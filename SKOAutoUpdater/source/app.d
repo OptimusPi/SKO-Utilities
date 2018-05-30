@@ -8,33 +8,42 @@ version(Windows)
 
 mixin APP_ENTRY_POINT;
 
-const string title = "Stick Knights Online Auto Updater";
+const dstring title = "Stick Knights Online Auto Updater";
 const string versionURL = "http://www.stickknightsonline.com/version.txt";
-__gshared ProgressBarWidget progress_bar; 
+
+__gshared ProgressBarWidget download_progress_bar, install_progress_bar; 
 __gshared Window progress_window;	
 
 void startDownloadMessage()
 {
-	import std.string, std.format, std.conv, core.sys.windows.windows;
 
+	import std.string, std.format, std.conv, core.sys.windows.windows;
 	
      // create window
-    progress_window = Platform.instance.createWindow("Dlang Auto-Updater with Progress", null, 4, 256, 64);
+    progress_window = Platform.instance.createWindow(title, null, 4, 256, 256);
+    auto vlayout = new VerticalLayout();
+    vlayout.margins = 20; // distance from window frame to vlayout background
+    vlayout.padding = 10; // distance from vlayout background bound to child widgets
+    vlayout.backgroundColor = 0xF7FAFC; // Very light steel blue
 
-	progress_bar = new ProgressBarWidget();
-	progress_bar.progress = 1; // max 1000, so 100% = 1000, 25.1% = 251, etc.
-	progress_bar.animationInterval = 16; // 16 milliseconds is about 60FPS for animation / screen refresh.
-	
-			
-	// create some widget to show in window
-    progress_window.mainWidget = progress_bar;
+    // Download Progress Bar
+    vlayout.addChild(new TextWidget(null, "Download Progress"d));
+    download_progress_bar = new ProgressBarWidget();
+    download_progress_bar.progress = 1; // max 1000, so 100% = 1000, 25.1% = 251, etc.
+    download_progress_bar.animationInterval = 33; // 33 milliseconds is about 30FPS for animation / screen refresh.
+    vlayout.addChild(download_progress_bar);
+
+    // Install Progress Bar
+    vlayout.addChild(new TextWidget(null, "Install Progress"d));
+    install_progress_bar = new ProgressBarWidget();
+    install_progress_bar.progress = 1; // max 1000, so 100% = 1000, 25.1% = 251, etc.
+    install_progress_bar.animationInterval = 33; // 33 milliseconds is about 30FPS for animation / screen refresh.
+    vlayout.addChild(install_progress_bar);
 		
     // show window
+    progress_window.mainWidget = vlayout;
     progress_window.show();
-
-    // run message loop
     Platform.instance.enterMessageLoop();
-
 }
 
 extern (C) int UIAppMain(string[] args)
@@ -48,21 +57,22 @@ extern (C) int UIAppMain(string[] args)
 	}
 	if(!prompt!("Stick Knights Online requires an update. Download and install now?")) return 0;
 
-	auto composed = new Thread(&startDownloadMessage);
-    composed.start();
-
-	version(linux) downloadPatch!("patch_linux.zip");
-	else version(Windows) downloadPatch!("patch_windows.zip");
-	else version(OSX) downloadPatch!("patch_osx.zip");
-	else static assert(false, "unsupported platform");
-	unzipPatch();
-
-	composed.join();
-
-	if(!prompt!("Update complete! Launch Stick Knights Online?")) return 0;
-	
-	
-	return launch();
+	startDownloadMessage();
+    //composed.start();
+    //
+    //version(linux) downloadPatch!("patch_linux.zip");
+    //else version(Windows) downloadPatch!("patch_windows.zip");
+    //else version(OSX) downloadPatch!("patch_osx.zip");
+    //else static assert(false, "unsupported platform");
+    //unzipPatch();
+    //
+    ////composed.join();
+    //
+    //if(!prompt!("Update complete! Launch Stick Knights Online?")) return 0;
+    //
+    //
+    //return launch();
+    return 0;
 }
 
 int launch()
@@ -182,25 +192,26 @@ void downloadPatch(string filename)()
         return data.length; 
     };
 
+    //download_progress_bar.progress = 500;
     http.onProgress = (size_t dltotal, size_t dlnow,
                        size_t ultotal, size_t ulnow)
     {
         if (dlnow > 0 && dltotal > 0)
         {
             float progress = to!float(dlnow) / to!float(dltotal);
-			progress_bar.progress = to!int(progress * 1000);
+			download_progress_bar.progress = to!int(progress * 1000);
         }   
         return 0;
     };
     http.perform();
-	progress_bar.progress = 1000;
+	download_progress_bar.progress = 1000;
 }
 
 void unzipPatch()
 {
     import std.algorithm, std.file, std.zip, std.conv, std.string;
 
-	progress_bar.progress = 0;
+	install_progress_bar.progress = 0;
 	
 	auto archive = new ZipArchive(_patch);
 
@@ -224,10 +235,10 @@ void unzipPatch()
 		write(e, archive.expand(archive.directory[e]));
 		
 		currentKey++;
-		progress_bar.progress = to!int(1000 * currentKey / finalKey);
+		install_progress_bar.progress = to!int(1000 * currentKey / finalKey);
 	}
 	
-	progress_bar.progress = 1000;
+	install_progress_bar.progress = 1000;
 	progress_window.close();
 }
 
