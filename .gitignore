@@ -15,9 +15,17 @@
 *.exe
 
 # DUB
+.dub/
 docs.json
 __dummy.html
 docs/
 
+# Visual Studio
+.vs/
+*.suo
+
 # Code coverage
 *.lst
+
+# Log Files
+*.log

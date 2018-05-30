@@ -1,0 +1,108 @@
+<DProject>
+  <ProjectGuid>{1D9C38E6-A7EC-4CCE-BEC5-79E9E6762870}</ProjectGuid>
+  <Config name="debug" platform="Win32">
+    <symdebug>1</symdebug>
+    <optimize>0</optimize>
+    <useInline>0</useInline>
+    <release>0</release>
+    <lib>0</lib>
+    <exefile>C:\GitHub\dlang\SKO-Utilities\SKOAutoUpdater\skoautoupdater.exe</exefile>
+    <imppath>"..\source" "..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty" "..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src" "..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\derelict-ft-1.1.3\derelict-ft\source" "..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\derelict-util-2.0.6\derelict-util\source" "..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\derelict-gl3-1.0.24\derelict-gl3\source" "..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\derelict-sdl2-2.0.2\derelict-sdl2\source"</imppath>
+    <fileImppath>"..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views"</fileImppath>
+    <program>$(DMDInstallDir)windows\bin\dmd.exe</program>
+    <additionalOptions></additionalOptions>
+    <versionids>Have_skoautoupdater Have_dlangui USE_OPENGL EmbedStandardResources Unicode Have_derelict_ft Have_derelict_gl3 Have_derelict_sdl2 Have_derelict_util</versionids>
+    <libfiles> </libfiles>
+    <useUnitTests>0</useUnitTests>
+    <obj>0</obj>
+    <link>0</link>
+    <subsystem>0</subsystem>
+    <multiobj>0</multiobj>
+    <singleFileCompilation>2</singleFileCompilation>
+    <mscoff>0</mscoff>    <oneobj>0</oneobj>
+    <trace>0</trace>
+    <quiet>0</quiet>
+    <verbose>0</verbose>
+    <vtls>0</vtls>
+    <cpu>0</cpu>
+    <isX86_64>0</isX86_64>
+    <isLinux>0</isLinux>
+    <isOSX>0</isOSX>
+    <isWindows>0</isWindows>
+    <isFreeBSD>0</isFreeBSD>
+    <isSolaris>0</isSolaris>
+    <isDragonFlyBSD>0</isDragonFlyBSD>
+    <scheduler>0</scheduler>
+    <useDeprecated>0</useDeprecated>
+    <useAssert>0</useAssert>
+    <useInvariants>0</useInvariants>
+    <useIn>0</useIn>
+    <useOut>0</useOut>
+    <useArrayBounds>0</useArrayBounds>
+    <noboundscheck>0</noboundscheck>
+    <useSwitchError>0</useSwitchError>
+    <preservePaths>1</preservePaths>
+    <warnings>1</warnings>
+    <infowarnings>0</infowarnings>
+    <checkProperty>0</checkProperty>
+    <genStackFrame>0</genStackFrame>
+    <pic>0</pic>
+    <cov>0</cov>
+    <nofloat>0</nofloat>
+    <Dversion>2</Dversion>
+    <ignoreUnsupportedPragmas>0</ignoreUnsupportedPragmas>
+    <compiler>0</compiler>
+    <otherDMD>0</otherDMD>
+    <outdir>C:\GitHub\dlang\SKO-Utilities\SKOAutoUpdater\</outdir>
+    <objdir>obj/debug/dummy/dummy/dummy/dummy/dummy/skoautoupdater</objdir>
+    <objname />
+    <libname />
+    <doDocComments>0</doDocComments>
+    <docdir />
+    <docname />
+    <modules_ddoc />
+    <ddocfiles />
+    <doHdrGeneration>0</doHdrGeneration>
+    <hdrdir />
+    <hdrname />
+    <doXGeneration>1</doXGeneration>
+    <xfilename>$(IntDir)\$(TargetName).json</xfilename>
+    <debuglevel>0</debuglevel>
+    <versionlevel>0</versionlevel>
+    <debugids />
+    <dump_source>0</dump_source>
+    <mapverbosity>0</mapverbosity>
+    <createImplib>0</createImplib>
+    <defaultlibname />
+    <debuglibname />
+    <moduleDepsFile />
+    <run>0</run>
+    <runargs />
+    <runCv2pdb>1</runCv2pdb>
+    <pathCv2pdb>$(VisualDInstallDir)cv2pdb\cv2pdb.exe</pathCv2pdb>
+    <cv2pdbPre2043>0</cv2pdbPre2043>
+    <cv2pdbNoDemangle>0</cv2pdbNoDemangle>
+    <cv2pdbEnumType>0</cv2pdbEnumType>
+    <cv2pdbOptions />
+    <objfiles />
+    <linkswitches />
+    <libpaths />
+    <deffile />
+    <resfile />
+    <debugworkingdir>..</debugworkingdir>
+    <preBuildCommand />
+    <postBuildCommand />
+    <filesToClean>*.obj;*.cmd;*.build;*.dep</filesToClean>
+  </Config>
+  <Folder name="skoautoupdater">
+    <Folder name="misc">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\win_app.def" />
+    </Folder>
+    <Folder name="skoautoupdater">
+    <Folder name="source">
+      <File path="..\source\app.d" />
+    </Folder>
+      <File tool="None" path="..\dub.json" />
+    </Folder>
+  </Folder>
+</DProject>

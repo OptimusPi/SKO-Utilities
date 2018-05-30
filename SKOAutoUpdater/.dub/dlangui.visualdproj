@@ -1,0 +1,684 @@
+<DProject>
+  <ProjectGuid>{968AF50C-6B9E-41E5-8BB0-DF4067E5DC6F}</ProjectGuid>
+  <Config name="debug" platform="Win32">
+    <symdebug>1</symdebug>
+    <optimize>0</optimize>
+    <useInline>0</useInline>
+    <release>0</release>
+    <lib>1</lib>
+    <exefile>lib\dlangui.lib</exefile>
+    <imppath>"..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty" "..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src" "..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\derelict-ft-1.1.3\derelict-ft\source" "..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\derelict-util-2.0.6\derelict-util\source" "..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\derelict-gl3-1.0.24\derelict-gl3\source" "..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\derelict-sdl2-2.0.2\derelict-sdl2\source"</imppath>
+    <fileImppath>"..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views"</fileImppath>
+    <program>$(DMDInstallDir)windows\bin\dmd.exe</program>
+    <additionalOptions></additionalOptions>
+    <versionids>USE_OPENGL EmbedStandardResources Unicode Have_dlangui Have_derelict_ft Have_derelict_gl3 Have_derelict_sdl2 Have_derelict_util</versionids>
+    <useUnitTests>0</useUnitTests>
+    <obj>0</obj>
+    <link>0</link>
+    <subsystem>0</subsystem>
+    <multiobj>0</multiobj>
+    <singleFileCompilation>2</singleFileCompilation>
+    <mscoff>0</mscoff>    <oneobj>0</oneobj>
+    <trace>0</trace>
+    <quiet>0</quiet>
+    <verbose>0</verbose>
+    <vtls>0</vtls>
+    <cpu>0</cpu>
+    <isX86_64>0</isX86_64>
+    <isLinux>0</isLinux>
+    <isOSX>0</isOSX>
+    <isWindows>0</isWindows>
+    <isFreeBSD>0</isFreeBSD>
+    <isSolaris>0</isSolaris>
+    <isDragonFlyBSD>0</isDragonFlyBSD>
+    <scheduler>0</scheduler>
+    <useDeprecated>0</useDeprecated>
+    <useAssert>0</useAssert>
+    <useInvariants>0</useInvariants>
+    <useIn>0</useIn>
+    <useOut>0</useOut>
+    <useArrayBounds>0</useArrayBounds>
+    <noboundscheck>0</noboundscheck>
+    <useSwitchError>0</useSwitchError>
+    <preservePaths>1</preservePaths>
+    <warnings>1</warnings>
+    <infowarnings>0</infowarnings>
+    <checkProperty>0</checkProperty>
+    <genStackFrame>0</genStackFrame>
+    <pic>0</pic>
+    <cov>0</cov>
+    <nofloat>0</nofloat>
+    <Dversion>2</Dversion>
+    <ignoreUnsupportedPragmas>0</ignoreUnsupportedPragmas>
+    <compiler>0</compiler>
+    <otherDMD>0</otherDMD>
+    <outdir>lib\</outdir>
+    <objdir>obj/debug/dummy/dummy/dummy/dummy/dummy/dlangui</objdir>
+    <objname />
+    <libname />
+    <doDocComments>0</doDocComments>
+    <docdir />
+    <docname />
+    <modules_ddoc />
+    <ddocfiles />
+    <doHdrGeneration>0</doHdrGeneration>
+    <hdrdir />
+    <hdrname />
+    <doXGeneration>1</doXGeneration>
+    <xfilename>$(IntDir)\$(TargetName).json</xfilename>
+    <debuglevel>0</debuglevel>
+    <versionlevel>0</versionlevel>
+    <debugids />
+    <dump_source>0</dump_source>
+    <mapverbosity>0</mapverbosity>
+    <createImplib>0</createImplib>
+    <defaultlibname />
+    <debuglibname />
+    <moduleDepsFile />
+    <run>0</run>
+    <runargs />
+    <runCv2pdb>1</runCv2pdb>
+    <pathCv2pdb>$(VisualDInstallDir)cv2pdb\cv2pdb.exe</pathCv2pdb>
+    <cv2pdbPre2043>0</cv2pdbPre2043>
+    <cv2pdbNoDemangle>0</cv2pdbNoDemangle>
+    <cv2pdbEnumType>0</cv2pdbEnumType>
+    <cv2pdbOptions />
+    <objfiles />
+    <linkswitches />
+    <libpaths />
+    <deffile />
+    <resfile />
+    <debugworkingdir>..</debugworkingdir>
+    <preBuildCommand />
+    <postBuildCommand />
+    <filesToClean>*.obj;*.cmd;*.build;*.dep</filesToClean>
+  </Config>
+  <Folder name="dlangui">
+    <Folder name="dlangui">
+    <Folder name="3rdparty">
+    <Folder name="EGL">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\EGL\egl.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\EGL\eglplatform.d" />
+    </Folder>
+    <Folder name="GLES">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\GLES\gl.d" />
+    </Folder>
+    <Folder name="GLES2">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\GLES2\gl2.d" />
+    </Folder>
+    <Folder name="GLES3">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\GLES3\gl3.d" />
+    </Folder>
+    <Folder name="android">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\android\android_native_app_glue.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\android\android_native_app_glue_impl.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\android\asset_manager.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\android\bitmap.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\android\configuration.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\android\input.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\android\keycodes.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\android\log.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\android\looper.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\android\native_activity.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\android\native_window.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\android\obb.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\android\rect.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\android\sensor.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\android\storage_manager.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\android\window.d" />
+    </Folder>
+    <Folder name="dimage">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\dimage\array.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\dimage\bitio.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\dimage\compound.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\dimage\huffman.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\dimage\idct.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\dimage\image.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\dimage\jpeg.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\dimage\memory.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\dimage\png.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\dimage\stream.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\dimage\zlib.d" />
+    </Folder>
+    <Folder name="icontheme">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\icontheme\cache.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\icontheme\file.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\icontheme\lookup.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\icontheme\package.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\icontheme\paths.d" />
+    </Folder>
+    <Folder name="inilike">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\inilike\common.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\inilike\file.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\inilike\package.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\inilike\range.d" />
+    </Folder>
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\isfreedesktop.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\jni.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\3rdparty\xdgpaths.d" />
+    </Folder>
+    <Folder name="src">
+    <Folder name="dlangui">
+    <Folder name="core">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\core\asyncsocket.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\core\collections.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\core\config.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\core\css.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\core\cssparser.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\core\dom.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\core\editable.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\core\events.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\core\filemanager.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\core\files.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\core\i18n.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\core\linestream.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\core\logger.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\core\math3d.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\core\parseutils.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\core\queue.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\core\settings.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\core\signals.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\core\stdaction.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\core\streams.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\core\textsource.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\core\types.d" />
+    </Folder>
+    <Folder name="dialogs">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\dialogs\dialog.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\dialogs\filedlg.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\dialogs\inputbox.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\dialogs\msgbox.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\dialogs\settingsdialog.d" />
+    </Folder>
+    <Folder name="dml">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\dml\annotations.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\dml\dmlhighlight.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\dml\parser.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\dml\tokenizer.d" />
+    </Folder>
+    <Folder name="dom">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\dom\cssparser.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\dom\encoding.d" />
+    </Folder>
+    <Folder name="graphics">
+    <Folder name="domrender">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\domrender\domrender.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\domrender\renderblock.d" />
+    </Folder>
+    <Folder name="scene">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\scene\camera.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\scene\drawableobject.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\scene\effect.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\scene\fbximport.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\scene\light.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\scene\material.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\scene\mesh.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\scene\model.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\scene\node.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\scene\objimport.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\scene\scene3d.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\scene\skybox.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\scene\transform.d" />
+    </Folder>
+    <Folder name="xpm">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\xpm\reader.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\xpm\xpmcolors.d" />
+    </Folder>
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\colors.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\drawbuf.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\fonts.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\ftfonts.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\gldrawbuf.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\glsupport.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\iconprovider.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\images.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\graphics\resources.d" />
+    </Folder>
+    <Folder name="platforms">
+    <Folder name="android">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\platforms\android\androidapp.d" />
+    </Folder>
+    <Folder name="ansi_console">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\platforms\ansi_console\consoleapp.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\platforms\ansi_console\consolefont.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\platforms\ansi_console\dconsole.d" />
+    </Folder>
+    <Folder name="common">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\platforms\common\platform.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\platforms\common\startup.d" />
+    </Folder>
+    <Folder name="dsfml">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\platforms\dsfml\dsfmlapp.d" />
+    </Folder>
+    <Folder name="external">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\platforms\external\externalapp.d" />
+    </Folder>
+    <Folder name="sdl">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\platforms\sdl\sdlapp.d" />
+    </Folder>
+    <Folder name="windows">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\platforms\windows\win32drawbuf.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\platforms\windows\win32fonts.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\platforms\windows\winapp.d" />
+    </Folder>
+    <Folder name="x11">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\platforms\x11\x11app.d" />
+    </Folder>
+    </Folder>
+    <Folder name="widgets">
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\appframe.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\charts.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\combobox.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\controls.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\dmlwidgets.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\docks.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\editors.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\grid.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\groupbox.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\layouts.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\lists.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\menu.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\metadata.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\popup.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\progressbar.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\scroll.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\scrollbar.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\srcedit.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\statusline.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\styles.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\tabs.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\toolbars.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\tree.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\widget.d" />
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\widgets\winframe.d" />
+    </Folder>
+      <File path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\src\dlangui\package.d" />
+    </Folder>
+    </Folder>
+    <Folder name="views">
+    <Folder name="res">
+    <Folder name="hdpi">
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_applications-internet.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_arrow_right_down_black.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_arrow_right_down_black_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_arrow_right_hollow.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_arrow_right_hollow_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_check_off.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_check_off_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_check_off_disabled.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_check_off_disabled_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_check_off_focused.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_check_off_focused_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_check_off_pressed.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_check_off_pressed_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_check_on.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_check_on_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_check_on_disabled.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_check_on_disabled_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_check_on_focused.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_check_on_focused_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_check_on_pressed.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_check_on_pressed_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_radio_off.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_radio_off_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_radio_off_disabled.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_radio_off_disabled_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_radio_off_focused.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_radio_off_focused_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_radio_off_pressed.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_radio_off_pressed_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_radio_on.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_radio_on_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_radio_on_disabled.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_radio_on_disabled_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_radio_on_focused.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_radio_on_focused_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_radio_on_pressed.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_btn_radio_on_pressed_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_dialog-cancel.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_dialog-close.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_dialog-ok-apply.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_dialog-ok.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_folder.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_scrollbar_btn_down.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_scrollbar_btn_down_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_scrollbar_btn_left.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_scrollbar_btn_left_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_scrollbar_btn_right.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_scrollbar_btn_right_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_scrollbar_btn_up.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_scrollbar_btn_up_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_switch_off.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_switch_off_disabled.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_switch_on.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_switch_on_disabled.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\hdpi\hdpi_text-plain.png" />
+    </Folder>
+    <Folder name="i18n">
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\i18n\std_en.ini" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\i18n\std_pl.ini" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\i18n\std_ru.ini" />
+    </Folder>
+    <Folder name="mdpi">
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\applications-internet.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\arrow_right_down_black.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\arrow_right_down_black_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\arrow_right_hollow.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\arrow_right_hollow_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_check_off.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_check_off_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_check_off_disabled.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_check_off_disabled_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_check_off_focused.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_check_off_focused_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_check_off_pressed.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_check_off_pressed_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_check_on.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_check_on_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_check_on_disabled.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_check_on_disabled_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_check_on_focused.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_check_on_focused_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_check_on_pressed.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_check_on_pressed_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_default.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_default_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_default_small_normal.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_default_small_normal_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_default_small_normal_disable.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_default_small_normal_disable_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_default_small_normal_disable_focused.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_default_small_normal_disable_focused_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_default_small_pressed.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_default_small_pressed_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_default_small_selected.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_default_small_selected_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_disabled.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_disabled_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_hover.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_hover_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_normal.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_normal_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_pressed.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_pressed_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_radio_off.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_radio_off_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_radio_off_disabled.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_radio_off_disabled_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_radio_off_focused.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_radio_off_focused_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_radio_off_pressed.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_radio_off_pressed_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_radio_on.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_radio_on_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_radio_on_disabled.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_radio_on_disabled_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_radio_on_focused.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_radio_on_focused_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_radio_on_pressed.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\btn_radio_on_pressed_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\computer.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\dialog-cancel.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\dialog-close.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\dialog-ok-apply.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\dialog-ok.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\dlangui-logo1.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\drive-harddisk.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\drive-optical.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\drive-removable-media.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\editbox_background_disabled.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\editbox_background_disabled_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\editbox_background_disabled_focus.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\editbox_background_disabled_focus_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\editbox_background_focus.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\editbox_background_focus_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\editbox_background_normal.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\editbox_background_normal_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\find_case_sensitive.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\find_whole_words.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\folder-blue.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\folder-bookmark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\folder-network.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\folder.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\list_item_focused.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\list_item_focused_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\list_item_hovered.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\list_item_hovered_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\list_item_selected.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\list_item_selected_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\media-flash-sd-mmc.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\menu_separator.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\menu_separator_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\popup_window_background.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\popup_window_background_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\switch_off.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\switch_off_disabled.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\switch_on.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\switch_on_disabled.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_down_focused.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_down_focused_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_down_focused_hover.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_down_focused_hover_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_down_focused_selected.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_down_focused_selected_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_down_hover.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_down_hover_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_down_normal.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_down_normal_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_down_selected.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_down_selected_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_up_focused.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_up_focused_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_up_focused_hover.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_up_focused_hover_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_up_focused_selected.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_up_focused_selected_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_up_hover.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_up_hover_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_up_normal.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_up_normal_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_up_selected.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_btn_dark_up_selected_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_down_background_dark_focused.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_down_background_dark_focused_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_down_background_dark_normal.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_down_background_dark_normal_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_up_background_dark_focused.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_up_background_dark_focused_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_up_background_dark_normal.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tab_up_background_dark_normal_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\text-plain.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\toolbar_background.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\toolbar_background_3d.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\toolbar_background_3d_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\toolbar_background_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\toolbar_button_hover.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\toolbar_button_hover_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\toolbar_button_null.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\toolbar_button_pressed.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\toolbar_button_pressed_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\toolbar_control_disabled.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\toolbar_control_disabled_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\toolbar_control_normal.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\toolbar_control_normal_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\toolbar_host_background.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\toolbar_host_background_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\toolbar_separator.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\toolbar_separator_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tooltip_background.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\tooltip_background_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\mdpi\user-home.png" />
+    </Folder>
+    <Folder name="shaders">
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\shaders\colored.frag" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\shaders\colored.vert" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\shaders\lighting.frag" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\shaders\lighting.vert" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\shaders\skinning-none.vert" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\shaders\skinning.vert" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\shaders\textured.frag" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\shaders\textured.vert" />
+    </Folder>
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_background.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_background_check_transparent.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_background_check_transparent_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_background_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_background_transparent.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_background_transparent_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_check.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_check_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_check_off.tim" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_check_off_disabled.tim" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_check_off_focused.tim" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_check_off_pressed.tim" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_check_on.tim" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_check_on_disabled.tim" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_check_on_focused.tim" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_check_on_pressed.tim" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_default_normal.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_default_normal_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_default_pressed.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_default_pressed_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_default_selected.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_default_selected_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_default_small.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_default_small_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_default_small_transparent.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_default_small_transparent_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_radio.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_radio_background.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_radio_background_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_radio_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_radio_off.tim" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_radio_off_disabled.tim" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_radio_off_focused.tim" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_radio_off_pressed.tim" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_radio_on.tim" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_radio_on_disabled.tim" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_radio_on_focused.tim" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\btn_radio_on_pressed.tim" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\close.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\close_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\combobox_background.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\combobox_background_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\console_theme_default.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\dock_window_background.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\dock_window_background_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\dock_window_background_focused.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\dock_window_background_focused_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\dock_window_background_normal.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\dock_window_background_normal_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\dock_window_caption_background.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\dock_window_caption_background_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\dock_window_caption_background_down.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\dock_window_caption_background_down_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\dock_window_caption_background_focused.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\dock_window_caption_background_focused_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\dock_window_caption_background_focused_down.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\dock_window_caption_background_focused_down_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\dock_window_caption_background_normal.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\dock_window_caption_background_normal_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\dock_window_caption_background_normal_down.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\dock_window_caption_background_normal_down_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\editbox_background.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\editbox_background_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\exit.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\fileclose.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\fileopen.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\frame_blue.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\group_box_frame_bottom.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\group_box_frame_bottom_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\group_box_frame_up_left.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\group_box_frame_up_left_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\group_box_frame_up_right.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\group_box_frame_up_right_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\list_item_background.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\list_item_background_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\list_item_background_solid.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\list_item_background_solid_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\main_menu_background.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\main_menu_item_background.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\main_menu_item_background_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\main_menu_item_background_hover.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\main_menu_item_background_hover_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\main_menu_item_background_normal.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\main_menu_item_background_normal_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\main_menu_item_background_selected.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\main_menu_item_background_selected_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\menu_item_background.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\menu_item_background_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\popup_menu_background_normal.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\popup_menu_background_normal_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\progress_bar_background_frame.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\progress_bar_gauge_animation.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\scrollbar_btn_background.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\scrollbar_btn_background_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\scrollbar_btn_background_disabled.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\scrollbar_btn_background_disabled_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\scrollbar_btn_background_hover.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\scrollbar_btn_background_hover_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\scrollbar_btn_background_normal.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\scrollbar_btn_background_normal_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\scrollbar_btn_background_pressed.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\scrollbar_btn_background_pressed_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\scrollbar_btn_down.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\scrollbar_btn_down_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\scrollbar_btn_left.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\scrollbar_btn_left_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\scrollbar_btn_right.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\scrollbar_btn_right_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\scrollbar_btn_transparent_background.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\scrollbar_btn_transparent_background_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\scrollbar_btn_up.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\scrollbar_btn_up_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\scrollbar_indicator_horizontal.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\scrollbar_indicator_vertical.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\slider_background.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\slider_background_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\switch.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_btn_dark_down.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_btn_dark_down_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_btn_dark_up.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_btn_dark_up_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_btn_normal.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_btn_normal_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_btn_up.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_btn_up_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_btn_up_focused.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_btn_up_focused_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_btn_up_focused_selected.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_btn_up_focused_selected_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_btn_up_hover.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_btn_up_hover_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_btn_up_normal.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_btn_up_normal_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_btn_up_selected.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_btn_up_selected_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_down_background_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_down_background_theme_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_more.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_more_dark.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_up_background.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_up_background_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_up_background_focused.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_up_background_focused_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_up_background_selected.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_up_background_selected_dark.9.png" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\tab_up_background_theme_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\theme_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\theme_default.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\toolbar_button_background.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\toolbar_button_background_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\toolbar_control_background.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\toolbar_control_background_dark.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\transparent_button_background.xml" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\res\transparent_button_background_dark.xml" />
+    </Folder>
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\DLANGUI_VERSION" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\console_standard_resources.list" />
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\views\standard_resources.list" />
+    </Folder>
+      <File tool="None" path="..\..\..\..\..\Users\HOWANAT\AppData\Local\dub\packages\dlangui-0.9.178\dlangui\dub.json" />
+    </Folder>
+  </Folder>
+</DProject>
