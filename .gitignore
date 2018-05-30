@@ -15,7 +15,6 @@
 *.exe
 
 # DUB
-.dub
 docs.json
 __dummy.html
 docs/
