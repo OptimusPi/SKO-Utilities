@@ -1,0 +1,14 @@
+.dub
+docs.json
+__dummy.html
+docs/
+skoautoupdater.so
+skoautoupdater.dylib
+skoautoupdater.dll
+skoautoupdater.a
+skoautoupdater.lib
+skoautoupdater-test-*
+*.exe
+*.o
+*.obj
+*.lst

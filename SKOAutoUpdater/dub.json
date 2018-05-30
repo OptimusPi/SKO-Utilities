@@ -1,0 +1,12 @@
+{
+	"name": "skoautoupdater",
+	"authors": [
+		"Nate Howard"
+	],
+	"dependencies": {
+		"dlangui": "~>0.9.178"
+	},
+	"description": "Auto-Updater and launcher program made for Stick Knights Online.",
+	"copyright": "Copyright © 2018, Nate Howard",
+	"license": "The Unlicense"
+}

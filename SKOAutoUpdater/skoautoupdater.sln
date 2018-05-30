@@ -1,0 +1,43 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{474C9C76-5E5D-44D5-BE98-8EDB8C1E5BAA}") = "skoautoupdater", ".dub/skoautoupdater.visualdproj", "{86063118-6825-45D8-9A5F-00C651498430}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BEC645FA-14A2-4320-AD15-6BEAC6F15D87} = {BEC645FA-14A2-4320-AD15-6BEAC6F15D87}
+		{E83084CB-F572-4BCB-95DA-D301A38D2C3E} = {E83084CB-F572-4BCB-95DA-D301A38D2C3E}
+		{6E98DFD9-C43D-494A-BF6A-4D5B6E5EB19B} = {6E98DFD9-C43D-494A-BF6A-4D5B6E5EB19B}
+		{E59FDA58-7E1F-4EFB-8874-524A6F892497} = {E59FDA58-7E1F-4EFB-8874-524A6F892497}
+		{3C14E49C-7CD0-4C5A-946D-B1D38E38B446} = {3C14E49C-7CD0-4C5A-946D-B1D38E38B446}
+	EndProjectSection
+EndProject
+Project("{474C9C76-5E5D-44D5-BE98-8EDB8C1E5BAA}") = "dlangui", ".dub/dlangui.visualdproj", "{BEC645FA-14A2-4320-AD15-6BEAC6F15D87}"
+EndProject
+Project("{474C9C76-5E5D-44D5-BE98-8EDB8C1E5BAA}") = "derelict-ft", ".dub/derelict-ft.visualdproj", "{E83084CB-F572-4BCB-95DA-D301A38D2C3E}"
+EndProject
+Project("{474C9C76-5E5D-44D5-BE98-8EDB8C1E5BAA}") = "derelict-util", ".dub/derelict-util.visualdproj", "{3C14E49C-7CD0-4C5A-946D-B1D38E38B446}"
+EndProject
+Project("{474C9C76-5E5D-44D5-BE98-8EDB8C1E5BAA}") = "derelict-gl3", ".dub/derelict-gl3.visualdproj", "{6E98DFD9-C43D-494A-BF6A-4D5B6E5EB19B}"
+EndProject
+Project("{474C9C76-5E5D-44D5-BE98-8EDB8C1E5BAA}") = "derelict-sdl2", ".dub/derelict-sdl2.visualdproj", "{E59FDA58-7E1F-4EFB-8874-524A6F892497}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		debug|Win32 = debug|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E59FDA58-7E1F-4EFB-8874-524A6F892497}.debug|Win32.ActiveCfg = debug|Win32
+		{E59FDA58-7E1F-4EFB-8874-524A6F892497}.debug|Win32.Build.0 = debug|Win32
+		{BEC645FA-14A2-4320-AD15-6BEAC6F15D87}.debug|Win32.ActiveCfg = debug|Win32
+		{BEC645FA-14A2-4320-AD15-6BEAC6F15D87}.debug|Win32.Build.0 = debug|Win32
+		{3C14E49C-7CD0-4C5A-946D-B1D38E38B446}.debug|Win32.ActiveCfg = debug|Win32
+		{3C14E49C-7CD0-4C5A-946D-B1D38E38B446}.debug|Win32.Build.0 = debug|Win32
+		{86063118-6825-45D8-9A5F-00C651498430}.debug|Win32.ActiveCfg = debug|Win32
+		{86063118-6825-45D8-9A5F-00C651498430}.debug|Win32.Build.0 = debug|Win32
+		{E83084CB-F572-4BCB-95DA-D301A38D2C3E}.debug|Win32.ActiveCfg = debug|Win32
+		{E83084CB-F572-4BCB-95DA-D301A38D2C3E}.debug|Win32.Build.0 = debug|Win32
+		{6E98DFD9-C43D-494A-BF6A-4D5B6E5EB19B}.debug|Win32.ActiveCfg = debug|Win32
+		{6E98DFD9-C43D-494A-BF6A-4D5B6E5EB19B}.debug|Win32.Build.0 = debug|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
