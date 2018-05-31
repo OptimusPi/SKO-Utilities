@@ -29,3 +29,17 @@ docs/
 
 # Log Files
 *.log
+
+# Game Content files
+IMG/
+DAT/
+SND/
+MAP/
+help.txt
+library.txt
+readme.txt
+rules.txt
+sko.*
+stdout.txt
+version.txt
+SKOAutoUpdater/version.txt

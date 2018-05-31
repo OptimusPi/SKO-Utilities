@@ -8,71 +8,109 @@ version(Windows)
 
 mixin APP_ENTRY_POINT;
 
-const dstring title = "Stick Knights Online Auto Updater";
+//Download the contents fo this file via CURL
 const string versionURL = "http://www.stickknightsonline.com/version.txt";
 
-__gshared ProgressBarWidget download_progress_bar, install_progress_bar; 
-__gshared Window progress_window;	
+//Text to display on the Update/Launcher window
+const dstring title = "Stick Knights Online Portal"d;
+const dstring txtUpdate = "Download and Install Update"d;
+const dstring txtLaunch = "Launch Stick Knights Online"d;
+const dstring txtUpdateAvailable = "An update is required."d;
+const dstring txtDownloadingUpdate = "[1/2] Downloading update..."d;
+const dstring txtInstallingUpdate = "[2/2] Installing update..."d;
+const dstring txtDownloadProgress = "Download Progress"d;
+const dstring txtInstallProgress = "Update Progress"d;
 
-void startDownloadMessage()
+__gshared ProgressBarWidget download_progress_bar, install_progress_bar;
+__gshared Button btnUpdateLaunch;
+__gshared TextWidget twUpdateLaunch;
+__gshared Window progress_window;
+__gshared bool isUpdated;
+
+void UpdateOrLaunch()
+{
+    if (isUpdated) {
+        launch();
+        progress_window.close();
+    }  else  {
+        //Disable Download button
+        btnUpdateLaunch.enabled = false;
+
+        // Download patch
+        twUpdateLaunch.text = txtDownloadingUpdate;
+        version(linux) downloadPatch!("patch_linux.zip");
+        else version(Windows) downloadPatch!("patch_windows.zip");
+        else version(OSX) downloadPatch!("patch_osx.zip");
+        else static assert(false, "unsupported platform");
+
+        // Unzip patch
+        twUpdateLaunch.text = txtInstallingUpdate;
+        unzipPatch();
+
+        //Update is complete! Set state to launch game
+        twUpdateLaunch.text = "Update complete! Ready to play Stick Knights Online?"d;
+        btnUpdateLaunch.text = txtLaunch;
+        btnUpdateLaunch.enabled = true;
+        isUpdated = true;
+    }
+}
+int startLauncherWindow()
 {
 
-	import std.string, std.format, std.conv, core.sys.windows.windows;
+	import std.string, std.format, std.conv, core.thread, core.sys.windows.windows;
 	
+    // First set isUpdated by checking the Internet for the latest version
+    // Later, after a patch is installed, set isUpdated to true.
+    isUpdated = isLatestVersion;
+
      // create window
-    progress_window = Platform.instance.createWindow(title, null, 4, 256, 256);
+    progress_window = Platform.instance.createWindow(title, null, 4, 480, 320);
     auto vlayout = new VerticalLayout();
-    vlayout.margins = 20; // distance from window frame to vlayout background
-    vlayout.padding = 10; // distance from vlayout background bound to child widgets
+    vlayout.margins = 0;
+    vlayout.padding = 10;
     vlayout.backgroundColor = 0xF7FAFC; // Very light steel blue
 
-    // Download Progress Bar
-    vlayout.addChild(new TextWidget(null, "Download Progress"d));
-    download_progress_bar = new ProgressBarWidget();
-    download_progress_bar.progress = 1; // max 1000, so 100% = 1000, 25.1% = 251, etc.
-    download_progress_bar.animationInterval = 33; // 33 milliseconds is about 30FPS for animation / screen refresh.
-    vlayout.addChild(download_progress_bar);
+    if (!isUpdated)
+    {
+        // Download Progress Bar
+        vlayout.addChild(new TextWidget(null, txtDownloadProgress));
+        download_progress_bar = new ProgressBarWidget();
+        download_progress_bar.progress = 1; // max 1000, so 100% = 1000, 25.1% = 251, etc.
+        download_progress_bar.animationInterval = 33; // 33 milliseconds is about 30FPS for animation / screen refresh.
+        vlayout.addChild(download_progress_bar);
 
-    // Install Progress Bar
-    vlayout.addChild(new TextWidget(null, "Install Progress"d));
-    install_progress_bar = new ProgressBarWidget();
-    install_progress_bar.progress = 1; // max 1000, so 100% = 1000, 25.1% = 251, etc.
-    install_progress_bar.animationInterval = 33; // 33 milliseconds is about 30FPS for animation / screen refresh.
-    vlayout.addChild(install_progress_bar);
-		
+        // Install Progress Bar
+        vlayout.addChild(new TextWidget(null, txtInstallProgress));
+        install_progress_bar = new ProgressBarWidget();
+        install_progress_bar.progress = 1; // max 1000, so 100% = 1000, 25.1% = 251, etc.
+        install_progress_bar.animationInterval = 33; // 33 milliseconds is about 30FPS for animation / screen refresh.
+        vlayout.addChild(install_progress_bar);
+    }
+
+    // Update and Launch button
+    twUpdateLaunch = new TextWidget(null, isUpdated ? txtLaunch : txtUpdateAvailable);
+    vlayout.addChild(twUpdateLaunch);
+    btnUpdateLaunch = new Button("btnUpdateLaunch", isUpdated ? txtLaunch : txtUpdate);
+    btnUpdateLaunch.click = delegate(Widget src) {
+        auto composed = new Thread(&UpdateOrLaunch);
+        composed.start();
+
+        return true;
+    };
+    vlayout.addChild(btnUpdateLaunch);
+
     // show window
     progress_window.mainWidget = vlayout;
     progress_window.show();
     Platform.instance.enterMessageLoop();
+
+    // exit program when finished!
+    return 0;
 }
 
 extern (C) int UIAppMain(string[] args)
 {
-	import core.thread;
-
-	if(isUpdated)
-	{
-		launch();
-		return 0;
-	}
-	if(!prompt!("Stick Knights Online requires an update. Download and install now?")) return 0;
-
-	startDownloadMessage();
-    //composed.start();
-    //
-    //version(linux) downloadPatch!("patch_linux.zip");
-    //else version(Windows) downloadPatch!("patch_windows.zip");
-    //else version(OSX) downloadPatch!("patch_osx.zip");
-    //else static assert(false, "unsupported platform");
-    //unzipPatch();
-    //
-    ////composed.join();
-    //
-    //if(!prompt!("Update complete! Launch Stick Knights Online?")) return 0;
-    //
-    //
-    //return launch();
-    return 0;
+	return startLauncherWindow();
 }
 
 int launch()
@@ -108,7 +146,7 @@ int launch()
 	return 0;
 }
 
-bool isUpdated() @property
+bool isLatestVersion() @property
 {
 	import std.net.curl;
 	import core.sys.windows.windows;
@@ -239,7 +277,6 @@ void unzipPatch()
 	}
 	
 	install_progress_bar.progress = 1000;
-	progress_window.close();
 }
 
 private ubyte[] _patch;
