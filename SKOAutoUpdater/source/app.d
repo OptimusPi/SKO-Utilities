@@ -1,11 +1,6 @@
 import std.stdio;
 import dlangui;
 
-version(Windows) 
-{
-	import core.sys.windows.windows;
-}
-
 mixin APP_ENTRY_POINT;
 
 //Download the contents fo this file via CURL
@@ -20,12 +15,19 @@ const dstring txtDownloadingUpdate = "[1/2] Downloading update..."d;
 const dstring txtInstallingUpdate = "[2/2] Installing update..."d;
 const dstring txtDownloadProgress = "Download Progress"d;
 const dstring txtInstallProgress = "Update Progress"d;
+const dstring txtUpToDate = "Stick Knights Online is up to date."d;
 
 __gshared ProgressBarWidget download_progress_bar, install_progress_bar;
 __gshared Button btnUpdateLaunch;
 __gshared TextWidget twUpdateLaunch;
 __gshared Window progress_window;
 __gshared bool isUpdated;
+private ubyte[] _patch;
+
+extern (C) int UIAppMain(string[] args)
+{
+	return startLauncherWindow();
+}
 
 void UpdateOrLaunch()
 {
@@ -48,12 +50,13 @@ void UpdateOrLaunch()
         unzipPatch();
 
         //Update is complete! Set state to launch game
-        twUpdateLaunch.text = "Update complete! Ready to play Stick Knights Online?"d;
+        twUpdateLaunch.text = txtUpToDate;
         btnUpdateLaunch.text = txtLaunch;
         btnUpdateLaunch.enabled = true;
         isUpdated = true;
     }
 }
+
 int startLauncherWindow()
 {
 
@@ -88,7 +91,7 @@ int startLauncherWindow()
     }
 
     // Update and Launch button
-    twUpdateLaunch = new TextWidget(null, isUpdated ? txtLaunch : txtUpdateAvailable);
+    twUpdateLaunch = new TextWidget(null, isUpdated ? txtUpToDate : txtUpdateAvailable);
     vlayout.addChild(twUpdateLaunch);
     btnUpdateLaunch = new Button("btnUpdateLaunch", isUpdated ? txtLaunch : txtUpdate);
     btnUpdateLaunch.click = delegate(Widget src) {
@@ -106,11 +109,6 @@ int startLauncherWindow()
 
     // exit program when finished!
     return 0;
-}
-
-extern (C) int UIAppMain(string[] args)
-{
-	return startLauncherWindow();
 }
 
 int launch()
@@ -148,8 +146,6 @@ int launch()
 
 bool isLatestVersion() @property
 {
-	import std.net.curl;
-	import core.sys.windows.windows;
     import std.net.curl, std.string;
 
 	try{
@@ -157,64 +153,10 @@ bool isLatestVersion() @property
 	} catch (Throwable) {
 		return false; 
 	}
-
-}
-
-void display(string message)()
-{
-    version(Windows)
-    {
-        import std.string, core.sys.windows.windows;
-
-        MessageBoxA(
-					null,
-					message.ptr,
-					title.ptr,
-					MB_OK);
-    }
-    else 
-	{
-		writeln("[" + title.toStringz() + "]" + message.toStringz());
-	}
-}
-
-bool prompt(string message)()
-{
-    import std.string;
-    string promptString = format("%s [Y/n] ", message);
-	
-    version(Windows)
-    {
-        auto result = MessageBoxA(
-								  NULL,
-								  promptString.ptr,
-								  "Stick Knights Online (Update Available)".ptr,
-								  MB_YESNO);
-        return result == IDYES ? true : false;
-    }
-    else
-    {
-        import std.algorithm;
-        write(promptString);
-        char[] actualResponse;
-        stdin.readln(actualResponse);
-        actualResponse.toLowerInPlace();
-        static immutable validResponses = ["y\n", "n\n", "yes\n", "no\n", "\n"];
-        while(!any!(a => a == actualResponse)(validResponses))
-        {
-            writeln("Input must be of the form '[Y/n]'");
-            write(promptString);
-            stdin.readln(actualResponse);
-            actualResponse.toLowerInPlace();
-        }
-        if(actualResponse == "n\n" || actualResponse == "no\n") return false;
-        return true;
-    }
 }
 
 void downloadPatch(string filename)()
 {
-	import core.sys.windows.windows;
     import std.net.curl, std.string, std.conv;
 
 
@@ -235,14 +177,10 @@ void downloadPatch(string filename)()
                        size_t ultotal, size_t ulnow)
     {
         if (dlnow > 0 && dltotal > 0)
-        {
-            float progress = to!float(dlnow) / to!float(dltotal);
-			download_progress_bar.progress = to!int(progress * 1000);
-        }   
+			download_progress_bar.progress = to!int((to!float(dlnow) / to!float(dltotal)) * 1000); 
         return 0;
     };
     http.perform();
-	download_progress_bar.progress = 1000;
 }
 
 void unzipPatch()
@@ -250,11 +188,7 @@ void unzipPatch()
     import std.algorithm, std.file, std.zip, std.conv, std.string;
 
 	install_progress_bar.progress = 0;
-	
 	auto archive = new ZipArchive(_patch);
-
-	//calculate for progress bar
-	int finalKey = archive.directory.keys.length;
 	int currentKey = 0;
 	
     foreach(e; archive.directory.keys.sort())
@@ -271,14 +205,9 @@ void unzipPatch()
 		}
 
 		write(e, archive.expand(archive.directory[e]));
-		
-		currentKey++;
-		install_progress_bar.progress = to!int(1000 * currentKey / finalKey);
+		install_progress_bar.progress = to!int(1000 * currentKey++ / archive.directory.keys.length);
 	}
-	
-	install_progress_bar.progress = 1000;
+    install_progress_bar.progress = 1000;
 }
-
-private ubyte[] _patch;
 
 
