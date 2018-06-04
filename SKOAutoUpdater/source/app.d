@@ -54,7 +54,7 @@ extern (C) int UIAppMain(string[] args)
     try {
         txtNewsFeed = to!string(get(newsFeedURL));
     } catch (Throwable) {
-        txtNewsFeed = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"><channel><item><title>Could not download latest News.</title><description>Could not download news!</description><pubDate>Fri, 24 Mar 2017 19:45:11 +0000</pubDate><link>http://www.stickknightsonline.com/</link></item></channel></rss>";
+        txtNewsFeed = "<xml><rss><channel><item><title>Could not download latest News.</title><description>Could not download news!</description><pubDate>Fri, 24 Mar 2017 19:45:11 +0000</pubDate><link>http://www.stickknightsonline.com/</link></item></channel></rss></xml>";
     }
 
     //Download plain text patch notes.
@@ -87,6 +87,8 @@ extern (C) int UIAppMain(string[] args)
             { 
                 item.link    = e.text(); 
             };
+
+            xml.parse();
 
             //Add to the list of items in the News Feed
             newsFeedItems ~= item;
