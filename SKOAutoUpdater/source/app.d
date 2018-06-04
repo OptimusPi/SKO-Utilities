@@ -5,6 +5,7 @@ mixin APP_ENTRY_POINT;
 
 //Download the contents fo this file via CURL
 const string versionURL = "http://www.stickknightsonline.com/version.txt";
+const string patchNotesURL = "http://www.stickknightsonline.com/patchNotes.txt";
 
 //Text to display on the Update/Launcher window
 const dstring title = "Stick Knights Online Portal"d;
@@ -17,15 +18,31 @@ const dstring txtDownloadProgress = "Download Progress"d;
 const dstring txtInstallProgress = "Update Progress"d;
 const dstring txtUpToDate = "Stick Knights Online is up to date."d;
 
+//colors
+enum colorUpdateRequired = 0xFF101F;    //Red
+enum colorDownloadProgress = 0xf26000;  //Dark Orange
+enum colorUpdateComplete = 0x4080ff;    //Blue
+enum colorNewsUpdatesBackground = 0xFAFBFC;  //Light Steel Blue
+enum colorWindowBackground = 0xFFFFFF;  //Pure White
+
 __gshared ProgressBarWidget download_progress_bar, install_progress_bar;
 __gshared Button btnUpdateLaunch;
 __gshared TextWidget twUpdateLaunch;
 __gshared Window progress_window;
 __gshared bool isUpdated;
+__gshared dstring txtPatchNotes;
 private ubyte[] _patch;
 
 extern (C) int UIAppMain(string[] args)
 {
+    //Download some meta data first to display in the update screen
+    import std.net.curl, std.string, std.conv;
+	try{
+		txtPatchNotes = to!dstring(get(patchNotesURL)).replace("\r", "");
+	} catch (Throwable) {
+		txtPatchNotes = "Unable to download patch notes."d;
+	}
+
 	return startLauncherWindow();
 }
 
@@ -40,6 +57,7 @@ void UpdateOrLaunch()
 
         // Download patch
         twUpdateLaunch.text = txtDownloadingUpdate;
+        twUpdateLaunch.textColor(colorDownloadProgress);
         version(linux) downloadPatch!("patch_linux.zip");
         else version(Windows) downloadPatch!("patch_windows.zip");
         else version(OSX) downloadPatch!("patch_osx.zip");
@@ -51,6 +69,7 @@ void UpdateOrLaunch()
 
         //Update is complete! Set state to launch game
         twUpdateLaunch.text = txtUpToDate;
+        twUpdateLaunch.textColor(colorUpdateComplete);
         btnUpdateLaunch.text = txtLaunch;
         btnUpdateLaunch.enabled = true;
         isUpdated = true;
@@ -61,23 +80,69 @@ int startLauncherWindow()
 {
 
 	import std.string, std.format, std.conv, core.thread, core.sys.windows.windows;
-	
+	import std.process;
+
+
+    //TODO use this to open links...! browse("http://www.stickknights.com");
+
     // First set isUpdated by checking the Internet for the latest version
     // Later, after a patch is installed, set isUpdated to true.
     isUpdated = isLatestVersion;
 
-     // create window
-    progress_window = Platform.instance.createWindow(title, null, 4, 480, 320);
+    // create window
+    progress_window = Platform.instance.createWindow(title, null, WindowFlag.Modal | WindowFlag.ExpandSize, 100, 100);
     auto vlayout = new VerticalLayout();
-    vlayout.margins = 0;
-    vlayout.padding = 10;
-    vlayout.backgroundColor = 0xF7FAFC; // Very light steel blue
+         vlayout.padding = 10;
+         vlayout.backgroundColor = colorWindowBackground;
+
+    // news  / changelog side by side in scroll bar boxes
+    auto hlayout = new HorizontalLayout();
+    auto labelNews = new TextWidget(null, "Stick Knights Online News"d);
+         labelNews.fontSize(24).layoutWidth(464).alignment(Align.Center);
+    auto labelUpdates = new TextWidget(null, "Updates and Patch Notes"d);
+         labelUpdates.fontSize(24).layoutWidth(464).alignment(Align.Center);
+    auto titles = new HorizontalLayout();
+         titles.addChild(labelNews);
+         titles.addChild(labelUpdates);
+
+    //News Section
+    auto scrollNews = new ScrollWidget("scrollNews", ScrollBarMode.Invisible, ScrollBarMode.Visible);
+         scrollNews.layoutWidth(464).layoutHeight(420);
+         scrollNews.backgroundColor = colorNewsUpdatesBackground;
+    auto newsContent = new VerticalLayout();
+         newsContent.addChild(new MultilineTextWidget(null, "Vel aptent, vitae pede a ante. Vel arcu integer quis, donec consectetuer at mauris, potenti vel, et pellentesque elit elementum nulla semper. Imperdiet elit libero, molestie fusce varius dolor, et varius quis, vel lacinia eros dapibus nibh tortor. Sodales vitae felis tortor ut id sit. Wisi nulla semper fringilla, velit repudiandae vehicula erat morbi augue suspendisse, nibh sociosqu neque eget. Sed neque pretium aenean dictumst wisi ut, sapien excepteur non facilisis aliquam dolor, elementum nonummy, purus lacus turpis. Eu duis nec imperdiet nostra. Lobortis et auctor, elit quis tortor in vel, id adipiscing commodo leo sed, massa orci pellentesque commodo arcu senectus. Tempor tellus cras massa purus auctor, felis elementum fringilla. Arcu est, nibh aliquam ligula justo eu in, et vel mollis faucibus amet, ultricies taciti justo et tincidunt dictum dui, varius quis elit. Nibh gravida sapien eget, rhoncus turpis elit, nulla mauris odio fugiat mi. Imperdiet sed vestibulum fringilla fames, pede velit."d));
+         newsContent.layoutWidth(432).layoutHeight(4200).margins(10);
+
+    scrollNews.contentWidget(newsContent);
+
+    //Changelog / Updates section
+    auto scrollUpdates = new ScrollWidget("scrollUpdates", ScrollBarMode.Invisible, ScrollBarMode.Visible);
+         scrollUpdates.layoutWidth(464).layoutHeight(420);
+         scrollUpdates.backgroundColor = colorNewsUpdatesBackground;
+    auto updatesContent = new VerticalLayout();
+         updatesContent.layoutWidth(432).layoutHeight(4200).margins(10);
+         updatesContent.addChild(new MultilineTextWidget(null, txtPatchNotes));
+    scrollUpdates.contentWidget(updatesContent);
+
+    //Add horizontal layout content panes to vertical layout
+    hlayout.addChild(scrollNews);
+    hlayout.addChild(scrollUpdates);
+    vlayout.addChild(titles);
+    vlayout.addChild(hlayout);
+
+    //Status message above progress bars
+    twUpdateLaunch = new TextWidget(null, isUpdated? txtUpToDate : txtUpdateAvailable);
 
     if (!isUpdated)
     {
+        twUpdateLaunch.fontSize(18);
+        twUpdateLaunch.textColor(colorUpdateRequired);
+        vlayout.addChild(twUpdateLaunch);
+
         // Download Progress Bar
         vlayout.addChild(new TextWidget(null, txtDownloadProgress));
         download_progress_bar = new ProgressBarWidget();
+        download_progress_bar.minHeight(32);
         download_progress_bar.progress = 1; // max 1000, so 100% = 1000, 25.1% = 251, etc.
         download_progress_bar.animationInterval = 33; // 33 milliseconds is about 30FPS for animation / screen refresh.
         vlayout.addChild(download_progress_bar);
@@ -85,15 +150,15 @@ int startLauncherWindow()
         // Install Progress Bar
         vlayout.addChild(new TextWidget(null, txtInstallProgress));
         install_progress_bar = new ProgressBarWidget();
+        install_progress_bar.minHeight(32);
         install_progress_bar.progress = 1; // max 1000, so 100% = 1000, 25.1% = 251, etc.
         install_progress_bar.animationInterval = 33; // 33 milliseconds is about 30FPS for animation / screen refresh.
         vlayout.addChild(install_progress_bar);
     }
 
     // Update and Launch button
-    twUpdateLaunch = new TextWidget(null, isUpdated ? txtUpToDate : txtUpdateAvailable);
-    vlayout.addChild(twUpdateLaunch);
     btnUpdateLaunch = new Button("btnUpdateLaunch", isUpdated ? txtLaunch : txtUpdate);
+    btnUpdateLaunch.minHeight(64);
     btnUpdateLaunch.click = delegate(Widget src) {
         auto composed = new Thread(&UpdateOrLaunch);
         composed.start();
