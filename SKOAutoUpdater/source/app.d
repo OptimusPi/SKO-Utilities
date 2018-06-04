@@ -6,9 +6,10 @@ mixin APP_ENTRY_POINT;
 //Download the contents fo this file via CURL
 const string versionURL = "http://www.stickknightsonline.com/version.txt";
 const string patchNotesURL = "http://www.stickknightsonline.com/patchNotes.txt";
+const string newsFeedURL = "http://www.stickknightsonline.com/feed/";
 
 //Text to display on the Update/Launcher window
-const dstring title = "Stick Knights Online Portal"d;
+const dstring txtPortalTitle = "Stick Knights Online Portal"d;
 const dstring txtUpdate = "Download and Install Update"d;
 const dstring txtLaunch = "Launch Stick Knights Online"d;
 const dstring txtUpdateAvailable = "An update is required."d;
@@ -31,17 +32,69 @@ __gshared TextWidget twUpdateLaunch;
 __gshared Window progress_window;
 __gshared bool isUpdated;
 __gshared dstring txtPatchNotes;
+__gshared string txtNewsFeed;
+__gshared NewsFeedItem[] newsFeedItems;
+
 private ubyte[] _patch;
+
+struct NewsFeedItem
+{
+    string title;
+    string pubDate;
+    string link;
+}
+
 
 extern (C) int UIAppMain(string[] args)
 {
     //Download some meta data first to display in the update screen
-    import std.net.curl, std.string, std.conv;
-	try{
-		txtPatchNotes = to!dstring(get(patchNotesURL)).replace("\r", "");
-	} catch (Throwable) {
-		txtPatchNotes = "Unable to download patch notes."d;
-	}
+    import std.net.curl, std.string, std.conv, std.xml, std.stdio;
+
+    //Download rss feed of news
+    try {
+        txtNewsFeed = to!string(get(newsFeedURL));
+    } catch (Throwable) {
+        txtNewsFeed = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><rss version=\"2.0\"><channel><item><title>Could not download latest News.</title><description>Could not download news!</description><pubDate>Fri, 24 Mar 2017 19:45:11 +0000</pubDate><link>http://www.stickknightsonline.com/</link></item></channel></rss>";
+    }
+
+    //Download plain text patch notes.
+    try {
+        txtPatchNotes = to!dstring(get(patchNotesURL)).replace("\r", "");
+    } catch (Throwable) {
+        txtPatchNotes = "Unable to download or parse patch notes."d;
+    }
+
+
+    //parse newsFeed
+    try {
+        //Parse XML feed if successful
+        auto xml = new DocumentParser(txtNewsFeed);
+
+        xml.onStartTag["item"] = (ElementParser xml)
+        {
+            NewsFeedItem item;
+            
+            //parse each tag one at a time and add it to a struct NewsFeedItem
+            xml.onEndTag["title"]   = (in Element e) 
+            { 
+                item.title   = e.text(); 
+            };
+            xml.onEndTag["pubDate"] = (in Element e) 
+            { 
+                item.pubDate = e.text(); 
+            };
+            xml.onEndTag["link"]    = (in Element e) 
+            { 
+                item.link    = e.text(); 
+            };
+
+            //Add to the list of items in the News Feed
+            newsFeedItems ~= item;
+        };
+        xml.parse();
+    } catch (Throwable) {
+        txtPatchNotes = "Unable to download or parse patch notes."d;
+    }
 
 	return startLauncherWindow();
 }
@@ -90,7 +143,7 @@ int startLauncherWindow()
     isUpdated = isLatestVersion;
 
     // create window
-    progress_window = Platform.instance.createWindow(title, null, WindowFlag.Modal | WindowFlag.ExpandSize, 100, 100);
+    progress_window = Platform.instance.createWindow(txtPortalTitle, null, WindowFlag.Modal | WindowFlag.ExpandSize, 100, 100);
     auto vlayout = new VerticalLayout();
          vlayout.padding = 10;
          vlayout.backgroundColor = colorWindowBackground;
