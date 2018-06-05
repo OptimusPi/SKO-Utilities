@@ -6,7 +6,7 @@ mixin APP_ENTRY_POINT;
 //Download the contents fo this file via CURL
 const string versionURL = "http://www.stickknightsonline.com/version.txt";
 const string patchNotesURL = "http://www.stickknightsonline.com/patchNotes.txt";
-const string newsFeedURL = "http://www.stickknightsonline.com/feed/";
+const string newsFeedURL = "http://twitrss.me/twitter_user_to_rss/?user=StickKnights";
 
 //Text to display on the Update/Launcher window
 const dstring txtPortalTitle = "Stick Knights Online Portal"d;
@@ -18,14 +18,16 @@ const dstring txtInstallingUpdate = "[2/2] Installing update..."d;
 const dstring txtDownloadProgress = "Download Progress"d;
 const dstring txtInstallProgress = "Update Progress"d;
 const dstring txtUpToDate = "Stick Knights Online is up to date."d;
-
+const dstring txtViewInBrowser = "Click to view in browser"d;
 //colors
 enum colorUpdateRequired = 0xFF101F;    //Red
 enum colorDownloadProgress = 0xf26000;  //Dark Orange
 enum colorUpdateComplete = 0x4080ff;    //Blue
 enum colorNewsUpdatesBackground = 0xFAFBFC;  //Light Steel Blue
 enum colorWindowBackground = 0xFFFFFF;  //Pure White
+enum colorLink = 0x003FFF; //Bright Blue
 
+//Varaiables used for multi-threading communication
 __gshared ProgressBarWidget download_progress_bar, install_progress_bar;
 __gshared Button btnUpdateLaunch;
 __gshared TextWidget twUpdateLaunch;
@@ -39,9 +41,9 @@ private ubyte[] _patch;
 
 struct NewsFeedItem
 {
-    string title;
-    string pubDate;
-    string link;
+    dstring title;
+    dstring pubDate;
+    dstring link;
 }
 
 
@@ -77,15 +79,15 @@ extern (C) int UIAppMain(string[] args)
             //parse each tag one at a time and add it to a struct NewsFeedItem
             xml.onEndTag["title"]   = (in Element e) 
             { 
-                item.title   = e.text(); 
+                item.title   = to!dstring(e.text()); 
             };
             xml.onEndTag["pubDate"] = (in Element e) 
             { 
-                item.pubDate = e.text(); 
+                item.pubDate = to!dstring(e.text()[0 .. 17]); 
             };
             xml.onEndTag["link"]    = (in Element e) 
             { 
-                item.link    = e.text(); 
+                item.link    = to!dstring(e.text()); 
             };
 
             xml.parse();
@@ -133,12 +135,7 @@ void UpdateOrLaunch()
 
 int startLauncherWindow()
 {
-
-	import std.string, std.format, std.conv, core.thread, core.sys.windows.windows;
-	import std.process;
-
-
-    //TODO use this to open links...! browse("http://www.stickknights.com");
+	import std.string, std.format, std.conv, core.thread, std.process;
 
     // First set isUpdated by checking the Internet for the latest version
     // Later, after a patch is installed, set isUpdated to true.
@@ -165,8 +162,35 @@ int startLauncherWindow()
          scrollNews.layoutWidth(464).layoutHeight(420);
          scrollNews.backgroundColor = colorNewsUpdatesBackground;
     auto newsContent = new VerticalLayout();
-         newsContent.addChild(new MultilineTextWidget(null, "Vel aptent, vitae pede a ante. Vel arcu integer quis, donec consectetuer at mauris, potenti vel, et pellentesque elit elementum nulla semper. Imperdiet elit libero, molestie fusce varius dolor, et varius quis, vel lacinia eros dapibus nibh tortor. Sodales vitae felis tortor ut id sit. Wisi nulla semper fringilla, velit repudiandae vehicula erat morbi augue suspendisse, nibh sociosqu neque eget. Sed neque pretium aenean dictumst wisi ut, sapien excepteur non facilisis aliquam dolor, elementum nonummy, purus lacus turpis. Eu duis nec imperdiet nostra. Lobortis et auctor, elit quis tortor in vel, id adipiscing commodo leo sed, massa orci pellentesque commodo arcu senectus. Tempor tellus cras massa purus auctor, felis elementum fringilla. Arcu est, nibh aliquam ligula justo eu in, et vel mollis faucibus amet, ultricies taciti justo et tincidunt dictum dui, varius quis elit. Nibh gravida sapien eget, rhoncus turpis elit, nulla mauris odio fugiat mi. Imperdiet sed vestibulum fringilla fames, pede velit."d));
          newsContent.layoutWidth(432).layoutHeight(4200).margins(10);
+
+         int i = 0;
+    foreach (NewsFeedItem item; newsFeedItems)
+    {
+        import std.conv;
+
+        auto date = new MultilineTextWidget(null, item.pubDate);
+             date.fontWeight(FontWeight.Bold);
+        auto title = new MultilineTextWidget(null, item.title);
+        auto link = new Button("btnLink" ~ to!string(i), txtViewInBrowser);
+             link.fontItalic(true);
+             link.styleId = STYLE_TEXT;
+             link.textColor(colorLink);
+        link.click = delegate(Widget src) {
+            browse(to!string(item.link));
+            return true;
+        };
+
+        //Add each part of this news element in order
+        auto dateAndLink= new HorizontalLayout();
+        dateAndLink.addChild(date);
+        dateAndLink.addChild(link);
+
+        newsContent.addChild(dateAndLink);
+        newsContent.addChild(title);
+        newsContent.addChild(new TextWidget(null, ""d));
+        newsContent.addChild(new TextWidget(null, ""d));
+    }
 
     scrollNews.contentWidget(newsContent);
 
