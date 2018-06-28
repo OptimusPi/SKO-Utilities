@@ -348,7 +348,9 @@ void unzipPatch()
 				mkdir(createDir);
 		}
 
-		write(e, archive.expand(archive.directory[e]));
+        //fix bug where trailing / causes access error upon unzipping a .zip created with 7-zip
+        if (e.length > 1 && e[e.length - 1] != '/')
+		    write(e, archive.expand(archive.directory[e]));
 		install_progress_bar.progress = to!int(1000 * currentKey++ / archive.directory.keys.length);
 	}
     install_progress_bar.progress = 1000;

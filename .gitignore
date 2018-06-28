@@ -43,3 +43,4 @@ sko.*
 stdout.txt
 version.txt
 SKOAutoUpdater/version.txt
+*.visualdproj
