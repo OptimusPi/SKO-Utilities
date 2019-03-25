@@ -1,13 +1,13 @@
-#include <SDL/SDL.h>
-#include <SDL/SDL_Image.h>
-#include <SDL/SDL_opengl.h>
+#include "SDL.h"
+#include "SDL_Image.h"
+#include "SDL_opengl.h" 
 #include <string>
 #include <sstream>
 #include <iostream>
 #include <fstream>
 #include "KE_Timestep.h"
 #include "Text.h"
-
+#include "OPI_Clock.h"
 
 //modes
 const char 
@@ -129,7 +129,7 @@ void Image::setImage(Image source)
      h       = source.h; 
 }
 
-void DrawImage( int x, int y, Image::Image img) 
+void DrawImage( int x, int y, Image img) 
 {      
      glColor3f(1.0f, 1.0f, 1.0f);     
      glBindTexture( GL_TEXTURE_2D,  img.texture);
@@ -154,7 +154,7 @@ void DrawImage( int x, int y, Image::Image img)
    
 } 
 
-Text::Text coords;
+Text coords;
 
 
 
@@ -374,8 +374,20 @@ void drawText();
 
 std::string save = "";
 Image font;
+
+
+
+#ifdef _WIN32
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow)
+{
+
+#else
+
 int main(int argc, char *argv[])
 {
+
+#endif
     
     KE_Timestep *timestep = new KE_Timestep(60);
     
@@ -429,7 +441,7 @@ int main(int argc, char *argv[])
   for(int i = 0; i < 256; i++)//check if file exists, etc.
   {
      char szFilename[24];
-     sprintf(szFilename, "IMG/TILE/tile%i.png", i);  
+     sprintf_s(szFilename, "IMG/TILE/tile%i.png", i);  
      std::ifstream checker (szFilename);
      if (checker.is_open())
      {
@@ -442,16 +454,17 @@ int main(int argc, char *argv[])
         break;
   }
   
-  //load map
-  if (argc > 1)
-  {
-    loadmap(argv[1]); 
-    current_tile = number_of_tiles;
-    current_rect = number_of_rects;
-    current_fringe= number_of_fringe;
-  }
+  //TODO fix this
+  ////load map
+  //if (argc > 1)
+  //{
+  //  loadmap(argv[1]); 
+  //  current_tile = number_of_tiles;
+  //  current_rect = number_of_rects;
+  //  current_fringe= number_of_fringe;
+  //}
   
-  int timer = SDL_GetTicks();
+  int timer = OPI_Clock::milliseconds();
   
   //mouse buttons
   bool RCLICK = false;
@@ -474,7 +487,7 @@ int main(int argc, char *argv[])
             if (save_notify < clock())
                save_notify = 0;
                           
-                if (SDL_GetTicks() - coordsTicker  > 100)
+                if (OPI_Clock::milliseconds() - coordsTicker  > 100)
                 {  
                     //draw coords
                     std::stringstream ss;
@@ -482,7 +495,7 @@ int main(int argc, char *argv[])
                     coords.SetText((char *)ss.str().c_str());
                     
                     //reset ticker
-                    coordsTicker = SDL_GetTicks();
+                    coordsTicker = OPI_Clock::milliseconds();
                 }        
                           
                           
@@ -645,8 +658,9 @@ int main(int argc, char *argv[])
                                     std::string file = "Output.map";
                                     
                                     //unless you have opened one
-                                     if (argc > 1)
-                                        file = argv[1]; 
+									// TODO fix this
+                                    // if (argc > 1)
+                                    //    file = argv[1]; 
                                     
                                     //dump all the memory into a file
                                     std::ofstream MapFile(file.c_str(), std::ios::out|std::ios::binary);
