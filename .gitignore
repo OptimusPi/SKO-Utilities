@@ -45,3 +45,4 @@ SKOMapEditor.VC.VC.opendb
 *.tlog
 *.idb
 *.pdb
+*.tmp
