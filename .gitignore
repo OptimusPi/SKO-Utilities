@@ -39,3 +39,9 @@ stdout.txt
 version.txt
 SKOAutoUpdater/version.txt
 *.visualdproj
+SKOMapEditor.VC.db
+SKOMapEditor.VC.VC.opendb
+*.ipch
+*.tlog
+*.idb
+*.pdb
