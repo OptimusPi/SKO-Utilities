@@ -74,6 +74,8 @@
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>C:\GitHub\SKO-Utilities\SKOMapEditor\Dependencies\SDL_image\lib\x86;C:\GitHub\SKO-Utilities\SKOMapEditor\Dependencies\SDL\lib\x86;C:\GitHub\SKO-Utilities\SKOMapEditor\Dependencies\pthread\lib\x86;$(LibraryPath)</LibraryPath>
     <IncludePath>C:\GitHub\SKO-Utilities\SKOMapEditor\Dependencies\SDL_image\include;C:\GitHub\SKO-Utilities\SKOMapEditor\Dependencies\SDL\include;C:\GitHub\SKO-Utilities\SKOMapEditor\Dependencies\pthread\include;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)\SKOMapEditor</OutDir>
+    <IntDir>$(SolutionDir)\SKOMapEditor</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
