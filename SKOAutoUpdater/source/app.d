@@ -1,68 +1,258 @@
 import std.stdio;
 import dlangui;
 
-version(Windows) 
-{
-	import core.sys.windows.windows;
-}
-
 mixin APP_ENTRY_POINT;
 
-const string title = "Stick Knights Online Auto Updater";
+//Download the contents fo this file via CURL
 const string versionURL = "http://www.stickknightsonline.com/version.txt";
-__gshared ProgressBarWidget progress_bar; 
-__gshared Window progress_window;	
+const string patchNotesURL = "http://www.stickknightsonline.com/patchNotes.txt";
+const string newsFeedURL = "http://twitrss.me/twitter_user_to_rss/?user=StickKnights";
 
-void startDownloadMessage()
+//Text to display on the Update/Launcher window
+const dstring txtPortalTitle = "Stick Knights Online Portal"d;
+const dstring txtUpdate = "Download and Install Update"d;
+const dstring txtLaunch = "Launch Stick Knights Online"d;
+const dstring txtUpdateAvailable = "An update is required."d;
+const dstring txtDownloadingUpdate = "[1/2] Downloading update..."d;
+const dstring txtInstallingUpdate = "[2/2] Installing update..."d;
+const dstring txtDownloadProgress = "Download Progress"d;
+const dstring txtInstallProgress = "Update Progress"d;
+const dstring txtUpToDate = "Stick Knights Online is up to date."d;
+const dstring txtViewInBrowser = "Click to view in browser"d;
+//colors
+enum colorUpdateRequired = 0xFF101F;    //Red
+enum colorDownloadProgress = 0xf26000;  //Dark Orange
+enum colorUpdateComplete = 0x4080ff;    //Blue
+enum colorNewsUpdatesBackground = 0xFAFBFC;  //Light Steel Blue
+enum colorWindowBackground = 0xFFFFFF;  //Pure White
+enum colorLink = 0x003FFF; //Bright Blue
+
+//Varaiables used for multi-threading communication
+__gshared ProgressBarWidget download_progress_bar, install_progress_bar;
+__gshared Button btnUpdateLaunch;
+__gshared TextWidget twUpdateLaunch;
+__gshared Window progress_window;
+__gshared bool isUpdated;
+__gshared dstring txtPatchNotes;
+__gshared string txtNewsFeed;
+__gshared NewsFeedItem[] newsFeedItems;
+
+private ubyte[] _patch;
+
+struct NewsFeedItem
 {
-	import std.string, std.format, std.conv, core.sys.windows.windows;
-
-	
-     // create window
-    progress_window = Platform.instance.createWindow("Dlang Auto-Updater with Progress", null, 4, 256, 64);
-
-	progress_bar = new ProgressBarWidget();
-	progress_bar.progress = 1; // max 1000, so 100% = 1000, 25.1% = 251, etc.
-	progress_bar.animationInterval = 16; // 16 milliseconds is about 60FPS for animation / screen refresh.
-	
-			
-	// create some widget to show in window
-    progress_window.mainWidget = progress_bar;
-		
-    // show window
-    progress_window.show();
-
-    // run message loop
-    Platform.instance.enterMessageLoop();
-
+    dstring title;
+    dstring pubDate;
+    dstring link;
 }
+
 
 extern (C) int UIAppMain(string[] args)
 {
-	import core.thread;
+    //Download some meta data first to display in the update screen
+    import std.net.curl, std.string, std.conv, std.xml, std.stdio;
 
-	if(isUpdated)
-	{
-		launch();
-		return 0;
-	}
-	if(!prompt!("Stick Knights Online requires an update. Download and install now?")) return 0;
+    //Download rss feed of news
+    try {
+        txtNewsFeed = to!string(get(newsFeedURL));
+    } catch (Throwable) {
+        txtNewsFeed = "<xml><rss><channel><item><title>Could not download latest News.</title><description>Could not download news!</description><pubDate>Fri, 24 Mar 2017 19:45:11 +0000</pubDate><link>http://www.stickknightsonline.com/</link></item></channel></rss></xml>";
+    }
 
-	auto composed = new Thread(&startDownloadMessage);
-    composed.start();
+    //Download plain text patch notes.
+    try {
+        txtPatchNotes = to!dstring(get(patchNotesURL)).replace("\r", "");
+    } catch (Throwable) {
+        txtPatchNotes = "Unable to download or parse patch notes."d;
+    }
 
-	version(linux) downloadPatch!("patch_linux.zip");
-	else version(Windows) downloadPatch!("patch_windows.zip");
-	else version(OSX) downloadPatch!("patch_osx.zip");
-	else static assert(false, "unsupported platform");
-	unzipPatch();
 
-	composed.join();
+    //parse newsFeed
+    try {
+        //Parse XML feed if successful
+        auto xml = new DocumentParser(txtNewsFeed);
 
-	if(!prompt!("Update complete! Launch Stick Knights Online?")) return 0;
-	
-	
-	return launch();
+        xml.onStartTag["item"] = (ElementParser xml)
+        {
+            NewsFeedItem item;
+            
+            //parse each tag one at a time and add it to a struct NewsFeedItem
+            xml.onEndTag["title"]   = (in Element e) 
+            { 
+                item.title   = to!dstring(e.text()); 
+            };
+            xml.onEndTag["pubDate"] = (in Element e) 
+            { 
+                item.pubDate = to!dstring(e.text()[0 .. 17]); 
+            };
+            xml.onEndTag["link"]    = (in Element e) 
+            { 
+                item.link    = to!dstring(e.text()); 
+            };
+
+            xml.parse();
+
+            //Add to the list of items in the News Feed
+            newsFeedItems ~= item;
+        };
+        xml.parse();
+    } catch (Throwable) {
+        txtPatchNotes = "Unable to download or parse patch notes."d;
+    }
+
+	return startLauncherWindow();
+}
+
+void UpdateOrLaunch()
+{
+    if (isUpdated) {
+        launch();
+        progress_window.close();
+    }  else  {
+        //Disable Download button
+        btnUpdateLaunch.enabled = false;
+
+        // Download patch
+        twUpdateLaunch.text = txtDownloadingUpdate;
+        twUpdateLaunch.textColor(colorDownloadProgress);
+        version(linux) downloadPatch!("patch_linux.zip");
+        else version(Windows) downloadPatch!("patch_windows.zip");
+        else version(OSX) downloadPatch!("patch_osx.zip");
+        else static assert(false, "unsupported platform");
+
+        // Unzip patch
+        twUpdateLaunch.text = txtInstallingUpdate;
+        unzipPatch();
+
+        //Update is complete! Set state to launch game
+        twUpdateLaunch.text = txtUpToDate;
+        twUpdateLaunch.textColor(colorUpdateComplete);
+        btnUpdateLaunch.text = txtLaunch;
+        btnUpdateLaunch.enabled = true;
+        isUpdated = true;
+    }
+}
+
+int startLauncherWindow()
+{
+	import std.string, std.format, std.conv, core.thread, std.process;
+
+    // First set isUpdated by checking the Internet for the latest version
+    // Later, after a patch is installed, set isUpdated to true.
+    isUpdated = isLatestVersion;
+
+    // create window
+    progress_window = Platform.instance.createWindow(txtPortalTitle, null, WindowFlag.Modal | WindowFlag.ExpandSize, 100, 100);
+    auto vlayout = new VerticalLayout();
+         vlayout.padding = 10;
+         vlayout.backgroundColor = colorWindowBackground;
+
+    // news  / changelog side by side in scroll bar boxes
+    auto hlayout = new HorizontalLayout();
+    auto labelNews = new TextWidget(null, "Stick Knights Online News"d);
+         labelNews.fontSize(24).layoutWidth(464).alignment(Align.Center);
+    auto labelUpdates = new TextWidget(null, "Updates and Patch Notes"d);
+         labelUpdates.fontSize(24).layoutWidth(464).alignment(Align.Center);
+    auto titles = new HorizontalLayout();
+         titles.addChild(labelNews);
+         titles.addChild(labelUpdates);
+
+    //News Section
+    auto scrollNews = new ScrollWidget("scrollNews", ScrollBarMode.Invisible, ScrollBarMode.Visible);
+         scrollNews.layoutWidth(464).layoutHeight(420);
+         scrollNews.backgroundColor = colorNewsUpdatesBackground;
+    auto newsContent = new VerticalLayout();
+         newsContent.layoutWidth(432).layoutHeight(4200).margins(10);
+
+         int i = 0;
+    foreach (NewsFeedItem item; newsFeedItems)
+    {
+        import std.conv;
+
+        auto date = new MultilineTextWidget(null, item.pubDate);
+             date.fontWeight(FontWeight.Bold);
+        auto title = new MultilineTextWidget(null, item.title);
+        auto link = new Button("btnLink" ~ to!string(i), txtViewInBrowser);
+             link.fontItalic(true);
+             link.styleId = STYLE_TEXT;
+             link.textColor(colorLink);
+        link.click = delegate(Widget src) {
+            browse(to!string(item.link));
+            return true;
+        };
+
+        //Add each part of this news element in order
+        auto dateAndLink= new HorizontalLayout();
+        dateAndLink.addChild(date);
+        dateAndLink.addChild(link);
+
+        newsContent.addChild(dateAndLink);
+        newsContent.addChild(title);
+        newsContent.addChild(new TextWidget(null, ""d));
+        newsContent.addChild(new TextWidget(null, ""d));
+    }
+
+    scrollNews.contentWidget(newsContent);
+
+    //Changelog / Updates section
+    auto scrollUpdates = new ScrollWidget("scrollUpdates", ScrollBarMode.Invisible, ScrollBarMode.Visible);
+         scrollUpdates.layoutWidth(464).layoutHeight(420);
+         scrollUpdates.backgroundColor = colorNewsUpdatesBackground;
+    auto updatesContent = new VerticalLayout();
+         updatesContent.layoutWidth(432).layoutHeight(4200).margins(10);
+         updatesContent.addChild(new MultilineTextWidget(null, txtPatchNotes));
+    scrollUpdates.contentWidget(updatesContent);
+
+    //Add horizontal layout content panes to vertical layout
+    hlayout.addChild(scrollNews);
+    hlayout.addChild(scrollUpdates);
+    vlayout.addChild(titles);
+    vlayout.addChild(hlayout);
+
+    //Status message above progress bars
+    twUpdateLaunch = new TextWidget(null, isUpdated? txtUpToDate : txtUpdateAvailable);
+
+    if (!isUpdated)
+    {
+        twUpdateLaunch.fontSize(18);
+        twUpdateLaunch.textColor(colorUpdateRequired);
+        vlayout.addChild(twUpdateLaunch);
+
+        // Download Progress Bar
+        vlayout.addChild(new TextWidget(null, txtDownloadProgress));
+        download_progress_bar = new ProgressBarWidget();
+        download_progress_bar.minHeight(32);
+        download_progress_bar.progress = 1; // max 1000, so 100% = 1000, 25.1% = 251, etc.
+        download_progress_bar.animationInterval = 33; // 33 milliseconds is about 30FPS for animation / screen refresh.
+        vlayout.addChild(download_progress_bar);
+
+        // Install Progress Bar
+        vlayout.addChild(new TextWidget(null, txtInstallProgress));
+        install_progress_bar = new ProgressBarWidget();
+        install_progress_bar.minHeight(32);
+        install_progress_bar.progress = 1; // max 1000, so 100% = 1000, 25.1% = 251, etc.
+        install_progress_bar.animationInterval = 33; // 33 milliseconds is about 30FPS for animation / screen refresh.
+        vlayout.addChild(install_progress_bar);
+    }
+
+    // Update and Launch button
+    btnUpdateLaunch = new Button("btnUpdateLaunch", isUpdated ? txtLaunch : txtUpdate);
+    btnUpdateLaunch.minHeight(64);
+    btnUpdateLaunch.click = delegate(Widget src) {
+        auto composed = new Thread(&UpdateOrLaunch);
+        composed.start();
+
+        return true;
+    };
+    vlayout.addChild(btnUpdateLaunch);
+
+    // show window
+    progress_window.mainWidget = vlayout;
+    progress_window.show();
+    Platform.instance.enterMessageLoop();
+
+    // exit program when finished!
+    return 0;
 }
 
 int launch()
@@ -98,10 +288,8 @@ int launch()
 	return 0;
 }
 
-bool isUpdated() @property
+bool isLatestVersion() @property
 {
-	import std.net.curl;
-	import core.sys.windows.windows;
     import std.net.curl, std.string;
 
 	try{
@@ -109,64 +297,10 @@ bool isUpdated() @property
 	} catch (Throwable) {
 		return false; 
 	}
-
-}
-
-void display(string message)()
-{
-    version(Windows)
-    {
-        import std.string, core.sys.windows.windows;
-
-        MessageBoxA(
-					null,
-					message.ptr,
-					title.ptr,
-					MB_OK);
-    }
-    else 
-	{
-		writeln("[" + title.toStringz() + "]" + message.toStringz());
-	}
-}
-
-bool prompt(string message)()
-{
-    import std.string;
-    string promptString = format("%s [Y/n] ", message);
-	
-    version(Windows)
-    {
-        auto result = MessageBoxA(
-								  NULL,
-								  promptString.ptr,
-								  "Stick Knights Online (Update Available)".ptr,
-								  MB_YESNO);
-        return result == IDYES ? true : false;
-    }
-    else
-    {
-        import std.algorithm;
-        write(promptString);
-        char[] actualResponse;
-        stdin.readln(actualResponse);
-        actualResponse.toLowerInPlace();
-        static immutable validResponses = ["y\n", "n\n", "yes\n", "no\n", "\n"];
-        while(!any!(a => a == actualResponse)(validResponses))
-        {
-            writeln("Input must be of the form '[Y/n]'");
-            write(promptString);
-            stdin.readln(actualResponse);
-            actualResponse.toLowerInPlace();
-        }
-        if(actualResponse == "n\n" || actualResponse == "no\n") return false;
-        return true;
-    }
 }
 
 void downloadPatch(string filename)()
 {
-	import core.sys.windows.windows;
     import std.net.curl, std.string, std.conv;
 
 
@@ -182,30 +316,23 @@ void downloadPatch(string filename)()
         return data.length; 
     };
 
+    //download_progress_bar.progress = 500;
     http.onProgress = (size_t dltotal, size_t dlnow,
                        size_t ultotal, size_t ulnow)
     {
         if (dlnow > 0 && dltotal > 0)
-        {
-            float progress = to!float(dlnow) / to!float(dltotal);
-			progress_bar.progress = to!int(progress * 1000);
-        }   
+			download_progress_bar.progress = to!int((to!float(dlnow) / to!float(dltotal)) * 1000); 
         return 0;
     };
     http.perform();
-	progress_bar.progress = 1000;
 }
 
 void unzipPatch()
 {
     import std.algorithm, std.file, std.zip, std.conv, std.string;
 
-	progress_bar.progress = 0;
-	
+	install_progress_bar.progress = 0;
 	auto archive = new ZipArchive(_patch);
-
-	//calculate for progress bar
-	int finalKey = archive.directory.keys.length;
 	int currentKey = 0;
 	
     foreach(e; archive.directory.keys.sort())
@@ -221,16 +348,12 @@ void unzipPatch()
 				mkdir(createDir);
 		}
 
-		write(e, archive.expand(archive.directory[e]));
-		
-		currentKey++;
-		progress_bar.progress = to!int(1000 * currentKey / finalKey);
+        //fix bug where trailing / causes access error upon unzipping a .zip created with 7-zip
+        if (e.length > 1 && e[e.length - 1] != '/')
+		    write(e, archive.expand(archive.directory[e]));
+		install_progress_bar.progress = to!int(1000 * currentKey++ / archive.directory.keys.length);
 	}
-	
-	progress_bar.progress = 1000;
-	progress_window.close();
+    install_progress_bar.progress = 1000;
 }
-
-private ubyte[] _patch;
 
 
