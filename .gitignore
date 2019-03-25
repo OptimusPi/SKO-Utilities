@@ -44,3 +44,6 @@ stdout.txt
 version.txt
 SKOAutoUpdater/version.txt
 *.visualdproj
+*.tlog
+*.pdb
+*.idb
