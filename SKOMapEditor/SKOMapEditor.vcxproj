@@ -29,8 +29,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -72,8 +72,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>C:\GitHub\SKO-Utilities\SKOMapEditor\Dependencies\SDL_image\lib\x86;C:\GitHub\SKO-Utilities\SKOMapEditor\Dependencies\SDL\lib\x86;C:\GitHub\SKO-Utilities\SKOMapEditor\Dependencies\pthread\lib\x86;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\GitHub\SKO-Utilities\SKOMapEditor\Dependencies\SDL_image\include;C:\GitHub\SKO-Utilities\SKOMapEditor\Dependencies\SDL\include;C:\GitHub\SKO-Utilities\SKOMapEditor\Dependencies\pthread\include;$(IncludePath)</IncludePath>
+    <LibraryPath>Dependencies\SDL_image\lib\x86;Dependencies\SDL\lib\x86;Dependencies\pthread\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>Dependencies\SDL_image\include;Dependencies\SDL\include;Dependencies\SDL\include\pthread\include;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)\SKOMapEditor</OutDir>
     <IntDir>$(SolutionDir)\SKOMapEditor</IntDir>
   </PropertyGroup>
