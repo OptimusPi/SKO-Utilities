@@ -374,8 +374,20 @@ void drawText();
 
 std::string save = "";
 Image font;
+
+
+
+#ifdef _WIN32
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow)
+{
+
+#else
+
 int main(int argc, char *argv[])
 {
+
+#endif
     
     KE_Timestep *timestep = new KE_Timestep(60);
     
@@ -442,14 +454,15 @@ int main(int argc, char *argv[])
         break;
   }
   
-  //load map
-  if (argc > 1)
-  {
-    loadmap(argv[1]); 
-    current_tile = number_of_tiles;
-    current_rect = number_of_rects;
-    current_fringe= number_of_fringe;
-  }
+  //TODO fix this
+  ////load map
+  //if (argc > 1)
+  //{
+  //  loadmap(argv[1]); 
+  //  current_tile = number_of_tiles;
+  //  current_rect = number_of_rects;
+  //  current_fringe= number_of_fringe;
+  //}
   
   int timer = OPI_Clock::milliseconds();
   
@@ -645,8 +658,9 @@ int main(int argc, char *argv[])
                                     std::string file = "Output.map";
                                     
                                     //unless you have opened one
-                                     if (argc > 1)
-                                        file = argv[1]; 
+									// TODO fix this
+                                    // if (argc > 1)
+                                    //    file = argv[1]; 
                                     
                                     //dump all the memory into a file
                                     std::ofstream MapFile(file.c_str(), std::ios::out|std::ios::binary);
