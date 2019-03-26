@@ -503,7 +503,16 @@ int main(int argc, char *argv[])
                //image buffer and background                    
                DrawImage(0, 0, background);
                 
-                 
+               //Delete any collision rectangles that are too small.
+			   for (int i = 0; i < current_rect; i++) {
+				   if (collision_rect[i].h < 4 || collision_rect[i].w < 4) {
+					   for (; i < current_rect; i++) {
+						   collision_rect[i] = collision_rect[i + 1];
+					   }
+					   current_rect--;
+					   number_of_rects--;
+				   }
+			   }
                //draw tiles, only on screen
                for (int i = 0; i < number_of_tiles; i++)
                {
