@@ -47,3 +47,7 @@ SKOMapEditor.VC.VC.opendb
 *.ipch
 *.tlog
 *.tmp
+*.ilk
+*.user
+SKOMapEditor/SKOMapEditor.ilk
+SKOMapEditor/SKOMapEditor.vcxproj.user
