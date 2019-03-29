@@ -42,6 +42,15 @@ float x_speed, y_speed;
 const float GRAVITY = 0.175;
 bool RIGHT = false, LEFT = false;
 
+// Global variables
+SDL_Event event;
+float camera_x = 0, camera_y = 0;
+int cursor_x = 0, cursor_y = 0;
+int current_tile = 0;
+int current_rect = 0;
+int current_fringe = 0;
+int current_tile_img = 0;
+
 class Image
 {
     private:
@@ -168,6 +177,20 @@ void DrawRect(SDL_Rect rect)
      glVertex2f(rect.x+rect.w + 0.5, rect.y+rect.h + 0.5);
      glVertex2f(rect.x + 0.5, rect.y+rect.h + 0.5);
      glEnd();
+}
+
+void cleanupInvisibleRects()
+{
+	//Delete any collision rectangles that are too small.
+	for (int i = 0; i < current_rect; i++) {
+		if (collision_rect[i].h < 4 || collision_rect[i].w < 4) {
+			for (; i < current_rect; i++) {
+				collision_rect[i] = collision_rect[i + 1];
+			}
+			current_rect--;
+			number_of_rects--;
+		}
+	}
 }
 
 void loadmap (std::string FileName)
@@ -337,6 +360,8 @@ void loadmap (std::string FileName)
 
          free(memblock);
      }
+
+	 cleanupInvisibleRects();
 }
 
 void screenOptions()
@@ -377,6 +402,7 @@ Image font;
 
 
 
+
 #ifdef _WIN32
 #include <shellapi.h>
 
@@ -392,7 +418,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 	int argCount;
 
 	szArgList = CommandLineToArgvW(GetCommandLine(), &argCount);
-	if (szArgList != NULL)
+	if (szArgList[1] != NULL)
 	{
 		std::wstring ws(szArgList[1]);
 		loadMapFilename +=  std::string(ws.begin(), ws.end());
@@ -415,15 +441,6 @@ int main(int argc, char *argv[])
 	}
 
 #endif
-
-	// Global variables
-	SDL_Event event;
-	float camera_x = 0, camera_y = 0;
-	int cursor_x = 0, cursor_y = 0;
-	int current_tile = 0;
-	int current_rect = 0;
-	int current_fringe = 0;
-	int current_tile_img = 0;
 
 	// Open requested map file
 	if (loadMapFilename.length() > 0)
@@ -506,7 +523,7 @@ int main(int argc, char *argv[])
   
   unsigned long int coordsTicker = 0;
   
-  
+
   while (!done)
   {
         timestep->Update();
@@ -532,7 +549,6 @@ int main(int argc, char *argv[])
                //image buffer and background                    
                DrawImage(0, 0, background);
                 
-                 
                //draw tiles, only on screen
                for (int i = 0; i < number_of_tiles; i++)
                {
@@ -680,6 +696,9 @@ int main(int argc, char *argv[])
                            break;
                            case '8':
                                  {  
+									// Cleanup small rects you can't see
+									cleanupInvisibleRects();
+
                                     //show selector for a second
                                     save_notify = clock() + 120;
                                     
@@ -1222,6 +1241,8 @@ int main(int argc, char *argv[])
                                
                                case COLLISION_DRAW:
                                      current_rect++;
+									 // Cleanup small rects you can't see
+									 cleanupInvisibleRects();
                                break;
                            }
                                    
