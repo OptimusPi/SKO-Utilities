@@ -25,17 +25,17 @@ int save_notify;
 bool SHIFT_HELD = false;
 
 SDL_Surface *screen;
-  SDL_Rect collision_rect[32768];
-  int collision_ox;
-  int collision_oy;
-  int tile_x[32768], tile_y[32768];
-  unsigned char tile[32768];
-  int fringe_x[32768], fringe_y[32768];
-  unsigned char fringe[32768];
-  int number_of_tiles = 0;
-  int number_of_rects = 0;
-  int number_of_fringe = 0;
-  bool stickman_toggle = false;
+SDL_Rect collision_rect[32768];
+int collision_ox;
+int collision_oy;
+int tile_x[32768], tile_y[32768];
+unsigned char tile[32768];
+int fringe_x[32768], fringe_y[32768];
+unsigned char fringe[32768];
+int number_of_tiles = 0;
+int number_of_rects = 0;
+int number_of_fringe = 0;
+bool stickman_toggle = false;
 
 SDL_Rect stickman;
 float x_speed, y_speed;
@@ -378,16 +378,61 @@ Image font;
 
 
 #ifdef _WIN32
+#include <shellapi.h>
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow)
 {
+
+	// load map by dragging and dropping onto this executable, 
+	// or with command line arguments:
+	// SKOMapEditor.exe map0.map
+	std::string loadMapFilename = "";
+
+	LPWSTR *szArgList;
+	int argCount;
+
+	szArgList = CommandLineToArgvW(GetCommandLine(), &argCount);
+	if (szArgList != NULL)
+	{
+		std::wstring ws(szArgList[1]);
+		loadMapFilename +=  std::string(ws.begin(), ws.end());
+	}
+	LocalFree(szArgList);
+
 
 #else
 
 int main(int argc, char *argv[])
 {
 
+	// load map by dragging and dropping onto this executable, 
+	// or with command line arguments:
+	// SKOMapEditor.exe map0.map
+	std::string loadMapFilename = "";
+	if (argc > 1)
+	{
+		loadMapFilename += (std::string)argv[1];
+	}
+
 #endif
+
+	// Global variables
+	SDL_Event event;
+	float camera_x = 0, camera_y = 0;
+	int cursor_x = 0, cursor_y = 0;
+	int current_tile = 0;
+	int current_rect = 0;
+	int current_fringe = 0;
+	int current_tile_img = 0;
+
+	// Open requested map file
+	if (loadMapFilename.length() > 0)
+	{
+		loadmap(loadMapFilename);
+		current_tile = number_of_tiles;
+		current_rect = number_of_rects;
+		current_fringe= number_of_fringe;
+	}
     
     KE_Timestep *timestep = new KE_Timestep(60);
     
@@ -398,14 +443,7 @@ int main(int argc, char *argv[])
      
     screenOptions();      
     
-    
-  SDL_Event event;
-  float camera_x = 0, camera_y = 0;
-  int cursor_x = 0, cursor_y = 0;
-  int current_tile = 0;
-  int current_rect = 0;
-  int current_fringe = 0;
-  int current_tile_img = 0;
+ 
   
   //stickman
   stickman.x = 0;
@@ -453,16 +491,7 @@ int main(int argc, char *argv[])
      else
         break;
   }
-  
-  //TODO fix this
-  ////load map
-  //if (argc > 1)
-  //{
-  //  loadmap(argv[1]); 
-  //  current_tile = number_of_tiles;
-  //  current_rect = number_of_rects;
-  //  current_fringe= number_of_fringe;
-  //}
+ 
   
   int timer = OPI_Clock::milliseconds();
   
@@ -667,9 +696,8 @@ int main(int argc, char *argv[])
                                     std::string file = "Output.map";
                                     
                                     //unless you have opened one
-									// TODO fix this
-                                    // if (argc > 1)
-                                    //    file = argv[1]; 
+                                    if (loadMapFilename.length() > 1)
+                                       file = loadMapFilename; 
                                     
                                     //dump all the memory into a file
                                     std::ofstream MapFile(file.c_str(), std::ios::out|std::ios::binary);
