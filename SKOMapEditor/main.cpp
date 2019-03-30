@@ -1,6 +1,16 @@
+
+#ifdef _WIN32
 #include "SDL.h"
 #include "SDL_Image.h"
 #include "SDL_opengl.h" 
+#else 
+#include <SDL/SDL.h>
+#include <SDL/SDL_image.h>
+#include <SDL/SDL_opengl.h> 
+#endif
+
+
+#include <stdio.h>
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -495,22 +505,18 @@ int main(int argc, char *argv[])
   
   for(int i = 0; i < 256; i++)//check if file exists, etc.
   {
-     char szFilename[24];
-     sprintf_s(szFilename, "IMG/TILE/tile%i.png", i);  
-     std::ifstream checker (szFilename);
+     std::stringstream ss;
+     ss << "IMG/TILE/tile" << i << ".png";  
+     std::ifstream checker (ss.str());
      if (checker.is_open())
      {
         checker.close();
-        tile_img[i].setImage(szFilename);
+        tile_img[i].setImage(ss.str());
         num_tiles = i;
-        
      }
      else
         break;
   }
- 
-  
-  int timer = OPI_Clock::milliseconds();
   
   //mouse buttons
   bool RCLICK = false;
