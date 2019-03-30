@@ -18,6 +18,7 @@
 #include "KE_Timestep.h"
 #include "Text.h"
 #include "OPI_Clock.h"
+#include "OPI_Sleep.h"
 
 //modes
 const char 
@@ -61,6 +62,18 @@ int current_rect = 0;
 int current_fringe = 0;
 int current_tile_img = 0;
 
+  
+  //mouse buttons
+  bool RCLICK = false;
+  bool LCLICK = false;
+  
+  bool placing_tile = false;
+  bool placing_fringe = false;
+  //main loop
+  bool done = false;
+  
+  unsigned long int coordsTicker = 0;
+
 class Image
 {
     private:
@@ -96,26 +109,28 @@ void Image::setImage( std::string path )
         w = surface->w;
         h = surface->h;
 
-
-            // get the number of channels in the SDL surface
-            nOfColors = surface->format->BytesPerPixel;
-            if (nOfColors == 4)     // contains an alpha channel
-            {
-                                              
-                    if (surface->format->Rmask == 0x000000ff)
-                            texture_format = GL_RGBA;
-                    else
-                            texture_format = GL_BGRA;
-            } else if (nOfColors == 3)     // no alpha channel
-            {
-                    if (surface->format->Rmask == 0x000000ff)
-                            texture_format = GL_RGB;
-                    else
-                            texture_format = GL_BGR;
-            } else {
-                    printf("warning: the image is not truecolor..  this will probably break\n");
-                    // this error should not go unhandled
-            }
+        // get the number of channels in the SDL surface
+        nOfColors = surface->format->BytesPerPixel;
+        if (nOfColors == 4)     // contains an alpha channel
+        {                            
+            if (surface->format->Rmask == 0x000000ff)
+                    texture_format = GL_RGBA;
+            else
+                    texture_format = GL_BGRA;
+        } 
+        else if (nOfColors == 3)     // no alpha channel
+        {
+            if (surface->format->Rmask == 0x000000ff)
+                    texture_format = GL_RGB;
+            else
+                    texture_format = GL_BGR;
+        } else {
+            printf("warning: the image is not truecolor..  this will probably break\n");
+            done = true;
+            OPI_Sleep::milliseconds(100);
+            SDL_Quit();
+            return;
+        }
             
 
         // Have OpenGL generate a texture object handle for us
@@ -125,13 +140,13 @@ void Image::setImage( std::string path )
         glBindTexture( GL_TEXTURE_2D, tex );
        
 
-       // Set the texture's stretching properties
-            glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-            glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+        // Set the texture's stretching properties
+        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
         // Edit the texture object's image data using the information SDL_Surface gives us
         glTexImage2D( GL_TEXTURE_2D, 0, nOfColors, surface->w, surface->h, 0,
-                          texture_format, GL_UNSIGNED_BYTE, surface->pixels );
+            texture_format, GL_UNSIGNED_BYTE, surface->pixels );
     }
 
     // Free the SDL_Surface only if it was successfully created
@@ -179,7 +194,6 @@ Text coords;
 
 void DrawRect(SDL_Rect rect)
 {
-     glBindTexture( GL_TEXTURE_2D,  NULL);
      glColor3f(0.0f, 0.0f, 1.0f);
      glBegin(GL_LINE_LOOP);
      glVertex2f(rect.x + 0.5, rect.y + 0.5);
@@ -517,18 +531,6 @@ int main(int argc, char *argv[])
      else
         break;
   }
-  
-  //mouse buttons
-  bool RCLICK = false;
-  bool LCLICK = false;
-  
-  bool placing_tile = false;
-  bool placing_fringe = false;
-  //main loop
-  bool done = false;
-  
-  unsigned long int coordsTicker = 0;
-  
 
   while (!done)
   {
@@ -646,10 +648,10 @@ int main(int argc, char *argv[])
             {        
                 if (event.type == SDL_QUIT)
                 {
+                   done = true;
+                   OPI_Sleep::milliseconds(100);
                    SDL_Quit();
-                   done = 1;
                 }
-                
                     
                 if (event.type == SDL_KEYUP)
                 {
@@ -891,12 +893,16 @@ int main(int argc, char *argv[])
                            break;
                            case 'a':  
                                       
-                                      if (current_tile > 0 && mode == TILE_DRAW && !fringe_mode) 
+                                      if (current_tile > 0 && mode == TILE_DRAW && !fringe_mode)
+                                      { 
                                          tile_x[current_tile-1]--;   
+                                      }
                                       if (current_fringe > 0&& mode == TILE_DRAW && fringe_mode) 
+                                      {
                                          fringe_x[current_fringe-1]--;   
+                                      }
                                          
-                                         LEFT = true;
+                                       LEFT = true;
                                       
                                       if (mode == COLLISION_DRAW && current_rect > 0) 
                                       {
@@ -982,14 +988,11 @@ int main(int argc, char *argv[])
                 if (camera_y < 0)
                    camera_y = 0;
                    
-                if( event.type == SDL_MOUSEMOTION) 
-                { 
-        
-                    //Get the mouse offsets 
+                if( event.type == SDL_MOUSEMOTION)
+                {
+                    //Get the mouse offsets
                     cursor_x = event.motion.x;
                     cursor_y = event.motion.y;
-                    
-                   
                     
                     //printf("x: %i, y: %i\n", cursor_x, cursor_y);
                     
@@ -1213,12 +1216,16 @@ int main(int argc, char *argv[])
                      
                      LCLICK = true;
                 }
+
+                if ( event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_RIGHT && !RCLICK)
+                {
+                    RCLICK = true;
+                    //TODO - use RCLICK for collision rect editing
+                }
                 if( event.type == SDL_MOUSEBUTTONUP ) 
-                {          
-                    
+                {         
                     if ( event.button.button == SDL_BUTTON_LEFT && LCLICK)
                     {
-                        
                            switch (mode)
                            {
                                case TILE_DRAW:
@@ -1253,6 +1260,11 @@ int main(int argc, char *argv[])
                            }
                                    
                           LCLICK = false;
+                   }
+
+                   if ( event.button.button == SDL_BUTTON_RIGHT && RCLICK)
+                   {
+                       RCLICK = false;
                    }
                }
             } //if poll event
