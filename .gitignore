@@ -53,3 +53,5 @@ SKOMapEditor/SKOMapEditor.ilk
 SKOMapEditor/SKOMapEditor.vcxproj.user
 *.bin
 *.enc
+*.ilk
+*.map
