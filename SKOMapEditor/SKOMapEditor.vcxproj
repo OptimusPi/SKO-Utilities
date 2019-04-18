@@ -160,12 +160,12 @@
     <ClInclude Include="KE_Timestep.h" />
     <ClInclude Include="OPI_Clock.h" />
     <ClInclude Include="OPI_Sleep.h" />
-    <ClInclude Include="Text.h" />
+    <ClInclude Include="OPI_Text.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KE_Timestep.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Text.cpp" />
+    <ClCompile Include="OPI_Text.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

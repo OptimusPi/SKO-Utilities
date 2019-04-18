@@ -52,3 +52,4 @@ SKOMapEditor.VC.VC.opendb
 SKOMapEditor/SKOMapEditor.ilk
 SKOMapEditor/SKOMapEditor.vcxproj.user
 *.bin
+*.enc
