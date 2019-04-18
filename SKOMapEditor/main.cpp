@@ -16,7 +16,7 @@
 #include <iostream>
 #include <fstream>
 #include "KE_Timestep.h"
-#include "Text.h"
+#include "OPI_Text.h"
 #include "OPI_Clock.h"
 #include "OPI_Sleep.h"
 
