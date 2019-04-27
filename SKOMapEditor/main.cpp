@@ -188,7 +188,7 @@ void DrawImage( int x, int y, Image img)
    
 } 
 
-Text coords;
+OPI_Text coords;
 
 
 
@@ -495,7 +495,7 @@ int main(int argc, char *argv[])
   SDL_ShowCursor(0);
 
   //coords text
-  coords.SetText("0,0");
+	coords.SetText("0,0");
      coords.used = true;
      coords.pos_x = 2;
      coords.pos_y = 2;

@@ -3,7 +3,7 @@
 
 #include <string>
 #include <cstdlib>
-
+#include "SDL/SDL_ttf"
 
 
 class OPI_Text
@@ -12,7 +12,7 @@ class OPI_Text
 	public:
 		OPI_Text();
 		void SetText(std::string content);
-		unsigned int length();
+		size_t length();
 		short int length;
 		float R, G, B;
 		float x, y;

@@ -12,6 +12,7 @@ unsigned int OPI_Text::length()
 	// Return length of content string
 	return this->content.length();
 }
+
 void OPI_Text::SetText(std::string content)
 {
 	this->content = content;
