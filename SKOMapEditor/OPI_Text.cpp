@@ -7,7 +7,7 @@ OPI_Text::OPI_Text()
     B = 255;        
 }
 
-unsigned int OPI_Text::length()
+size_t OPI_Text::length()
 {
 	// Return length of content string
 	return this->content.length();

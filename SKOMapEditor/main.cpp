@@ -62,6 +62,7 @@ int current_rect = 0;
 int current_fringe = 0;
 int current_tile_img = 0;
 
+
   
   //mouse buttons
   bool RCLICK = false;
@@ -84,76 +85,78 @@ class Image
     void setImage(std::string filename);
     Image();
     void setImage(Image source);
-    
+	void setImage(SDL_Surface *surface);
+
     GLuint texture;
     int w;
     int h;
-    
 };
 
 Image::Image(){};
 
 
+void Image::setImage(SDL_Surface *surface)
+{
+	GLuint tex;			// This is a handle to our texture object
+	GLenum texture_format;
+	GLint  nOfColors;
+
+	if (surface)
+	{
+		w = surface->w;
+		h = surface->h;
+
+		// get the number of channels in the SDL surface
+		nOfColors = surface->format->BytesPerPixel;
+		if (nOfColors == 4)     // contains an alpha channel
+		{
+			if (surface->format->Rmask == 0x000000ff)
+				texture_format = GL_RGBA;
+			else
+				texture_format = GL_BGRA;
+		}
+		else if (nOfColors == 3)     // no alpha channel
+		{
+			if (surface->format->Rmask == 0x000000ff)
+				texture_format = GL_RGB;
+			else
+				texture_format = GL_BGR;
+		}
+		else {
+			texture_format = GL_RGB;
+		}
+
+
+		// Have OpenGL generate a texture object handle for us
+		glGenTextures(1, &tex);
+
+		// Bind the texture object
+		glBindTexture(GL_TEXTURE_2D, tex);
+
+
+		// Set the texture's stretching properties
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		// Edit the texture object's image data using the information SDL_Surface gives us
+		glTexImage2D(GL_TEXTURE_2D, 0, nOfColors, surface->w, surface->h, 0,
+			texture_format, GL_UNSIGNED_BYTE, surface->pixels);
+	}
+
+	// Free the SDL_Surface only if it was successfully created
+	if (surface)
+		SDL_FreeSurface(surface);
+
+	texture = tex;
+}
+
 void Image::setImage( std::string path )
 {
-   
-  GLuint tex;			// This is a handle to our texture object
-    SDL_Surface *surface;	// This surface will tell us the details of the image
-    GLenum texture_format;
-    GLint  nOfColors;
-
+	// This surface will tell us the details of the image in SDL format
+	// Before we can draw, we change it to OpenGL image
+	SDL_Surface *surface;
     surface = IMG_Load(path.c_str());
-    
-    if ( surface ) 
-    {       
-        w = surface->w;
-        h = surface->h;
-
-        // get the number of channels in the SDL surface
-        nOfColors = surface->format->BytesPerPixel;
-        if (nOfColors == 4)     // contains an alpha channel
-        {                            
-            if (surface->format->Rmask == 0x000000ff)
-                    texture_format = GL_RGBA;
-            else
-                    texture_format = GL_BGRA;
-        } 
-        else if (nOfColors == 3)     // no alpha channel
-        {
-            if (surface->format->Rmask == 0x000000ff)
-                    texture_format = GL_RGB;
-            else
-                    texture_format = GL_BGR;
-        } else {
-            printf("warning: the image is not truecolor..  this will probably break\n");
-            done = true;
-            OPI_Sleep::milliseconds(100);
-            SDL_Quit();
-            return;
-        }
-            
-
-        // Have OpenGL generate a texture object handle for us
-        glGenTextures( 1, &tex );
-
-        // Bind the texture object
-        glBindTexture( GL_TEXTURE_2D, tex );
-       
-
-        // Set the texture's stretching properties
-        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-
-        // Edit the texture object's image data using the information SDL_Surface gives us
-        glTexImage2D( GL_TEXTURE_2D, 0, nOfColors, surface->w, surface->h, 0,
-            texture_format, GL_UNSIGNED_BYTE, surface->pixels );
-    }
-
-    // Free the SDL_Surface only if it was successfully created
-    if ( surface ) 
-        SDL_FreeSurface( surface );
-    
-    texture = tex; 
+	setImage(surface);
 }
 
 void Image::setImage(Image source)
@@ -188,6 +191,7 @@ void DrawImage( int x, int y, Image img)
    
 } 
 
+Image *messageImg = new Image();
 OPI_Text coords;
 
 
@@ -415,14 +419,13 @@ void screenOptions()
     glDisable(GL_DEPTH_TEST);
     
 
-    SDL_WM_SetCaption ("Stick Knights Online - Map Editor v7", NULL);
+    SDL_WM_SetCaption ("Stick Knights Online - Map Editor v8", NULL);
 }
 
 void Physics();
 void drawText();
 
 std::string save = "";
-Image font;
 
 
 
@@ -483,9 +486,34 @@ int main(int argc, char *argv[])
     screen = SDL_SetVideoMode( 1024, 600, 32, SDL_OPENGL);
      
     screenOptions();      
-    
+
+	//Initialize SDL_ttf
+	if (TTF_Init() == -1)
+	{
+		return false;
+	}
+
+    //Open the font
+	auto font = TTF_OpenFont("font.ttf", 12);
  
-  
+	//If there was an error in loading the font
+	if (font == NULL)
+	{
+		return false;
+	}
+
+	//Render the text
+	SDL_Color color;
+	color.r = 255;
+	color.g = 200;
+	color.b = 200;
+
+	
+	SDL_Surface *message = TTF_RenderUTF8_Blended(font, "The quick brown fox jumps over the lazy dog", color);
+	messageImg = new Image();
+	messageImg->setImage(message);
+
+
   //stickman
   stickman.x = 0;
   stickman.y = 0;
@@ -497,8 +525,8 @@ int main(int argc, char *argv[])
   //coords text
 	coords.SetText("0,0");
      coords.used = true;
-     coords.pos_x = 2;
-     coords.pos_y = 2;
+     coords.x = 2;
+     coords.y = 2;
      coords.R = 0.4f;
      coords.G = 0.0f;
      coords.B = 0.0f;
@@ -515,7 +543,7 @@ int main(int argc, char *argv[])
   gui.setImage("IMG/gui.png");
   selector.setImage("IMG/selector.png");
   stickman_img.setImage("IMG/stickman.png");
-  font.setImage("IMG/font.png");
+  //font.setImage("IMG/font.png");
   
   for(int i = 0; i < 256; i++)//check if file exists, etc.
   {
@@ -1361,45 +1389,17 @@ void Physics()
 
 void drawText()
 {
-     glBindTexture(GL_TEXTURE_2D, font.texture);
+	//glBindTexture(GL_TEXTURE_2D, font.texture);
          
-         //tint
-         glColor3f(coords.R, coords.G, coords.B);
+	//tint
+	glColor3f(coords.R, coords.G, coords.B);
          
-         //go through all the letters in each message
-         for (int ii = 0; ii < coords.length; ii++)
-         {
-            int letter_w = 8;
-            int  letter_h = 11;
 
-            float screen_x = coords.pos_x + ii*letter_w, screen_y = coords.pos_y,
-                    offset_x = coords.letter_x[ii], offset_y = coords.letter_y[ii],
-                    selection_width = letter_w, selection_height = letter_h,
-                    end_x = coords.pos_x+letter_w + letter_w*ii, end_y = coords.pos_y+letter_h;
+	float screen_x = coords.x;
+	float screen_y = coords.y;
+    DrawImage(10, 10, *messageImg);
 
-            float right = (offset_x + selection_width) / (float)font.w;
-            float bottom = (offset_y + selection_height) / (float)font.h;
-            float left = (offset_x) / (float)font.w;
-            float top = (offset_y) / (float)font.h;
+	
 
-            glBegin( GL_QUADS );
-                //Top-left vertex (corner)
-                glTexCoord2f( left, top );
-                glVertex2f( screen_x, screen_y);
-
-                //Bottom-left vertex (corner)
-                glTexCoord2f( left, bottom );
-                glVertex2f( screen_x, end_y);
-
-                //Bottom-right vertex (corner)
-                glTexCoord2f( right, bottom );
-                glVertex2f( end_x, end_y);
-
-                //Top-right vertex (corner)
-                glTexCoord2f( right, top );
-                glVertex2f( end_x, screen_y);
-            glEnd();
-
-          } //for
-          glColor3f(1.0f, 1.0f, 1.0f);
+	glColor3f(1.0f, 1.0f, 1.0f);
 }

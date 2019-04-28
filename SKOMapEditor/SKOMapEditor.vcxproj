@@ -72,8 +72,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>Dependencies\SDL_image\lib\x86;Dependencies\SDL\lib\x86;Dependencies\pthread\lib\x86;$(LibraryPath)</LibraryPath>
-    <IncludePath>Dependencies\SDL_image\include;Dependencies\SDL\include;Dependencies\SDL\include\pthread\include;$(IncludePath)</IncludePath>
+    <LibraryPath>Dependencies\SDL_image\lib\x86;Dependencies\SDL\lib\x86;Dependencies\SDL_ttf\lib\x86;Dependencies\pthread\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>Dependencies\SDL_image\include;Dependencies\SDL\include;Dependencies\SDL_ttf\include;Dependencies\SDL\include\pthread\include;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)\SKOMapEditor</OutDir>
     <IntDir>$(SolutionDir)\SKOMapEditor</IntDir>
   </PropertyGroup>
@@ -100,7 +100,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>pthreadVC2.lib;SDL.lib;SDL_image.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>pthreadVC2.lib;SDL.lib;SDL_image.lib;SDL_ttf.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
