@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="KE_Timestep.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="OPI_Clock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -27,15 +24,21 @@
     <ClInclude Include="OPI_Text.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OPI_Image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OPI_Timestep.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="KE_Timestep.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="OPI_Text.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OPI_Timestep.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

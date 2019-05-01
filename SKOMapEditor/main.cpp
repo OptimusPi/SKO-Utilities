@@ -15,7 +15,7 @@
 #include <sstream>
 #include <iostream>
 #include <fstream>
-#include "KE_Timestep.h"
+#include "OPI_Timestep.h"
 #include "OPI_Text.h"
 #include "OPI_Clock.h"
 #include "OPI_Sleep.h"
@@ -24,7 +24,7 @@
 const char 
 
 TILE_DRAW = 1, TILE_DELETE = 2, 
-COLLISION_DRAW = 3, COLLISION_DELETE = 4, 
+COLLISION_DRAW = 3, COLLISION_DELETE = 4,
 STICKMAN_DRAW = 5, STICKMAN_DELETE = 6,
 FRINGE_TOGGLE = 7,
 SAVE = 8;
@@ -75,98 +75,8 @@ int current_tile_img = 0;
   
   unsigned long int coordsTicker = 0;
 
-class Image
-{
-    private:
 
-    public:
-           
-    //Initialize the variables
-    void setImage(std::string filename);
-    Image();
-    void setImage(Image source);
-	void setImage(SDL_Surface *surface);
-
-    GLuint texture;
-    int w;
-    int h;
-};
-
-Image::Image(){};
-
-
-void Image::setImage(SDL_Surface *surface)
-{
-	GLuint tex;			// This is a handle to our texture object
-	GLenum texture_format;
-	GLint  nOfColors;
-
-	if (surface)
-	{
-		w = surface->w;
-		h = surface->h;
-
-		// get the number of channels in the SDL surface
-		nOfColors = surface->format->BytesPerPixel;
-		if (nOfColors == 4)     // contains an alpha channel
-		{
-			if (surface->format->Rmask == 0x000000ff)
-				texture_format = GL_RGBA;
-			else
-				texture_format = GL_BGRA;
-		}
-		else if (nOfColors == 3)     // no alpha channel
-		{
-			if (surface->format->Rmask == 0x000000ff)
-				texture_format = GL_RGB;
-			else
-				texture_format = GL_BGR;
-		}
-		else {
-			texture_format = GL_RGB;
-		}
-
-
-		// Have OpenGL generate a texture object handle for us
-		glGenTextures(1, &tex);
-
-		// Bind the texture object
-		glBindTexture(GL_TEXTURE_2D, tex);
-
-
-		// Set the texture's stretching properties
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		// Edit the texture object's image data using the information SDL_Surface gives us
-		glTexImage2D(GL_TEXTURE_2D, 0, nOfColors, surface->w, surface->h, 0,
-			texture_format, GL_UNSIGNED_BYTE, surface->pixels);
-	}
-
-	// Free the SDL_Surface only if it was successfully created
-	if (surface)
-		SDL_FreeSurface(surface);
-
-	texture = tex;
-}
-
-void Image::setImage( std::string path )
-{
-	// This surface will tell us the details of the image in SDL format
-	// Before we can draw, we change it to OpenGL image
-	SDL_Surface *surface;
-    surface = IMG_Load(path.c_str());
-	setImage(surface);
-}
-
-void Image::setImage(Image source)
-{
-     texture = source.texture;
-     w       = source.w; 
-     h       = source.h; 
-}
-
-void DrawImage( int x, int y, Image img) 
+void DrawImage( int x, int y, OPI_Image img) 
 {      
      glColor3f(1.0f, 1.0f, 1.0f);     
      glBindTexture( GL_TEXTURE_2D,  img.texture);
@@ -178,20 +88,19 @@ void DrawImage( int x, int y, Image img)
     	
     	//Bottom-left vertex (corner)
     	glTexCoord2f( 0, 1 );
-    	glVertex3f( x, y+img.h, 0 );
+    	glVertex3f( x, y+img.height, 0 );
     	
     	//Bottom-right vertex (corner)
     	glTexCoord2f( 1, 1 );
-    	glVertex3f( x+img.w, y+img.h, 0 );
+    	glVertex3f( x+img.width, y+img.height, 0 );
     	
     	//Top-right vertex (corner)
     	glTexCoord2f( 1, 0 );
-    	glVertex3f( x+img.w, y, 0 );
+    	glVertex3f( x+img.width, y, 0 );
     glEnd();
    
 } 
 
-Image *messageImg = new Image();
 OPI_Text coords;
 
 
@@ -478,7 +387,7 @@ int main(int argc, char *argv[])
 		current_fringe= number_of_fringe;
 	}
     
-    KE_Timestep *timestep = new KE_Timestep(60);
+    OPI_Timestep *timestep = new OPI_Timestep(60);
     
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
         return 1;
@@ -487,32 +396,13 @@ int main(int argc, char *argv[])
      
     screenOptions();      
 
-	//Initialize SDL_ttf
-	if (TTF_Init() == -1)
-	{
-		return false;
-	}
-
-    //Open the font
-	auto font = TTF_OpenFont("font.ttf", 12);
- 
-	//If there was an error in loading the font
-	if (font == NULL)
-	{
-		return false;
-	}
-
 	//Render the text
 	SDL_Color color;
 	color.r = 255;
 	color.g = 200;
 	color.b = 200;
 
-	
-	SDL_Surface *message = TTF_RenderUTF8_Blended(font, "The quick brown fox jumps over the lazy dog", color);
-	messageImg = new Image();
-	messageImg->setImage(message);
-
+	coords.SetText("1000, 400");
 
   //stickman
   stickman.x = 0;
@@ -592,9 +482,9 @@ int main(int argc, char *argv[])
                    int draw_x = tile_x[i] - (int)camera_x;
                    int draw_y = tile_y[i] - (int)camera_y;
                    
-                   if (draw_x >= 0-tile_img[tile[i]].w &&
+                   if (draw_x >= 0-tile_img[tile[i]].width &&
                       draw_x < 1024 && draw_y < 600 &&
-                      draw_y >= 0-tile_img[tile[i]].h)
+                      draw_y >= 0-tile_img[tile[i]].height)
                    DrawImage(draw_x, draw_y, tile_img[tile[i]]);
                }
                
@@ -613,9 +503,9 @@ int main(int argc, char *argv[])
                    int draw_x = fringe_x[i] - (int)camera_x;
                    int draw_y = fringe_y[i] - (int)camera_y;
                    
-                   if (draw_x >= 0-tile_img[fringe[i]].w &&
+                   if (draw_x >= 0-tile_img[fringe[i]].width &&
                       draw_x < 1024 && draw_y < 600 &&
-                      draw_y >= 0-tile_img[fringe[i]].h)
+                      draw_y >= 0-tile_img[fringe[i]].height)
                    DrawImage(draw_x, draw_y, tile_img[fringe[i]]);
                }
                
@@ -635,12 +525,12 @@ int main(int argc, char *argv[])
                    
                    newRect.x = collision_rect[i].x - (int)camera_x;
                    newRect.y = collision_rect[i].y - (int)camera_y;
-                   newRect.h = collision_rect[i].h;
-                   newRect.w = collision_rect[i].w;
+                   newredt.h = collision_rect[i].height;
+                   newredt.w = collision_rect[i].width;
                    
-                   if (newRect.x >= 0-collision_rect[i].w &&
+                   if (newRect.x >= 0-collision_rect[i].width &&
                        newRect.x < 1024 && newRect.y < 600 &&
-                       newRect.y >= 0-collision_rect[i].h)
+                       newRect.y >= 0-collision_rect[i].height)
                        
                    DrawRect(newRect);
                }
@@ -840,14 +730,14 @@ int main(int argc, char *argv[])
                                            MapFile << b1 << b2 << b3 << b4;
                                            
                                            //width
-                                           p=(unsigned char*)&collision_rect[i].w;
+                                           p=(unsigned char*)&collision_rect[i].width;
                                            b1=p[0]; b2=p[1]; b3=p[2]; b4=p[3];
                                        
                                            //spit out each of the bytes
                                            MapFile << b1 << b2 << b3 << b4;
                                            
                                            //height
-                                           p=(unsigned char*)&collision_rect[i].h;
+                                           p=(unsigned char*)&collision_rect[i].height;
                                            b1=p[0]; b2=p[1]; b3=p[2]; b4=p[3];
                                        
                                            //spit out each of the bytes
@@ -915,7 +805,7 @@ int main(int argc, char *argv[])
                                                if (collision_rect[current_rect - 1].y > 0)
                                                {
                                                    collision_rect[current_rect - 1].y --;
-                                                   collision_rect[current_rect - 1].h ++;
+                                                   collision_rect[current_rect - 1].height ++;
                                                }
                                       }
                            break;
@@ -937,7 +827,7 @@ int main(int argc, char *argv[])
                                                if (collision_rect[current_rect - 1].x > 0)
                                                {
                                                    collision_rect[current_rect - 1].x --;
-                                                   collision_rect[current_rect - 1].w ++;
+                                                   collision_rect[current_rect - 1].width ++;
                                                }
                                       }
                            break;
@@ -950,7 +840,7 @@ int main(int argc, char *argv[])
                                       if (mode == COLLISION_DRAW && current_rect > 0) 
                                       {
                                          collision_rect[current_rect - 1].y ++;   
-                                         collision_rect[current_rect - 1].h --; 
+                                         collision_rect[current_rect - 1].height --; 
                                       }
                                           
                            break;
@@ -966,7 +856,7 @@ int main(int argc, char *argv[])
                                       if (mode == COLLISION_DRAW && current_rect > 0) 
                                       {
                                          collision_rect[current_rect - 1].x ++;
-                                         collision_rect[current_rect - 1].w --;
+                                         collision_rect[current_rect - 1].width --;
                                       }
                            break;
                           
@@ -974,31 +864,31 @@ int main(int argc, char *argv[])
                             case 'i': 
                                       if (mode == COLLISION_DRAW && current_rect > 0) 
                                       {
-                                               if (collision_rect[current_rect - 1].h > 0)
+                                               if (collision_rect[current_rect - 1].height > 0)
                                                {
-                                                   collision_rect[current_rect - 1].h --;
+                                                   collision_rect[current_rect - 1].height --;
                                                }
                                       }
                            break;
                            case 'j':  
                                       if (mode == COLLISION_DRAW && current_rect > 0) 
                                       {
-                                               if (collision_rect[current_rect - 1].w > 0)
+                                               if (collision_rect[current_rect - 1].width > 0)
                                                {
-                                                   collision_rect[current_rect - 1].w --;
+                                                   collision_rect[current_rect - 1].width --;
                                                }
                                       }
                            break;
                            case 'k':   
                                       if (mode == COLLISION_DRAW && current_rect > 0) 
                                       {
-                                         collision_rect[current_rect - 1].h ++;  
+                                         collision_rect[current_rect - 1].height ++;  
                                       } 
                            break;
                            case 'l': 
                                       if (mode == COLLISION_DRAW && current_rect > 0) 
                                       {
-                                         collision_rect[current_rect - 1].w ++;
+                                         collision_rect[current_rect - 1].width ++;
                                       }
                            break;
                            
@@ -1065,9 +955,9 @@ int main(int argc, char *argv[])
                        
                        //adjust the width and height
                        collision_rect[current_rect].x = x1;
-                       collision_rect[current_rect].w = x2-x1;
+                       collision_rect[current_rect].width = x2-x1;
                        collision_rect[current_rect].y = y1;
-                       collision_rect[current_rect].h = y2-y1;
+                       collision_rect[current_rect].height = y2-y1;
                     }
                     if (mode == TILE_DRAW && LCLICK)
                     {
@@ -1134,8 +1024,8 @@ int main(int argc, char *argv[])
                                bool found = false;
                                for (i = 0; i < current_tile; i++)
                                {
-                                   if (x > tile_x[i] && x < tile_x[i]+tile_img[tile[i]].w &&
-                                       y > tile_y[i] && y < tile_y[i]+tile_img[tile[i]].h)
+                                   if (x > tile_x[i] && x < tile_x[i]+tile_img[tile[i]].width &&
+                                       y > tile_y[i] && y < tile_y[i]+tile_img[tile[i]].height)
                                    {
                                       found = true;
                                       break;
@@ -1161,8 +1051,8 @@ int main(int argc, char *argv[])
                                bool found = false;
                                for (i = 0; i < current_fringe; i++)
                                {
-                                   if (x > fringe_x[i] && x < fringe_x[i]+tile_img[fringe[i]].w &&
-                                       y > fringe_y[i] && y < fringe_y[i]+tile_img[fringe[i]].h)
+                                   if (x > fringe_x[i] && x < fringe_x[i]+tile_img[fringe[i]].width &&
+                                       y > fringe_y[i] && y < fringe_y[i]+tile_img[fringe[i]].height)
                                    {
                                       found = true;
                                       break;
@@ -1195,8 +1085,8 @@ int main(int argc, char *argv[])
                             collision_oy = event.button.y+(int)camera_y;
                             collision_rect[current_rect].x = collision_ox;
                             collision_rect[current_rect].y = collision_oy;
-                            collision_rect[current_rect].w = 0;
-                            collision_rect[current_rect].h = 0;
+                            collision_rect[current_rect].width = 0;
+                            collision_rect[current_rect].height = 0;
                       break;
                        
                       case COLLISION_DELETE:{
@@ -1207,8 +1097,8 @@ int main(int argc, char *argv[])
                            bool found = false;
                            for (i = 0; i < current_rect; i++)
                            {
-                               if (x > collision_rect[i].x && x < collision_rect[i].x + collision_rect[i].w &&
-                                   y > collision_rect[i].y && y < collision_rect[i].y + collision_rect[i].h)
+                               if (x > collision_rect[i].x && x < collision_rect[i].x + collision_rect[i].width &&
+                                   y > collision_rect[i].y && y < collision_rect[i].y + collision_rect[i].height)
                                {
                                    found = true;
                                   break;
@@ -1321,8 +1211,8 @@ bool blocked(float box1_x1, float box1_y1, float box1_x2, float box1_y2)
      {
           float box2_x1 = collision_rect[r].x;
           float box2_y1 = collision_rect[r].y;
-          float box2_x2 = collision_rect[r].x + collision_rect[r].w;
-          float box2_y2 = collision_rect[r].y + collision_rect[r].h;
+          float box2_x2 = collision_rect[r].x + collision_rect[r].width;
+          float box2_y2 = collision_rect[r].y + collision_rect[r].height;
 
 
           if (box1_x2 > box2_x1 && box1_x1 < box2_x2 && box1_y2 > box2_y1 && box1_y1 < box2_y2)

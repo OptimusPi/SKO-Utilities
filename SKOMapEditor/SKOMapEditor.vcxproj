@@ -157,13 +157,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="KE_Timestep.h" />
+    <ClInclude Include="OPI_Timestep.h" />
     <ClInclude Include="OPI_Clock.h" />
+    <ClInclude Include="OPI_Image.h" />
     <ClInclude Include="OPI_Sleep.h" />
     <ClInclude Include="OPI_Text.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="KE_Timestep.cpp" />
+    <ClCompile Include="OPI_Timestep.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OPI_Text.cpp" />
   </ItemGroup>
