@@ -9,7 +9,6 @@
 #include <SDL/SDL_opengl.h> 
 #endif
 
-
 #include <stdio.h>
 #include <string>
 #include <sstream>
@@ -17,6 +16,7 @@
 #include <fstream>
 #include "OPI_Timestep.h"
 #include "OPI_Text.h"
+#include "OPI_Fonts.h"
 #include "OPI_Clock.h"
 #include "OPI_Sleep.h"
 
@@ -101,7 +101,7 @@ void DrawImage( int x, int y, OPI_Image img)
    
 } 
 
-OPI_Text coords;
+OPI_Text* coords;
 
 
 
@@ -332,7 +332,7 @@ void screenOptions()
 }
 
 void Physics();
-void drawText();
+void drawText(OPI_Text *text);
 
 std::string save = "";
 
@@ -402,32 +402,40 @@ int main(int argc, char *argv[])
 	color.g = 200;
 	color.b = 200;
 
-	coords.SetText("1000, 400");
+	//TODO - load from config file
+	OPI_Fonts *fonts = new OPI_Fonts(); 
+	if (!fonts->init())
+	{
+		printf("Could not initialize SDL_ttf!\n");
+	}
 
-  //stickman
-  stickman.x = 0;
-  stickman.y = 0;
-  stickman.w = 14;
-  stickman.h = 64;
+	fonts->addFont("RobotoMono-Regular", "fonts/RobotoMono-Regular.ttf");
+	coords = new OPI_Text("1000, 400", fonts->getFont("RobotoMono-Regular"));
+
+	//stickman
+	stickman.x = 0;
+	stickman.y = 0;
+	stickman.w = 14;
+	stickman.h = 64;
   
-  SDL_ShowCursor(0);
+	SDL_ShowCursor(0);
 
-  //coords text
-	coords.SetText("0,0");
-     coords.used = true;
-     coords.x = 2;
-     coords.y = 2;
-     coords.R = 0.4f;
-     coords.G = 0.0f;
-     coords.B = 0.0f;
+	//coords text
+	coords->setText("0,0", NULL);
+	coords->visible = true;
+	coords->x = 2;
+	coords->y = 2;
+	coords->R = 1.0f;
+	coords->G = 1.0f;
+	coords->B = 1.0f;
      
      
      
   //images
-  Image tile_img[256], cursor;
-  Image background;
-  Image gui, selector;
-  Image stickman_img;
+  OPI_Image tile_img[256], cursor;
+  OPI_Image background;
+  OPI_Image gui, selector;
+  OPI_Image stickman_img;
   cursor.setImage("IMG/cursor.png");
   background.setImage("IMG/back.png");
   gui.setImage("IMG/gui.png");
@@ -459,12 +467,12 @@ int main(int argc, char *argv[])
             if (save_notify < clock())
                save_notify = 0;
                           
-                if (OPI_Clock::milliseconds() - coordsTicker  > 100)
+                if (OPI_Clock::milliseconds() - coordsTicker  > 1)
                 {  
                     //draw coords
                     std::stringstream ss;
                     ss << "(" << cursor_x+camera_x << ", " << cursor_y+camera_y << ")";
-                    coords.SetText((char *)ss.str().c_str());
+                    coords->setText((char *)ss.str().c_str());
                     
                     //reset ticker
                     coordsTicker = OPI_Clock::milliseconds();
@@ -525,12 +533,12 @@ int main(int argc, char *argv[])
                    
                    newRect.x = collision_rect[i].x - (int)camera_x;
                    newRect.y = collision_rect[i].y - (int)camera_y;
-                   newredt.h = collision_rect[i].height;
-                   newredt.w = collision_rect[i].width;
+                   newRect.h = collision_rect[i].h;
+				   newRect.w = collision_rect[i].w;
                    
-                   if (newRect.x >= 0-collision_rect[i].width &&
+                   if (newRect.x >= 0-collision_rect[i].w &&
                        newRect.x < 1024 && newRect.y < 600 &&
-                       newRect.y >= 0-collision_rect[i].height)
+                       newRect.y >= 0-collision_rect[i].h)
                        
                    DrawRect(newRect);
                }
@@ -552,7 +560,7 @@ int main(int argc, char *argv[])
                
                
                //draw coords
-               drawText();
+               drawText(coords);
                
                //draw cursor
                DrawImage(cursor_x, cursor_y, cursor);
@@ -730,14 +738,14 @@ int main(int argc, char *argv[])
                                            MapFile << b1 << b2 << b3 << b4;
                                            
                                            //width
-                                           p=(unsigned char*)&collision_rect[i].width;
+                                           p=(unsigned char*)&collision_rect[i].w;
                                            b1=p[0]; b2=p[1]; b3=p[2]; b4=p[3];
                                        
                                            //spit out each of the bytes
                                            MapFile << b1 << b2 << b3 << b4;
                                            
                                            //height
-                                           p=(unsigned char*)&collision_rect[i].height;
+                                           p=(unsigned char*)&collision_rect[i].h;
                                            b1=p[0]; b2=p[1]; b3=p[2]; b4=p[3];
                                        
                                            //spit out each of the bytes
@@ -805,7 +813,7 @@ int main(int argc, char *argv[])
                                                if (collision_rect[current_rect - 1].y > 0)
                                                {
                                                    collision_rect[current_rect - 1].y --;
-                                                   collision_rect[current_rect - 1].height ++;
+                                                   collision_rect[current_rect - 1].w ++;
                                                }
                                       }
                            break;
@@ -827,7 +835,7 @@ int main(int argc, char *argv[])
                                                if (collision_rect[current_rect - 1].x > 0)
                                                {
                                                    collision_rect[current_rect - 1].x --;
-                                                   collision_rect[current_rect - 1].width ++;
+                                                   collision_rect[current_rect - 1].w ++;
                                                }
                                       }
                            break;
@@ -840,7 +848,7 @@ int main(int argc, char *argv[])
                                       if (mode == COLLISION_DRAW && current_rect > 0) 
                                       {
                                          collision_rect[current_rect - 1].y ++;   
-                                         collision_rect[current_rect - 1].height --; 
+                                         collision_rect[current_rect - 1].h --; 
                                       }
                                           
                            break;
@@ -856,7 +864,7 @@ int main(int argc, char *argv[])
                                       if (mode == COLLISION_DRAW && current_rect > 0) 
                                       {
                                          collision_rect[current_rect - 1].x ++;
-                                         collision_rect[current_rect - 1].width --;
+                                         collision_rect[current_rect - 1].w --;
                                       }
                            break;
                           
@@ -864,31 +872,31 @@ int main(int argc, char *argv[])
                             case 'i': 
                                       if (mode == COLLISION_DRAW && current_rect > 0) 
                                       {
-                                               if (collision_rect[current_rect - 1].height > 0)
+                                               if (collision_rect[current_rect - 1].h > 0)
                                                {
-                                                   collision_rect[current_rect - 1].height --;
+                                                   collision_rect[current_rect - 1].h --;
                                                }
                                       }
                            break;
                            case 'j':  
                                       if (mode == COLLISION_DRAW && current_rect > 0) 
                                       {
-                                               if (collision_rect[current_rect - 1].width > 0)
+                                               if (collision_rect[current_rect - 1].w > 0)
                                                {
-                                                   collision_rect[current_rect - 1].width --;
+                                                   collision_rect[current_rect - 1].w --;
                                                }
                                       }
                            break;
                            case 'k':   
                                       if (mode == COLLISION_DRAW && current_rect > 0) 
                                       {
-                                         collision_rect[current_rect - 1].height ++;  
+                                         collision_rect[current_rect - 1].h ++;  
                                       } 
                            break;
                            case 'l': 
                                       if (mode == COLLISION_DRAW && current_rect > 0) 
                                       {
-                                         collision_rect[current_rect - 1].width ++;
+                                         collision_rect[current_rect - 1].w ++;
                                       }
                            break;
                            
@@ -955,9 +963,9 @@ int main(int argc, char *argv[])
                        
                        //adjust the width and height
                        collision_rect[current_rect].x = x1;
-                       collision_rect[current_rect].width = x2-x1;
+                       collision_rect[current_rect].w = x2-x1;
                        collision_rect[current_rect].y = y1;
-                       collision_rect[current_rect].height = y2-y1;
+                       collision_rect[current_rect].h = y2-y1;
                     }
                     if (mode == TILE_DRAW && LCLICK)
                     {
@@ -1085,8 +1093,8 @@ int main(int argc, char *argv[])
                             collision_oy = event.button.y+(int)camera_y;
                             collision_rect[current_rect].x = collision_ox;
                             collision_rect[current_rect].y = collision_oy;
-                            collision_rect[current_rect].width = 0;
-                            collision_rect[current_rect].height = 0;
+                            collision_rect[current_rect].w = 0;
+                            collision_rect[current_rect].h = 0;
                       break;
                        
                       case COLLISION_DELETE:{
@@ -1097,8 +1105,8 @@ int main(int argc, char *argv[])
                            bool found = false;
                            for (i = 0; i < current_rect; i++)
                            {
-                               if (x > collision_rect[i].x && x < collision_rect[i].x + collision_rect[i].width &&
-                                   y > collision_rect[i].y && y < collision_rect[i].y + collision_rect[i].height)
+                               if (x > collision_rect[i].x && x < collision_rect[i].x + collision_rect[i].w &&
+                                   y > collision_rect[i].y && y < collision_rect[i].y + collision_rect[i].h)
                                {
                                    found = true;
                                   break;
@@ -1211,8 +1219,8 @@ bool blocked(float box1_x1, float box1_y1, float box1_x2, float box1_y2)
      {
           float box2_x1 = collision_rect[r].x;
           float box2_y1 = collision_rect[r].y;
-          float box2_x2 = collision_rect[r].x + collision_rect[r].width;
-          float box2_y2 = collision_rect[r].y + collision_rect[r].height;
+          float box2_x2 = collision_rect[r].x + collision_rect[r].w;
+          float box2_y2 = collision_rect[r].y + collision_rect[r].h;
 
 
           if (box1_x2 > box2_x1 && box1_x1 < box2_x2 && box1_y2 > box2_y1 && box1_y1 < box2_y2)
@@ -1277,19 +1285,17 @@ void Physics()
 }
 
 
-void drawText()
+void drawText(OPI_Text *text)
 {
 	//glBindTexture(GL_TEXTURE_2D, font.texture);
          
 	//tint
-	glColor3f(coords.R, coords.G, coords.B);
+	glColor3f(text->R, text->G, text->B);
          
+	float screen_x = text->x;
+	float screen_y = text->y;
+    DrawImage(10, 10, text->contentRender);
 
-	float screen_x = coords.x;
-	float screen_y = coords.y;
-    DrawImage(10, 10, *messageImg);
-
-	
-
+	//reset tint
 	glColor3f(1.0f, 1.0f, 1.0f);
 }

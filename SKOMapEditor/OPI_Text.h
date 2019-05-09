@@ -23,17 +23,21 @@ class OPI_Text
       
 	public:
 		OPI_Text();
-		static bool Init();
-		void SetText(std::string content);
+		OPI_Text(std::string content, TTF_Font* font = NULL, bool wrapped = false);
+		static bool init();
+		void setText(std::string content, TTF_Font* font = NULL, bool wrapped = false);
 		size_t length();
 		float R, G, B;
 		float x, y;
-		bool used;
+		unsigned short int width, height;
+		bool visible;
+		OPI_Image contentRender;
 
 	private:
+		TTF_Font *currentFont;
 		std::string content;
-		OPI_Image contentRender;
-		void generateImage(std::string text, std::string font);
+		SDL_Color color;
+		void renderImage(std::string content, TTF_Font* font, bool wrapped);
 };
 
 #endif

@@ -30,6 +30,9 @@
     <ClInclude Include="OPI_Timestep.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OPI_Fonts.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -39,6 +42,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="OPI_Timestep.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OPI_Fonts.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OPI_Image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

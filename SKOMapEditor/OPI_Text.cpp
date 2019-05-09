@@ -2,43 +2,45 @@
 
 OPI_Text::OPI_Text()
 {
+	content = "";
     R = 255;
     G = 255;
     B = 255;        
 }
 
-// Return true for success
-bool OPI_Text::Init()
+OPI_Text::OPI_Text(std::string content, TTF_Font* font, bool wrapped)
 {
-	//Initialize SDL_ttf
-	if (TTF_Init() == -1)
-	{
-		return false;
-	}
-
-	//Open the font
-	auto font = TTF_OpenFont("font.ttf", 12);
-
-	//If there was an error in loading the font
-	if (font == NULL)
-	{
-		return false;
-	}
+	//TODO move RGB to parameters with default value
+	R = 255;
+	G = 255;
+	B = 255;
+	setText(content, font, wrapped);
 }
+
 size_t OPI_Text::length()
 {
 	// Return length of content string
 	return this->content.length();
 }
 
-void OPI_Text::generateImage(std::string text, std::string font)
+void OPI_Text::renderImage(std::string content, TTF_Font* font, bool wrapped)
 {
-	SDL_Surface *surface = TTF_RenderUTF8_Blended(font, "(1000, 42069)", color);
+	SDL_Surface *surface = TTF_RenderUTF8_Blended(font, content.c_str(), this->color);
+	this->contentRender = new OPI_Image(surface);
 }
 
-
-void OPI_Text::SetText(std::string content)
+void OPI_Text::setText(std::string content, TTF_Font* font, bool wrapped)
 {
 	this->content = content;
-	this->contentRender = generateImage();
+
+	if (font == NULL)
+	{
+		font = this->currentFont;
+	}
+	else
+	{
+		this->currentFont = font;
+	}
+
+	renderImage(content, font, wrapped);
 }
