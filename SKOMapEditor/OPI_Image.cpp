@@ -80,12 +80,15 @@ void OPI_Image::setImage(SDL_Surface * surface)
 		// Edit the texture object's OPI_Image data using the information SDL_Surface gives us
 		glTexImage2D(GL_TEXTURE_2D, 0, nOfColors, surface->w, surface->h, 0,
 			texture_format, GL_UNSIGNED_BYTE, surface->pixels);
+
+		SDL_FreeSurface(surface);
 	}
 
-	// Free the SDL_Surface only if it was successfully created
-	if (surface)
-		SDL_FreeSurface(surface);
-
+	//Clean up memory from OpenGL
+	if (texture)
+	{
+		glDeleteTextures(1, &texture);
+	}
 	texture = tex[0];
 }
 

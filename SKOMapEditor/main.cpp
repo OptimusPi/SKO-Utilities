@@ -387,7 +387,7 @@ int main(int argc, char *argv[])
 		current_fringe= number_of_fringe;
 	}
     
-    OPI_Timestep *timestep = new OPI_Timestep(60);
+    OPI_Timestep *timestep = new OPI_Timestep(20000);
     
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
         return 1;
@@ -462,8 +462,9 @@ int main(int argc, char *argv[])
   {
         timestep->Update();
                            
-        while (timestep->Check())
+        while (!done && timestep->Check())
         {
+			//if save notify is in the past, clear it
             if (save_notify < clock())
                save_notify = 0;
                           
@@ -570,13 +571,12 @@ int main(int argc, char *argv[])
                SDL_GL_SwapBuffers();
  
         
-            while (SDL_PollEvent(&event))
+            while (!done && SDL_PollEvent(&event))
             {        
                 if (event.type == SDL_QUIT)
                 {
+				   //todo save a backup file
                    done = true;
-                   OPI_Sleep::milliseconds(100);
-                   SDL_Quit();
                 }
                     
                 if (event.type == SDL_KEYUP)
@@ -958,8 +958,6 @@ int main(int argc, char *argv[])
                             y1 = cy;
                             y2 = collision_oy;
                        }    
-                      
-                       
                        
                        //adjust the width and height
                        collision_rect[current_rect].x = x1;
@@ -991,8 +989,6 @@ int main(int argc, char *argv[])
                 {      
                      switch (mode)
                      {
-                       
-                       
                        
                        case TILE_DRAW:
                            if (!fringe_mode)
@@ -1195,7 +1191,7 @@ int main(int argc, char *argv[])
                }
             } //if poll event
     
-            if (stickman_toggle)
+            if (!done && stickman_toggle)
                Physics();
             
             //prevent repeats

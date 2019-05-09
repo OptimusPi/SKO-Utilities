@@ -26,7 +26,7 @@ size_t OPI_Text::length()
 void OPI_Text::renderImage(std::string content, TTF_Font* font, bool wrapped)
 {
 	SDL_Surface *surface = TTF_RenderUTF8_Blended(font, content.c_str(), this->color);
-	this->contentRender = new OPI_Image(surface);
+	this->contentRender.setImage(surface);
 }
 
 void OPI_Text::setText(std::string content, TTF_Font* font, bool wrapped)
