@@ -94,8 +94,7 @@ void OPI_Image::setImage(SDL_Surface * surface)
 
 void OPI_Image::setImage(std::string path)
 {
-	SDL_Surface *surface;	// This surface will tell us the details of the OPI_Image
-	surface = IMG_Load(path.c_str());
+	SDL_Surface *surface = OPI_Image::getSurface(path);
 	setImage(surface);
 }
 
@@ -104,4 +103,10 @@ void OPI_Image::setImage(OPI_Image *source)
 	texture = source->texture;
 	width = source->width;
 	height = source->height;
+}
+
+
+SDL_Surface* OPI_Image::getSurface(std::string filePath)
+{
+	return IMG_Load(filePath.c_str());
 }

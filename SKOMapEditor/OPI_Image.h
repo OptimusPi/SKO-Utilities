@@ -29,6 +29,7 @@ public:
 	void setImage(std::string filename);
 	void setImage(OPI_Image *source);
 	void setImage(SDL_Surface *surface);
+	static SDL_Surface* getSurface(std::string filePath);
 
 	GLuint texture;
 	unsigned int width;
