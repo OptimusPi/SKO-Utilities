@@ -19,6 +19,7 @@
 #include "OPI_Fonts.h"
 #include "OPI_Clock.h"
 #include "OPI_Sleep.h"
+#include "OPI_Gui.h"
 
 //modes
 const char 
@@ -76,6 +77,7 @@ int current_tile_img = 0;
   unsigned long int coordsTicker = 0;
 
 
+
 void DrawImage( int x, int y, OPI_Image img) 
 {      
      glColor3f(1.0f, 1.0f, 1.0f);     
@@ -100,6 +102,14 @@ void DrawImage( int x, int y, OPI_Image img)
     glEnd();
    
 } 
+
+void drawPanel(OPI_Panel *panel)
+{
+	if (!panel->texture)
+		panel->render(screen);
+
+	DrawImage(panel->x, panel->y, panel->texture);
+}
 
 OPI_Text* coords;
 
@@ -303,7 +313,7 @@ void loadmap (std::string FileName)
 
 void screenOptions()
 {
-     SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
+    SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
 
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
@@ -458,6 +468,8 @@ int main(int argc, char *argv[])
         break;
   }
 
+  OPI_Panel *testPanel = new OPI_Panel("ice", 100, 100, 100, 80);
+
   while (!done)
   {
         timestep->Update();
@@ -559,6 +571,9 @@ int main(int argc, char *argv[])
                if (!stickman_toggle)
                   DrawImage(144 + (STICKMAN_DELETE-1)*64, 536, selector);
                
+
+			   //draw GUI
+			   drawPanel(testPanel);
                
                //draw coords
                drawText(coords);

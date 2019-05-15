@@ -30,6 +30,7 @@ public:
 	void setImage(OPI_Image *source);
 	void setImage(SDL_Surface *surface);
 	static SDL_Surface* getSurface(std::string filePath);
+	static GLuint generateTexture(SDL_Surface * surface);
 
 	GLuint texture;
 	unsigned int width;

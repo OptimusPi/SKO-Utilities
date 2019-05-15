@@ -29,20 +29,52 @@ int pot(unsigned int x)
 
 void OPI_Image::setImage(SDL_Surface * surface)
 {
+	//Clean up old texture memory from OpenGL
+	if (texture)
+	{
+		glDeleteTextures(1, &texture);
+	}
+
+	width = surface->w;
+	height = surface->h;
+
+	if (!pot(width))
+		printf("ERROR: OPI_Image width not power of two!\n");
+	if (!pot(height))
+		printf("ERROR: OPI_Image width not power of two!\n");
+
+	texture = OPI_Image::generateTexture(surface);
+}
+
+void OPI_Image::setImage(std::string path)
+{
+	SDL_Surface *surface = OPI_Image::getSurface(path);
+	setImage(surface);
+	SDL_FreeSurface(surface);
+}
+
+void OPI_Image::setImage(OPI_Image *source)
+{
+	texture = source->texture;
+	width = source->width;
+	height = source->height;
+}
+
+
+SDL_Surface* OPI_Image::getSurface(std::string filePath)
+{
+	SDL_Surface *surface = IMG_Load(filePath.c_str());
+	return surface;
+}
+
+GLuint OPI_Image::generateTexture(SDL_Surface * surface)
+{
 	GLuint tex[1];			// This is a handle to our texture object
 	GLenum texture_format = GL_RGBA;
 	GLint  nOfColors;
 
 	if (surface)
 	{
-		width = surface->w;
-		height = surface->h;
-
-		if (!pot(width))
-			printf("ERROR: OPI_Image width not power of two!\n");
-		if (!pot(height))
-			printf("ERROR: OPI_Image width not power of two!\n");
-
 		// get the number of channels in the SDL surface
 		nOfColors = surface->format->BytesPerPixel;
 		if (nOfColors == 4)     // contains an alpha channel
@@ -81,32 +113,8 @@ void OPI_Image::setImage(SDL_Surface * surface)
 		glTexImage2D(GL_TEXTURE_2D, 0, nOfColors, surface->w, surface->h, 0,
 			texture_format, GL_UNSIGNED_BYTE, surface->pixels);
 
-		SDL_FreeSurface(surface);
+		//TODO SDL_FreeSurface(surface);
 	}
 
-	//Clean up memory from OpenGL
-	if (texture)
-	{
-		glDeleteTextures(1, &texture);
-	}
-	texture = tex[0];
-}
-
-void OPI_Image::setImage(std::string path)
-{
-	SDL_Surface *surface = OPI_Image::getSurface(path);
-	setImage(surface);
-}
-
-void OPI_Image::setImage(OPI_Image *source)
-{
-	texture = source->texture;
-	width = source->width;
-	height = source->height;
-}
-
-
-SDL_Surface* OPI_Image::getSurface(std::string filePath)
-{
-	return IMG_Load(filePath.c_str());
+	return tex[0];
 }
