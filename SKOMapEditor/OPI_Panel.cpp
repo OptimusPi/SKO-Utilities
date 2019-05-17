@@ -21,53 +21,67 @@ void OPI_Panel::loadTheme(std::string theme)
 	corners[1] = OPI_Image::getSurface(themePath + "corner-top-right.png");
 	corners[2] = OPI_Image::getSurface(themePath + "corner-bottom-left.png");
 	corners[3] = OPI_Image::getSurface(themePath + "corner-bottom-right.png");
-	edges[0] = OPI_Image::getSurface(themePath + "edge-top-left.png");
-	edges[1] = OPI_Image::getSurface(themePath + "edge-top-right.png");
-	edges[2] = OPI_Image::getSurface(themePath + "edge-bottom-left.png");
-	edges[3] = OPI_Image::getSurface(themePath + "edge-bottom-right.png");
+	edges[0] = OPI_Image::getSurface(themePath + "edge-top.png");
+	edges[1] = OPI_Image::getSurface(themePath + "edge-bottom.png");
+	edges[2] = OPI_Image::getSurface(themePath + "edge-left.png");
+	edges[3] = OPI_Image::getSurface(themePath + "edge-right.png");
 	filler = OPI_Image::getSurface(themePath + "filler.png");
 	canvas = OPI_Image::getSurface(themePath + "canvas.png");
 }
 
-void OPI_Panel::render(SDL_Surface *screen)
+void OPI_Panel::render()
 {
+	// Note: when blitting images, the destination SDL_Rect ignores width and height.
+
 	// 
 	// Form a blank canvas to draw on.
 	//
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-	Uint32 rmask = 0xff000000;
-	Uint32 gmask = 0x00ff0000;
-	Uint32 bmask = 0x0000ff00;
-	Uint32 amask = 0x000000ff;
-#else
-	Uint32 rmask = 0x000000ff;
-	Uint32 gmask = 0x0000ff00;
-	Uint32 bmask = 0x00ff0000;
-	Uint32 amask = 0xff000000;
-#endif
-/*
-	SDL_Surface* panelCanvas = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32,
-		rmask, gmask, bmask, amask);*/
-
-	//SDL_Surface *panelCanvas = filler;
-
-	
-	SDL_Surface* panelCanvas = SDL_CreateRGBSurface(SDL_HWSURFACE, this->width, this->height,
+	SDL_Surface* panelCanvas = SDL_CreateRGBSurface(SDL_SRCALPHA | SDL_HWSURFACE, this->width, this->height,
 		24,
-		0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
+		0, 0, 0, 0);
 
-	SDL_SetAlpha(panelCanvas, 0, 0);
+	// Fill panel background 
+	for (short x = 0; x < this->width; x += 8)
+	{
+		for (short y = 0; y < this->height; y += 8)
+		{
+			SDL_Rect fillArea = SDL_Rect{ x, y, 0, 0 };
+			SDL_BlitSurface(filler, NULL, panelCanvas, &fillArea);
+		}
+	}
+
 
 	//
-	// Draw pieces into the canvas.
+	// Draw border on top of the canvas
 	//
-	// Start with corners
-	SDL_Rect *topLeftCorner = new SDL_Rect { 0, 0, 8, 8 };
-    int returnVal = SDL_BlitSurface(corners[0], topLeftCorner, panelCanvas, topLeftCorner);
-	//if (returnVal)
-	//	printf("Unable to render panel! SDL_BlitSurface failed.");
-	SDL_Flip(panelCanvas);
+	//
+	// Draw Top and Bottom edges
+	for (short x = 8; x < this->width - 8; x += 8)
+	{
+		SDL_Rect topEdge = SDL_Rect{ x, 0, 8, 8 };
+		SDL_Rect bottomEdge = SDL_Rect{ x, this->height - 8, 8, 8 };
+		SDL_BlitSurface(edges[0], NULL, panelCanvas, &topEdge);
+		SDL_BlitSurface(edges[1], NULL, panelCanvas, &bottomEdge);
+	}
+	// Draw Left and Right edges
+	for (short y = 8; y < this->height - 8; y += 8)
+	{
+		SDL_Rect leftEdge = SDL_Rect{ 0, y, 8, 8 };
+		SDL_Rect rightEdge = SDL_Rect{ this->width - 8, y, 8, 8 };
+		SDL_BlitSurface(edges[2], NULL, panelCanvas, &leftEdge);
+		SDL_BlitSurface(edges[3], NULL, panelCanvas, &rightEdge);
+	}
+	// Cap off the edges with the corner pieces on top
+	SDL_Rect topLeftCorner = SDL_Rect{ 0, 0, 8, 8 };
+	SDL_Rect topRightCorner = SDL_Rect{ this->width - 8, 0, 0, 0 };
+	SDL_Rect bottomLeftCorner = SDL_Rect{ 0, this->height - 8, 0, 0 };
+	SDL_Rect bottomRightCorner = SDL_Rect{ this->width - 8, this->height - 8, 0, 0 };
+	SDL_BlitSurface(corners[0], NULL, panelCanvas, &topLeftCorner);
+	SDL_BlitSurface(corners[1], NULL, panelCanvas, &topRightCorner);
+	SDL_BlitSurface(corners[2], NULL, panelCanvas, &bottomLeftCorner);
+	SDL_BlitSurface(corners[3], NULL, panelCanvas, &bottomRightCorner);
 
 	// Finally, convert slow SDL_Surface into OpenGL texture for fast drawing.
 	texture = new OPI_Image(panelCanvas);
+	SDL_FreeSurface(panelCanvas);
 }

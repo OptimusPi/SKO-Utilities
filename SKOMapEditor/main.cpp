@@ -106,7 +106,7 @@ void DrawImage( int x, int y, OPI_Image img)
 void drawPanel(OPI_Panel *panel)
 {
 	if (!panel->texture)
-		panel->render(screen);
+		panel->render();
 
 	DrawImage(panel->x, panel->y, panel->texture);
 }
@@ -319,11 +319,9 @@ void screenOptions()
     glEnable(GL_BLEND);
     
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    
 
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
     glViewport( 0, 0, 1024, 600 );
-
     glClear( GL_COLOR_BUFFER_BIT );
 
     glMatrixMode( GL_PROJECTION );
@@ -402,7 +400,7 @@ int main(int argc, char *argv[])
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
         return 1;
          
-    screen = SDL_SetVideoMode( 1024, 600, 32, SDL_OPENGL);
+    screen = SDL_SetVideoMode( 1024, 600, 32, SDL_HWSURFACE  | SDL_OPENGL);
      
     screenOptions();      
 
@@ -468,7 +466,7 @@ int main(int argc, char *argv[])
         break;
   }
 
-  OPI_Panel *testPanel = new OPI_Panel("ice", 100, 100, 100, 80);
+  OPI_Panel *testPanel = new OPI_Panel("ice", 240, 100, 601, 339);
 
   while (!done)
   {
@@ -490,8 +488,6 @@ int main(int argc, char *argv[])
                     //reset ticker
                     coordsTicker = OPI_Clock::milliseconds();
                 }        
-                          
-                          
                                
                //image buffer and background                    
                DrawImage(0, 0, background);
@@ -499,7 +495,6 @@ int main(int argc, char *argv[])
                //draw tiles, only on screen
                for (int i = 0; i < number_of_tiles; i++)
                {
-    
                    int draw_x = tile_x[i] - (int)camera_x;
                    int draw_y = tile_y[i] - (int)camera_y;
                    
@@ -934,6 +929,11 @@ int main(int argc, char *argv[])
                     //Get the mouse offsets
                     cursor_x = event.motion.x;
                     cursor_y = event.motion.y;
+
+					//move GUI
+					testPanel->x = cursor_x;
+					testPanel->y = cursor_y;
+					testPanel->render();
                     
                     //printf("x: %i, y: %i\n", cursor_x, cursor_y);
                     

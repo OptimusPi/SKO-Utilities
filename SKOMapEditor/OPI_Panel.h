@@ -7,12 +7,12 @@
 class OPI_Panel
 {
 public:
-	OPI_Panel(std::string theme, int x = 0, int y = 0, unsigned short int width = 5, unsigned short int height = 5);
+	OPI_Panel(std::string theme, int x = 0, int y = 0, unsigned short int width = 32, unsigned short int height = 32);
 	virtual ~OPI_Panel();
 	void loadTheme(std::string theme);
 	int x, y;
 	OPI_Image *texture;
-	void render(SDL_Surface *screen);
+	void render();
 private:
 	SDL_Surface *corners[4];
 	SDL_Surface *edges[4];
