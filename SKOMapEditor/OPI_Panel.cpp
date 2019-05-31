@@ -31,22 +31,37 @@ void OPI_Panel::loadTheme(std::string theme)
 
 void OPI_Panel::render()
 {
+
+	// https://wiki.libsdl.org/SDL_CreateRGBSurfaceFrom
+	// Set up the pixel format color masks for RGBA byte arrays.
 	// Note: when blitting images, the destination SDL_Rect ignores width and height.
+		Uint32 rmask, gmask, bmask, amask;
+	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+		rmask = 0xff000000;
+		gmask = 0x00ff0000;
+		bmask = 0x0000ff00;
+		amask = 0x000000ff;
+	#else // little endian, like x86
+		rmask = 0x000000ff;
+		gmask = 0x0000ff00;
+		bmask = 0x00ff0000;
+		amask = 0xff000000;
+	#endif
 
 	// 
 	// Form a blank canvas to draw on.
-	//
-	SDL_Surface* panelCanvas = SDL_CreateRGBSurface(SDL_SRCALPHA | SDL_HWSURFACE, this->width, this->height,
-		24,
-		0, 0, 0, 0);
+	// 
+	SDL_Surface* panelCanvas = SDL_CreateRGBSurface(0, this->width, this->height,
+		32,
+		rmask, gmask, bmask, amask);
 
 	// Fill panel background 
-	for (short x = 0; x < this->width; x += 8)
+	for (short x = 8; x < this->width; x += 8)
 	{
-		for (short y = 0; y < this->height; y += 8)
+		for (short y = 8; y < this->height; y += 8)
 		{
-			SDL_Rect fillArea = SDL_Rect{ x, y, 0, 0 };
-			SDL_BlitSurface(filler, NULL, panelCanvas, &fillArea);
+			//SDL_Rect fillArea = SDL_Rect{ x, y, 0, 0 };
+			//SDL_BlitSurface(filler, NULL, panelCanvas, &fillArea);
 		}
 	}
 
@@ -82,6 +97,7 @@ void OPI_Panel::render()
 	SDL_BlitSurface(corners[3], NULL, panelCanvas, &bottomRightCorner);
 
 	// Finally, convert slow SDL_Surface into OpenGL texture for fast drawing.
+	delete texture;
 	texture = new OPI_Image(panelCanvas);
 	SDL_FreeSurface(panelCanvas);
 }

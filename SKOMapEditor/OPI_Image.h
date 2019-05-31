@@ -23,6 +23,7 @@ class OPI_Image
 {
 public:
 	OPI_Image();
+	~OPI_Image();
 	OPI_Image(std::string filename);
 	OPI_Image(OPI_Image *source);
 	OPI_Image(SDL_Surface *surface);
@@ -31,6 +32,7 @@ public:
 	void setImage(SDL_Surface *surface);
 	static SDL_Surface* getSurface(std::string filePath);
 	static GLuint generateTexture(SDL_Surface * surface);
+	
 
 	GLuint texture;
 	unsigned int width;

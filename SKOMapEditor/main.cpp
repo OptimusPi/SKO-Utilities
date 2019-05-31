@@ -36,7 +36,8 @@ bool fringe_mode = 0;
 int save_notify;
 bool SHIFT_HELD = false;
 
-SDL_Surface *screen;
+SDL_Window *screen;
+SDL_GLContext glContext;
 SDL_Rect collision_rect[32768];
 int collision_ox;
 int collision_oy;
@@ -78,10 +79,10 @@ int current_tile_img = 0;
 
 
 
-void DrawImage( int x, int y, OPI_Image img) 
+void DrawImage( int x, int y, const OPI_Image *img) 
 {      
      glColor3f(1.0f, 1.0f, 1.0f);     
-     glBindTexture( GL_TEXTURE_2D,  img.texture);
+     glBindTexture( GL_TEXTURE_2D,  img->texture);
       
       glBegin( GL_QUADS );
     	//Top-left vertex (corner)
@@ -90,23 +91,21 @@ void DrawImage( int x, int y, OPI_Image img)
     	
     	//Bottom-left vertex (corner)
     	glTexCoord2f( 0, 1 );
-    	glVertex3f( x, y+img.height, 0 );
+    	glVertex3f( x, y+img->height, 0 );
     	
     	//Bottom-right vertex (corner)
     	glTexCoord2f( 1, 1 );
-    	glVertex3f( x+img.width, y+img.height, 0 );
+    	glVertex3f( x+img->width, y+img->height, 0 );
     	
     	//Top-right vertex (corner)
     	glTexCoord2f( 1, 0 );
-    	glVertex3f( x+img.width, y, 0 );
+    	glVertex3f( x+img->width, y, 0 );
     glEnd();
-   
 } 
 
 void drawPanel(OPI_Panel *panel)
 {
-	if (!panel->texture)
-		panel->render();
+	//panel->render();
 
 	DrawImage(panel->x, panel->y, panel->texture);
 }
@@ -311,9 +310,15 @@ void loadmap (std::string FileName)
 	 cleanupInvisibleRects();
 }
 
-void screenOptions()
+void initScreen()
 {
-    SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
+	screen = SDL_CreateWindow("SKO Map Editor v 0.9.0",
+		SDL_WINDOWPOS_UNDEFINED,
+		SDL_WINDOWPOS_UNDEFINED,
+		1024, 600,
+		SDL_WINDOW_OPENGL);
+
+	glContext = SDL_GL_CreateContext(screen);
 
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
@@ -332,11 +337,7 @@ void screenOptions()
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
     
-
     glDisable(GL_DEPTH_TEST);
-    
-
-    SDL_WM_SetCaption ("Stick Knights Online - Map Editor v8", NULL);
 }
 
 void Physics();
@@ -399,10 +400,8 @@ int main(int argc, char *argv[])
     
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
         return 1;
-         
-    screen = SDL_SetVideoMode( 1024, 600, 32, SDL_HWSURFACE  | SDL_OPENGL);
-     
-    screenOptions();      
+
+    initScreen();      
 
 	//Render the text
 	SDL_Color color;
@@ -467,6 +466,7 @@ int main(int argc, char *argv[])
   }
 
   OPI_Panel *testPanel = new OPI_Panel("ice", 240, 100, 601, 339);
+  testPanel->render();
 
   while (!done)
   {
@@ -488,9 +488,9 @@ int main(int argc, char *argv[])
                     //reset ticker
                     coordsTicker = OPI_Clock::milliseconds();
                 }        
-                               
+                            
                //image buffer and background                    
-               DrawImage(0, 0, background);
+               DrawImage(0, 0, &background);
                 
                //draw tiles, only on screen
                for (int i = 0; i < number_of_tiles; i++)
@@ -501,13 +501,13 @@ int main(int argc, char *argv[])
                    if (draw_x >= 0-tile_img[tile[i]].width &&
                       draw_x < 1024 && draw_y < 600 &&
                       draw_y >= 0-tile_img[tile[i]].height)
-                   DrawImage(draw_x, draw_y, tile_img[tile[i]]);
+                   DrawImage(draw_x, draw_y, &tile_img[tile[i]]);
                }
                
                   
                //stickman!
                if (stickman_toggle)
-                  DrawImage(stickman.x - 25 - camera_x, stickman.y - camera_y, stickman_img);
+                  DrawImage(stickman.x - 25 - camera_x, stickman.y - camera_y, &stickman_img);
                
                
                
@@ -522,13 +522,13 @@ int main(int argc, char *argv[])
                    if (draw_x >= 0-tile_img[fringe[i]].width &&
                       draw_x < 1024 && draw_y < 600 &&
                       draw_y >= 0-tile_img[fringe[i]].height)
-                   DrawImage(draw_x, draw_y, tile_img[fringe[i]]);
+                   DrawImage(draw_x, draw_y, &tile_img[fringe[i]]);
                }
                
                
                //draw current tile
                if (mode == TILE_DRAW)
-                  DrawImage(cursor_x/32*32, cursor_y/32*32, tile_img[current_tile_img]);
+                  DrawImage(cursor_x/32*32, cursor_y/32*32, &tile_img[current_tile_img]);
                           
                
             
@@ -552,19 +552,19 @@ int main(int argc, char *argv[])
                }
                
                //draw bottom gui bar
-               DrawImage(144, 536, gui);
+               DrawImage(144, 536, &gui);
                
                //draw gui selector
-               DrawImage(144 + (mode-1)*64, 536, selector);
+               DrawImage(144 + (mode-1)*64, 536, &selector);
                
                if (fringe_mode)
-                  DrawImage(144 + (FRINGE_TOGGLE-1)*64, 536, selector);
+                  DrawImage(144 + (FRINGE_TOGGLE-1)*64, 536, &selector);
                
                if (save_notify)
-                  DrawImage(144 + (SAVE-1)*64, 536, selector);
+                  DrawImage(144 + (SAVE-1)*64, 536, &selector);
                   
                if (!stickman_toggle)
-                  DrawImage(144 + (STICKMAN_DELETE-1)*64, 536, selector);
+                  DrawImage(144 + (STICKMAN_DELETE-1)*64, 536, &selector);
                
 
 			   //draw GUI
@@ -574,13 +574,11 @@ int main(int argc, char *argv[])
                drawText(coords);
                
                //draw cursor
-               DrawImage(cursor_x, cursor_y, cursor);
-               
+               DrawImage(cursor_x, cursor_y, &cursor);
                
                //update screen
-               SDL_GL_SwapBuffers();
+               SDL_GL_SwapWindow(screen);
  
-        
             while (!done && SDL_PollEvent(&event))
             {        
                 if (event.type == SDL_QUIT)
@@ -933,7 +931,6 @@ int main(int argc, char *argv[])
 					//move GUI
 					testPanel->x = cursor_x;
 					testPanel->y = cursor_y;
-					testPanel->render();
                     
                     //printf("x: %i, y: %i\n", cursor_x, cursor_y);
                     
@@ -1219,6 +1216,10 @@ int main(int argc, char *argv[])
   //printf("number_of_tiles: %i", number_of_tiles);
   
   printf("DONE\n");
+
+
+  SDL_GL_DeleteContext(glContext);
+
   SDL_Quit();
   return(0);
 }
@@ -1305,7 +1306,7 @@ void drawText(OPI_Text *text)
          
 	float screen_x = text->x;
 	float screen_y = text->y;
-    DrawImage(10, 10, text->contentRender);
+    DrawImage(10, 10, &text->contentRender);
 
 	//reset tint
 	glColor3f(1.0f, 1.0f, 1.0f);

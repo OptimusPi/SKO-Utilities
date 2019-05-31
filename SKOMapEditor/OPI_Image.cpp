@@ -7,6 +7,12 @@ OPI_Image::OPI_Image()
 	texture = 0;
 }
 
+OPI_Image::~OPI_Image()
+{
+	if (texture)
+		glDeleteTextures(1, &texture);
+}
+
 OPI_Image::OPI_Image(std::string filename)
 {
 	setImage(filename);

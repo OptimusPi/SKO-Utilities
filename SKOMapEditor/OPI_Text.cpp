@@ -33,14 +33,10 @@ void OPI_Text::setText(std::string content, TTF_Font* font, bool wrapped)
 {
 	this->content = content;
 
-	if (font == NULL)
-	{
-		font = this->currentFont;
-	}
-	else
+	if (font != NULL)
 	{
 		this->currentFont = font;
 	}
 
-	renderImage(content, font, wrapped);
+	renderImage(content, this->currentFont, wrapped);
 }
