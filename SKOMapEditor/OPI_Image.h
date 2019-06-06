@@ -13,11 +13,10 @@
 #include <GL/gl.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
-#endif
+#endif 
 
 #ifndef __OPI_IMAGE_H_
 #define __OPI_IMAGE_H_
-
 
 class OPI_Image
 {
@@ -32,8 +31,8 @@ public:
 	void setImage(SDL_Surface *surface);
 	static SDL_Surface* getSurface(std::string filePath);
 	static GLuint generateTexture(SDL_Surface * surface);
-	
-
+	static SDL_Surface* createBlankSurface(unsigned short int width, unsigned short int height);
+	static SDL_Surface* createColoredSurface(unsigned short width, unsigned short  height, unsigned char red, unsigned char green, unsigned char blue);
 	GLuint texture;
 	unsigned int width;
 	unsigned int height;

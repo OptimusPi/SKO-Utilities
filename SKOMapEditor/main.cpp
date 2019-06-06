@@ -21,6 +21,9 @@
 #include "OPI_Sleep.h"
 #include "OPI_Gui.h"
 
+#define WINDOW_WIDTH 1024
+#define WINDOW_HEIGHT 600
+
 //modes
 const char 
 
@@ -105,7 +108,6 @@ void DrawImage( int x, int y, const OPI_Image *img)
 
 void drawPanel(OPI_Panel *panel)
 {
-	//panel->render();
 
 	DrawImage(panel->x, panel->y, panel->texture);
 }
@@ -315,8 +317,8 @@ void initScreen()
 	screen = SDL_CreateWindow("SKO Map Editor v 0.9.0",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
-		1024, 600,
-		SDL_WINDOW_OPENGL);
+		WINDOW_WIDTH, WINDOW_HEIGHT,
+		SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 
 	glContext = SDL_GL_CreateContext(screen);
 
@@ -465,8 +467,8 @@ int main(int argc, char *argv[])
         break;
   }
 
-  OPI_Panel *testPanel = new OPI_Panel("ice", 240, 100, 601, 339);
-  testPanel->render();
+  OPI_Panel *testPanel = new OPI_Panel("ice", 240, 100, 241, 242);
+
 
   while (!done)
   {
@@ -928,10 +930,17 @@ int main(int argc, char *argv[])
                     cursor_x = event.motion.x;
                     cursor_y = event.motion.y;
 
+					if (cursor_x > WINDOW_WIDTH)
+						cursor_x = WINDOW_WIDTH;
+
+					if (cursor_y > WINDOW_HEIGHT)
+						cursor_y = WINDOW_HEIGHT;
+
 					//move GUI
-					testPanel->x = cursor_x;
-					testPanel->y = cursor_y;
-                    
+					testPanel->setWidth(cursor_x - testPanel->x);
+					testPanel->setHeight(cursor_y - testPanel->y);
+					testPanel->render();
+
                     //printf("x: %i, y: %i\n", cursor_x, cursor_y);
                     
                     //draw the almost done rect
