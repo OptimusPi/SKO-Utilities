@@ -27,6 +27,7 @@ void OPI_Text::renderImage(std::string content, TTF_Font* font, bool wrapped)
 {
 	SDL_Surface *surface = TTF_RenderUTF8_Blended(font, content.c_str(), this->color);
 	this->contentRender.setImage(surface);
+	SDL_FreeSurface(surface);
 }
 
 void OPI_Text::setText(std::string content, TTF_Font* font, bool wrapped)
