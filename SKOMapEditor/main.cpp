@@ -66,7 +66,7 @@ int current_tile = 0;
 int current_rect = 0;
 int current_fringe = 0;
 int current_tile_img = 0;
-
+OPI_Panel *testPanel = new OPI_Panel("ice", 240, 100, 241, 242);
 
   
   //mouse buttons
@@ -80,6 +80,13 @@ int current_tile_img = 0;
   
   unsigned long int coordsTicker = 0;
 
+  //images
+  OPI_Image tile_img[256], cursor;
+  OPI_Image background;
+  OPI_Image gui, selector;
+  OPI_Image stickman_img;
+
+  //font.setImage("IMG/font.png");
 
 
 void DrawImage( int x, int y, const OPI_Image *img) 
@@ -348,7 +355,98 @@ void drawText(OPI_Text *text);
 std::string save = "";
 
 
+void Graphics()
+{
+	//image buffer and background                    
+	DrawImage(0, 0, &background);
 
+	//draw tiles, only on screen
+	for (int i = 0; i < number_of_tiles; i++)
+	{
+		int draw_x = tile_x[i] - (int)camera_x;
+		int draw_y = tile_y[i] - (int)camera_y;
+
+		if (draw_x >= 0 - tile_img[tile[i]].width &&
+			draw_x < 1024 && draw_y < 600 &&
+			draw_y >= 0 - tile_img[tile[i]].height)
+			DrawImage(draw_x, draw_y, &tile_img[tile[i]]);
+	}
+
+
+	//stickman!
+	if (stickman_toggle)
+		DrawImage(stickman.x - 25 - camera_x, stickman.y - camera_y, &stickman_img);
+
+
+
+
+	//draw tiles, only on screen
+	for (int i = 0; i < number_of_fringe; i++)
+	{
+
+		int draw_x = fringe_x[i] - (int)camera_x;
+		int draw_y = fringe_y[i] - (int)camera_y;
+
+		if (draw_x >= 0 - tile_img[fringe[i]].width &&
+			draw_x < 1024 && draw_y < 600 &&
+			draw_y >= 0 - tile_img[fringe[i]].height)
+			DrawImage(draw_x, draw_y, &tile_img[fringe[i]]);
+	}
+
+
+	//draw current tile
+	if (mode == TILE_DRAW)
+		DrawImage(cursor_x / 32 * 32, cursor_y / 32 * 32, &tile_img[current_tile_img]);
+
+
+
+
+	//draw collision rects, only on screen  
+	for (int i = 0; i < number_of_rects; i++)
+	{
+
+		SDL_Rect newRect;
+
+		newRect.x = collision_rect[i].x - (int)camera_x;
+		newRect.y = collision_rect[i].y - (int)camera_y;
+		newRect.h = collision_rect[i].h;
+		newRect.w = collision_rect[i].w;
+
+		if (newRect.x >= 0 - collision_rect[i].w &&
+			newRect.x < 1024 && newRect.y < 600 &&
+			newRect.y >= 0 - collision_rect[i].h)
+
+			DrawRect(newRect);
+	}
+
+	//draw bottom gui bar
+	DrawImage(144, 536, &gui);
+
+	//draw gui selector
+	DrawImage(144 + (mode - 1) * 64, 536, &selector);
+
+	if (fringe_mode)
+		DrawImage(144 + (FRINGE_TOGGLE - 1) * 64, 536, &selector);
+
+	if (save_notify)
+		DrawImage(144 + (SAVE - 1) * 64, 536, &selector);
+
+	if (!stickman_toggle)
+		DrawImage(144 + (STICKMAN_DELETE - 1) * 64, 536, &selector);
+
+
+	//draw GUI
+	drawPanel(testPanel);
+
+	//draw coords
+	drawText(coords);
+
+	//draw cursor
+	DrawImage(cursor_x, cursor_y, &cursor);
+
+	//update screen
+	SDL_GL_SwapWindow(screen);
+}
 
 #ifdef _WIN32
 #include <shellapi.h>
@@ -398,12 +496,18 @@ int main(int argc, char *argv[])
 		current_fringe= number_of_fringe;
 	}
     
-    OPI_Timestep *timestep = new OPI_Timestep(20000);
+    OPI_Timestep *timestep = new OPI_Timestep(60);
     
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
         return 1;
 
     initScreen();      
+
+	cursor.setImage("IMG/cursor.png");
+	background.setImage("IMG/back.png");
+	gui.setImage("IMG/gui.png");
+	selector.setImage("IMG/selector.png");
+	stickman_img.setImage("IMG/stickman.png");
 
 	//Render the text
 	SDL_Color color;
@@ -440,17 +544,6 @@ int main(int argc, char *argv[])
      
      
      
-  //images
-  OPI_Image tile_img[256], cursor;
-  OPI_Image background;
-  OPI_Image gui, selector;
-  OPI_Image stickman_img;
-  cursor.setImage("IMG/cursor.png");
-  background.setImage("IMG/back.png");
-  gui.setImage("IMG/gui.png");
-  selector.setImage("IMG/selector.png");
-  stickman_img.setImage("IMG/stickman.png");
-  //font.setImage("IMG/font.png");
   
   for(int i = 0; i < 256; i++)//check if file exists, etc.
   {
@@ -467,119 +560,32 @@ int main(int argc, char *argv[])
         break;
   }
 
-  OPI_Panel *testPanel = new OPI_Panel("ice", 240, 100, 241, 242);
+
 
 
   while (!done)
   {
         timestep->Update();
                            
-        while (!done && timestep->Check())
+        if (!done && timestep->Check())
         {
 			//if save notify is in the past, clear it
             if (save_notify < clock())
                save_notify = 0;
                           
-                if (OPI_Clock::milliseconds() - coordsTicker  > 1)
+                if (OPI_Clock::milliseconds() - coordsTicker  > 15)
                 {  
                     //draw coords
                     std::stringstream ss;
                     ss << "(" << cursor_x+camera_x << ", " << cursor_y+camera_y << ")";
-                    coords->setText((char *)ss.str().c_str());
+
+                    coords->setText(ss.str());
                     
                     //reset ticker
                     coordsTicker = OPI_Clock::milliseconds();
                 }        
                             
-               //image buffer and background                    
-               DrawImage(0, 0, &background);
-                
-               //draw tiles, only on screen
-               for (int i = 0; i < number_of_tiles; i++)
-               {
-                   int draw_x = tile_x[i] - (int)camera_x;
-                   int draw_y = tile_y[i] - (int)camera_y;
-                   
-                   if (draw_x >= 0-tile_img[tile[i]].width &&
-                      draw_x < 1024 && draw_y < 600 &&
-                      draw_y >= 0-tile_img[tile[i]].height)
-                   DrawImage(draw_x, draw_y, &tile_img[tile[i]]);
-               }
-               
-                  
-               //stickman!
-               if (stickman_toggle)
-                  DrawImage(stickman.x - 25 - camera_x, stickman.y - camera_y, &stickman_img);
-               
-               
-               
-                 
-               //draw tiles, only on screen
-               for (int i = 0; i < number_of_fringe; i++)
-               {
-    
-                   int draw_x = fringe_x[i] - (int)camera_x;
-                   int draw_y = fringe_y[i] - (int)camera_y;
-                   
-                   if (draw_x >= 0-tile_img[fringe[i]].width &&
-                      draw_x < 1024 && draw_y < 600 &&
-                      draw_y >= 0-tile_img[fringe[i]].height)
-                   DrawImage(draw_x, draw_y, &tile_img[fringe[i]]);
-               }
-               
-               
-               //draw current tile
-               if (mode == TILE_DRAW)
-                  DrawImage(cursor_x/32*32, cursor_y/32*32, &tile_img[current_tile_img]);
-                          
-               
-            
-                        
-               //draw collision rects, only on screen  
-               for (int i = 0; i < number_of_rects; i++)
-               {   
-    
-                   SDL_Rect newRect;
-                   
-                   newRect.x = collision_rect[i].x - (int)camera_x;
-                   newRect.y = collision_rect[i].y - (int)camera_y;
-                   newRect.h = collision_rect[i].h;
-				   newRect.w = collision_rect[i].w;
-                   
-                   if (newRect.x >= 0-collision_rect[i].w &&
-                       newRect.x < 1024 && newRect.y < 600 &&
-                       newRect.y >= 0-collision_rect[i].h)
-                       
-                   DrawRect(newRect);
-               }
-               
-               //draw bottom gui bar
-               DrawImage(144, 536, &gui);
-               
-               //draw gui selector
-               DrawImage(144 + (mode-1)*64, 536, &selector);
-               
-               if (fringe_mode)
-                  DrawImage(144 + (FRINGE_TOGGLE-1)*64, 536, &selector);
-               
-               if (save_notify)
-                  DrawImage(144 + (SAVE-1)*64, 536, &selector);
-                  
-               if (!stickman_toggle)
-                  DrawImage(144 + (STICKMAN_DELETE-1)*64, 536, &selector);
-               
-
-			   //draw GUI
-			   drawPanel(testPanel);
-               
-               //draw coords
-               drawText(coords);
-               
-               //draw cursor
-               DrawImage(cursor_x, cursor_y, &cursor);
-               
-               //update screen
-               SDL_GL_SwapWindow(screen);
+				Graphics();
  
             while (!done && SDL_PollEvent(&event))
             {        
@@ -1219,10 +1225,8 @@ int main(int argc, char *argv[])
             event.type = 0;
       }//while check
       
-      SDL_Delay(1);
+	  OPI_Sleep::microseconds(100);
   }//while !done
-  
-  //printf("number_of_tiles: %i", number_of_tiles);
   
   printf("DONE\n");
 
