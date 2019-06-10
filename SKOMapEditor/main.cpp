@@ -66,7 +66,7 @@ int current_tile = 0;
 int current_rect = 0;
 int current_fringe = 0;
 int current_tile_img = 0;
-OPI_Panel *testPanel = new OPI_Panel("ice", 240, 100, 241, 242);
+OPI_Panel *testPanel = NULL;
 
   
   //mouse buttons
@@ -115,7 +115,8 @@ void DrawImage( int x, int y, const OPI_Image *img)
 
 void drawPanel(OPI_Panel *panel)
 {
-
+	for (int i = 0; i < 10000; i++)
+	panel->render();
 	DrawImage(panel->x, panel->y, panel->texture);
 }
 
@@ -503,6 +504,7 @@ int main(int argc, char *argv[])
 
     initScreen();      
 
+	testPanel = new OPI_Panel("ice", 240, 100, 241, 242);
 	cursor.setImage("IMG/cursor.png");
 	background.setImage("IMG/back.png");
 	gui.setImage("IMG/gui.png");
