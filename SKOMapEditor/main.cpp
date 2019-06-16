@@ -81,12 +81,17 @@ OPI_Panel *testPanel = NULL;
   unsigned long int coordsTicker = 0;
 
   //images
-  OPI_Image tile_img[256], cursor;
+  OPI_Image tile_img[256];
   OPI_Image background;
   OPI_Image gui, selector;
   OPI_Image stickman_img;
 
   //font.setImage("IMG/font.png");
+
+	// load map by dragging and dropping onto this executable, 
+	// or with command line arguments:
+	// SKOMapEditor.exe map0.map
+  std::string loadMapFilename = "";
 
 
 void DrawImage( int x, int y, const OPI_Image *img) 
@@ -115,8 +120,6 @@ void DrawImage( int x, int y, const OPI_Image *img)
 
 void drawPanel(OPI_Panel *panel)
 {
-	for (int i = 0; i < 10000; i++)
-	panel->render();
 	DrawImage(panel->x, panel->y, panel->texture);
 }
 
@@ -320,6 +323,15 @@ void loadmap (std::string FileName)
 	 cleanupInvisibleRects();
 }
 
+SDL_Cursor *pointer;
+
+void initCursors()
+{
+	SDL_Surface* pointer_surface = OPI_Image::getSurface("IMG/GUI/cursors/hourglass.png");
+	pointer = SDL_CreateColorCursor(pointer_surface, 0, 0);
+	SDL_SetCursor(pointer);
+}
+
 void initScreen()
 {
 	screen = SDL_CreateWindow("SKO Map Editor v 0.9.0",
@@ -442,11 +454,642 @@ void Graphics()
 	//draw coords
 	drawText(coords);
 
-	//draw cursor
-	DrawImage(cursor_x, cursor_y, &cursor);
-
 	//update screen
 	SDL_GL_SwapWindow(screen);
+}
+
+void HandleInput()
+{
+	while (!done && SDL_PollEvent(&event))
+	{
+		if (event.type == SDL_QUIT)
+		{
+			//todo save a backup file
+			done = true;
+		}
+
+		if (event.type == SDL_KEYUP)
+		{
+			switch (event.key.keysym.sym)
+			{
+			case 'a':
+				LEFT = false;
+				break;
+
+			case 'd':
+				RIGHT = false;
+				break;
+
+			case SDLK_LSHIFT:
+				SHIFT_HELD = false;
+				break;
+
+			default:
+				break;
+			}
+		}
+
+		if (event.type == SDL_KEYDOWN)
+		{
+			switch (event.key.keysym.sym)
+			{
+			case SDLK_LSHIFT:
+				SHIFT_HELD = true;
+				break;
+			case '1':
+				mode = TILE_DRAW;
+				break;
+			case '2':
+				mode = TILE_DELETE;
+				break;
+			case '3':
+				mode = COLLISION_DRAW;
+				break;
+			case '4':
+				mode = COLLISION_DELETE;
+				break;
+			case '5':
+				mode = STICKMAN_DRAW;
+				break;
+			case '6':
+				stickman_toggle = !stickman_toggle;
+				break;
+			case '7':
+				fringe_mode = !fringe_mode;
+				break;
+			case '8':
+			{
+				// Cleanup small rects you can't see
+				cleanupInvisibleRects();
+
+				//show selector for a second
+				save_notify = clock() + 120;
+
+				//default
+				std::string file = "Output.map";
+
+				//unless you have opened one
+				if (loadMapFilename.length() > 1)
+					file = loadMapFilename;
+
+				//dump all the memory into a file
+				std::ofstream MapFile(file.c_str(), std::ios::out | std::ios::binary);
+
+				if (MapFile.is_open())
+				{
+
+					//first say how many tiles
+					//break up the int as 4 bytes
+					unsigned char *p;
+					p = (unsigned char*)&number_of_tiles;
+					unsigned char b1 = p[0];
+					unsigned char b2 = p[1];
+					unsigned char b3 = p[2];
+					unsigned char b4 = p[3];
+
+					//spit out each of the bytes
+					MapFile << b1 << b2 << b3 << b4;
+
+					//put how many fringe
+					p = (unsigned char*)&number_of_fringe;
+					b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+
+					//spit out each of the bytes
+					MapFile << b1 << b2 << b3 << b4;
+
+					//put how many rects
+					p = (unsigned char*)&number_of_rects;
+					b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+
+					//spit out each of the bytes
+					MapFile << b1 << b2 << b3 << b4;
+
+
+					//spit out all the tiles
+					for (int i = 0; i < number_of_tiles; i++)
+					{
+						//x coords
+						p = (unsigned char*)&tile_x[i];
+						b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+
+						//spit out each of the bytes
+						MapFile << b1 << b2 << b3 << b4;
+
+						//y coords
+						p = (unsigned char*)&tile_y[i];
+						b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+
+						//spit out each of the bytes
+						MapFile << b1 << b2 << b3 << b4;
+
+						//tile number
+						MapFile << tile[i];
+
+					}
+
+					//spit out all the tiles
+					for (int i = 0; i < number_of_fringe; i++)
+					{
+						//x coords
+						p = (unsigned char*)&fringe_x[i];
+						b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+
+						//spit out each of the bytes
+						MapFile << b1 << b2 << b3 << b4;
+
+						//y coords
+						p = (unsigned char*)&fringe_y[i];
+						b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+
+						//spit out each of the bytes
+						MapFile << b1 << b2 << b3 << b4;
+
+						//fringe number
+						MapFile << fringe[i];
+
+					}
+
+					//spit out all the rects
+					for (int i = 0; i < number_of_rects; i++)
+					{
+						//x coords
+						p = (unsigned char*)&collision_rect[i].x;
+						b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+
+						//spit out each of the bytes
+						MapFile << b1 << b2 << b3 << b4;
+
+						//y coords
+						p = (unsigned char*)&collision_rect[i].y;
+						b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+
+						//spit out each of the bytes
+						MapFile << b1 << b2 << b3 << b4;
+
+						//width
+						p = (unsigned char*)&collision_rect[i].w;
+						b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+
+						//spit out each of the bytes
+						MapFile << b1 << b2 << b3 << b4;
+
+						//height
+						p = (unsigned char*)&collision_rect[i].h;
+						b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+
+						//spit out each of the bytes
+						MapFile << b1 << b2 << b3 << b4;
+					}
+
+					MapFile.close();
+				}
+			}
+			break;
+
+
+			case  SDLK_UP:
+				if (SHIFT_HELD)
+					camera_y -= 576;
+				else
+					camera_y -= 32;
+				break;
+			case  SDLK_LEFT:
+				if (SHIFT_HELD)
+					camera_x -= 1024;
+				else
+					camera_x -= 32;
+				break;
+			case  SDLK_DOWN:
+				if (SHIFT_HELD)
+					camera_y += 576;
+				else
+					camera_y += 32;
+				break;
+			case  SDLK_RIGHT:
+				if (SHIFT_HELD)
+					camera_x += 1024;
+				else
+					camera_x += 32;
+				break;
+
+
+
+
+			case SDLK_HOME:
+				camera_x = 0;
+				camera_y = 0;
+				break;
+			case SDLK_PAGEUP:
+				if (current_tile_img > 0)
+					current_tile_img--;
+				break;
+
+			case SDLK_PAGEDOWN:
+				if (current_tile_img < num_tiles)
+					current_tile_img++;
+				break;
+
+			case 'w':
+				if (current_tile > 0 && mode == TILE_DRAW && !fringe_mode)
+					tile_y[current_tile - 1]--;
+				if (current_fringe > 0 && mode == TILE_DRAW && fringe_mode)
+					fringe_y[current_fringe - 1]--;
+
+				if (mode == STICKMAN_DRAW)
+					y_speed = -6;
+				if (mode == COLLISION_DRAW && current_rect > 0)
+				{
+					if (collision_rect[current_rect - 1].y > 0)
+					{
+						collision_rect[current_rect - 1].y--;
+						collision_rect[current_rect - 1].w++;
+					}
+				}
+				break;
+			case 'a':
+
+				if (current_tile > 0 && mode == TILE_DRAW && !fringe_mode)
+				{
+					tile_x[current_tile - 1]--;
+				}
+				if (current_fringe > 0 && mode == TILE_DRAW && fringe_mode)
+				{
+					fringe_x[current_fringe - 1]--;
+				}
+
+				LEFT = true;
+
+				if (mode == COLLISION_DRAW && current_rect > 0)
+				{
+					if (collision_rect[current_rect - 1].x > 0)
+					{
+						collision_rect[current_rect - 1].x--;
+						collision_rect[current_rect - 1].w++;
+					}
+				}
+				break;
+			case 's':
+				if (current_tile > 0 && mode == TILE_DRAW && !fringe_mode)
+					tile_y[current_tile - 1]++;
+				if (current_fringe > 0 && mode == TILE_DRAW && fringe_mode)
+					fringe_y[current_fringe - 1]++;
+
+				if (mode == COLLISION_DRAW && current_rect > 0)
+				{
+					collision_rect[current_rect - 1].y++;
+					collision_rect[current_rect - 1].h--;
+				}
+
+				break;
+			case 'd':
+
+				if (current_tile > 0 && mode == TILE_DRAW && !fringe_mode)
+					tile_x[current_tile - 1]++;
+				if (current_fringe > 0 && mode == TILE_DRAW && fringe_mode)
+					fringe_x[current_fringe - 1]++;
+
+				RIGHT = true;
+
+				if (mode == COLLISION_DRAW && current_rect > 0)
+				{
+					collision_rect[current_rect - 1].x++;
+					collision_rect[current_rect - 1].w--;
+				}
+				break;
+
+				//smaller rects
+			case 'i':
+				if (mode == COLLISION_DRAW && current_rect > 0)
+				{
+					if (collision_rect[current_rect - 1].h > 0)
+					{
+						collision_rect[current_rect - 1].h--;
+					}
+				}
+				break;
+			case 'j':
+				if (mode == COLLISION_DRAW && current_rect > 0)
+				{
+					if (collision_rect[current_rect - 1].w > 0)
+					{
+						collision_rect[current_rect - 1].w--;
+					}
+				}
+				break;
+			case 'k':
+				if (mode == COLLISION_DRAW && current_rect > 0)
+				{
+					collision_rect[current_rect - 1].h++;
+				}
+				break;
+			case 'l':
+				if (mode == COLLISION_DRAW && current_rect > 0)
+				{
+					collision_rect[current_rect - 1].w++;
+				}
+				break;
+
+
+			default:
+				printf("unknown key is: %i\n", (int)event.key.keysym.sym);
+				break;
+
+			}
+		}
+
+		//reset camera
+		if (camera_x < 0)
+			camera_x = 0;
+		if (camera_y < 0)
+			camera_y = 0;
+
+		if (event.type == SDL_MOUSEMOTION)
+		{
+			//Get the mouse offsets
+			cursor_x = event.motion.x;
+			cursor_y = event.motion.y;
+
+			if (cursor_x > WINDOW_WIDTH)
+				cursor_x = WINDOW_WIDTH;
+
+			if (cursor_y > WINDOW_HEIGHT)
+				cursor_y = WINDOW_HEIGHT;
+
+			//move GUI
+			testPanel->setWidth(cursor_x - testPanel->x);
+			testPanel->setHeight(cursor_y - testPanel->y);
+			testPanel->render();
+
+			//printf("x: %i, y: %i\n", cursor_x, cursor_y);
+
+			//draw the almost done rect
+			if (mode == COLLISION_DRAW && LCLICK)
+			{
+				//variables for easy determining
+				int cx = cursor_x + (int)camera_x;
+				int cy = cursor_y + (int)camera_y;
+				int x1, x2, y1, y2;
+
+
+				//
+				// X
+				//
+				if (cx > collision_ox)
+				{
+					x1 = collision_rect[current_rect].x;
+					x2 = cx;
+				}
+				else
+				{
+					x1 = cx;
+					x2 = collision_ox;
+				}
+
+				//
+				// Y
+				//
+				if (cy > collision_oy)
+				{
+					y1 = collision_rect[current_rect].y;
+					y2 = cy;
+				}
+				else
+				{
+					y1 = cy;
+					y2 = collision_oy;
+				}
+
+				//adjust the width and height
+				collision_rect[current_rect].x = x1;
+				collision_rect[current_rect].w = x2 - x1;
+				collision_rect[current_rect].y = y1;
+				collision_rect[current_rect].h = y2 - y1;
+			}
+			if (mode == TILE_DRAW && LCLICK)
+			{
+				if (!fringe_mode)
+				{
+					tile_x[current_tile] = (int)(cursor_x + camera_x) / 32 * 32;
+					tile_y[current_tile] = (int)(cursor_y + camera_y) / 32 * 32;
+				}
+				else
+				{
+					fringe_x[current_fringe] = (int)(cursor_x + camera_x) / 32 * 32;
+					fringe_y[current_fringe] = (int)(cursor_y + camera_y) / 32 * 32;
+				}
+			}
+			if (mode == STICKMAN_DRAW && LCLICK)
+			{
+				stickman.x = cursor_x + camera_x;
+				stickman.y = cursor_y + camera_y;
+			}
+		}
+
+		if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT && !LCLICK)
+		{
+			switch (mode)
+			{
+
+			case TILE_DRAW:
+				if (!fringe_mode)
+				{
+					if (!placing_tile)
+					{
+						number_of_tiles++;
+						placing_tile = true;
+					}
+
+					tile_x[current_tile] = (int)(cursor_x + (int)camera_x) / 32 * 32;
+					tile_y[current_tile] = (int)(cursor_y + (int)camera_y) / 32 * 32;
+					tile[current_tile] = current_tile_img;
+				}
+				else
+				{
+					if (!placing_fringe)
+					{
+						number_of_fringe++;
+						placing_fringe = true;
+					}
+
+					fringe_x[current_fringe] = (int)(cursor_x + (int)camera_x) / 32 * 32;
+					fringe_y[current_fringe] = (int)(cursor_y + (int)camera_y) / 32 * 32;
+					fringe[current_fringe] = current_tile_img;
+				}
+				break;
+
+			case TILE_DELETE: {
+				//find a tile to delete
+				int i;
+				int x = cursor_x + camera_x;
+				int y = cursor_y + camera_y;
+
+				if (!fringe_mode)
+				{
+					bool found = false;
+					for (i = 0; i < current_tile; i++)
+					{
+						if (x > tile_x[i] && x < tile_x[i] + tile_img[tile[i]].width &&
+							y > tile_y[i] && y < tile_y[i] + tile_img[tile[i]].height)
+						{
+							found = true;
+							break;
+						}
+					}
+
+					//move all tiles back in the array
+					for (; found && i < current_tile; i++)
+					{
+						tile[i] = tile[i + 1];
+						tile_x[i] = tile_x[i + 1];
+						tile_y[i] = tile_y[i + 1];
+					}
+
+					//we deleted a tile. current position is one less now.
+					if (found) {
+						current_tile--;
+						number_of_tiles--;
+					}
+				}
+				else
+				{
+					bool found = false;
+					for (i = 0; i < current_fringe; i++)
+					{
+						if (x > fringe_x[i] && x < fringe_x[i] + tile_img[fringe[i]].width &&
+							y > fringe_y[i] && y < fringe_y[i] + tile_img[fringe[i]].height)
+						{
+							found = true;
+							break;
+						}
+					}
+
+					//move all tiles back in the array
+					for (; found && i < current_fringe; i++)
+					{
+						fringe[i] = fringe[i + 1];
+						fringe_x[i] = fringe_x[i + 1];
+						fringe_y[i] = fringe_y[i + 1];
+					}
+
+					//we deleted a tile. current position is one less now.
+					if (found) {
+						current_fringe--;
+						number_of_fringe--;
+					}
+				}
+			}
+							  break;
+
+			case COLLISION_DRAW:
+				//go to next rect
+				number_of_rects++;
+
+				//Get the mouse offsets
+				collision_ox = event.button.x + (int)camera_x;
+				collision_oy = event.button.y + (int)camera_y;
+				collision_rect[current_rect].x = collision_ox;
+				collision_rect[current_rect].y = collision_oy;
+				collision_rect[current_rect].w = 0;
+				collision_rect[current_rect].h = 0;
+				break;
+
+			case COLLISION_DELETE: {
+				//find a collision to delete
+				int i;
+				int x = cursor_x + camera_x;
+				int y = cursor_y + camera_y;
+				bool found = false;
+				for (i = 0; i < current_rect; i++)
+				{
+					if (x > collision_rect[i].x && x < collision_rect[i].x + collision_rect[i].w &&
+						y > collision_rect[i].y && y < collision_rect[i].y + collision_rect[i].h)
+					{
+						found = true;
+						break;
+					}
+				}
+
+				//move all tiles back in the array
+				for (; i < current_rect; i++)
+				{
+					collision_rect[i] = collision_rect[i + 1];
+
+				}
+
+
+				//we deleted a rect. current position is one less now.
+				if (found) {
+					current_rect--;
+					number_of_rects--;
+				}
+			}
+								   break;
+
+
+			case STICKMAN_DRAW:
+				stickman_toggle = true;
+				stickman.x = cursor_x + camera_x;
+				stickman.y = cursor_y + camera_y;
+
+				break;
+
+
+			}
+
+			LCLICK = true;
+		}
+
+		if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_RIGHT && !RCLICK)
+		{
+			RCLICK = true;
+			//TODO - use RCLICK for collision rect editing
+		}
+		if (event.type == SDL_MOUSEBUTTONUP)
+		{
+			if (event.button.button == SDL_BUTTON_LEFT && LCLICK)
+			{
+				switch (mode)
+				{
+				case TILE_DRAW:
+					if (!fringe_mode)
+					{
+						tile_x[current_tile] = (int)(event.button.x + (int)camera_x) / 32 * 32;
+						tile_y[current_tile] = (int)(event.button.y + (int)camera_y) / 32 * 32;
+						tile[current_tile] = current_tile_img;
+
+						//go to the next tile
+						current_tile++;
+						placing_tile = false;
+					}
+					else
+					{
+						fringe_x[current_fringe] = (int)(event.button.x + (int)camera_x) / 32 * 32;
+						fringe_y[current_fringe] = (int)(event.button.y + (int)camera_y) / 32 * 32;
+						fringe[current_fringe] = current_tile_img;
+
+						//go to the next tile
+						current_fringe++;
+						placing_fringe = false;
+					}
+
+					break;
+
+				case COLLISION_DRAW:
+					current_rect++;
+					// Cleanup small rects you can't see
+					cleanupInvisibleRects();
+					break;
+				}
+
+				LCLICK = false;
+			}
+
+			if (event.button.button == SDL_BUTTON_RIGHT && RCLICK)
+			{
+				RCLICK = false;
+			}
+		}
+	} //if poll event
 }
 
 #ifdef _WIN32
@@ -454,11 +1097,6 @@ void Graphics()
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow)
 {
-
-	// load map by dragging and dropping onto this executable, 
-	// or with command line arguments:
-	// SKOMapEditor.exe map0.map
-	std::string loadMapFilename = "";
 
 	LPWSTR *szArgList;
 	int argCount;
@@ -503,9 +1141,9 @@ int main(int argc, char *argv[])
         return 1;
 
     initScreen();      
+	initCursors();
 
-	testPanel = new OPI_Panel("ice", 240, 100, 241, 242);
-	cursor.setImage("IMG/cursor.png");
+	testPanel = new OPI_Panel("book", 240, 100, 241, 242);
 	background.setImage("IMG/back.png");
 	gui.setImage("IMG/gui.png");
 	selector.setImage("IMG/selector.png");
@@ -532,8 +1170,6 @@ int main(int argc, char *argv[])
 	stickman.y = 0;
 	stickman.w = 14;
 	stickman.h = 64;
-  
-	SDL_ShowCursor(0);
 
 	//coords text
 	coords->setText("0,0", NULL);
@@ -543,9 +1179,6 @@ int main(int argc, char *argv[])
 	coords->R = 1.0f;
 	coords->G = 1.0f;
 	coords->B = 1.0f;
-     
-     
-     
   
   for(int i = 0; i < 256; i++)//check if file exists, etc.
   {
@@ -561,8 +1194,6 @@ int main(int argc, char *argv[])
      else
         break;
   }
-
-
 
 
   while (!done)
@@ -588,638 +1219,8 @@ int main(int argc, char *argv[])
                 }        
                             
 				Graphics();
- 
-            while (!done && SDL_PollEvent(&event))
-            {        
-                if (event.type == SDL_QUIT)
-                {
-				   //todo save a backup file
-                   done = true;
-                }
-                    
-                if (event.type == SDL_KEYUP)
-                {
-                    switch (event.key.keysym.sym)
-                    {
-                           case 'a':
-                                LEFT = false; 
-                           break;
-                           
-                           case 'd':
-                                RIGHT = false;
-                           break;
-                           
-                           case SDLK_LSHIFT:
-                                SHIFT_HELD = false;
-                           break;
-                           
-                           default: 
-                           break;
-                    }
-                }
-                   
-                if (event.type == SDL_KEYDOWN)
-                {
-                    switch (event.key.keysym.sym)
-                    {       
-                           case SDLK_LSHIFT:
-                                SHIFT_HELD = true;
-                           break;
-                           case '1':
-                                   mode = TILE_DRAW;
-                           break;
-                           case '2':
-                                   mode = TILE_DELETE;
-                           break;
-                           case '3':
-                                   mode = COLLISION_DRAW;
-                           break;
-                           case '4':
-                                   mode = COLLISION_DELETE;
-                           break;
-                           case '5':
-                                   mode = STICKMAN_DRAW;
-                           break;
-                           case '6':
-                                   stickman_toggle = !stickman_toggle;
-                           break;
-                           case '7':
-                                   fringe_mode = !fringe_mode;
-                           break;
-                           case '8':
-                                 {  
-									// Cleanup small rects you can't see
-									cleanupInvisibleRects();
+				HandleInput();
 
-                                    //show selector for a second
-                                    save_notify = clock() + 120;
-                                    
-                                    //default
-                                    std::string file = "Output.map";
-                                    
-                                    //unless you have opened one
-                                    if (loadMapFilename.length() > 1)
-                                       file = loadMapFilename; 
-                                    
-                                    //dump all the memory into a file
-                                    std::ofstream MapFile(file.c_str(), std::ios::out|std::ios::binary);
-                                    
-                                    if (MapFile.is_open())
-                                    {     
-                                          
-                                       //first say how many tiles
-                                       //break up the int as 4 bytes
-                                       unsigned char *p;
-                                       p=(unsigned char*)&number_of_tiles;
-                                       unsigned char b1=p[0];
-                                       unsigned char b2=p[1];
-                                       unsigned char b3=p[2];
-                                       unsigned char b4=p[3];
-                                       
-                                       //spit out each of the bytes
-                                       MapFile << b1 << b2 << b3 << b4;
-                                       
-                                       //put how many fringe
-                                       p=(unsigned char*)&number_of_fringe;
-                                       b1=p[0]; b2=p[1]; b3=p[2]; b4=p[3];
-                                       
-                                       //spit out each of the bytes
-                                       MapFile << b1 << b2 << b3 << b4;
-                                       
-                                       //put how many rects
-                                       p=(unsigned char*)&number_of_rects;
-                                       b1=p[0]; b2=p[1]; b3=p[2]; b4=p[3];
-                                       
-                                       //spit out each of the bytes
-                                       MapFile << b1 << b2 << b3 << b4;
-                                       
-                                       
-                                       //spit out all the tiles
-                                       for (int i = 0; i < number_of_tiles; i++)   
-                                       {
-                                           //x coords
-                                           p=(unsigned char*)&tile_x[i];
-                                           b1=p[0]; b2=p[1]; b3=p[2]; b4=p[3];
-                                       
-                                           //spit out each of the bytes
-                                           MapFile << b1 << b2 << b3 << b4;
-                                           
-                                           //y coords
-                                           p=(unsigned char*)&tile_y[i];
-                                           b1=p[0]; b2=p[1]; b3=p[2]; b4=p[3];
-                                       
-                                           //spit out each of the bytes
-                                           MapFile << b1 << b2 << b3 << b4;
-                                           
-                                           //tile number
-                                           MapFile << tile[i];   
-                                             
-                                       }
-                                       
-                                       //spit out all the tiles
-                                       for (int i = 0; i < number_of_fringe; i++)   
-                                       {
-                                           //x coords
-                                           p=(unsigned char*)&fringe_x[i];
-                                           b1=p[0]; b2=p[1]; b3=p[2]; b4=p[3];
-                                       
-                                           //spit out each of the bytes
-                                           MapFile << b1 << b2 << b3 << b4;
-                                           
-                                           //y coords
-                                           p=(unsigned char*)&fringe_y[i];
-                                           b1=p[0]; b2=p[1]; b3=p[2]; b4=p[3];
-                                       
-                                           //spit out each of the bytes
-                                           MapFile << b1 << b2 << b3 << b4;
-                                           
-                                           //fringe number
-                                           MapFile << fringe[i];   
-                                             
-                                       }
-                                       
-                                       //spit out all the rects
-                                       for (int i = 0; i < number_of_rects; i++)   
-                                       {
-                                           //x coords
-                                           p=(unsigned char*)&collision_rect[i].x;
-                                           b1=p[0]; b2=p[1]; b3=p[2]; b4=p[3];
-                                       
-                                           //spit out each of the bytes
-                                           MapFile << b1 << b2 << b3 << b4;
-                                           
-                                           //y coords
-                                           p=(unsigned char*)&collision_rect[i].y;
-                                           b1=p[0]; b2=p[1]; b3=p[2]; b4=p[3];
-                                       
-                                           //spit out each of the bytes
-                                           MapFile << b1 << b2 << b3 << b4;
-                                           
-                                           //width
-                                           p=(unsigned char*)&collision_rect[i].w;
-                                           b1=p[0]; b2=p[1]; b3=p[2]; b4=p[3];
-                                       
-                                           //spit out each of the bytes
-                                           MapFile << b1 << b2 << b3 << b4;
-                                           
-                                           //height
-                                           p=(unsigned char*)&collision_rect[i].h;
-                                           b1=p[0]; b2=p[1]; b3=p[2]; b4=p[3];
-                                       
-                                           //spit out each of the bytes
-                                           MapFile << b1 << b2 << b3 << b4;     
-                                       }
-                                       
-                                       MapFile.close(); 
-                                    }
-                                }
-                           break;     
-                                
-                                  
-                           case  SDLK_UP: 
-                                if (SHIFT_HELD)
-                                   camera_y -= 576; 
-                                else
-                                    camera_y -= 32;
-                           break;
-                           case  SDLK_LEFT: 
-                                if (SHIFT_HELD)
-                                   camera_x -= 1024; 
-                                else
-                                    camera_x -= 32;
-                           break;
-                           case  SDLK_DOWN: 
-                                 if (SHIFT_HELD)
-                                    camera_y += 576;
-                                 else
-                                     camera_y+=32;
-                           break;
-                           case  SDLK_RIGHT: 
-                                 if (SHIFT_HELD)
-                                    camera_x += 1024;
-                                 else
-                                     camera_x+=32;
-                           break;
-                           
-                           
-                           
-                           
-                           case SDLK_HOME:
-                                camera_x = 0;
-                                camera_y = 0;
-                           break; 
-                           case SDLK_PAGEUP:
-                                if (current_tile_img > 0)
-                                   current_tile_img --;
-                           break;
-                           
-                           case SDLK_PAGEDOWN:
-                                if (current_tile_img < num_tiles)
-                                   current_tile_img ++;
-                           break;
-                    
-                           case 'w':    
-                                      if (current_tile > 0&& mode == TILE_DRAW && !fringe_mode) 
-                                         tile_y[current_tile-1]--;  
-                                      if (current_fringe > 0&& mode == TILE_DRAW && fringe_mode) 
-                                         fringe_y[current_fringe-1]--;   
-                                         
-                                      if (mode == STICKMAN_DRAW)
-                                          y_speed = -6; 
-                                      if (mode == COLLISION_DRAW && current_rect > 0) 
-                                      {
-                                               if (collision_rect[current_rect - 1].y > 0)
-                                               {
-                                                   collision_rect[current_rect - 1].y --;
-                                                   collision_rect[current_rect - 1].w ++;
-                                               }
-                                      }
-                           break;
-                           case 'a':  
-                                      
-                                      if (current_tile > 0 && mode == TILE_DRAW && !fringe_mode)
-                                      { 
-                                         tile_x[current_tile-1]--;   
-                                      }
-                                      if (current_fringe > 0&& mode == TILE_DRAW && fringe_mode) 
-                                      {
-                                         fringe_x[current_fringe-1]--;   
-                                      }
-                                         
-                                       LEFT = true;
-                                      
-                                      if (mode == COLLISION_DRAW && current_rect > 0) 
-                                      {
-                                               if (collision_rect[current_rect - 1].x > 0)
-                                               {
-                                                   collision_rect[current_rect - 1].x --;
-                                                   collision_rect[current_rect - 1].w ++;
-                                               }
-                                      }
-                           break;
-                           case 's':  
-                                      if (current_tile > 0&& mode == TILE_DRAW && !fringe_mode) 
-                                          tile_y[current_tile-1]++;   
-                                      if (current_fringe > 0&& mode == TILE_DRAW && fringe_mode) 
-                                         fringe_y[current_fringe-1]++;   
-                                           
-                                      if (mode == COLLISION_DRAW && current_rect > 0) 
-                                      {
-                                         collision_rect[current_rect - 1].y ++;   
-                                         collision_rect[current_rect - 1].h --; 
-                                      }
-                                          
-                           break;
-                           case 'd': 
-                                     
-                                      if (current_tile > 0 && mode == TILE_DRAW && !fringe_mode) 
-                                         tile_x[current_tile-1]++;   
-                                      if (current_fringe > 0 && mode == TILE_DRAW && fringe_mode) 
-                                         fringe_x[current_fringe-1]++;   
-                                      
-                                      RIGHT = true; 
-                                       
-                                      if (mode == COLLISION_DRAW && current_rect > 0) 
-                                      {
-                                         collision_rect[current_rect - 1].x ++;
-                                         collision_rect[current_rect - 1].w --;
-                                      }
-                           break;
-                          
-                           //smaller rects
-                            case 'i': 
-                                      if (mode == COLLISION_DRAW && current_rect > 0) 
-                                      {
-                                               if (collision_rect[current_rect - 1].h > 0)
-                                               {
-                                                   collision_rect[current_rect - 1].h --;
-                                               }
-                                      }
-                           break;
-                           case 'j':  
-                                      if (mode == COLLISION_DRAW && current_rect > 0) 
-                                      {
-                                               if (collision_rect[current_rect - 1].w > 0)
-                                               {
-                                                   collision_rect[current_rect - 1].w --;
-                                               }
-                                      }
-                           break;
-                           case 'k':   
-                                      if (mode == COLLISION_DRAW && current_rect > 0) 
-                                      {
-                                         collision_rect[current_rect - 1].h ++;  
-                                      } 
-                           break;
-                           case 'l': 
-                                      if (mode == COLLISION_DRAW && current_rect > 0) 
-                                      {
-                                         collision_rect[current_rect - 1].w ++;
-                                      }
-                           break;
-                           
-                           
-                           default:
-                                   printf("unknown key is: %i\n", (int)event.key.keysym.sym);        
-                           break;      
-                                  
-                    }      
-                }
-                
-                //reset camera
-                if (camera_x < 0)
-                   camera_x = 0;
-                if (camera_y < 0)
-                   camera_y = 0;
-                   
-                if( event.type == SDL_MOUSEMOTION)
-                {
-                    //Get the mouse offsets
-                    cursor_x = event.motion.x;
-                    cursor_y = event.motion.y;
-
-					if (cursor_x > WINDOW_WIDTH)
-						cursor_x = WINDOW_WIDTH;
-
-					if (cursor_y > WINDOW_HEIGHT)
-						cursor_y = WINDOW_HEIGHT;
-
-					//move GUI
-					testPanel->setWidth(cursor_x - testPanel->x);
-					testPanel->setHeight(cursor_y - testPanel->y);
-					testPanel->render();
-
-                    //printf("x: %i, y: %i\n", cursor_x, cursor_y);
-                    
-                    //draw the almost done rect
-                    if (mode == COLLISION_DRAW && LCLICK)
-                    {
-                       //variables for easy determining
-                       int cx = cursor_x+(int)camera_x;
-                       int cy = cursor_y+(int)camera_y;
-                       int x1, x2, y1, y2;
-                       
-                       
-                       //
-                       // X
-                       //
-                       if (cx > collision_ox)
-                       {
-                              x1 = collision_rect[current_rect].x;
-                              x2 = cx;
-                       } 
-                       else 
-                       {
-                            x1 = cx;
-                            x2 = collision_ox;
-                       }    
-                       
-                       //
-                       // Y
-                       //
-                       if (cy > collision_oy)
-                       {
-                              y1 = collision_rect[current_rect].y;
-                              y2 = cy;
-                       } 
-                       else 
-                       {
-                            y1 = cy;
-                            y2 = collision_oy;
-                       }    
-                       
-                       //adjust the width and height
-                       collision_rect[current_rect].x = x1;
-                       collision_rect[current_rect].w = x2-x1;
-                       collision_rect[current_rect].y = y1;
-                       collision_rect[current_rect].h = y2-y1;
-                    }
-                    if (mode == TILE_DRAW && LCLICK)
-                    {
-                       if (!fringe_mode)
-                       {
-                           tile_x[current_tile] = (int)(cursor_x+camera_x)/32*32;
-                           tile_y[current_tile] = (int)(cursor_y+camera_y)/32*32;
-                       }
-                       else
-                       {
-                           fringe_x[current_fringe] = (int)(cursor_x+camera_x)/32*32;
-                           fringe_y[current_fringe] = (int)(cursor_y+camera_y)/32*32;
-                       }
-                    }
-                    if (mode == STICKMAN_DRAW && LCLICK)
-                    {
-                       stickman.x = cursor_x + camera_x;
-                       stickman.y = cursor_y + camera_y;
-                    }
-                }
-         
-                if ( event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT && !LCLICK)
-                {      
-                     switch (mode)
-                     {
-                       
-                       case TILE_DRAW:
-                           if (!fringe_mode)
-                           {
-                               if (!placing_tile)   
-                               {              
-                                  number_of_tiles++;
-                                  placing_tile = true;
-                               }
-                                  
-                               tile_x[current_tile] = (int)(cursor_x+(int)camera_x)/32*32;
-                               tile_y[current_tile] = (int)(cursor_y+(int)camera_y)/32*32;
-                               tile[current_tile] = current_tile_img;
-                           }
-                           else
-                           {
-                               if (!placing_fringe)   
-                               {              
-                                  number_of_fringe++;
-                                  placing_fringe = true;
-                               }
-                                  
-                               fringe_x[current_fringe] = (int)(cursor_x+(int)camera_x)/32*32;
-                               fringe_y[current_fringe] = (int)(cursor_y+(int)camera_y)/32*32;
-                               fringe[current_fringe] = current_tile_img;
-                           }
-                      break;
-                      
-                      case TILE_DELETE: {
-                           //find a tile to delete
-                           int i;
-                           int x = cursor_x + camera_x;
-                           int y = cursor_y + camera_y;
-                           
-                           if (!fringe_mode)
-                           {
-                               bool found = false;
-                               for (i = 0; i < current_tile; i++)
-                               {
-                                   if (x > tile_x[i] && x < tile_x[i]+tile_img[tile[i]].width &&
-                                       y > tile_y[i] && y < tile_y[i]+tile_img[tile[i]].height)
-                                   {
-                                      found = true;
-                                      break;
-                                   }
-                               }
-                               
-                               //move all tiles back in the array
-                               for (; found && i < current_tile; i++)
-                               {
-                                   tile[i]   = tile[i+1];
-                                   tile_x[i] = tile_x[i+1];
-                                   tile_y[i] = tile_y[i+1];
-                               }
-                               
-                               //we deleted a tile. current position is one less now.
-                               if (found){
-                                  current_tile --;
-                                  number_of_tiles --;
-                               }
-                           }
-                           else
-                           {
-                               bool found = false;
-                               for (i = 0; i < current_fringe; i++)
-                               {
-                                   if (x > fringe_x[i] && x < fringe_x[i]+tile_img[fringe[i]].width &&
-                                       y > fringe_y[i] && y < fringe_y[i]+tile_img[fringe[i]].height)
-                                   {
-                                      found = true;
-                                      break;
-                                   }
-                               }
-                               
-                               //move all tiles back in the array
-                               for (; found && i < current_fringe; i++)
-                               {
-                                   fringe[i]   = fringe[i+1];
-                                   fringe_x[i] = fringe_x[i+1];
-                                   fringe_y[i] = fringe_y[i+1];
-                               }
-                               
-                               //we deleted a tile. current position is one less now.
-                               if (found){
-                                  current_fringe --;
-                                  number_of_fringe --;
-                               }
-                           }
-                      }
-                      break; 
-                      
-                      case COLLISION_DRAW:
-                            //go to next rect
-                            number_of_rects++;
-                           
-                            //Get the mouse offsets
-                            collision_ox = event.button.x+(int)camera_x;
-                            collision_oy = event.button.y+(int)camera_y;
-                            collision_rect[current_rect].x = collision_ox;
-                            collision_rect[current_rect].y = collision_oy;
-                            collision_rect[current_rect].w = 0;
-                            collision_rect[current_rect].h = 0;
-                      break;
-                       
-                      case COLLISION_DELETE:{
-                           //find a collision to delete
-                           int i;
-                           int x = cursor_x + camera_x;
-                           int y = cursor_y + camera_y;
-                           bool found = false;
-                           for (i = 0; i < current_rect; i++)
-                           {
-                               if (x > collision_rect[i].x && x < collision_rect[i].x + collision_rect[i].w &&
-                                   y > collision_rect[i].y && y < collision_rect[i].y + collision_rect[i].h)
-                               {
-                                   found = true;
-                                  break;
-                               }
-                           }
-                           
-                           //move all tiles back in the array
-                           for (; i < current_rect; i++)
-                           {
-                               collision_rect[i] = collision_rect[i+1];
-                               
-                           }
-                           
-                           
-                           //we deleted a rect. current position is one less now.
-                           if (found){
-                              current_rect --;
-                              number_of_rects --;
-                           }
-                      }
-                      break;  
-                      
-                      
-                      case STICKMAN_DRAW:
-                       stickman_toggle = true;    
-                       stickman.x = cursor_x + camera_x;
-                       stickman.y = cursor_y + camera_y;
-                    
-                      break;
-                      
-                      
-                     }
-                     
-                     LCLICK = true;
-                }
-
-                if ( event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_RIGHT && !RCLICK)
-                {
-                    RCLICK = true;
-                    //TODO - use RCLICK for collision rect editing
-                }
-                if( event.type == SDL_MOUSEBUTTONUP ) 
-                {         
-                    if ( event.button.button == SDL_BUTTON_LEFT && LCLICK)
-                    {
-                           switch (mode)
-                           {
-                               case TILE_DRAW:
-                                    if (!fringe_mode)
-                                    {
-                                        tile_x[current_tile] = (int)(event.button.x+(int)camera_x)/32*32;
-                                        tile_y[current_tile] = (int)(event.button.y+(int)camera_y)/32*32;
-                                        tile[current_tile] = current_tile_img;
-                                   
-                                        //go to the next tile
-                                        current_tile++; 
-                                        placing_tile = false; 
-                                    }
-                                    else 
-                                    {
-                                        fringe_x[current_fringe] = (int)(event.button.x+(int)camera_x)/32*32;
-                                        fringe_y[current_fringe] = (int)(event.button.y+(int)camera_y)/32*32;
-                                        fringe[current_fringe] = current_tile_img;
-                                   
-                                        //go to the next tile
-                                        current_fringe++; 
-                                        placing_fringe = false; 
-                                    } 
-                                   
-                               break;
-                               
-                               case COLLISION_DRAW:
-                                     current_rect++;
-									 // Cleanup small rects you can't see
-									 cleanupInvisibleRects();
-                               break;
-                           }
-                                   
-                          LCLICK = false;
-                   }
-
-                   if ( event.button.button == SDL_BUTTON_RIGHT && RCLICK)
-                   {
-                       RCLICK = false;
-                   }
-               }
-            } //if poll event
-    
             if (!done && stickman_toggle)
                Physics();
             
