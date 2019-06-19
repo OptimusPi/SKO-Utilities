@@ -21,6 +21,12 @@ void OPI_Panel::loadTheme(std::string theme)
 	//Load template sprite, and then cut out the corners and middle
 	SDL_Surface *panelTemplate = OPI_Image::getSurface(themePath + "panel.png");
 
+	//Ensure it loaded
+	if (panelTemplate == NULL)
+	{
+		throw "Panel Template is NULL. Maybe the image is missing from IMG/GUI/themes/<theme_name>/panel.png";
+	}
+
 	// Ensure it is a 3x3 "tileset" 
 	if (panelTemplate->w % 3 > 0 || panelTemplate->h % 3 > 0)
 	{
