@@ -118,8 +118,6 @@ GLuint OPI_Image::generateTexture(SDL_Surface * surface)
 		// Edit the texture object's OPI_Image data using the information SDL_Surface gives us
 		glTexImage2D(GL_TEXTURE_2D, 0, nOfColors, surface->w, surface->h, 0,
 			texture_format, GL_UNSIGNED_BYTE, surface->pixels);
-
-		//TODO SDL_FreeSurface(surface);
 	}
 
 	return tex[0];

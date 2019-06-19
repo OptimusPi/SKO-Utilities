@@ -1,20 +1,36 @@
 #ifndef __OPI_GUI_H_
 #define __OPI_GUI_H_
 
-#include "OPI_Panel.h"
 #include <list>
+#include "OPI_Panel.h"
+
+class OPI_Panel;
 
 class OPI_Gui
 {
 public:
+
+	enum class CursorType
+	{
+		Normal,
+		Move,
+		Resize,
+		Hourglass
+	};
+
 	OPI_Gui();
 	void addPanel(OPI_Panel *panel);
-
+	void setCursor(CursorType selectedCursor);
+	void initCursors(std::string normal, std::string move, std::string resize, std::string hourglass);
+	void handleMouseMove(int mouseX, int mouseY);
+	void handleMousePress(int mouseX, int mouseY);
+	void handleMouseRelease(int mouseX, int mouseY);
+	std::list<OPI_Panel*> panels;
 private:
-	std::list<OPI_Panel> panels;
-	SDL_Cursor *pointerNormal;
-	SDL_Cursor *pointerMove;
-	SDL_Cursor *pointerResize;
-	SDL_Cursor *pointerHourglass;
+	SDL_Cursor *cursorNormal;
+	SDL_Cursor *cursorMove;
+	SDL_Cursor *cursorResize;
+	SDL_Cursor *cursorHourglass;
 };
+
 #endif

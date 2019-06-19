@@ -1,7 +1,8 @@
 #include "OPI_Panel.h"
 
-OPI_Panel::OPI_Panel(std::string theme, int x, int y, unsigned short int width, unsigned short int height)
+OPI_Panel::OPI_Panel(OPI_Gui *gui, std::string theme, int x, int y, unsigned short int width, unsigned short int height)
 {
+	this->parent = gui;
 	this->theme = theme;
 	this->x = x;
 	this->y = y;
@@ -11,8 +12,7 @@ OPI_Panel::OPI_Panel(std::string theme, int x, int y, unsigned short int width, 
 	this->render();
 }
 
-OPI_Panel::~OPI_Panel() {}
-
+OPI_Panel::~OPI_Panel() {};
 
 void OPI_Panel::loadTheme(std::string theme)
 {
@@ -209,4 +209,61 @@ void OPI_Panel::render()
 	texture = new OPI_Image(panelCanvas);
 	SDL_FreeSurface(panelCanvas);
 	return;
+}
+
+bool OPI_Panel::containsMouse(int mouseX, int mouseY, int x, int y, int w, int h)
+{
+	// If it's off to one side, it is not contained.
+	if (mouseX < x || mouseX > x+w)
+		return false;
+
+	// If it's above or below, it is not contained. 
+	if (mouseY < y || mouseY > y+h)
+		return false;
+
+	return true;
+}
+
+bool OPI_Panel::handleResize(int mouseX, int mouseY)
+{
+	if (this->isResizing)
+	{
+		setWidth(mouseX - this->x);
+		setHeight(mouseY - this->y);
+		render();
+		// Signal that event has been handled
+		return true;
+	}
+
+	// Set resize cursor if inside lower-right corner
+	if (containsMouse(mouseX, mouseY, this->x + this->width-10, this->y + this->height-10, 10, 10))
+	{
+		this->parent->setCursor(OPI_Gui::CursorType::Resize);
+		// Signal that event has been handled
+		return true;
+	}
+
+	// Reset to normal cursor
+	this->parent->setCursor(OPI_Gui::CursorType::Normal);
+
+	// Signal to keep processing this event
+	return false;
+}
+
+void OPI_Panel::handleMouseMove(int mouseX, int mouseY)
+{
+	if (this->isResizable && handleResize(mouseX, mouseY))
+	{
+		return;
+	}
+}
+
+void OPI_Panel::handleMousePress(int mouseX, int mouseY)
+{
+
+}
+
+void OPI_Panel::handleMouseRelease(int mouseX, int mouseY)
+{
+
 }

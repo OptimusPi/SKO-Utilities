@@ -83,8 +83,9 @@ OPI_Panel *testPanel = NULL;
   //images
   OPI_Image tile_img[256];
   OPI_Image background;
-  OPI_Image gui, selector;
+  OPI_Image selector;
   OPI_Image stickman_img;
+  OPI_Gui *gui;
 
   //font.setImage("IMG/font.png");
 
@@ -325,13 +326,6 @@ void loadmap (std::string FileName)
 
 SDL_Cursor *pointer;
 
-void initCursors()
-{
-	SDL_Surface* pointer_surface = OPI_Image::getSurface("IMG/GUI/cursors/hourglass.png");
-	pointer = SDL_CreateColorCursor(pointer_surface, 0, 0);
-	SDL_SetCursor(pointer);
-}
-
 void initScreen()
 {
 	screen = SDL_CreateWindow("SKO Map Editor v 0.9.0",
@@ -368,7 +362,7 @@ void drawText(OPI_Text *text);
 std::string save = "";
 
 
-void Graphics()
+void DrawGameScene()
 {
 	//image buffer and background                    
 	DrawImage(0, 0, &background);
@@ -390,9 +384,6 @@ void Graphics()
 	if (stickman_toggle)
 		DrawImage(stickman.x - 25 - camera_x, stickman.y - camera_y, &stickman_img);
 
-
-
-
 	//draw tiles, only on screen
 	for (int i = 0; i < number_of_fringe; i++)
 	{
@@ -406,13 +397,9 @@ void Graphics()
 			DrawImage(draw_x, draw_y, &tile_img[fringe[i]]);
 	}
 
-
 	//draw current tile
 	if (mode == TILE_DRAW)
 		DrawImage(cursor_x / 32 * 32, cursor_y / 32 * 32, &tile_img[current_tile_img]);
-
-
-
 
 	//draw collision rects, only on screen  
 	for (int i = 0; i < number_of_rects; i++)
@@ -432,9 +419,6 @@ void Graphics()
 			DrawRect(newRect);
 	}
 
-	//draw bottom gui bar
-	DrawImage(144, 536, &gui);
-
 	//draw gui selector
 	DrawImage(144 + (mode - 1) * 64, 536, &selector);
 
@@ -446,12 +430,24 @@ void Graphics()
 
 	if (!stickman_toggle)
 		DrawImage(144 + (STICKMAN_DELETE - 1) * 64, 536, &selector);
+}
 
+void DrawGui(OPI_Gui* gui)
+{
+	for (OPI_Panel* panel : gui->panels) {
+		DrawImage(panel->x, panel->y, panel->texture);
+	}
+}
 
-	//draw GUI
-	drawPanel(testPanel);
+void Graphics()
+{
+	// Draw map, tiles, etc
+	DrawGameScene();
+	
+	// Draw panels, text, and controls
+	DrawGui(gui);
 
-	//draw coords
+	// Draw coords
 	drawText(coords);
 
 	//update screen
@@ -815,13 +811,6 @@ void HandleInput()
 			if (cursor_y > WINDOW_HEIGHT)
 				cursor_y = WINDOW_HEIGHT;
 
-			//move GUI
-			testPanel->setWidth(cursor_x - testPanel->x);
-			testPanel->setHeight(cursor_y - testPanel->y);
-			testPanel->render();
-
-			//printf("x: %i, y: %i\n", cursor_x, cursor_y);
-
 			//draw the almost done rect
 			if (mode == COLLISION_DRAW && LCLICK)
 			{
@@ -829,7 +818,6 @@ void HandleInput()
 				int cx = cursor_x + (int)camera_x;
 				int cy = cursor_y + (int)camera_y;
 				int x1, x2, y1, y2;
-
 
 				//
 				// X
@@ -883,6 +871,8 @@ void HandleInput()
 				stickman.x = cursor_x + camera_x;
 				stickman.y = cursor_y + camera_y;
 			}
+
+			gui->handleMouseMove(cursor_x, cursor_y);
 		}
 
 		if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT && !LCLICK)
@@ -1140,12 +1130,13 @@ int main(int argc, char *argv[])
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
         return 1;
 
-    initScreen();      
-	initCursors();
+    initScreen();
+	gui = new OPI_Gui();
+	gui->initCursors("IMG/GUI/cursors/normal.png", "IMG/GUI/cursors/move.png", "IMG/GUI/cursors/resize.png", "IMG/GUI/cursors/hourglass.png");
+	//testPanel = new OPI_Panel(gui, "ice", 240, 100, 241, 242);
+	gui->addPanel(new OPI_Panel(gui, "ice", 0, 0, 100, 100));
 
-	testPanel = new OPI_Panel("book", 240, 100, 241, 242);
 	background.setImage("IMG/back.png");
-	gui.setImage("IMG/gui.png");
 	selector.setImage("IMG/selector.png");
 	stickman_img.setImage("IMG/stickman.png");
 
