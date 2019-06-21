@@ -32,7 +32,8 @@ public:
 
 	// Input handlers
 	void handleMouseMove(int mouseX, int mouseY);
-	void handleMousePress(int mouseX, int mouseY);
+	void handleMousePressLeft(int mouseX, int mouseY);
+	void handleMousePressRight(int mouseX, int mouseY);
 	void handleMouseRelease(int mouseX, int mouseY);
 
 private:
@@ -45,8 +46,11 @@ private:
 	unsigned short int width, height;
 	bool containsMouse(int mouseX, int mouseY, int x, int y, int w, int h);
 	bool handleResize(int mouseX, int mouseY);
+	bool handleMove(int mouseX, int mouseY);
 	bool isResizing = false;
 	bool isResizable = true;
+	bool isMoving = false;
+	bool isMovable = true;
 	OPI_Gui *parent;
 };
 

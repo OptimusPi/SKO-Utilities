@@ -23,7 +23,8 @@ public:
 	void setCursor(CursorType selectedCursor);
 	void initCursors(std::string normal, std::string move, std::string resize, std::string hourglass);
 	void handleMouseMove(int mouseX, int mouseY);
-	void handleMousePress(int mouseX, int mouseY);
+	void handleMousePressLeft(int mouseX, int mouseY);
+	void handleMousePressRight(int mouseX, int mouseY);
 	void handleMouseRelease(int mouseX, int mouseY);
 	std::list<OPI_Panel*> panels;
 private:

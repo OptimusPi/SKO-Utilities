@@ -242,7 +242,7 @@ bool OPI_Panel::handleResize(int mouseX, int mouseY)
 	}
 
 	// Set resize cursor if inside lower-right corner
-	if (containsMouse(mouseX, mouseY, this->x + this->width-10, this->y + this->height-10, 10, 10))
+	if (containsMouse(mouseX, mouseY, this->x + this->width-24, this->y + this->height-24, 24, 24))
 	{
 		this->parent->setCursor(OPI_Gui::CursorType::Resize);
 		// Signal that event has been handled
@@ -256,15 +256,53 @@ bool OPI_Panel::handleResize(int mouseX, int mouseY)
 	return false;
 }
 
+
+bool OPI_Panel::handleMove(int mouseX, int mouseY)
+{
+	if (this->isMoving)
+	{
+		setWidth(mouseX - this->x);
+		setHeight(mouseY - this->y);
+		render();
+		// Signal that event has been handled
+		return true;
+	}
+
+	// Set resize cursor if inside lower-right corner
+	if (containsMouse(mouseX, mouseY, this->x , this->y, this->width, 24))
+	{
+		this->parent->setCursor(OPI_Gui::CursorType::Move);
+		// Signal that event has been handled
+		return true;
+	}
+
+	// Reset to normal cursor
+	this->parent->setCursor(OPI_Gui::CursorType::Normal);
+
+	// Signal to keep processing this event
+	return false;
+}
+
 void OPI_Panel::handleMouseMove(int mouseX, int mouseY)
 {
+	if (this->isMovable && handleMove(mouseX, mouseY))
+	{
+		return;
+	}
+
 	if (this->isResizable && handleResize(mouseX, mouseY))
 	{
 		return;
 	}
 }
 
-void OPI_Panel::handleMousePress(int mouseX, int mouseY)
+void OPI_Panel::handleMousePressLeft(int mouseX, int mouseY)
+{
+
+}
+
+
+void OPI_Panel::handleMousePressRight(int mouseX, int mouseY)
 {
 
 }

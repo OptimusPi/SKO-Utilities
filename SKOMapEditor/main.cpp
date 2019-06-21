@@ -877,6 +877,8 @@ void HandleInput()
 
 		if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT && !LCLICK)
 		{
+			gui->handleMousePressLeft(cursor_x, cursor_y);
+
 			switch (mode)
 			{
 
@@ -1031,6 +1033,7 @@ void HandleInput()
 
 		if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_RIGHT && !RCLICK)
 		{
+			gui->handleMousePressRight(cursor_x, cursor_y);
 			RCLICK = true;
 			//TODO - use RCLICK for collision rect editing
 		}
@@ -1133,8 +1136,7 @@ int main(int argc, char *argv[])
     initScreen();
 	gui = new OPI_Gui();
 	gui->initCursors("IMG/GUI/cursors/normal.png", "IMG/GUI/cursors/move.png", "IMG/GUI/cursors/resize.png", "IMG/GUI/cursors/hourglass.png");
-	//testPanel = new OPI_Panel(gui, "ice", 240, 100, 241, 242);
-	gui->addPanel(new OPI_Panel(gui, "ice", 0, 0, 100, 100));
+	gui->addPanel(new OPI_Panel(gui, "ice", 240, 240, 500, 250));
 
 	background.setImage("IMG/back.png");
 	selector.setImage("IMG/selector.png");
