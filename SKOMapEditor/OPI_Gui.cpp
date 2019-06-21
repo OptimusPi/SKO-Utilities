@@ -16,7 +16,7 @@ void OPI_Gui::initCursors(std::string normal, std::string move, std::string resi
 
 	cursorNormal = SDL_CreateColorCursor(cursorSurfaceNormal, 0, 0);
 	cursorMove = SDL_CreateColorCursor(cursorSurfaceMove, cursorSurfaceMove->w / 2, cursorSurfaceMove->h / 2);
-	cursorResize = SDL_CreateColorCursor(cursorSurfaceResize, cursorSurfaceResize->w/2, cursorSurfaceResize->h/2);
+	cursorResize = SDL_CreateColorCursor(cursorSurfaceResize, cursorSurfaceResize->w / 2, cursorSurfaceResize->h / 2);
 	cursorHourglass = SDL_CreateColorCursor(cursorSurfaceHourglass, cursorSurfaceHourglass->w / 2, cursorSurfaceHourglass->h / 2);
 
 	// Free memory of loaded images
@@ -76,9 +76,16 @@ void OPI_Gui::handleMousePressRight(int mouseX, int mouseY)
 }
 
 
-void OPI_Gui::handleMouseRelease(int mouseX, int mouseY)
+void OPI_Gui::handleMouseReleaseLeft(int mouseX, int mouseY)
 {
 	for (OPI_Panel* panel : this->panels) {
-		panel->handleMouseRelease(mouseX, mouseY);
+		panel->handleMouseReleaseLeft(mouseX, mouseY);
+	}
+}
+
+void OPI_Gui::handleMouseReleaseRight(int mouseX, int mouseY)
+{
+	for (OPI_Panel* panel : this->panels) {
+		panel->handleMouseReleaseRight(mouseX, mouseY);
 	}
 }

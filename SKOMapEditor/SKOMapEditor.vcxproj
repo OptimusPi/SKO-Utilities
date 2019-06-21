@@ -157,6 +157,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="OPI_Rectangle.h" />
     <ClInclude Include="OPI_Button.h" />
     <ClInclude Include="OPI_Fonts.h" />
     <ClInclude Include="OPI_Gui.h" />

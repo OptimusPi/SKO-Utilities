@@ -4,6 +4,7 @@
 #include <string>
 #include "OPI_Image.h"
 #include "OPI_Gui.h"
+#include "OPI_Rectangle.h"
 
 #ifdef _WIN32
 	#include "SDL.h"
@@ -16,6 +17,7 @@
 #endif
 
 class OPI_Gui;
+class Rectangle;
 
 class OPI_Panel
 {
@@ -24,6 +26,7 @@ public:
 	virtual ~OPI_Panel();
 	void loadTheme(std::string theme);
 	int x, y;
+	bool isVisible = true;
 	void setWidth(short int width);
 	void setHeight(short int height);
 
@@ -34,9 +37,18 @@ public:
 	void handleMouseMove(int mouseX, int mouseY);
 	void handleMousePressLeft(int mouseX, int mouseY);
 	void handleMousePressRight(int mouseX, int mouseY);
-	void handleMouseRelease(int mouseX, int mouseY);
+	void handleMouseReleaseRight(int mouseX, int mouseY);
+	void handleMouseReleaseLeft(int mouseX, int mouseY);
+	bool movableContainsMouse(int mouseX, int mouseY);
+	bool resizableContainsMouse(int mouseX, int mouseY);
+	bool closableContainsMouse(int mouseX, int mouseY);
 
 private:
+	
+	OPI_Rectangle *moveableGrabArea;
+	OPI_Rectangle *resizableGrabArea;
+	OPI_Rectangle *closableGrabArea;
+
 	unsigned short int tileWidth;
 	unsigned short int tileHeight;
 	SDL_Surface *corners[4];
@@ -47,10 +59,16 @@ private:
 	bool containsMouse(int mouseX, int mouseY, int x, int y, int w, int h);
 	bool handleResize(int mouseX, int mouseY);
 	bool handleMove(int mouseX, int mouseY);
+	bool handleClose(int mouseX, int mouseY);
 	bool isResizing = false;
 	bool isResizable = true;
 	bool isMoving = false;
+	int moveOriginX;
+	int moveOriginY;
+	int moveOriginGrabX;
+	int moveOriginGrabY;
 	bool isMovable = true;
+	bool isClosable = true;
 	OPI_Gui *parent;
 };
 

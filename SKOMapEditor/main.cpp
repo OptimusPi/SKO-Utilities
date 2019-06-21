@@ -435,7 +435,8 @@ void DrawGameScene()
 void DrawGui(OPI_Gui* gui)
 {
 	for (OPI_Panel* panel : gui->panels) {
-		DrawImage(panel->x, panel->y, panel->texture);
+		if (panel->isVisible)
+			DrawImage(panel->x, panel->y, panel->texture);
 	}
 }
 
@@ -1041,6 +1042,8 @@ void HandleInput()
 		{
 			if (event.button.button == SDL_BUTTON_LEFT && LCLICK)
 			{
+				gui->handleMouseReleaseLeft(cursor_x, cursor_y);
+
 				switch (mode)
 				{
 				case TILE_DRAW:
@@ -1079,6 +1082,7 @@ void HandleInput()
 
 			if (event.button.button == SDL_BUTTON_RIGHT && RCLICK)
 			{
+				gui->handleMouseReleaseRight(cursor_x, cursor_y);
 				RCLICK = false;
 			}
 		}

@@ -25,7 +25,8 @@ public:
 	void handleMouseMove(int mouseX, int mouseY);
 	void handleMousePressLeft(int mouseX, int mouseY);
 	void handleMousePressRight(int mouseX, int mouseY);
-	void handleMouseRelease(int mouseX, int mouseY);
+	void handleMouseReleaseLeft(int mouseX, int mouseY);
+	void handleMouseReleaseRight(int mouseX, int mouseY);
 	std::list<OPI_Panel*> panels;
 private:
 	SDL_Cursor *cursorNormal;

@@ -230,6 +230,60 @@ bool OPI_Panel::containsMouse(int mouseX, int mouseY, int x, int y, int w, int h
 	return true;
 }
 
+// TODO - allow customizable moveable grab area
+bool OPI_Panel::movableContainsMouse(int mouseX, int mouseY)
+{
+	//if (moveableGrabArea == NULL)
+	//	return false;
+
+	return containsMouse(mouseX, mouseY, this->x, this->y, this->width - 24, 24);
+}
+
+// TODO - allow customizable resizable grab area
+bool OPI_Panel::resizableContainsMouse(int mouseX, int mouseY)
+{
+	//if (resizableGrabArea == NULL)
+	//	return false;
+
+	return containsMouse(mouseX, mouseY, this->x + this->width - 24, this->y + this->height - 24, 24, 24);
+}
+
+// TODO - allow customizable closable grab area
+bool OPI_Panel::closableContainsMouse(int mouseX, int mouseY)
+{
+	//if (closableGrabArea == NULL)
+	//	return false;
+
+	return containsMouse(mouseX, mouseY, this->x + this->width - 24, this->y, 24, 24);
+}
+
+bool OPI_Panel::handleMove(int mouseX, int mouseY)
+{
+	if (this->isMoving)
+	{
+		this->x = moveOriginX + mouseX - moveOriginGrabX;
+		this->y = moveOriginY + mouseY - moveOriginGrabY;
+
+		// Signal that event has been handled
+		return true;
+	}
+
+	// Set resize cursor if inside lower-right corner
+	if (movableContainsMouse(mouseX, mouseY))
+	{
+		this->parent->setCursor(OPI_Gui::CursorType::Move);
+		// Signal that event has been handled
+		return true;
+	}
+
+	// Reset to normal cursor
+	if (!this->isResizing)
+		this->parent->setCursor(OPI_Gui::CursorType::Normal);
+
+	// Signal to keep processing this event
+	return false;
+}
+
 bool OPI_Panel::handleResize(int mouseX, int mouseY)
 {
 	if (this->isResizing)
@@ -242,7 +296,7 @@ bool OPI_Panel::handleResize(int mouseX, int mouseY)
 	}
 
 	// Set resize cursor if inside lower-right corner
-	if (containsMouse(mouseX, mouseY, this->x + this->width-24, this->y + this->height-24, 24, 24))
+	if (resizableContainsMouse(mouseX, mouseY))
 	{
 		this->parent->setCursor(OPI_Gui::CursorType::Resize);
 		// Signal that event has been handled
@@ -250,28 +304,20 @@ bool OPI_Panel::handleResize(int mouseX, int mouseY)
 	}
 
 	// Reset to normal cursor
-	this->parent->setCursor(OPI_Gui::CursorType::Normal);
+	if (!this->isMoving)
+		this->parent->setCursor(OPI_Gui::CursorType::Normal);
 
 	// Signal to keep processing this event
 	return false;
 }
 
 
-bool OPI_Panel::handleMove(int mouseX, int mouseY)
+bool OPI_Panel::handleClose(int mouseX, int mouseY)
 {
-	if (this->isMoving)
-	{
-		setWidth(mouseX - this->x);
-		setHeight(mouseY - this->y);
-		render();
-		// Signal that event has been handled
-		return true;
-	}
-
 	// Set resize cursor if inside lower-right corner
-	if (containsMouse(mouseX, mouseY, this->x , this->y, this->width, 24))
+	if (closableContainsMouse(mouseX, mouseY))
 	{
-		this->parent->setCursor(OPI_Gui::CursorType::Move);
+		this->parent->setCursor(OPI_Gui::CursorType::Hourglass);
 		// Signal that event has been handled
 		return true;
 	}
@@ -298,7 +344,42 @@ void OPI_Panel::handleMouseMove(int mouseX, int mouseY)
 
 void OPI_Panel::handleMousePressLeft(int mouseX, int mouseY)
 {
+	if (this->isMovable && handleMove(mouseX, mouseY))
+	{
+		isMoving = true;
+		moveOriginX = this->x;
+		moveOriginY = this->y;
+		moveOriginGrabX = mouseX;
+		moveOriginGrabY = mouseY;
+		return;
+	}
 
+	if (this->isResizable && handleResize(mouseX, mouseY))
+	{
+		isResizing = true;
+		return;
+	}
+
+	if (this->isClosable && handleClose(mouseX, mouseY))
+	{
+		isVisible = false;
+		return;
+	}
+}
+
+void OPI_Panel::handleMouseReleaseLeft(int mouseX, int mouseY)
+{
+	if (this->isMovable && handleMove(mouseX, mouseY))
+	{
+		isMoving = false;
+		return;
+	}
+
+	if (this->isResizable && handleResize(mouseX, mouseY))
+	{
+		isResizing = false;
+		return;
+	}
 }
 
 
@@ -307,7 +388,7 @@ void OPI_Panel::handleMousePressRight(int mouseX, int mouseY)
 
 }
 
-void OPI_Panel::handleMouseRelease(int mouseX, int mouseY)
+void OPI_Panel::handleMouseReleaseRight(int mouseX, int mouseY)
 {
 
 }
