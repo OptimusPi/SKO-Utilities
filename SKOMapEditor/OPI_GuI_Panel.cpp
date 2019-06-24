@@ -1,6 +1,6 @@
-#include "OPI_Panel.h"
+#include "OPI_Gui_Panel.h"
 
-OPI_Panel::OPI_Panel(OPI_Gui *gui, std::string theme, int x, int y, unsigned short int width, unsigned short int height)
+OPI_Gui::Panel::Panel(OPI_Gui::Manager *gui, std::string theme, int x, int y, unsigned short int width, unsigned short int height)
 {
 	this->parent = gui;
 	this->theme = theme;
@@ -12,9 +12,9 @@ OPI_Panel::OPI_Panel(OPI_Gui *gui, std::string theme, int x, int y, unsigned sho
 	this->render();
 }
 
-OPI_Panel::~OPI_Panel() {};
+OPI_Gui::Panel::~Panel() {};
 
-void OPI_Panel::loadTheme(std::string theme)
+void OPI_Gui::Panel::loadTheme(std::string theme)
 {
 	std::string themePath = "IMG/GUI/themes/" + theme + "/";
 
@@ -30,7 +30,7 @@ void OPI_Panel::loadTheme(std::string theme)
 	// Ensure it is a 3x3 "tileset" 
 	if (panelTemplate->w % 3 > 0 || panelTemplate->h % 3 > 0)
 	{
-		throw "OPI_Panel template dimensions are incorrect! Width and Height must be divisible by 3.";
+		throw "Panel template dimensions are incorrect! Width and Height must be divisible by 3.";
 	}
 
 	// Determine dimensions automatiacally from the template
@@ -93,7 +93,7 @@ void OPI_Panel::loadTheme(std::string theme)
 	SDL_BlitSurface(panelTemplate, &tileClip, filler, NULL);
 }
 
-void OPI_Panel::setWidth(short int width)
+void OPI_Gui::Panel::setWidth(short int width)
 {
 	if (width < this->tileWidth * 3)
 		width = tileWidth * 3;
@@ -101,7 +101,7 @@ void OPI_Panel::setWidth(short int width)
 	this->width = width;
 }
 
-void OPI_Panel::setHeight(short int height)
+void OPI_Gui::Panel::setHeight(short int height)
 {
 	if (height < this->tileHeight * 3)
 		height = tileHeight * 3;
@@ -109,7 +109,7 @@ void OPI_Panel::setHeight(short int height)
 	this->height = height;
 }
 
-void OPI_Panel::render()
+void OPI_Gui::Panel::render()
 {
 	// 
 	// Form a blank canvas to draw on.
@@ -217,7 +217,7 @@ void OPI_Panel::render()
 	return;
 }
 
-bool OPI_Panel::containsMouse(int mouseX, int mouseY, int x, int y, int w, int h)
+bool OPI_Gui::Panel::containsMouse(int mouseX, int mouseY, int x, int y, int w, int h)
 {
 	// If it's off to one side, it is not contained.
 	if (mouseX < x || mouseX > x+w)
@@ -231,7 +231,7 @@ bool OPI_Panel::containsMouse(int mouseX, int mouseY, int x, int y, int w, int h
 }
 
 // TODO - allow customizable moveable grab area
-bool OPI_Panel::movableContainsMouse(int mouseX, int mouseY)
+bool OPI_Gui::Panel::movableContainsMouse(int mouseX, int mouseY)
 {
 	//if (moveableGrabArea == NULL)
 	//	return false;
@@ -240,7 +240,7 @@ bool OPI_Panel::movableContainsMouse(int mouseX, int mouseY)
 }
 
 // TODO - allow customizable resizable grab area
-bool OPI_Panel::resizableContainsMouse(int mouseX, int mouseY)
+bool OPI_Gui::Panel::resizableContainsMouse(int mouseX, int mouseY)
 {
 	//if (resizableGrabArea == NULL)
 	//	return false;
@@ -249,7 +249,7 @@ bool OPI_Panel::resizableContainsMouse(int mouseX, int mouseY)
 }
 
 // TODO - allow customizable closable grab area
-bool OPI_Panel::closableContainsMouse(int mouseX, int mouseY)
+bool OPI_Gui::Panel::closableContainsMouse(int mouseX, int mouseY)
 {
 	//if (closableGrabArea == NULL)
 	//	return false;
@@ -257,12 +257,12 @@ bool OPI_Panel::closableContainsMouse(int mouseX, int mouseY)
 	return containsMouse(mouseX, mouseY, this->x + this->width - 24, this->y, 24, 24);
 }
 
-void OPI_Panel::setCursor(CursorType cursor)
+void OPI_Gui::Panel::setCursor(CursorType cursor)
 {
 	this->parent->setCursor(cursor);
 }
 
-bool OPI_Panel::handleSection_Move(int mouseX, int mouseY)
+bool OPI_Gui::Panel::handleSection_Move(int mouseX, int mouseY)
 {
 	if (this->isMoving)
 	{
@@ -289,7 +289,7 @@ bool OPI_Panel::handleSection_Move(int mouseX, int mouseY)
 	return false;
 }
 
-bool OPI_Panel::handleSection_Resize(int mouseX, int mouseY)
+bool OPI_Gui::Panel::handleSection_Resize(int mouseX, int mouseY)
 {
 	if (this->isResizing)
 	{
@@ -317,7 +317,7 @@ bool OPI_Panel::handleSection_Resize(int mouseX, int mouseY)
 }
 
 
-bool OPI_Panel::handleSection_Close(int mouseX, int mouseY)
+bool OPI_Gui::Panel::handleSection_Close(int mouseX, int mouseY)
 {
 	// Set resize cursor if inside lower-right corner
 	if (closableContainsMouse(mouseX, mouseY))
@@ -331,7 +331,7 @@ bool OPI_Panel::handleSection_Close(int mouseX, int mouseY)
 	return false;
 }
 
-void OPI_Panel::handleMouseMove(int mouseX, int mouseY)
+void OPI_Gui::Panel::handleMouseMove(int mouseX, int mouseY)
 {
 	if (this->isMovable && handleSection_Move(mouseX, mouseY))
 	{
@@ -349,7 +349,7 @@ void OPI_Panel::handleMouseMove(int mouseX, int mouseY)
 	}
 }
 
-void OPI_Panel::handleMousePressLeft(int mouseX, int mouseY)
+void OPI_Gui::Panel::handleMousePressLeft(int mouseX, int mouseY)
 {
 	if (this->isMovable && handleSection_Move(mouseX, mouseY))
 	{
@@ -375,7 +375,7 @@ void OPI_Panel::handleMousePressLeft(int mouseX, int mouseY)
 	}
 }
 
-void OPI_Panel::handleMouseReleaseLeft(int mouseX, int mouseY)
+void OPI_Gui::Panel::handleMouseReleaseLeft(int mouseX, int mouseY)
 {
 	if (this->isMovable && handleSection_Move(mouseX, mouseY))
 	{
@@ -391,12 +391,12 @@ void OPI_Panel::handleMouseReleaseLeft(int mouseX, int mouseY)
 }
 
 
-void OPI_Panel::handleMousePressRight(int mouseX, int mouseY)
+void OPI_Gui::Panel::handleMousePressRight(int mouseX, int mouseY)
 {
 
 }
 
-void OPI_Panel::handleMouseReleaseRight(int mouseX, int mouseY)
+void OPI_Gui::Panel::handleMouseReleaseRight(int mouseX, int mouseY)
 {
 
 }

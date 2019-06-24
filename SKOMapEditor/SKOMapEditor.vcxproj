@@ -160,10 +160,10 @@
     <ClInclude Include="OPI_Gui_CursorType.h" />
     <ClInclude Include="OPI_Gui_Element.h" />
     <ClInclude Include="OPI_Rectangle.h" />
-    <ClInclude Include="OPI_Button.h" />
+    <ClInclude Include="OPI_Gui_Button.h" />
     <ClInclude Include="OPI_Fonts.h" />
-    <ClInclude Include="OPI_Gui.h" />
-    <ClInclude Include="OPI_Panel.h" />
+    <ClInclude Include="OPI_Gui_Manager.h" />
+    <ClInclude Include="OPI_Gui_Panel.h" />
     <ClInclude Include="OPI_Timestep.h" />
     <ClInclude Include="OPI_Clock.h" />
     <ClInclude Include="OPI_Image.h" />
@@ -171,11 +171,11 @@
     <ClInclude Include="OPI_Text.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="OPI_Button.cpp" />
+    <ClCompile Include="OPI_Gui_Button.cpp" />
     <ClCompile Include="OPI_Fonts.cpp" />
-    <ClCompile Include="OPI_Gui.cpp" />
+    <ClCompile Include="OPI_Gui_Manager.cpp" />
     <ClCompile Include="OPI_Image.cpp" />
-    <ClCompile Include="OPI_Panel.cpp" />
+    <ClCompile Include="OPI_GuI_Panel.cpp" />
     <ClCompile Include="OPI_Timestep.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OPI_Text.cpp" />

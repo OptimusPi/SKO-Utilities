@@ -19,8 +19,8 @@
 #include "OPI_Fonts.h"
 #include "OPI_Clock.h"
 #include "OPI_Sleep.h"
-#include "OPI_Gui.h"
-#include "OPI_Panel.h"
+#include "OPI_Gui_Manager.h"
+#include "OPI_Gui_Panel.h"
 
 #define WINDOW_WIDTH 1024
 #define WINDOW_HEIGHT 600
@@ -85,7 +85,7 @@ int current_tile_img = 0;
   OPI_Image background;
   OPI_Image selector;
   OPI_Image stickman_img;
-  OPI_Gui *gui;
+  OPI_Gui::Manager *gui;
 
   //font.setImage("IMG/font.png");
 
@@ -118,11 +118,6 @@ void DrawImage( int x, int y, const OPI_Image *img)
     	glVertex3f( x+img->width, y, 0 );
     glEnd();
 } 
-
-void drawGuiElement(OPI_Gui_Element *element)
-{
-	DrawImage(element->x, element->y, element->texture);
-}
 
 OPI_Text* coords;
 
@@ -432,9 +427,9 @@ void DrawGameScene()
 		DrawImage(144 + (STICKMAN_DELETE - 1) * 64, 536, &selector);
 }
 
-void DrawGui(OPI_Gui* gui)
+void DrawGui(OPI_Gui::Manager* gui)
 {
-	for (OPI_Gui_Element* element : gui->children) {
+	for (OPI_Gui::Element* element : gui->children) {
 		if (element->isVisible)
 			DrawImage(element->x, element->y, element->texture);
 	}
@@ -1138,9 +1133,9 @@ int main(int argc, char *argv[])
         return 1;
 
     initScreen();
-	gui = new OPI_Gui();
+	gui = new OPI_Gui::Manager();
 	gui->initCursors("IMG/GUI/cursors/normal.png", "IMG/GUI/cursors/move.png", "IMG/GUI/cursors/resize.png", "IMG/GUI/cursors/hourglass.png", "IMG/GUI/cursors/hand.png");
-	OPI_Panel *testPanel = new OPI_Panel(gui, "ice", 240, 240, 500, 250);
+	OPI_Gui::Panel *testPanel = new OPI_Gui::Panel(gui, "ice", 240, 240, 500, 250);
 	testPanel->isVisible = true;
 
 	gui->addElement(testPanel);

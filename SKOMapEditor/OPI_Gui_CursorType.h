@@ -1,12 +1,16 @@
 #ifndef __OPI_GUI_CURSORTYPE_
 #define __OPI_GUI_CURSORTYPE_
 
-enum class CursorType
+namespace OPI_Gui
 {
-	Normal,
-	Move,
-	Resize,
-	Hourglass,
-	Hand
-};
+	enum class CursorType
+	{
+		Normal,
+		Move,
+		Resize,
+		Hourglass,
+		Hand
+	};
+}
+
 #endif

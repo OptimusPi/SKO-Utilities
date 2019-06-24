@@ -14,9 +14,7 @@
 #include <SDL/SDL_ttf>
 #endif
 
-
 #include "OPI_Image.h"
-
 
 class OPI_Text
 {

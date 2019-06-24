@@ -33,22 +33,22 @@
     <ClInclude Include="OPI_Fonts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OPI_Gui.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OPI_Panel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OPI_Button.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="OPI_Rectangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OPI_Gui_Element.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OPI_Gui_Manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="OPI_Gui_CursorType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OPI_Gui_Panel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OPI_Gui_Button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -68,13 +68,13 @@
     <ClCompile Include="OPI_Image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OPI_Gui.cpp">
+    <ClCompile Include="OPI_Gui_Manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OPI_Panel.cpp">
+    <ClCompile Include="OPI_GuI_Panel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OPI_Button.cpp">
+    <ClCompile Include="OPI_Gui_Button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
