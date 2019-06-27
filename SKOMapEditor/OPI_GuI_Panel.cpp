@@ -2,7 +2,6 @@
 
 OPI_Gui::Panel::Panel(OPI_Gui::Manager *gui, std::string theme, int x, int y, unsigned short int width, unsigned short int height)
 {
-	this->parent = gui;
 	this->theme = theme;
 	this->x = x;
 	this->y = y;
@@ -259,7 +258,7 @@ bool OPI_Gui::Panel::closableContainsMouse(int mouseX, int mouseY)
 
 void OPI_Gui::Panel::setCursor(CursorType cursor)
 {
-	this->parent->setCursor(cursor);
+	OPI_Gui::Manager::getInstance()->setCursor(cursor);
 }
 
 bool OPI_Gui::Panel::handleSection_Move(int mouseX, int mouseY)
@@ -276,14 +275,14 @@ bool OPI_Gui::Panel::handleSection_Move(int mouseX, int mouseY)
 	// Set resize cursor if inside lower-right corner
 	if (movableContainsMouse(mouseX, mouseY))
 	{
-		this->parent->setCursor(CursorType::Move);
+		OPI_Gui::Manager::getInstance()->setCursor(CursorType::Move);
 		// Signal that event has been handled
 		return true;
 	}
 
 	// Reset to normal cursor
 	if (!this->isResizing)
-		this->parent->setCursor(CursorType::Normal);
+		OPI_Gui::Manager::getInstance()->setCursor(CursorType::Normal);
 
 	// Signal to keep processing this event
 	return false;
@@ -303,14 +302,14 @@ bool OPI_Gui::Panel::handleSection_Resize(int mouseX, int mouseY)
 	// Set resize cursor if inside lower-right corner
 	if (resizableContainsMouse(mouseX, mouseY))
 	{
-		this->parent->setCursor(CursorType::Resize);
+		OPI_Gui::Manager::getInstance()->setCursor(CursorType::Resize);
 		// Signal that event has been handled
 		return true;
 	}
 
 	// Reset to normal cursor
 	if (!this->isMoving)
-		this->parent->setCursor(CursorType::Normal);
+		OPI_Gui::Manager::getInstance()->setCursor(CursorType::Normal);
 
 	// Signal to keep processing this event
 	return false;
@@ -322,7 +321,7 @@ bool OPI_Gui::Panel::handleSection_Close(int mouseX, int mouseY)
 	// Set resize cursor if inside lower-right corner
 	if (closableContainsMouse(mouseX, mouseY))
 	{
-		this->parent->setCursor(CursorType::Hand);
+		OPI_Gui::Manager::getInstance()->setCursor(CursorType::Hand);
 		// Signal that event has been handled
 		return true;
 	}
@@ -370,7 +369,7 @@ void OPI_Gui::Panel::handleMousePressLeft(int mouseX, int mouseY)
 	if (this->isClosable && handleSection_Close(mouseX, mouseY))
 	{
 		isVisible = false;
-		this->parent->setCursor(CursorType::Normal);
+		OPI_Gui::Manager::getInstance()->setCursor(CursorType::Normal);
 		return;
 	}
 }

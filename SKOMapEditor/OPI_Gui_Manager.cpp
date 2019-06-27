@@ -1,9 +1,17 @@
 #include "OPI_Gui_Manager.h"
 #include "OPI_Gui_Panel.h"
 
-OPI_Gui::Manager::Manager()
-{
 
+///Singleton instance
+OPI_Gui::Manager * OPI_Gui::Manager::instance;
+OPI_Gui::Manager * OPI_Gui::Manager::getInstance()
+{
+	if (!OPI_Gui::Manager::instance) 
+	{
+		OPI_Gui::Manager::instance = new OPI_Gui::Manager;
+	}
+
+	return OPI_Gui::Manager::instance;
 }
 
 void OPI_Gui::Manager::initCursors(std::string normal, std::string move, std::string resize, std::string hourglass, std::string hand)

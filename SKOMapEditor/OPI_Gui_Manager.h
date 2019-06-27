@@ -11,13 +11,14 @@
 
 #include "OPI_Gui_CursorType.h"
 #include "OPI_Gui_Element.h"
-
+ 
 namespace OPI_Gui
 {
+	/// Singleton
 	class Manager
 	{
 	public:
-		Manager();
+		static Manager* getInstance();
 		void addElement(OPI_Gui::Element *element);
 		void setCursor(OPI_Gui::CursorType selectedCursor);
 		void initCursors(std::string normal, std::string move, std::string resize, std::string hourglass, std::string hand);
@@ -33,6 +34,8 @@ namespace OPI_Gui
 		SDL_Cursor *cursorResize;
 		SDL_Cursor *cursorHourglass;
 		SDL_Cursor *cursorHand;
+		static Manager * instance;
+		Manager() {};
 	};
 }
 

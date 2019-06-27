@@ -3,6 +3,7 @@
 
 #include "OPI_Gui_CursorType.h"
 #include "OPI_Image.h"
+#include <vector>
 
 namespace OPI_Gui
 {
@@ -19,13 +20,16 @@ namespace OPI_Gui
 		virtual bool resizableContainsMouse(int mouseX, int mouseY) = 0;
 		virtual bool closableContainsMouse(int mouseX, int mouseY) = 0;
 
-		// Pass cursor event to parent
-		void setCursor(CursorType cursor);
-
 		OPI_Image *texture;
 		int x;
 		int y;
 		bool isVisible;
+
+		// Any GUI Element may have children, such as:
+		// Panel can contain a few buttons and text
+		// Buttons can contain 
+		std::vector<OPI_Gui::Element *>children;
+		OPI_Gui::Element *parent;
 
 	};
 }

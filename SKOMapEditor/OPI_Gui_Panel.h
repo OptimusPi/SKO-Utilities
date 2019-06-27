@@ -22,7 +22,7 @@ namespace OPI_Gui
 {
 	class Manager;
 
-	class Panel : public OPI_Gui::Element
+	class Panel : public Element
 	{
 	public:
 		Panel(OPI_Gui::Manager *gui, std::string theme, int x = 0, int y = 0, unsigned short int width = 3, unsigned short int height = 3);
@@ -71,8 +71,6 @@ namespace OPI_Gui
 		int moveOriginGrabY;
 		bool isMovable = true;
 		bool isClosable = true;
-		std::vector<OPI_Gui::Element *>children;
-		OPI_Gui::Manager *parent;
 	};
 }
 

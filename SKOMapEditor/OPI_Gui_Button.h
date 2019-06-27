@@ -3,6 +3,7 @@
 
 #include <functional>
 
+#include "OPI_Gui_Element.h"
 #include "OPI_Image.h"
 #include "OPI_Text.h"
 
@@ -10,7 +11,7 @@
 
 namespace OPI_Gui
 {
-	class Button
+	class Button : public Element
 	{
 	public:
 		Button(std::string theme, int x = 0, int y = 0);
@@ -18,8 +19,6 @@ namespace OPI_Gui
 		void addCallback(std::function<void(void)> callback);
 	private:
 		// Button position and dimensions inside its OPI_Panel
-		int x;
-		int y;
 		int width;
 		int height;
 		OPI_Image *textureEnabled;

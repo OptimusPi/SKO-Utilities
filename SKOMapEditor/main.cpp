@@ -1133,7 +1133,7 @@ int main(int argc, char *argv[])
         return 1;
 
     initScreen();
-	gui = new OPI_Gui::Manager();
+	gui = OPI_Gui::Manager::getInstance();
 	gui->initCursors("IMG/GUI/cursors/normal.png", "IMG/GUI/cursors/move.png", "IMG/GUI/cursors/resize.png", "IMG/GUI/cursors/hourglass.png", "IMG/GUI/cursors/hand.png");
 	OPI_Gui::Panel *testPanel = new OPI_Gui::Panel(gui, "ice", 240, 240, 500, 250);
 	testPanel->isVisible = true;
