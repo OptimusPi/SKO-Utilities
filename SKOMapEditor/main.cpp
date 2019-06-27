@@ -367,7 +367,6 @@ void initScreen()
 
 	glContext = SDL_GL_CreateContext(screen);
 	sizeScreen();
-
 }
 
 void Physics();
@@ -393,7 +392,6 @@ void DrawGameScene()
 			draw_x < 1024 && draw_y < 600 &&
 			draw_y >= (int)(0 - tile_img[tile[i]].height))
 			DrawImage(draw_x, draw_y, &tile_img[tile[i]]);
-
 	}
 
 	//stickman!
@@ -408,7 +406,7 @@ void DrawGameScene()
 		int draw_y = fringe_y[i] - (int)camera_y;
 
 		if (draw_x >= 0 - tile_img[fringe[i]].width &&
-			draw_x < 1024 && draw_y < 600 &&
+			draw_x < originalWindowWidth && draw_y < originalWindowHeight &&
 			draw_y >= 0 - tile_img[fringe[i]].height)
 			DrawImage(draw_x, draw_y, &tile_img[fringe[i]]);
 	}
