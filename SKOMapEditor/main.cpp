@@ -102,10 +102,16 @@ void DrawImage( int x, int y, const OPI_Image *img)
 {      
      glColor3f(1.0f, 1.0f, 1.0f);     
      glBindTexture( GL_TEXTURE_2D,  img->texture);
-      
+	 
+	 glEnable(GL_BLEND);
+	 glAlphaFunc(GL_GREATER, 0.7500); 
+	 glEnable(GL_ALPHA_TEST);
+	 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	 glDisable(GL_DEPTH_TEST);
+	 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
 
       glBegin( GL_QUADS );
     	//Top-left vertex (corner)
@@ -124,6 +130,8 @@ void DrawImage( int x, int y, const OPI_Image *img)
     	glTexCoord2i( 1, 0 );
     	glVertex3i( x+img->width, y, 0 );
     glEnd();
+
+	glDisable(GL_BLEND);
 } 
 
 OPI_Text* coords;
