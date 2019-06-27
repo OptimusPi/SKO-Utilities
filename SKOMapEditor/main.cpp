@@ -3,6 +3,7 @@
 #include "SDL.h"
 #include "SDL_Image.h"
 #include "SDL_opengl.h" 
+
 #else 
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
@@ -22,8 +23,10 @@
 #include "OPI_Gui_Manager.h"
 #include "OPI_Gui_Panel.h"
 
-#define WINDOW_WIDTH 1024
-#define WINDOW_HEIGHT 600
+int originalWindowWidth = 1280;
+int originalWindowHeight = 720;
+int windowWidth = 1280;
+int windowHeight = 720;
 
 //modes
 const char 
@@ -100,22 +103,26 @@ void DrawImage( int x, int y, const OPI_Image *img)
      glColor3f(1.0f, 1.0f, 1.0f);     
      glBindTexture( GL_TEXTURE_2D,  img->texture);
       
+	 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	 glDisable(GL_DEPTH_TEST);
+
       glBegin( GL_QUADS );
     	//Top-left vertex (corner)
-    	glTexCoord2f( 0, 0 );
-    	glVertex3f( x, y, 0 );
+    	glTexCoord2i( 0, 0 );
+    	glVertex3i( x, y, 0 );
     	
     	//Bottom-left vertex (corner)
-    	glTexCoord2f( 0, 1 );
-    	glVertex3f( x, y+img->height, 0 );
+    	glTexCoord2i( 0, 1 );
+    	glVertex3i( x, y+img->height, 0 );
     	
     	//Bottom-right vertex (corner)
-    	glTexCoord2f( 1, 1 );
-    	glVertex3f( x+img->width, y+img->height, 0 );
+    	glTexCoord2i( 1, 1 );
+    	glVertex3i( x+img->width, y+img->height, 0 );
     	
     	//Top-right vertex (corner)
-    	glTexCoord2f( 1, 0 );
-    	glVertex3f( x+img->width, y, 0 );
+    	glTexCoord2i( 1, 0 );
+    	glVertex3i( x+img->width, y, 0 );
     glEnd();
 } 
 
@@ -321,34 +328,38 @@ void loadmap (std::string FileName)
 
 SDL_Cursor *pointer;
 
+
+void sizeScreen()
+{
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glViewport(0, 0, windowWidth, windowHeight);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	glOrtho(0.0f, originalWindowWidth, originalWindowHeight, 0.0f, -1.0f, 1.0f);
+
+	glMatrixMode(GL_TEXTURE);
+	glLoadIdentity();
+
+}
+
 void initScreen()
 {
 	screen = SDL_CreateWindow("SKO Map Editor v 0.9.0",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
-		WINDOW_WIDTH, WINDOW_HEIGHT,
+		windowWidth, windowHeight,
 		SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 
 	glContext = SDL_GL_CreateContext(screen);
+	sizeScreen();
 
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_BLEND);
-    
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
-    glViewport( 0, 0, 1024, 600 );
-    glClear( GL_COLOR_BUFFER_BIT );
-
-    glMatrixMode( GL_PROJECTION );
-    glLoadIdentity();
-
-    glOrtho(0.0f, 1024, 600, 0.0f, -1.0f, 1.0f);
-
-    glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity();
-    
-    glDisable(GL_DEPTH_TEST);
 }
 
 void Physics();
@@ -361,6 +372,8 @@ void DrawGameScene()
 {
 	//image buffer and background                    
 	DrawImage(0, 0, &background);
+	DrawImage(512, 0, &background);
+	DrawImage(1024, 0, &background);
 
 	//draw tiles, only on screen
 	for (int i = 0; i < number_of_tiles; i++)
@@ -368,12 +381,12 @@ void DrawGameScene()
 		int draw_x = tile_x[i] - (int)camera_x;
 		int draw_y = tile_y[i] - (int)camera_y;
 
-		if (draw_x >= 0 - tile_img[tile[i]].width &&
+		if (draw_x >= (int)(0 - tile_img[tile[i]].width) &&
 			draw_x < 1024 && draw_y < 600 &&
-			draw_y >= 0 - tile_img[tile[i]].height)
+			draw_y >= (int)(0 - tile_img[tile[i]].height))
 			DrawImage(draw_x, draw_y, &tile_img[tile[i]]);
-	}
 
+	}
 
 	//stickman!
 	if (stickman_toggle)
@@ -454,6 +467,37 @@ void HandleInput()
 {
 	while (!done && SDL_PollEvent(&event))
 	{
+		if (event.type == SDL_WINDOWEVENT)
+		{
+			switch (event.window.event)
+			{
+			case SDL_WINDOWEVENT_SHOWN:
+				SDL_Log("Window %d shown", event.window.windowID);
+				break;
+			case SDL_WINDOWEVENT_HIDDEN:
+				SDL_Log("Window %d hidden", event.window.windowID);
+				break;
+			case SDL_WINDOWEVENT_EXPOSED:
+				SDL_Log("Window %d exposed", event.window.windowID);
+				break;
+			case SDL_WINDOWEVENT_MOVED:
+				SDL_Log("Window %d moved to %d,%d",
+					event.window.windowID, event.window.data1,
+					event.window.data2);
+				break;
+			case SDL_WINDOWEVENT_RESIZED:
+				SDL_Log("Window %d resized to %dx%d",
+					event.window.windowID, event.window.data1,
+					event.window.data2);
+
+				windowWidth = event.window.data1;
+				windowHeight = event.window.data2;
+				sizeScreen();
+
+				break;
+			}
+		}
+
 		if (event.type == SDL_QUIT)
 		{
 			//todo save a backup file
@@ -801,11 +845,11 @@ void HandleInput()
 			cursor_x = event.motion.x;
 			cursor_y = event.motion.y;
 
-			if (cursor_x > WINDOW_WIDTH)
-				cursor_x = WINDOW_WIDTH;
+			if (cursor_x > windowWidth)
+				cursor_x = windowWidth;
 
-			if (cursor_y > WINDOW_HEIGHT)
-				cursor_y = WINDOW_HEIGHT;
+			if (cursor_y > windowHeight)
+				cursor_y = windowHeight;
 
 			//draw the almost done rect
 			if (mode == COLLISION_DRAW && LCLICK)
