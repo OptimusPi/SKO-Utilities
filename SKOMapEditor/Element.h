@@ -1,7 +1,7 @@
 #ifndef __OPI_Gui_Element_
 #define __OPI_Gui_Element_
 
-#include "OPI_Gui_CursorType.h"
+#include "CursorType.h"
 #include "OPI_Image.h"
 #include <vector>
 

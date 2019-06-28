@@ -20,8 +20,8 @@
 #include "OPI_Fonts.h"
 #include "OPI_Clock.h"
 #include "OPI_Sleep.h"
-#include "OPI_Gui_Manager.h"
-#include "OPI_Gui_Panel.h"
+#include "Manager.h"
+#include "Panel.h"
 
 int originalWindowWidth = 1280;
 int originalWindowHeight = 720;

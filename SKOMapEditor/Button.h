@@ -3,7 +3,7 @@
 
 #include <functional>
 
-#include "OPI_Gui_Element.h"
+#include "Element.h"
 #include "OPI_Image.h"
 #include "OPI_Text.h"
 

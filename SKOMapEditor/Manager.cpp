@@ -1,5 +1,5 @@
-#include "OPI_Gui_Manager.h"
-#include "OPI_Gui_Panel.h"
+#include "Manager.h"
+#include "Panel.h"
 
 
 ///Singleton instance

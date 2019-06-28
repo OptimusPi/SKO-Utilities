@@ -4,8 +4,9 @@
 #include <vector>
 #include <string>
 #include "OPI_Image.h"
-#include "OPI_Gui_Manager.h"
-#include "OPI_Gui_Element.h"
+#include "Manager.h"
+#include "Element.h"
+#include "ElementRenderer3x3.h"
 #include "OPI_Rectangle.h"
 
 #ifdef _WIN32
@@ -22,7 +23,7 @@ namespace OPI_Gui
 {
 	class Manager;
 
-	class Panel : public Element
+	class Panel : public Element, public ElementRenderer3x3
 	{
 	public:
 		Panel(OPI_Gui::Manager *gui, std::string theme, int x = 0, int y = 0, unsigned short int width = 3, unsigned short int height = 3);
@@ -30,7 +31,6 @@ namespace OPI_Gui
 		void loadTheme(std::string theme);
 		void setWidth(short int width);
 		void setHeight(short int height);
-		void render();
 
 		// Input handlers
 		void handleMouseMove(int mouseX, int mouseY);
@@ -51,12 +51,6 @@ namespace OPI_Gui
 		SDL_Rect *resizableGrabArea;
 		SDL_Rect *closablePressArea;
 
-		unsigned short int tileWidth;
-		unsigned short int tileHeight;
-		SDL_Surface *corners[4];
-		SDL_Surface *edges[4];
-		SDL_Surface *filler;
-		std::string theme;
 		unsigned short int width, height;
 		bool containsMouse(int mouseX, int mouseY, int x, int y, int w, int h);
 		bool handleSection_Resize(int mouseX, int mouseY);
