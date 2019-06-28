@@ -47,9 +47,9 @@ namespace OPI_Gui
 
 	private:
 
-		OPI_Rectangle *moveableGrabArea;
-		OPI_Rectangle *resizableGrabArea;
-		OPI_Rectangle *closablePressArea;
+		SDL_Rect *moveableGrabArea;
+		SDL_Rect *resizableGrabArea;
+		SDL_Rect *closablePressArea;
 
 		unsigned short int tileWidth;
 		unsigned short int tileHeight;

@@ -33,9 +33,6 @@
     <ClInclude Include="OPI_Fonts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OPI_Rectangle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="OPI_Gui_Element.h">
       <Filter>Header Files</Filter>
     </ClInclude>

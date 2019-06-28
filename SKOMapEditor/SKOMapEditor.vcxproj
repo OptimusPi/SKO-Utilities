@@ -159,7 +159,6 @@
   <ItemGroup>
     <ClInclude Include="OPI_Gui_CursorType.h" />
     <ClInclude Include="OPI_Gui_Element.h" />
-    <ClInclude Include="OPI_Rectangle.h" />
     <ClInclude Include="OPI_Gui_Button.h" />
     <ClInclude Include="OPI_Fonts.h" />
     <ClInclude Include="OPI_Gui_Manager.h" />

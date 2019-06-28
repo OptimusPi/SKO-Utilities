@@ -122,7 +122,6 @@ void OPI_Gui::Panel::render()
 		unsigned short fillX = x;
 		if (x >= this->width - this->tileWidth * 2)
 		{
-			fillX = this->width - this->tileWidth * 2;
 			edgeCase = true;
 		}
 
@@ -131,7 +130,6 @@ void OPI_Gui::Panel::render()
 			unsigned short fillY = y;
 			if (y >= this->height - this->tileHeight * 2)
 			{
-				fillY = this->height - this->tileHeight * 2;
 				edgeCase = true;
 			}
 
@@ -146,8 +144,11 @@ void OPI_Gui::Panel::render()
 			// Fill in middle from the top left corner without running over the corners or edges
 			if (edgeCase)
 			{
-				SDL_Rect fillArea = SDL_Rect{ fillX, fillY, this->tileWidth, this->tileHeight };
-				SDL_BlitSurface(filler, NULL, panelCanvas, &fillArea);
+				int fillHeight = this->height - this->tileHeight  - fillY;
+				int fillWidth = this->width - this->tileWidth - fillX;
+				SDL_Rect clipArea = SDL_Rect{ 0, 0, fillWidth, fillHeight };
+				SDL_Rect fillArea = SDL_Rect{ fillX, fillY, fillWidth, fillHeight };
+				SDL_BlitSurface(filler, &clipArea, panelCanvas, &fillArea);
 			}
 		}
 	}
@@ -162,18 +163,25 @@ void OPI_Gui::Panel::render()
 		// Fill in gaps for when window width is not divisible by `tileSize`
 		if (x > this->width - this->tileWidth * 2)
 		{
-			x = this->width - this->tileWidth * 2;
-			edgeCase = true;
+			int fillHeight = this->height - this->tileHeight - y;
+			int fillWidth = this->width - this->tileWidth - x;
+			SDL_Rect clipArea = SDL_Rect{ 0, 0, fillWidth, this->tileHeight };
+			SDL_Rect topEdge = SDL_Rect{ x, 0, fillWidth, this->tileHeight };
+			SDL_Rect bottomEdge = SDL_Rect{ x, this->height - this->tileHeight, this->tileWidth, this->tileHeight };
+			SDL_BlitSurface(edges[0], &clipArea, panelCanvas, &topEdge);
+			SDL_BlitSurface(edges[1], &clipArea, panelCanvas, &bottomEdge);
 		}
+		else
+		{
 
-		// Fill in edges from the start without running over the corners
-		SDL_Rect topEdge = SDL_Rect{ x, 0, this->tileWidth, this->tileHeight };
-		SDL_Rect bottomEdge = SDL_Rect{ x, this->height - this->tileHeight, this->tileWidth, this->tileHeight };
 
-		SDL_BlitSurface(edges[0], NULL, panelCanvas, &topEdge);
-		SDL_BlitSurface(edges[1], NULL, panelCanvas, &bottomEdge);
+			// Fill in edges from the start without running over the corners
+			SDL_Rect topEdge = SDL_Rect{ x, 0, this->tileWidth, this->tileHeight };
+			SDL_Rect bottomEdge = SDL_Rect{ x, this->height - this->tileHeight, this->tileWidth, this->tileHeight };
 
-		if (edgeCase) break;
+			SDL_BlitSurface(edges[0], NULL, panelCanvas, &topEdge);
+			SDL_BlitSurface(edges[1], NULL, panelCanvas, &bottomEdge);
+		}
 	}
 
 	// Draw Left and Right edges
@@ -184,18 +192,25 @@ void OPI_Gui::Panel::render()
 		// Fill in gaps for when window width is not divisible by `tileSize`
 		if (y > this->height - this->tileHeight * 2)
 		{
-			y = this->height - this->tileHeight * 2;
-			edgeCase = true;
+			int fillHeight = this->height - this->tileHeight - y;
+			SDL_Rect clipArea = SDL_Rect{ 0, 0, 
+										this->tileWidth, fillHeight };
+			SDL_Rect leftEdge = SDL_Rect{ 0, y, 
+										this->tileHeight, fillHeight };
+			SDL_Rect rightEdge = SDL_Rect{ this->width - this->tileWidth, y,
+										this->tileWidth, fillHeight };
+			SDL_BlitSurface(edges[2], &clipArea, panelCanvas, &leftEdge);
+			SDL_BlitSurface(edges[3], &clipArea, panelCanvas, &rightEdge);
 		}
+		else
+		{
+			// Fill in edges from the start without running over the corners
+			SDL_Rect leftEdge = SDL_Rect{ 0, y, this->tileWidth, this->tileHeight };
+			SDL_Rect rightEdge = SDL_Rect{ this->width - this->tileWidth, y, this->tileWidth, this->tileHeight };
 
-		// Fill in edges from the start without running over the corners
-		SDL_Rect leftEdge = SDL_Rect{ 0, y, this->tileWidth, this->tileHeight };
-		SDL_Rect rightEdge = SDL_Rect{ this->width - this->tileWidth, y, this->tileWidth, this->tileHeight };
-
-		SDL_BlitSurface(edges[2], NULL, panelCanvas, &leftEdge);
-		SDL_BlitSurface(edges[3], NULL, panelCanvas, &rightEdge);
-
-		if (edgeCase) break;
+			SDL_BlitSurface(edges[2], NULL, panelCanvas, &leftEdge);
+			SDL_BlitSurface(edges[3], NULL, panelCanvas, &rightEdge);
+		}
 	}
 
 
