@@ -23,10 +23,10 @@ namespace OPI_Gui
 {
 	class Manager;
 
-	class Panel : public Element, public ElementRenderer3x3
+	class Panel : public Element, public ElementThemeGridRect
 	{
 	public:
-		Panel(OPI_Gui::Manager *gui, std::string theme, int x = 0, int y = 0, unsigned short int width = 3, unsigned short int height = 3);
+		Panel(std::string theme, int x = 0, int y = 0, unsigned short int width = 3, unsigned short int height = 3);
 		virtual ~Panel();
 		void loadTheme(std::string theme);
 		void setWidth(short int width);

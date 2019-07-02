@@ -157,12 +157,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ElementRenderer3x3.h" />
+    <ClInclude Include="ElementThemeGridRect.h" />
     <ClInclude Include="CursorType.h" />
     <ClInclude Include="Element.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="OPI_Fonts.h" />
-    <ClInclude Include="ElementRenderer.h" />
+    <ClInclude Include="ElementTheme.h" />
     <ClInclude Include="Manager.h" />
     <ClInclude Include="Panel.h" />
     <ClInclude Include="OPI_Timestep.h" />
@@ -172,10 +172,9 @@
     <ClInclude Include="OPI_Text.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ElementRenderer3x3.cpp" />
+    <ClCompile Include="ElementTheme3x3.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="OPI_Fonts.cpp" />
-    <ClCompile Include="ElementRenderer.cpp" />
     <ClCompile Include="Manager.cpp" />
     <ClCompile Include="OPI_Image.cpp" />
     <ClCompile Include="Panel.cpp" />

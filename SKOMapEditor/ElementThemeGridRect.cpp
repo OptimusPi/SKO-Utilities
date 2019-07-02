@@ -1,19 +1,16 @@
-#include "ElementRenderer3x3.h"
+#include "ElementThemeGridRect.h"
 
-
-
-OPI_Gui::ElementRenderer3x3::ElementRenderer3x3()
+OPI_Gui::ElementThemeGridRect::ElementThemeGridRect()
 {
 
 }
 
-
-OPI_Gui::ElementRenderer3x3::~ElementRenderer3x3()
+OPI_Gui::ElementThemeGridRect::~ElementThemeGridRect()
 {
 
 }
 
-OPI_Gui::ElementRenderer::render(OPI_Gui::Element* element)
+OPI_Gui::ElementThemeGridRect::render(OPI_Gui::Element* element)
 {
 	// 
 	// Form a blank canvas to draw on.

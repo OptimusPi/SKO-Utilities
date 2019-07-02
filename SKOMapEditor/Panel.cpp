@@ -1,8 +1,8 @@
 #include "Panel.h"
 
-OPI_Gui::Panel::Panel(OPI_Gui::Manager *gui, std::string theme, int x, int y, unsigned short int width, unsigned short int height)
+OPI_Gui::Panel::Panel(std::string theme, int x, int y, unsigned short int width, unsigned short int height)
 {
-	this->theme = theme;
+	this->theme = OPI_Gui::ThemeLoader:getTheme(theme);
 	this->x = x;
 	this->y = y;
 	this->width = width;
