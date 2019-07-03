@@ -54,6 +54,9 @@
     <ClInclude Include="ElementThemeGridRect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ThemeLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -80,7 +83,10 @@
     <ClCompile Include="Panel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ElementTheme3x3.cpp">
+    <ClCompile Include="ElementThemeGridRect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ThemeLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

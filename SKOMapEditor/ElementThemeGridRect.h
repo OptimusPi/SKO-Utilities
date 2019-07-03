@@ -8,16 +8,18 @@ namespace OPI_Gui
 	class ElementThemeGridRect : public ElementTheme
 	{
 	public:
-		ElementThemeGridRect(std::string theme);
+		ElementThemeGridRect();
 		virtual ~ElementThemeGridRect();
-
-	private:
+		int getMinimumWidth();
+		int getMinimumHeight();
+		void render(OPI_Gui::Element* element);
 		unsigned short int tileWidth;
 		unsigned short int tileHeight;
 		SDL_Surface *corners[4];
 		SDL_Surface *edges[4];
 		SDL_Surface *filler;
-		std::string theme;
+	private:
+		
 	};
 }
 

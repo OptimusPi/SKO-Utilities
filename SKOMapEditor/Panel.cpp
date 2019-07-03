@@ -1,116 +1,34 @@
 #include "Panel.h"
 
-OPI_Gui::Panel::Panel(std::string theme, int x, int y, unsigned short int width, unsigned short int height)
+OPI_Gui::Panel::Panel(std::string theme, int x, int y, int width, int height)
 {
-	this->theme = OPI_Gui::ThemeLoader:getTheme(theme);
+	this->theme = OPI_Gui::ThemeLoader::GetTheme(theme);
 	this->x = x;
 	this->y = y;
 	this->width = width;
 	this->height = height;
-	this->loadTheme(theme);
-	this->render();
+	this->theme->render(this);
 }
 
 OPI_Gui::Panel::~Panel() {};
 
-void OPI_Gui::Panel::loadTheme(std::string theme)
-{
-	std::string themePath = "IMG/GUI/themes/" + theme + "/";
-
-	//Load template sprite, and then cut out the corners and middle
-	SDL_Surface *panelTemplate = OPI_Image::getSurface(themePath + "panel.png");
-
-	//Ensure it loaded
-	if (panelTemplate == NULL)
-	{
-		throw "Panel Template is NULL. Maybe the image is missing from IMG/GUI/themes/<theme_name>/panel.png";
-	}
-
-	// Ensure it is a 3x3 "tileset" 
-	if (panelTemplate->w % 3 > 0 || panelTemplate->h % 3 > 0)
-	{
-		throw "Panel template dimensions are incorrect! Width and Height must be divisible by 3.";
-	}
-
-	// Determine dimensions automatiacally from the template
-	this->tileWidth = panelTemplate->w / 3;
-	this->tileHeight = panelTemplate->h / 3;
-	SDL_Rect tileClip { 0, 0, tileWidth, tileHeight };
-
-	// Top-Left corner
-	corners[0] = OPI_Image::createBlankSurface(tileWidth, tileHeight);
-	tileClip.x = 0; 
-	tileClip.y = 0;
-	SDL_BlitSurface(panelTemplate, &tileClip, corners[0], NULL);
-
-	// Top-Right corner
-	corners[1] = OPI_Image::createBlankSurface(tileWidth, tileHeight);
-	tileClip.x = tileWidth*2;
-	tileClip.y = 0;
-	SDL_BlitSurface(panelTemplate, &tileClip, corners[1], NULL);
-
-	// Bottom-Left corner
-	corners[2] = OPI_Image::createBlankSurface(tileWidth, tileHeight);
-	tileClip.x = 0;
-	tileClip.y = tileHeight*2;
-	SDL_BlitSurface(panelTemplate, &tileClip, corners[2], NULL);
-
-	// Bottom-Right corner
-	corners[3] = OPI_Image::createBlankSurface(tileWidth, tileHeight);
-	tileClip.x = tileWidth*2;
-	tileClip.y = tileHeight*2;
-	SDL_BlitSurface(panelTemplate, &tileClip, corners[3], NULL);
-
-	// Top Edge
-	edges[0] = OPI_Image::createBlankSurface(tileWidth, tileHeight);
-	tileClip.x = tileWidth;
-	tileClip.y = 0;
-	SDL_BlitSurface(panelTemplate, &tileClip, edges[0], NULL);
-
-	// Bottom Edge 
-	edges[1] = OPI_Image::createBlankSurface(tileWidth, tileHeight);
-	tileClip.x = tileWidth;
-	tileClip.y = tileHeight*2;
-	SDL_BlitSurface(panelTemplate, &tileClip, edges[1], NULL);
-
-	// Left Edge
-	edges[2] = OPI_Image::createBlankSurface(tileWidth, tileHeight);
-	tileClip.x = 0;
-	tileClip.y = tileHeight;
-	SDL_BlitSurface(panelTemplate, &tileClip, edges[2], NULL);
-
-	// Right Edge
-	edges[3] = OPI_Image::createBlankSurface(tileWidth, tileHeight);
-	tileClip.x = tileWidth * 2;
-	tileClip.y = tileHeight;
-	SDL_BlitSurface(panelTemplate, &tileClip, edges[3], NULL);
-
-	// Filler
-	filler = OPI_Image::createBlankSurface(tileWidth, tileHeight);
-	tileClip.x = tileWidth;
-	tileClip.y = tileHeight;
-	SDL_BlitSurface(panelTemplate, &tileClip, filler, NULL);
-}
 
 void OPI_Gui::Panel::setWidth(short int width)
 {
-	if (width < this->tileWidth * 3)
-		width = tileWidth * 3;
+	int minimumWidth = this->theme->getMinimumWidth();
+	if (width < minimumWidth)
+		width = minimumWidth;
 
 	this->width = width;
 }
 
 void OPI_Gui::Panel::setHeight(short int height)
 {
-	if (height < this->tileHeight * 3)
-		height = tileHeight * 3;
+	int minimumHeight = this->theme->getMinimumHeight();
+	if (height < minimumHeight)
+		height = minimumHeight;
 
 	this->height = height;
-}
-
-void OPI_Gui::Panel::render()
-{
-	this->renderer->render(this);
 }
 
 bool OPI_Gui::Panel::containsMouse(int mouseX, int mouseY, int x, int y, int w, int h)
@@ -191,7 +109,7 @@ bool OPI_Gui::Panel::handleSection_Resize(int mouseX, int mouseY)
 	{
 		setWidth(mouseX - this->x);
 		setHeight(mouseY - this->y);
-		render();
+		this->theme->render(this);
 		// Signal that event has been handled
 		return true;
 	}

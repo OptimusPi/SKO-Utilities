@@ -6,8 +6,8 @@
 #include "OPI_Image.h"
 #include "Manager.h"
 #include "Element.h"
-#include "ElementRenderer3x3.h"
-#include "OPI_Rectangle.h"
+#include "ElementThemeGridRect.h"
+#include "ThemeLoader.h"
 
 #ifdef _WIN32
 	#include "SDL.h"
@@ -23,12 +23,11 @@ namespace OPI_Gui
 {
 	class Manager;
 
-	class Panel : public Element, public ElementThemeGridRect
+	class Panel : public Element
 	{
 	public:
-		Panel(std::string theme, int x = 0, int y = 0, unsigned short int width = 3, unsigned short int height = 3);
+		Panel(std::string theme, int x, int y, int width, int height);
 		virtual ~Panel();
-		void loadTheme(std::string theme);
 		void setWidth(short int width);
 		void setHeight(short int height);
 
@@ -46,12 +45,11 @@ namespace OPI_Gui
 		void setCursor(CursorType cursor);
 
 	private:
-
+		OPI_Gui::ElementTheme *theme;
 		SDL_Rect *moveableGrabArea;
 		SDL_Rect *resizableGrabArea;
 		SDL_Rect *closablePressArea;
 
-		unsigned short int width, height;
 		bool containsMouse(int mouseX, int mouseY, int x, int y, int w, int h);
 		bool handleSection_Resize(int mouseX, int mouseY);
 		bool handleSection_Move(int mouseX, int mouseY);

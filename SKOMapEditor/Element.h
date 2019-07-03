@@ -23,6 +23,8 @@ namespace OPI_Gui
 		OPI_Image *texture;
 		int x;
 		int y;
+		int width;
+		int height;
 		bool isVisible;
 
 		// Any GUI Element may have children, such as:

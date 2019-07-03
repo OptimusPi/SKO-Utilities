@@ -14,13 +14,11 @@ namespace OPI_Gui
 	class Button : public Element
 	{
 	public:
-		Button(std::string theme, int x = 0, int y = 0);
+		Button(std::string theme, int x, int y);
 		virtual ~Button();
 		void addCallback(std::function<void(void)> callback);
 	private:
 		// Button position and dimensions inside its OPI_Panel
-		int width;
-		int height;
 		OPI_Image *textureEnabled;
 		OPI_Image *textureDisabled;
 		OPI_Image *texturePressed;

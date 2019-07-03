@@ -170,10 +170,11 @@
     <ClInclude Include="OPI_Image.h" />
     <ClInclude Include="OPI_Sleep.h" />
     <ClInclude Include="OPI_Text.h" />
+    <ClInclude Include="ThemeLoader.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ElementTheme3x3.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="ElementThemeGridRect.cpp" />
     <ClCompile Include="OPI_Fonts.cpp" />
     <ClCompile Include="Manager.cpp" />
     <ClCompile Include="OPI_Image.cpp" />
@@ -181,6 +182,7 @@
     <ClCompile Include="OPI_Timestep.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OPI_Text.cpp" />
+    <ClCompile Include="ThemeLoader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
