@@ -32,6 +32,7 @@ namespace OPI_Gui
 		void setHeight(short int height);
 
 		// Input handlers
+		bool isInteracting();
 	    bool handleMouseMove(int mouseX, int mouseY);
 	    bool handleMousePressLeft(int mouseX, int mouseY);
 	    bool handleMousePressRight(int mouseX, int mouseY);

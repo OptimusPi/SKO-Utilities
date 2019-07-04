@@ -220,3 +220,8 @@ bool OPI_Gui::Panel::handleMouseReleaseRight(int mouseX, int mouseY)
 {
 	return false;
 }
+
+bool OPI_Gui::Panel::isInteracting()
+{
+	return (this->isMoving || this->isResizing);
+}

@@ -98,13 +98,13 @@ int current_tile_img = 0;
   std::string loadMapFilename = "";
 
 
-void DrawImage( int x, int y, const OPI_Image *img) 
+void DrawImage( int x, int y, const OPI_Image *img, float blendTolerance) 
 {      
      glColor3f(1.0f, 1.0f, 1.0f);     
      glBindTexture( GL_TEXTURE_2D,  img->texture);
 	 
 	 glEnable(GL_BLEND);
-	 glAlphaFunc(GL_GREATER, 0.7500); 
+	 glAlphaFunc(GL_GREATER, blendTolerance); 
 	 glEnable(GL_ALPHA_TEST);
 	 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -133,6 +133,11 @@ void DrawImage( int x, int y, const OPI_Image *img)
 
 	glDisable(GL_BLEND);
 } 
+
+void  DrawImage(int x, int y, const OPI_Image *img)
+{
+	DrawImage(x, y, img, 0.7500);
+}
 
 OPI_Text* coords;
 
@@ -1374,14 +1379,12 @@ void Physics()
 
 void drawText(OPI_Text *text)
 {
-	//glBindTexture(GL_TEXTURE_2D, font.texture);
-         
 	//tint
 	glColor3f(text->R, text->G, text->B);
          
 	float screen_x = text->x;
 	float screen_y = text->y;
-    DrawImage(10, 10, &text->contentRender);
+    DrawImage(10, 10, &text->contentRender, 0.1);
 
 	//reset tint
 	glColor3f(1.0f, 1.0f, 1.0f);

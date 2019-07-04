@@ -22,6 +22,11 @@ namespace OPI_Gui
 		void addElement(OPI_Gui::Element *element);
 		void setCursor(OPI_Gui::CursorType selectedCursor);
 		void initCursors(std::string normal, std::string move, std::string resize, std::string hourglass, std::string hand);
+
+		// Give priority for event handlers
+		bool handleMouseMove_InteractingElements(int mouseX, int mouseY);
+
+		// Mouse events
 		void handleMouseMove(int mouseX, int mouseY);
 		void handleMousePressLeft(int mouseX, int mouseY);
 		void handleMousePressRight(int mouseX, int mouseY);

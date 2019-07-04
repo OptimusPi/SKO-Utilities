@@ -68,8 +68,25 @@ void OPI_Gui::Manager::setCursor(OPI_Gui::CursorType selectedCursor)
 	}
 }
 
+
+
+bool OPI_Gui::Manager::handleMouseMove_InteractingElements(int mouseX, int mouseY)
+{
+	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
+	{
+		OPI_Gui::Element *element = *i;
+		if (element->isInteracting() && element->handleMouseMove(mouseX, mouseY))
+			return true;
+	}
+	return false;
+}
+
 void OPI_Gui::Manager::handleMouseMove(int mouseX, int mouseY)
 {
+	// Allow elements to pass over, under, and across each other when dragging without losing mouse focus
+	if (handleMouseMove_InteractingElements(mouseX, mouseY))
+		return;
+
 	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
 	{
 		OPI_Gui::Element *element = *i;

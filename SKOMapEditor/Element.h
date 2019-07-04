@@ -11,6 +11,7 @@ namespace OPI_Gui
 	{
 	public:
 		// Input handlers
+		virtual bool isInteracting();
 		virtual bool handleMouseMove(int mouseX, int mouseY) = 0;
 		virtual bool handleMousePressLeft(int mouseX, int mouseY) = 0;
 		virtual bool handleMousePressRight(int mouseX, int mouseY) = 0;

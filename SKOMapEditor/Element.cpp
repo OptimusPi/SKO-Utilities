@@ -11,3 +11,8 @@ OPI_Image * OPI_Gui::Element::getTexture()
 {
 	return this->texture;
 }
+
+bool OPI_Gui::Element::isInteracting()
+{
+	return false;
+}
