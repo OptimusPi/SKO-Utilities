@@ -9,11 +9,6 @@ OPI_Gui::Button::Button(std::string theme, int x, int y)
 	this->height = textureEnabled->height;
 }
 
-OPI_Gui::Button::~Button()
-{
-
-}
-
 void OPI_Gui::Button::addCallback(std::function<void(void)> callback)
 {
 	this->callback = callback;
@@ -26,4 +21,10 @@ void OPI_Gui::Button::loadTheme(std::string theme)
 	this->textureDisabled = new OPI_Image(path + "disabled.png");
 	this->texturePressed = new OPI_Image(path + "pressed.png");
 	this->textureSelected = new OPI_Image(path + "selected.png");
+}
+
+
+OPI_Gui::Button::~Button()
+{
+
 }

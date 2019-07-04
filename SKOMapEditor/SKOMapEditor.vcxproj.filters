@@ -57,6 +57,12 @@
     <ClInclude Include="ThemeLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ElementThemeType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ElementThemeImage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -87,6 +93,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ThemeLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ElementThemeImage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Element.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

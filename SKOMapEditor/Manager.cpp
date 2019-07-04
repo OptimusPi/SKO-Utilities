@@ -70,36 +70,51 @@ void OPI_Gui::Manager::setCursor(OPI_Gui::CursorType selectedCursor)
 
 void OPI_Gui::Manager::handleMouseMove(int mouseX, int mouseY)
 {
-	for (OPI_Gui::Element* element : this->children) {
-		element->handleMouseMove(mouseX, mouseY);
+	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
+	{
+		OPI_Gui::Element *element = *i;
+		if (element->handleMouseMove(mouseX, mouseY))
+			break;
 	}
 }
 
 void OPI_Gui::Manager::handleMousePressLeft(int mouseX, int mouseY)
 {
-	for (OPI_Gui::Element* element : this->children) {
-		element->handleMousePressLeft(mouseX, mouseY);
+	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
+	{
+		OPI_Gui::Element *element = *i;
+		if (element->handleMousePressLeft(mouseX, mouseY))
+			break;
 	}
 }
 
 void OPI_Gui::Manager::handleMousePressRight(int mouseX, int mouseY)
 {
-	for (OPI_Gui::Element* element : this->children) {
-		element->handleMousePressRight(mouseX, mouseY);
+	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
+	{
+		OPI_Gui::Element *element = *i;
+		if (element->handleMousePressRight(mouseX, mouseY))
+			break;
 	}
 }
 
 
 void OPI_Gui::Manager::handleMouseReleaseLeft(int mouseX, int mouseY)
 {
-	for (OPI_Gui::Element* element : this->children) {
-		element->handleMouseReleaseLeft(mouseX, mouseY);
+	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
+	{
+		OPI_Gui::Element *element = *i;
+		if (element->handleMouseReleaseLeft(mouseX, mouseY))
+			break;
 	}
 }
 
 void OPI_Gui::Manager::handleMouseReleaseRight(int mouseX, int mouseY)
 {
-	for (OPI_Gui::Element* element : this->children) {
-		element->handleMouseReleaseRight(mouseX, mouseY);
+	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
+	{
+		OPI_Gui::Element *element = *i;
+		if (element->handleMouseReleaseRight(mouseX, mouseY))
+			break;
 	}
 }

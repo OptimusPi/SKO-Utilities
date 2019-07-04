@@ -11,16 +11,19 @@ namespace OPI_Gui
 	{
 	public:
 		// Input handlers
-		virtual void handleMouseMove(int mouseX, int mouseY) = 0;
-		virtual void handleMousePressLeft(int mouseX, int mouseY) = 0;
-		virtual void handleMousePressRight(int mouseX, int mouseY) = 0;
-		virtual void handleMouseReleaseRight(int mouseX, int mouseY) = 0;
-		virtual void handleMouseReleaseLeft(int mouseX, int mouseY) = 0;
+		virtual bool handleMouseMove(int mouseX, int mouseY) = 0;
+		virtual bool handleMousePressLeft(int mouseX, int mouseY) = 0;
+		virtual bool handleMousePressRight(int mouseX, int mouseY) = 0;
+		virtual bool handleMouseReleaseRight(int mouseX, int mouseY) = 0;
+		virtual bool handleMouseReleaseLeft(int mouseX, int mouseY) = 0;
 		virtual bool movableContainsMouse(int mouseX, int mouseY) = 0;
 		virtual bool resizableContainsMouse(int mouseX, int mouseY) = 0;
 		virtual bool closableContainsMouse(int mouseX, int mouseY) = 0;
 
-		OPI_Image *texture;
+		// Safe way to set the texture
+		// Clear out existing texture and free SDL Surface
+		void setTexture(OPI_Image *texture);
+		OPI_Image *getTexture();
 		int x;
 		int y;
 		int width;
@@ -32,7 +35,8 @@ namespace OPI_Gui
 		// Buttons can contain 
 		std::vector<OPI_Gui::Element *>children;
 		OPI_Gui::Element *parent;
-
+	private:
+		OPI_Image *texture;
 	};
 }
 

@@ -5,6 +5,7 @@
 #include <map>
 
 #include "ElementTheme.h"
+#include "ElementThemeType.h"
 
 namespace OPI_Gui
 {
@@ -12,14 +13,26 @@ namespace OPI_Gui
 	class ThemeLoader
 	{
 	public:
-		static OPI_Gui::ElementTheme *GetTheme(std::string theme);
+		static OPI_Gui::ElementTheme *GetTheme(OPI_Gui::ElementThemeType type, std::string theme);
+		OPI_Gui::ElementThemeType t;
 	private:
 		static ThemeLoader* getInstance();
 		static ThemeLoader *instance;
 		ThemeLoader();
 		virtual ~ThemeLoader();
-		OPI_Gui::ElementTheme *getTheme(std::string theme);
-		void loadTheme(std::string theme);
+
+		// Grab theme from cache if it exists, 
+		// else load it from disk.
+		OPI_Gui::ElementTheme *getTheme(OPI_Gui::ElementThemeType type, std::string theme);
+
+		// Load themes from disk and add them to cache
+		void loadTheme_ElementThemeGridRect(std::string theme);
+		void loadTheme_ElementThemeImage(std::string theme);
+
+		// Get a unique key to look up in the dictionary
+		std::string generateKey(OPI_Gui::ElementThemeType type, std::string theme);
+
+		// Dictionary to cache all the themes
 		std::map<std::string, OPI_Gui::ElementTheme*> themes;
 	};
 }

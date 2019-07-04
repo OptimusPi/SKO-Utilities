@@ -1,17 +1,17 @@
 #include "Panel.h"
 
-OPI_Gui::Panel::Panel(std::string theme, int x, int y, int width, int height)
+
+OPI_Gui::Panel::Panel(OPI_Gui::ElementThemeType type, std::string theme, int x, int y, int width, int height)
 {
-	this->theme = OPI_Gui::ThemeLoader::GetTheme(theme);
+	this->theme = OPI_Gui::ThemeLoader::GetTheme(type, theme);
 	this->x = x;
 	this->y = y;
-	this->width = width;
-	this->height = height;
+	this->width = width < this->theme->getMinimumWidth() ? this->theme->getMinimumWidth() : width;
+	this->height = height < this->theme->getMinimumHeight() ? this->theme->getMinimumHeight() : height;
 	this->theme->render(this);
 }
 
 OPI_Gui::Panel::~Panel() {};
-
 
 void OPI_Gui::Panel::setWidth(short int width)
 {
@@ -145,25 +145,27 @@ bool OPI_Gui::Panel::handleSection_Close(int mouseX, int mouseY)
 	return false;
 }
 
-void OPI_Gui::Panel::handleMouseMove(int mouseX, int mouseY)
+bool OPI_Gui::Panel::handleMouseMove(int mouseX, int mouseY)
 {
 	if (this->isMovable && handleSection_Move(mouseX, mouseY))
 	{
-		return;
+		return true;
 	}
 
 	if (this->isResizable && handleSection_Resize(mouseX, mouseY))
 	{
-		return;
+		return true;
 	}
 
 	if (this->isClosable && handleSection_Close(mouseX, mouseY))
 	{
-		return;
+		return true;
 	}
+
+	return false;
 }
 
-void OPI_Gui::Panel::handleMousePressLeft(int mouseX, int mouseY)
+bool OPI_Gui::Panel::handleMousePressLeft(int mouseX, int mouseY)
 {
 	if (this->isMovable && handleSection_Move(mouseX, mouseY))
 	{
@@ -172,45 +174,49 @@ void OPI_Gui::Panel::handleMousePressLeft(int mouseX, int mouseY)
 		moveOriginY = this->y;
 		moveOriginGrabX = mouseX;
 		moveOriginGrabY = mouseY;
-		return;
+		return true;
 	}
 
 	if (this->isResizable && handleSection_Resize(mouseX, mouseY))
 	{
 		isResizing = true;
-		return;
+		return true;
 	}
 
 	if (this->isClosable && handleSection_Close(mouseX, mouseY))
 	{
 		isVisible = false;
 		OPI_Gui::Manager::getInstance()->setCursor(CursorType::Normal);
-		return;
+		return true;
 	}
+
+	return false;
 }
 
-void OPI_Gui::Panel::handleMouseReleaseLeft(int mouseX, int mouseY)
+bool OPI_Gui::Panel::handleMouseReleaseLeft(int mouseX, int mouseY)
 {
 	if (this->isMovable && handleSection_Move(mouseX, mouseY))
 	{
 		isMoving = false;
-		return;
+		return true;
 	}
 
 	if (this->isResizable && handleSection_Resize(mouseX, mouseY))
 	{
 		isResizing = false;
-		return;
+		return true;
 	}
+
+	return false;
 }
 
 
-void OPI_Gui::Panel::handleMousePressRight(int mouseX, int mouseY)
+bool OPI_Gui::Panel::handleMousePressRight(int mouseX, int mouseY)
 {
-
+	return false;
 }
 
-void OPI_Gui::Panel::handleMouseReleaseRight(int mouseX, int mouseY)
+bool OPI_Gui::Panel::handleMouseReleaseRight(int mouseX, int mouseY)
 {
-
+	return false;
 }

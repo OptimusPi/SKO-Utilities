@@ -450,7 +450,7 @@ void DrawGui(OPI_Gui::Manager* gui)
 {
 	for (OPI_Gui::Element* element : gui->children) {
 		if (element->isVisible)
-			DrawImage(element->x, element->y, element->texture);
+			DrawImage(element->x, element->y, element->getTexture());
 	}
 }
 
@@ -1185,10 +1185,24 @@ int main(int argc, char *argv[])
     initScreen();
 	gui = OPI_Gui::Manager::getInstance();
 	gui->initCursors("IMG/GUI/cursors/normal.png", "IMG/GUI/cursors/move.png", "IMG/GUI/cursors/resize.png", "IMG/GUI/cursors/hourglass.png", "IMG/GUI/cursors/hand.png");
-	OPI_Gui::Panel *testPanel = new OPI_Gui::Panel("ice", 240, 240, 500, 250);
-	testPanel->isVisible = true;
+	
+	OPI_Gui::ElementThemeGridRect a = OPI_Gui::ElementThemeGridRect();
 
-	gui->addElement(testPanel);
+	// Test out a GridRect panel
+	auto *panel_GridRect = new OPI_Gui::Panel(OPI_Gui::ElementThemeType::GridRect,"ice", 240, 240, 500, 250);
+	panel_GridRect->isVisible = true; 
+	panel_GridRect->isClosable = true;
+	panel_GridRect->isResizable = true;
+	panel_GridRect->isMovable = true;
+	gui->addElement(panel_GridRect);
+
+	// Test out an Image panel
+	auto *panel_Image = new OPI_Gui::Panel(OPI_Gui::ElementThemeType::Image, "vapor", 600, 600);
+	panel_Image->isVisible = true;
+	panel_Image->isResizable = false;
+	panel_Image->isClosable = true;
+	panel_Image->isMovable = true;
+	gui->addElement(panel_Image);
 
 	background.setImage("IMG/back.png");
 	selector.setImage("IMG/selector.png");

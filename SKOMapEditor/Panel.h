@@ -26,20 +26,25 @@ namespace OPI_Gui
 	class Panel : public Element
 	{
 	public:
-		Panel(std::string theme, int x, int y, int width, int height);
+		Panel(OPI_Gui::ElementThemeType type, std::string theme, int x, int y, int width = 0, int height = 0);
 		virtual ~Panel();
 		void setWidth(short int width);
 		void setHeight(short int height);
 
 		// Input handlers
-		void handleMouseMove(int mouseX, int mouseY);
-		void handleMousePressLeft(int mouseX, int mouseY);
-		void handleMousePressRight(int mouseX, int mouseY);
-		void handleMouseReleaseRight(int mouseX, int mouseY);
-		void handleMouseReleaseLeft(int mouseX, int mouseY);
+	    bool handleMouseMove(int mouseX, int mouseY);
+	    bool handleMousePressLeft(int mouseX, int mouseY);
+	    bool handleMousePressRight(int mouseX, int mouseY);
+	    bool handleMouseReleaseRight(int mouseX, int mouseY);
+	    bool handleMouseReleaseLeft(int mouseX, int mouseY);
 		bool movableContainsMouse(int mouseX, int mouseY);
 		bool resizableContainsMouse(int mouseX, int mouseY);
 		bool closableContainsMouse(int mouseX, int mouseY);
+
+		// Actions available on this panel
+		bool isResizable = false;
+		bool isMovable = false;
+		bool isClosable = false;
 
 		// Set cursor
 		void setCursor(CursorType cursor);
@@ -55,14 +60,12 @@ namespace OPI_Gui
 		bool handleSection_Move(int mouseX, int mouseY);
 		bool handleSection_Close(int mouseX, int mouseY);
 		bool isResizing = false;
-		bool isResizable = true;
 		bool isMoving = false;
+		bool isClosing = false;
 		int moveOriginX;
 		int moveOriginY;
 		int moveOriginGrabX;
 		int moveOriginGrabY;
-		bool isMovable = true;
-		bool isClosable = true;
 	};
 }
 

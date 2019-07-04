@@ -133,7 +133,6 @@ void OPI_Gui::ElementThemeGridRect::render(OPI_Gui::Element* element)
 	SDL_BlitSurface(corners[2], NULL, panelCanvas, &bottomLeftCorner);
 	SDL_BlitSurface(corners[3], NULL, panelCanvas, &bottomRightCorner);
 	// Render with SDL2 and then convert to OpenGL texture
-	delete element->texture;
-	element->texture = new OPI_Image(panelCanvas);
+	element->setTexture(new OPI_Image(panelCanvas));
 	SDL_FreeSurface(panelCanvas);
 }

@@ -27,7 +27,7 @@ namespace OPI_Gui
 		void handleMousePressRight(int mouseX, int mouseY);
 		void handleMouseReleaseLeft(int mouseX, int mouseY);
 		void handleMouseReleaseRight(int mouseX, int mouseY);
-		std::list<OPI_Gui::Element*> children;
+		std::vector<OPI_Gui::Element*> children;
 	private:
 		SDL_Cursor *cursorNormal;
 		SDL_Cursor *cursorMove;

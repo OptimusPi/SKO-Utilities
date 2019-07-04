@@ -161,6 +161,7 @@
     <ClInclude Include="CursorType.h" />
     <ClInclude Include="Element.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="ElementThemeImage.h" />
     <ClInclude Include="OPI_Fonts.h" />
     <ClInclude Include="ElementTheme.h" />
     <ClInclude Include="Manager.h" />
@@ -171,10 +172,13 @@
     <ClInclude Include="OPI_Sleep.h" />
     <ClInclude Include="OPI_Text.h" />
     <ClInclude Include="ThemeLoader.h" />
+    <ClInclude Include="ElementThemeType.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Element.cpp" />
     <ClCompile Include="ElementThemeGridRect.cpp" />
+    <ClCompile Include="ElementThemeImage.cpp" />
     <ClCompile Include="OPI_Fonts.cpp" />
     <ClCompile Include="Manager.cpp" />
     <ClCompile Include="OPI_Image.cpp" />
