@@ -20,6 +20,17 @@ int OPI_Gui::ElementThemeGridRect::getMinimumHeight()
 	return this->tileHeight * 3;
 }
 
+int OPI_Gui::ElementThemeGridRect::getMaximumWidth()
+{
+	return 0;
+}
+
+int OPI_Gui::ElementThemeGridRect::getMaximumHeight()
+{
+	return 0;
+}
+
+
 void OPI_Gui::ElementThemeGridRect::render(OPI_Gui::Element* element)
 {
 	// 

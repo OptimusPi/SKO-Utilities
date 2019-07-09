@@ -157,6 +157,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ElementThemeButton.h" />
     <ClInclude Include="ElementThemeGridRect.h" />
     <ClInclude Include="CursorType.h" />
     <ClInclude Include="Element.h" />
@@ -177,6 +178,7 @@
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Element.cpp" />
+    <ClCompile Include="ElementThemeButton.cpp" />
     <ClCompile Include="ElementThemeGridRect.cpp" />
     <ClCompile Include="ElementThemeImage.cpp" />
     <ClCompile Include="OPI_Fonts.cpp" />

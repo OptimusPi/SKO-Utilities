@@ -17,9 +17,6 @@ namespace OPI_Gui
 		virtual bool handleMousePressRight(int mouseX, int mouseY) = 0;
 		virtual bool handleMouseReleaseRight(int mouseX, int mouseY) = 0;
 		virtual bool handleMouseReleaseLeft(int mouseX, int mouseY) = 0;
-		virtual bool movableContainsMouse(int mouseX, int mouseY) = 0;
-		virtual bool resizableContainsMouse(int mouseX, int mouseY) = 0;
-		virtual bool closableContainsMouse(int mouseX, int mouseY) = 0;
 
 		// Safe way to set the texture
 		// Clear out existing texture and free SDL Surface
@@ -30,6 +27,16 @@ namespace OPI_Gui
 		int width;
 		int height;
 		bool isVisible;
+
+		// Calculates the bounds given by the parent element container
+		int getMinimumX();
+		int getMinimumY();
+		int getMaximumX();
+		int getMaximumY();
+		void ensureBounds();
+
+		// Add more elements to this element
+		void addElement(OPI_Gui::Element *element);
 
 		// Any GUI Element may have children, such as:
 		// Panel can contain a few buttons and text

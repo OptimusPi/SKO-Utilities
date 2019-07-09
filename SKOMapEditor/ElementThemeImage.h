@@ -13,6 +13,8 @@ namespace OPI_Gui
 		virtual ~ElementThemeImage();
 		int getMinimumWidth();
 		int getMinimumHeight();
+		int getMaximumWidth();
+		int getMaximumHeight();
 		void render(OPI_Gui::Element* element);
 		OPI_Image* texture;
 	private:

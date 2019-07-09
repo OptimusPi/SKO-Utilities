@@ -6,7 +6,7 @@
 #include "OPI_Image.h"
 #include "Manager.h"
 #include "Element.h"
-#include "ElementThemeGridRect.h"
+#include "ElementThemeGridRect.h" // TODO is this needed
 #include "ThemeLoader.h"
 
 #ifdef _WIN32

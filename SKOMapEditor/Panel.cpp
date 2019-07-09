@@ -8,6 +8,8 @@ OPI_Gui::Panel::Panel(OPI_Gui::ElementThemeType type, std::string theme, int x, 
 	this->y = y;
 	this->width = width < this->theme->getMinimumWidth() ? this->theme->getMinimumWidth() : width;
 	this->height = height < this->theme->getMinimumHeight() ? this->theme->getMinimumHeight() : height;
+	this->width = this->width > this->theme->getMaximumWidth() && this->theme->getMaximumWidth() > 0 ? this->theme->getMinimumWidth() : this->width;
+	this->height = this->height > this->theme->getMaximumHeight() && this->theme->getMaximumHeight() > 0 ? this->theme->getMinimumHeight() : this->height;
 	this->theme->render(this);
 }
 
@@ -83,6 +85,9 @@ bool OPI_Gui::Panel::handleSection_Move(int mouseX, int mouseY)
 		this->x = moveOriginX + mouseX - moveOriginGrabX;
 		this->y = moveOriginY + mouseY - moveOriginGrabY;
 
+		// Contain Element inside the screen
+		ensureBounds();
+
 		// Signal that event has been handled
 		return true;
 	}
@@ -147,6 +152,14 @@ bool OPI_Gui::Panel::handleSection_Close(int mouseX, int mouseY)
 
 bool OPI_Gui::Panel::handleMouseMove(int mouseX, int mouseY)
 {
+	//handle child mouse presses first
+	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
+	{
+		OPI_Gui::Element *element = *i;
+		if (element->handleMouseMove(mouseX - this->x, mouseY - this->y))
+			return true;
+	}
+
 	if (this->isMovable && handleSection_Move(mouseX, mouseY))
 	{
 		return true;
@@ -167,6 +180,14 @@ bool OPI_Gui::Panel::handleMouseMove(int mouseX, int mouseY)
 
 bool OPI_Gui::Panel::handleMousePressLeft(int mouseX, int mouseY)
 {
+	//handle child mouse presses first
+	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
+	{
+		OPI_Gui::Element *element = *i;
+		if (element->handleMousePressLeft(mouseX - this->x, mouseY - this->y))
+			return true;
+	}
+
 	if (this->isMovable && handleSection_Move(mouseX, mouseY))
 	{
 		isMoving = true;
@@ -195,6 +216,14 @@ bool OPI_Gui::Panel::handleMousePressLeft(int mouseX, int mouseY)
 
 bool OPI_Gui::Panel::handleMouseReleaseLeft(int mouseX, int mouseY)
 {
+	//handle child mouse presses first
+	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
+	{
+		OPI_Gui::Element *element = *i;
+		if (element->handleMouseReleaseLeft(mouseX - this->x, mouseY - this->y))
+			return true;
+	}
+
 	if (this->isMovable && handleSection_Move(mouseX, mouseY))
 	{
 		isMoving = false;
@@ -213,11 +242,26 @@ bool OPI_Gui::Panel::handleMouseReleaseLeft(int mouseX, int mouseY)
 
 bool OPI_Gui::Panel::handleMousePressRight(int mouseX, int mouseY)
 {
+	//handle child mouse presses first
+	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
+	{
+		OPI_Gui::Element *element = *i;
+		if (element->handleMousePressRight(mouseX - this->x, mouseY - this->y))
+			return true;
+	}
+
 	return false;
 }
 
 bool OPI_Gui::Panel::handleMouseReleaseRight(int mouseX, int mouseY)
 {
+	//handle child mouse presses first
+	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
+	{
+		OPI_Gui::Element *element = *i;
+		if (element->handleMouseReleaseRight(mouseX - this->x, mouseY - this->y))
+			return true;
+	}
 	return false;
 }
 

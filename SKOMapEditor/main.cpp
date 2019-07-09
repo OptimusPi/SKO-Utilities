@@ -22,6 +22,7 @@
 #include "OPI_Sleep.h"
 #include "Manager.h"
 #include "Panel.h"
+#include "Button.h"
 
 int originalWindowWidth = 1280;
 int originalWindowHeight = 720;
@@ -451,11 +452,21 @@ void DrawGameScene()
 		DrawImage(144 + (STICKMAN_DELETE - 1) * 64, 536, &selector);
 }
 
+void DrawElement(int x, int y, OPI_Gui::Element *element)
+{
+	DrawImage(x + element->x, y + element->y, element->getTexture());
+	DrawImage(x + element->x+25, y + element->y+25, element->getTexture());
+	for (OPI_Gui::Element* child : element->children) {
+		if (child->isVisible)
+			DrawElement(element->x, element->y, child);
+	}
+}
+
 void DrawGui(OPI_Gui::Manager* gui)
 {
-	for (OPI_Gui::Element* element : gui->children) {
-		if (element->isVisible)
-			DrawImage(element->x, element->y, element->getTexture());
+	for (OPI_Gui::Element* child : gui->children) {
+		if (child->isVisible)
+			DrawElement(0, 0, child);
 	}
 }
 
@@ -1194,7 +1205,7 @@ int main(int argc, char *argv[])
 	OPI_Gui::ElementThemeGridRect a = OPI_Gui::ElementThemeGridRect();
 
 	// Test out a GridRect panel
-	auto *panel_GridRect = new OPI_Gui::Panel(OPI_Gui::ElementThemeType::GridRect,"ice", 240, 240, 500, 250);
+	auto *panel_GridRect = new OPI_Gui::Panel(OPI_Gui::ElementThemeType::GridRect,"ice", 240, 240, 600, 420);
 	panel_GridRect->isVisible = true; 
 	panel_GridRect->isClosable = true;
 	panel_GridRect->isResizable = true;
@@ -1207,7 +1218,12 @@ int main(int argc, char *argv[])
 	panel_Image->isResizable = false;
 	panel_Image->isClosable = true;
 	panel_Image->isMovable = true;
-	gui->addElement(panel_Image);
+	panel_GridRect->addElement(panel_Image);
+
+	// Test out button with normal image set render
+	auto *button_Image = new OPI_Gui::Button(OPI_Gui::ElementThemeType::Button, "basic", 10, 10);
+	button_Image->isVisible = true;
+	panel_Image->addElement(button_Image);
 
 	background.setImage("IMG/back.png");
 	selector.setImage("IMG/selector.png");

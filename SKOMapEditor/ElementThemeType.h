@@ -6,7 +6,8 @@ namespace OPI_Gui
 	enum class ElementThemeType
 	{
 		Image,
-		GridRect
+		GridRect,
+		Button
 	};
 }
 

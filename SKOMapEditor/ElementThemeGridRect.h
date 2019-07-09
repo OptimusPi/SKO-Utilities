@@ -12,6 +12,8 @@ namespace OPI_Gui
 		virtual ~ElementThemeGridRect();
 		int getMinimumWidth();
 		int getMinimumHeight();
+		int getMaximumWidth();
+		int getMaximumHeight();
 		void render(OPI_Gui::Element* element);
 		unsigned short int tileWidth;
 		unsigned short int tileHeight;

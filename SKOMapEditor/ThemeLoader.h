@@ -26,8 +26,9 @@ namespace OPI_Gui
 		OPI_Gui::ElementTheme *getTheme(OPI_Gui::ElementThemeType type, std::string theme);
 
 		// Load themes from disk and add them to cache
-		void loadTheme_ElementThemeGridRect(std::string theme);
-		void loadTheme_ElementThemeImage(std::string theme);
+		void loadTheme_GridRect(std::string theme);
+		void loadTheme_Image(std::string theme);
+		void loadTheme_Button(std::string theme);
 
 		// Get a unique key to look up in the dictionary
 		std::string generateKey(OPI_Gui::ElementThemeType type, std::string theme);
