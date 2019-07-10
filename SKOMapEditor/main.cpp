@@ -455,10 +455,9 @@ void DrawGameScene()
 void DrawElement(int x, int y, OPI_Gui::Element *element)
 {
 	DrawImage(x + element->x, y + element->y, element->getTexture());
-	DrawImage(x + element->x+25, y + element->y+25, element->getTexture());
 	for (OPI_Gui::Element* child : element->children) {
 		if (child->isVisible)
-			DrawElement(element->x, element->y, child);
+			DrawElement(x + element->x, y + element->y, child);
 	}
 }
 
@@ -1204,16 +1203,17 @@ int main(int argc, char *argv[])
 	
 	OPI_Gui::ElementThemeGridRect a = OPI_Gui::ElementThemeGridRect();
 
-	// Test out a GridRect panel
-	auto *panel_GridRect = new OPI_Gui::Panel(OPI_Gui::ElementThemeType::GridRect,"ice", 240, 240, 600, 420);
-	panel_GridRect->isVisible = true; 
+
+	//// Test out a GridRect panel
+	auto *panel_GridRect = new OPI_Gui::Panel(OPI_Gui::ElementThemeType::GridRect, "ice", 100, 100, 433, 433);
+	panel_GridRect->isVisible = true;
 	panel_GridRect->isClosable = true;
 	panel_GridRect->isResizable = true;
 	panel_GridRect->isMovable = true;
 	gui->addElement(panel_GridRect);
 
 	// Test out an Image panel
-	auto *panel_Image = new OPI_Gui::Panel(OPI_Gui::ElementThemeType::Image, "vapor", 600, 600);
+	auto *panel_Image = new OPI_Gui::Panel(OPI_Gui::ElementThemeType::Image, "vapor", 51, 51);
 	panel_Image->isVisible = true;
 	panel_Image->isResizable = false;
 	panel_Image->isClosable = true;
@@ -1223,6 +1223,7 @@ int main(int argc, char *argv[])
 	// Test out button with normal image set render
 	auto *button_Image = new OPI_Gui::Button(OPI_Gui::ElementThemeType::Button, "basic", 10, 10);
 	button_Image->isVisible = true;
+	button_Image->isEnabled = false;
 	panel_Image->addElement(button_Image);
 
 	background.setImage("IMG/back.png");
