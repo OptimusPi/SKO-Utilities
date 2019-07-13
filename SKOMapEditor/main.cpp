@@ -1149,6 +1149,9 @@ void HandleInput()
 	} //if poll event
 }
 
+
+
+
 #ifdef _WIN32
 #include <shellapi.h>
 
@@ -1221,14 +1224,18 @@ int main(int argc, char *argv[])
 	panel_GridRect->addElement(panel_Image);
 
 	// Test out button with normal image set render
-	auto *button_Image = new OPI_Gui::Button(OPI_Gui::ElementThemeType::Button, "basic", 10, 10);
+	auto *button_Image = new OPI_Gui::Button("basic", 15, 15);
 	button_Image->isVisible = true;
-	button_Image->isEnabled = false;
+	button_Image->isEnabled = true;
 	panel_Image->addElement(button_Image);
 
 	background.setImage("IMG/back.png");
 	selector.setImage("IMG/selector.png");
 	stickman_img.setImage("IMG/stickman.png");
+
+	button_Image->addCallback([]() {
+		std::cout << "ButtonClickTest ran." << std::endl; 
+	});
 
 	//Render the text
 	SDL_Color color;

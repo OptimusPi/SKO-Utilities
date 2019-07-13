@@ -15,8 +15,6 @@ void OPI_Gui::Element::addElement(OPI_Gui::Element *element)
 
 void OPI_Gui::Element::setTexture(OPI_Image * texture)
 {
-	if (this->texture)
-		delete this->texture;
 	this->texture = texture;
 }
 

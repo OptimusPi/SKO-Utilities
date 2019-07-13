@@ -32,6 +32,8 @@ namespace OPI_Gui
 		void handleMousePressRight(int mouseX, int mouseY);
 		void handleMouseReleaseLeft(int mouseX, int mouseY);
 		void handleMouseReleaseRight(int mouseX, int mouseY);
+
+		// Recursive mouse events 
 		std::vector<OPI_Gui::Element*> children;
 	private:
 		SDL_Cursor *cursorNormal;

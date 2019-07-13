@@ -115,6 +115,16 @@ void OPI_Gui::Manager::handleMousePressRight(int mouseX, int mouseY)
 	}
 }
 
+//void OPI_Gui::Manager::handleMouseReleaseLeft(OPI_Gui::Element *element, int mouseX, int mouseY)
+//{
+//	for (auto i = element->children.rbegin(); i != element->children.rend(); i++)
+//	{
+//		OPI_Gui::Element *child = *i;
+//		handleMouseReleaseLeft(child, mouseX, mouseY);
+//		if (element->handleMouseReleaseLeft(mouseX, mouseY))
+//			break;
+//	}
+//}
 
 void OPI_Gui::Manager::handleMouseReleaseLeft(int mouseX, int mouseY)
 {

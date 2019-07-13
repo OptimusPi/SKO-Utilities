@@ -1,4 +1,5 @@
 #include "ElementThemeButton.h"
+#include "Button.h"
 
 OPI_Gui::ElementThemeButton::ElementThemeButton()
 {
@@ -31,7 +32,11 @@ int OPI_Gui::ElementThemeButton::getMaximumHeight()
 
 void OPI_Gui::ElementThemeButton::render(OPI_Gui::Element * element)
 {
-	auto button = (OPI_Gui::Button*)element;
+	return;
+}
+
+void OPI_Gui::ElementThemeButton::render(OPI_Gui::Button * button)
+{
 
 	if (!button->isEnabled)
 	{
@@ -39,22 +44,15 @@ void OPI_Gui::ElementThemeButton::render(OPI_Gui::Element * element)
 		return;
 	}
 
-	if (!button->isPressed)
+	if (button->isPressed)
 	{
 		button->setTexture(this->texturePressed);
 		return;
 	}
 
-	if (!button->isSelected)
+	if (button->isSelected)
 	{
 		button->setTexture(this->textureSelected);
-		return;
-	}
-
-
-	if (!button->isEnabled)
-	{
-		button->setTexture(this->textureDisabled);
 		return;
 	}
 

@@ -8,6 +8,7 @@
 #include "OPI_Text.h"
 #include "ThemeLoader.h"
 #include "Manager.h"
+#include "ElementThemeButton.h"
 
 #include <string>
 
@@ -16,12 +17,12 @@ namespace OPI_Gui
 	class Button : public Element
 	{
 	public:
-		Button(OPI_Gui::ElementThemeType type, std::string theme, int x, int y);
+		Button(std::string theme, int x, int y);
 		virtual ~Button();
 		void addCallback(std::function<void(void)> callback);
-		bool isPressed;
-		bool isSelected;
-		bool isEnabled;
+		bool isPressed = false;
+		bool isSelected = false;
+		bool isEnabled = true;
 
 		// Input handlers
 		bool handleMouseMove(int mouseX, int mouseY);
@@ -29,11 +30,10 @@ namespace OPI_Gui
 		bool handleMousePressRight(int mouseX, int mouseY);
 		bool handleMouseReleaseRight(int mouseX, int mouseY);
 		bool handleMouseReleaseLeft(int mouseX, int mouseY);
-		bool movableContainsMouse(int mouseX, int mouseY);
-		bool resizableContainsMouse(int mouseX, int mouseY);
-		bool closableContainsMouse(int mouseX, int mouseY);
 	private:
-		OPI_Gui::ElementTheme *theme;
+		bool clickableContainsMouse(int mouseX, int mouseY);
+		void setCursor(CursorType cursor);
+		OPI_Gui::ElementThemeButton *theme;
 		OPI_Image *texture;
 		OPI_Text *text;
 

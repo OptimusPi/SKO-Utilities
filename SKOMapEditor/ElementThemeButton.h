@@ -7,7 +7,9 @@
 
 namespace OPI_Gui
 {
-	class ElementThemeButton : public ElementTheme
+	class Button;
+
+	class ElementThemeButton : public ElementTheme 
 	{
 	public:
 		ElementThemeButton();
@@ -17,11 +19,13 @@ namespace OPI_Gui
 		int getMaximumWidth();
 		int getMaximumHeight();
 		void render(OPI_Gui::Element* element);
+		void render(OPI_Gui::Button* button);
 		OPI_Image *textureEnabled;
 		OPI_Image *textureDisabled;
 		OPI_Image *texturePressed;
 		OPI_Image *textureSelected;
 	private:
+		
 	};
 }
 
