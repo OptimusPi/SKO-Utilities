@@ -3,6 +3,8 @@
 
 #include "OPI_GuiElement.h"
 #include "OPI_GuiMessageBoxType.h"
+#include "OPI_Image.h"
+#include "OPI_Text.h"
 
 namespace OPI_Gui
 {
@@ -10,8 +12,9 @@ namespace OPI_Gui
 	{
 	public:
 		MessageBox(std::string message);
-		MessageBox(std::string message, MessageBoxType mode);
+		MessageBox(std::string message, MessageBoxType type);
 		virtual ~MessageBox();
+		OPI_Image *texture;
 	};
 }
 
