@@ -3,12 +3,12 @@
 
 #include <functional>
 
-#include "Element.h"
+#include "OPI_GuiElement.h"
 #include "OPI_Image.h"
 #include "OPI_Text.h"
-#include "ThemeLoader.h"
-#include "Manager.h"
-#include "ElementThemeButton.h"
+#include "OPI_GuiThemeLoader.h"
+#include "OPI_GuiManager.h"
+#include "OPI_GuiElementThemeButton.h"
 
 #include <string>
 

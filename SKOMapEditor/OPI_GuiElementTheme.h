@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "Element.h"
+#include "OPI_GuiElement.h"
 
 namespace OPI_Gui
 {

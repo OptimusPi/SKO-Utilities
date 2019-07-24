@@ -4,8 +4,8 @@
 #include <string>
 #include <map>
 
-#include "ElementTheme.h"
-#include "ElementThemeType.h"
+#include "OPI_GuiElementTheme.h"
+#include "OPI_GuiElementThemeType.h"
 
 namespace OPI_Gui
 {

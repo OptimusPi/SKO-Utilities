@@ -1,5 +1,5 @@
 #include "OPI_Image.h"
-#include "ElementTheme.h"
+#include "OPI_GuiElementTheme.h"
 
 #ifndef __OPI_GUI_ELEMENTTHEMEIMAGE_
 #define __OPI_GUI_ELEMENTTHEMEIMAGE_

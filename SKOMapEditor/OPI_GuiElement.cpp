@@ -1,4 +1,4 @@
-#include "Element.h"
+#include "OPI_GuiElement.h"
 
 
 void OPI_Gui::Element::addElement(OPI_Gui::Element *element)

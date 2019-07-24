@@ -1,9 +1,9 @@
 #include <typeinfo>
 
-#include "ThemeLoader.h"
-#include "ElementThemeGridRect.h"
-#include "ElementThemeImage.h"
-#include "ElementThemeButton.h"
+#include "OPI_GuiThemeLoader.h"
+#include "OPI_GuiElementThemeGridRect.h"
+#include "OPI_GuiElementThemeImage.h"
+#include "OPI_GuiElementThemeButton.h"
 
 /// Singleton instance
 OPI_Gui::ThemeLoader * OPI_Gui::ThemeLoader::instance;

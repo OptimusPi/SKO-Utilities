@@ -9,16 +9,16 @@
 	#include <SDL/SDL.h>
 #endif
 
-#include "CursorType.h"
-#include "Element.h"
+#include "OPI_GuiCursorType.h"
+#include "OPI_GuiElement.h"
  
 namespace OPI_Gui
 {
 	/// Singleton
-	class Manager
+	class GuiManager
 	{
 	public:
-		static Manager* getInstance();
+		static GuiManager* getInstance();
 		void addElement(OPI_Gui::Element *element);
 		void setCursor(OPI_Gui::CursorType selectedCursor);
 		void initCursors(std::string normal, std::string move, std::string resize, std::string hourglass, std::string hand);
@@ -41,8 +41,8 @@ namespace OPI_Gui
 		SDL_Cursor *cursorResize;
 		SDL_Cursor *cursorHourglass;
 		SDL_Cursor *cursorHand;
-		static Manager * instance;
-		Manager() {};
+		static GuiManager * instance;
+		GuiManager() {};
 	};
 }
 

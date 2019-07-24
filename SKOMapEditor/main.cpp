@@ -17,12 +17,12 @@
 #include <fstream>
 #include "OPI_Timestep.h"
 #include "OPI_Text.h"
-#include "OPI_Fonts.h"
+#include "OPI_FontManager.h"
 #include "OPI_Clock.h"
 #include "OPI_Sleep.h"
-#include "Manager.h"
-#include "Panel.h"
-#include "Button.h"
+#include "OPI_GuiManager.h"
+#include "OPI_GuiPanel.h"
+#include "OPI_GuiButton.h"
 
 int originalWindowWidth = 1280;
 int originalWindowHeight = 720;
@@ -89,7 +89,7 @@ int current_tile_img = 0;
   OPI_Image background;
   OPI_Image selector;
   OPI_Image stickman_img;
-  OPI_Gui::Manager *gui;
+  OPI_Gui::GuiManager *gui;
 
   //font.setImage("IMG/font.png");
 
@@ -461,7 +461,7 @@ void DrawElement(int x, int y, OPI_Gui::Element *element)
 	}
 }
 
-void DrawGui(OPI_Gui::Manager* gui)
+void DrawGui(OPI_Gui::GuiManager* gui)
 {
 	for (OPI_Gui::Element* child : gui->children) {
 		if (child->isVisible)
@@ -1201,7 +1201,7 @@ int main(int argc, char *argv[])
         return 1;
 
     initScreen();
-	gui = OPI_Gui::Manager::getInstance();
+	gui = OPI_Gui::GuiManager::getInstance();
 	gui->initCursors("IMG/GUI/cursors/normal.png", "IMG/GUI/cursors/move.png", "IMG/GUI/cursors/resize.png", "IMG/GUI/cursors/hourglass.png", "IMG/GUI/cursors/hand.png");
 	
 	OPI_Gui::ElementThemeGridRect a = OPI_Gui::ElementThemeGridRect();
@@ -1244,7 +1244,7 @@ int main(int argc, char *argv[])
 	color.b = 200;
 
 	//TODO - load from config file
-	OPI_Fonts *fonts = new OPI_Fonts(); 
+	FontManager *fonts = new FontManager(); 
 	if (!fonts->init())
 	{
 		printf("Could not initialize SDL_ttf!\n");

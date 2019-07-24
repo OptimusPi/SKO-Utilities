@@ -4,10 +4,10 @@
 #include <vector>
 #include <string>
 #include "OPI_Image.h"
-#include "Manager.h"
-#include "Element.h"
-#include "ElementThemeGridRect.h" // TODO is this needed
-#include "ThemeLoader.h"
+#include "OPI_GuiManager.h"
+#include "OPI_GuiElement.h"
+#include "OPI_GuiElementThemeGridRect.h" // TODO is this needed
+#include "OPI_GuiThemeLoader.h"
 
 #ifdef _WIN32
 	#include "SDL.h"
@@ -21,7 +21,7 @@
 
 namespace OPI_Gui
 {
-	class Manager;
+	class GuiManager;
 
 	class Panel : public Element
 	{

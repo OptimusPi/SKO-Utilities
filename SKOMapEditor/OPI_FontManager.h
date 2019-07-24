@@ -17,10 +17,10 @@
 // Custom OPI Classes
 #include "OPI_Image.h"
 
-class OPI_Fonts
+class FontManager
 {
 public:
-	OPI_Fonts();
+	FontManager();
 	bool init();
 	void addFont(std::string fontName, std::string fontPath);
 	TTF_Font* getFont(std::string fontName);

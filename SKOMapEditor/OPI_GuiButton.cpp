@@ -1,4 +1,4 @@
-#include "Button.h"
+#include "OPI_GuiButton.h"
 
 OPI_Gui::Button::Button(std::string theme, int x, int y)
 {
@@ -19,7 +19,7 @@ void OPI_Gui::Button::addCallback(std::function<void(void)> callback)
 
 void OPI_Gui::Button::setCursor(OPI_Gui::CursorType cursor)
 {
-	OPI_Gui::Manager::getInstance()->setCursor(cursor);
+	OPI_Gui::GuiManager::getInstance()->setCursor(cursor);
 }
 
 bool OPI_Gui::Button::clickableContainsMouse(int mouseX, int mouseY)

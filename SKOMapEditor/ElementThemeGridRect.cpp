@@ -1,4 +1,4 @@
-#include "ElementThemeGridRect.h"
+#include "OPI_GuiElementThemeGridRect.h"
 
 OPI_Gui::ElementThemeGridRect::ElementThemeGridRect()
 {

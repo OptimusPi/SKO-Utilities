@@ -1,20 +1,20 @@
-#include "Manager.h"
-#include "Panel.h"
+#include "OPI_GuiManager.h"
+#include "OPI_GuiPanel.h"
 
 
 ///Singleton instance
-OPI_Gui::Manager * OPI_Gui::Manager::instance;
-OPI_Gui::Manager * OPI_Gui::Manager::getInstance()
+OPI_Gui::GuiManager * OPI_Gui::GuiManager::instance;
+OPI_Gui::GuiManager * OPI_Gui::GuiManager::getInstance()
 {
-	if (!OPI_Gui::Manager::instance) 
+	if (!OPI_Gui::GuiManager::instance) 
 	{
-		OPI_Gui::Manager::instance = new OPI_Gui::Manager;
+		OPI_Gui::GuiManager::instance = new OPI_Gui::GuiManager;
 	}
 
-	return OPI_Gui::Manager::instance;
+	return OPI_Gui::GuiManager::instance;
 }
 
-void OPI_Gui::Manager::initCursors(std::string normal, std::string move, std::string resize, std::string hourglass, std::string hand)
+void OPI_Gui::GuiManager::initCursors(std::string normal, std::string move, std::string resize, std::string hourglass, std::string hand)
 {
 	// Load cursor images
 	SDL_Surface* cursorSurfaceNormal = OPI_Image::getSurface(normal);
@@ -40,12 +40,12 @@ void OPI_Gui::Manager::initCursors(std::string normal, std::string move, std::st
 	this->setCursor(OPI_Gui::CursorType::Normal);
 }
 
-void OPI_Gui::Manager::addElement(OPI_Gui::Element *element)
+void OPI_Gui::GuiManager::addElement(OPI_Gui::Element *element)
 {
 	children.push_back(element);
 }
 
-void OPI_Gui::Manager::setCursor(OPI_Gui::CursorType selectedCursor)
+void OPI_Gui::GuiManager::setCursor(OPI_Gui::CursorType selectedCursor)
 {
 	switch (selectedCursor)
 	{
@@ -70,7 +70,7 @@ void OPI_Gui::Manager::setCursor(OPI_Gui::CursorType selectedCursor)
 
 
 
-bool OPI_Gui::Manager::handleMouseMove_InteractingElements(int mouseX, int mouseY)
+bool OPI_Gui::GuiManager::handleMouseMove_InteractingElements(int mouseX, int mouseY)
 {
 	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
 	{
@@ -81,7 +81,7 @@ bool OPI_Gui::Manager::handleMouseMove_InteractingElements(int mouseX, int mouse
 	return false;
 }
 
-void OPI_Gui::Manager::handleMouseMove(int mouseX, int mouseY)
+void OPI_Gui::GuiManager::handleMouseMove(int mouseX, int mouseY)
 {
 	// Allow elements to pass over, under, and across each other when dragging without losing mouse focus
 	if (handleMouseMove_InteractingElements(mouseX, mouseY))
@@ -95,7 +95,7 @@ void OPI_Gui::Manager::handleMouseMove(int mouseX, int mouseY)
 	}
 }
 
-void OPI_Gui::Manager::handleMousePressLeft(int mouseX, int mouseY)
+void OPI_Gui::GuiManager::handleMousePressLeft(int mouseX, int mouseY)
 {
 	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
 	{
@@ -105,7 +105,7 @@ void OPI_Gui::Manager::handleMousePressLeft(int mouseX, int mouseY)
 	}
 }
 
-void OPI_Gui::Manager::handleMousePressRight(int mouseX, int mouseY)
+void OPI_Gui::GuiManager::handleMousePressRight(int mouseX, int mouseY)
 {
 	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
 	{
@@ -126,7 +126,7 @@ void OPI_Gui::Manager::handleMousePressRight(int mouseX, int mouseY)
 //	}
 //}
 
-void OPI_Gui::Manager::handleMouseReleaseLeft(int mouseX, int mouseY)
+void OPI_Gui::GuiManager::handleMouseReleaseLeft(int mouseX, int mouseY)
 {
 	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
 	{
@@ -136,7 +136,7 @@ void OPI_Gui::Manager::handleMouseReleaseLeft(int mouseX, int mouseY)
 	}
 }
 
-void OPI_Gui::Manager::handleMouseReleaseRight(int mouseX, int mouseY)
+void OPI_Gui::GuiManager::handleMouseReleaseRight(int mouseX, int mouseY)
 {
 	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
 	{
