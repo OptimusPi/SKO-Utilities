@@ -117,6 +117,12 @@
     <ClInclude Include="OPI_Text.h">
       <Filter>Header Files\Text</Filter>
     </ClInclude>
+    <ClInclude Include="OPI_GuiMessageBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OPI_GuiMessageBoxType.h">
+      <Filter>Header Files\GUI\Enums</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -157,6 +163,9 @@
     </ClCompile>
     <ClCompile Include="OPI_GuiElementThemeImage.cpp">
       <Filter>Source Files\GUI\Themes</Filter>
+    </ClCompile>
+    <ClCompile Include="OPI_GuiMessageBox.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
