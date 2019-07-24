@@ -179,9 +179,9 @@
   <ItemGroup>
     <ClCompile Include="OPI_GuiButton.cpp" />
     <ClCompile Include="OPI_GuiElement.cpp" />
-    <ClCompile Include="ElementThemeButton.cpp" />
-    <ClCompile Include="ElementThemeGridRect.cpp" />
-    <ClCompile Include="ElementThemeImage.cpp" />
+    <ClCompile Include="OPI_GuiElementThemeButton.cpp" />
+    <ClCompile Include="OPI_GuiElementThemeGridRect.cpp" />
+    <ClCompile Include="OPI_GuiElementThemeImage.cpp" />
     <ClCompile Include="OPI_Fonts.cpp" />
     <ClCompile Include="OPI_GuiManager.cpp" />
     <ClCompile Include="OPI_Image.cpp" />

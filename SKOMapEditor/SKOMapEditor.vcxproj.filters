@@ -122,15 +122,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ElementThemeButton.cpp">
-      <Filter>Source Files\GUI\Themes</Filter>
-    </ClCompile>
-    <ClCompile Include="ElementThemeGridRect.cpp">
-      <Filter>Source Files\GUI\Themes</Filter>
-    </ClCompile>
-    <ClCompile Include="ElementThemeImage.cpp">
-      <Filter>Source Files\GUI\Themes</Filter>
-    </ClCompile>
     <ClCompile Include="OPI_Image.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
@@ -157,6 +148,15 @@
     </ClCompile>
     <ClCompile Include="OPI_GuiThemeLoader.cpp">
       <Filter>Source Files\GUI\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="OPI_GuiElementThemeButton.cpp">
+      <Filter>Source Files\GUI\Themes</Filter>
+    </ClCompile>
+    <ClCompile Include="OPI_GuiElementThemeGridRect.cpp">
+      <Filter>Source Files\GUI\Themes</Filter>
+    </ClCompile>
+    <ClCompile Include="OPI_GuiElementThemeImage.cpp">
+      <Filter>Source Files\GUI\Themes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
