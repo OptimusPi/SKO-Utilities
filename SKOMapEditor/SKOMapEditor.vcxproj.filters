@@ -117,11 +117,14 @@
     <ClInclude Include="OPI_Text.h">
       <Filter>Header Files\Text</Filter>
     </ClInclude>
-    <ClInclude Include="OPI_GuiMessageBox.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="OPI_GuiMessageBoxType.h">
       <Filter>Header Files\GUI\Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="OPI_GuiMessageBox.h">
+      <Filter>Header Files\GUI\HighLevelElements</Filter>
+    </ClInclude>
+    <ClInclude Include="OPI_GuiTextLabel.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +168,9 @@
       <Filter>Source Files\GUI\Themes</Filter>
     </ClCompile>
     <ClCompile Include="OPI_GuiMessageBox.cpp">
+      <Filter>Source Files\GUI\HighLevelElements</Filter>
+    </ClCompile>
+    <ClCompile Include="OPI_GuiTextLabel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

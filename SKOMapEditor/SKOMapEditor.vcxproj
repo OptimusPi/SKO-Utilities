@@ -170,6 +170,7 @@
     <ClInclude Include="OPI_GuiManager.h" />
     <ClInclude Include="OPI_GuiMessageBox.h" />
     <ClInclude Include="OPI_GuiPanel.h" />
+    <ClInclude Include="OPI_GuiTextLabel.h" />
     <ClInclude Include="OPI_Timestep.h" />
     <ClInclude Include="OPI_Clock.h" />
     <ClInclude Include="OPI_Image.h" />
@@ -187,6 +188,7 @@
     <ClCompile Include="OPI_Fonts.cpp" />
     <ClCompile Include="OPI_GuiManager.cpp" />
     <ClCompile Include="OPI_GuiMessageBox.cpp" />
+    <ClCompile Include="OPI_GuiTextLabel.cpp" />
     <ClCompile Include="OPI_Image.cpp" />
     <ClCompile Include="OPI_GuiPanel.cpp" />
     <ClCompile Include="OPI_Timestep.cpp" />
