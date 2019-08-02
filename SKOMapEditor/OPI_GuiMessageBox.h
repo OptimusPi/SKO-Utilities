@@ -26,7 +26,6 @@ namespace OPI_Gui
 		// Input handlers
 		bool isInteracting();
 
-		OPI_Image *texture;
 		ElementTheme *theme;
 		MessageBoxType type = MessageBoxType::Okay;
 

@@ -46,8 +46,6 @@ void OPI_Gui::MessageBox::addText()
 	addElement(textLabel);
 	this->width = textLabel->getTexture()->width + this->DefaultPadding * 2;
 	this->height = textLabel->getTexture()->width + this->DefaultPadding * 2;
-	this->width = 100;
-	this->height = 100;
 }
 
 void OPI_Gui::MessageBox::addButtons()
