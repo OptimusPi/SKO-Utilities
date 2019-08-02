@@ -16,19 +16,22 @@ namespace OPI_Gui
 	class MessageBox : public Panel
 	{
 	public:
-		MessageBox(ElementThemeType themeType, std::string theme, std::string message, TTF_Font* font, bool wordWrap = false);
-		MessageBox(ElementThemeType themeType, std::string theme, std::string message, MessageBoxType messageBoxType, TTF_Font* font, bool wordWrap = false);
+		MessageBox(std::string message, TTF_Font* font, 
+			bool wordWrap = false, ElementThemeType themeType = ElementThemeType::GridRect, std::string theme = "default");
+		MessageBox(std::string message, MessageBoxType messageBoxType, TTF_Font* font, 
+			bool wordWrap = false, ElementThemeType themeType = ElementThemeType::GridRect, std::string theme = "default");
 		virtual ~MessageBox();
 		void setText(std::string message);
 		
+		// Input handlers
+		bool isInteracting();
+
 		OPI_Image *texture;
 		ElementTheme *theme;
 		MessageBoxType type = MessageBoxType::Okay;
 
 		OPI_Text *message;
 		TTF_Font *font;
-		int width;
-		int height;
 		bool wordWrap = false;
 		const int DefaultPadding = 32;
 	private:

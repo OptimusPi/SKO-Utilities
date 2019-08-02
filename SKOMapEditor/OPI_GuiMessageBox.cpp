@@ -5,8 +5,13 @@ OPI_Gui::MessageBox::~MessageBox()
 
 }
 
-OPI_Gui::MessageBox::MessageBox(OPI_Gui::ElementThemeType themeType, std::string theme, std::string message, TTF_Font* font, bool wordWrap)
-	: Panel(OPI_Gui::ElementThemeType::GridRect, "default", 0, 0)
+bool OPI_Gui::MessageBox::isInteracting()
+{
+	return true;
+}
+
+OPI_Gui::MessageBox::MessageBox(std::string message, TTF_Font* font, bool wordWrap, OPI_Gui::ElementThemeType themeType, std::string theme)
+	: Panel(themeType, theme, 0, 0)
 {
 	this->theme = OPI_Gui::ThemeLoader::GetTheme(themeType, theme);
 	this->message = new OPI_Text(message, font, wordWrap);
@@ -14,15 +19,19 @@ OPI_Gui::MessageBox::MessageBox(OPI_Gui::ElementThemeType themeType, std::string
 	this->theme->render(this);
 	this->addText();
 	this->addButtons();
+	this->isVisible = true;
 }
 
-OPI_Gui::MessageBox::MessageBox(OPI_Gui::ElementThemeType themeType, std::string theme, std::string message, OPI_Gui::MessageBoxType messageBoxType, TTF_Font* font, bool wordWrap)
-	: Panel(OPI_Gui::ElementThemeType::GridRect, "default", 0, 0)
+OPI_Gui::MessageBox::MessageBox(std::string message, OPI_Gui::MessageBoxType messageBoxType, TTF_Font* font, bool wordWrap, OPI_Gui::ElementThemeType themeType, std::string theme)
+	: Panel(themeType, theme, 0, 0)
 {
 	this->theme = OPI_Gui::ThemeLoader::GetTheme(themeType, theme);
 	this->message = new OPI_Text(message, font, wordWrap);
 	this->wordWrap = wordWrap;
 	this->theme->render(this);
+	this->addText();
+	this->addButtons();
+	this->isVisible = true;
 }
 
 void OPI_Gui::MessageBox::setText(std::string message)
@@ -35,6 +44,10 @@ void OPI_Gui::MessageBox::addText()
 {
 	OPI_Gui::TextLabel *textLabel = new OPI_Gui::TextLabel(this->width/2 - this->message->contentRender.width, this->height/2, this->message);
 	addElement(textLabel);
+	this->width = textLabel->getTexture()->width + this->DefaultPadding * 2;
+	this->height = textLabel->getTexture()->width + this->DefaultPadding * 2;
+	this->width = 100;
+	this->height = 100;
 }
 
 void OPI_Gui::MessageBox::addButtons()
@@ -53,7 +66,7 @@ void OPI_Gui::MessageBox::addButtons()
 	OPI_Gui::Button *yesButton = nullptr;
 	OPI_Gui::Button *noButton = nullptr;
 
-	switch (this->type) 
+	switch (this->type)
 	{
 	case OPI_Gui::MessageBoxType::Okay:
 

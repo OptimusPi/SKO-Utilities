@@ -1,15 +1,11 @@
 #include "OPI_GuiTextLabel.h"
 
-OPI_Gui::TextLabel::TextLabel()
-{
-
-}
-
 OPI_Gui::TextLabel::TextLabel(int x, int y, OPI_Text * text)
 {
 	this->text = text;
 	this->x = x;
 	this->y = y;
+	this->setTexture(&text->contentRender);
 }
 
 

@@ -23,6 +23,8 @@
 #include "OPI_GuiManager.h"
 #include "OPI_GuiPanel.h"
 #include "OPI_GuiButton.h"
+#include "OPI_GuiMessageBox.h"
+#include "OPI_FontManager.h"
 
 int originalWindowWidth = 1280;
 int originalWindowHeight = 720;
@@ -1149,15 +1151,11 @@ void HandleInput()
 	} //if poll event
 }
 
-
-
-
 #ifdef _WIN32
 #include <shellapi.h>
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int nCmdShow)
 {
-
 	LPWSTR *szArgList;
 	int argCount;
 
@@ -1197,7 +1195,7 @@ int main(int argc, char *argv[])
     
     OPI_Timestep *timestep = new OPI_Timestep(60);
     
-    if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
+    if (SDL_Init( SDL_INIT_EVERYTHING ) == -1)
         return 1;
 
     initScreen();
@@ -1206,36 +1204,51 @@ int main(int argc, char *argv[])
 	
 	OPI_Gui::ElementThemeGridRect a = OPI_Gui::ElementThemeGridRect();
 
+	//TODO - Singleton with cached fonts
+	//TODO - load from config file
+	FontManager *fonts = new FontManager();
+	if (!fonts->init())
+	{
+		printf("Could not initialize SDL_ttf!\n");
+	}
+
+	fonts->addFont("RobotoMono-Regular", "fonts/RobotoMono-Regular.ttf");
 
 	//// Test out a GridRect panel
-	auto *panel_GridRect = new OPI_Gui::Panel(OPI_Gui::ElementThemeType::GridRect, "ice", 100, 100, 433, 433);
-	panel_GridRect->isVisible = true;
-	panel_GridRect->isClosable = true;
-	panel_GridRect->isResizable = true;
-	panel_GridRect->isMovable = true;
-	gui->addElement(panel_GridRect);
+	//auto *panel_GridRect = new OPI_Gui::Panel(OPI_Gui::ElementThemeType::GridRect, "ice", 100, 100, 433, 433);
+	//panel_GridRect->isVisible = true;
+	//panel_GridRect->isClosable = true;
+	//panel_GridRect->isResizable = true;
+	//panel_GridRect->isMovable = true;
+	//gui->addElement(panel_GridRect);
 
-	// Test out an Image panel
-	auto *panel_Image = new OPI_Gui::Panel(OPI_Gui::ElementThemeType::Image, "vapor", 51, 51);
-	panel_Image->isVisible = true;
-	panel_Image->isResizable = false;
-	panel_Image->isClosable = true;
-	panel_Image->isMovable = true;
-	panel_GridRect->addElement(panel_Image);
+	//// Test out an Image panel
+	//auto *panel_Image = new OPI_Gui::Panel(OPI_Gui::ElementThemeType::Image, "vapor", 51, 51);
+	//panel_Image->isVisible = true;
+	//panel_Image->isResizable = false;
+	//panel_Image->isClosable = true;
+	//panel_Image->isMovable = true;
+	//panel_GridRect->addElement(panel_Image);
 
-	// Test out button with normal image set render
-	auto *button_Image = new OPI_Gui::Button("basic", 15, 15);
-	button_Image->isVisible = true;
-	button_Image->isEnabled = true;
-	panel_Image->addElement(button_Image);
+	//// Test out button with normal image set render
+	//auto *button_Image = new OPI_Gui::Button("basic", 15, 15);
+	//button_Image->isVisible = true;
+	//button_Image->isEnabled = true;
+	//panel_Image->addElement(button_Image);
+
+	// Test out MessageBox
+	auto testFont = fonts->getFont("RobotoMono-Regular");
+	auto *messageBoxTest = new OPI_Gui::MessageBox("Hello World!", testFont);
+
+	gui->addElement(messageBoxTest);
 
 	background.setImage("IMG/back.png");
 	selector.setImage("IMG/selector.png");
 	stickman_img.setImage("IMG/stickman.png");
 
-	button_Image->addCallback([]() {
+	/*button_Image->addCallback([]() {
 		std::cout << "ButtonClickTest ran." << std::endl; 
-	});
+	});*/
 
 	//Render the text
 	SDL_Color color;
@@ -1243,14 +1256,7 @@ int main(int argc, char *argv[])
 	color.g = 200;
 	color.b = 200;
 
-	//TODO - load from config file
-	FontManager *fonts = new FontManager(); 
-	if (!fonts->init())
-	{
-		printf("Could not initialize SDL_ttf!\n");
-	}
 
-	fonts->addFont("RobotoMono-Regular", "fonts/RobotoMono-Regular.ttf");
 	coords = new OPI_Text("1000, 400", fonts->getFont("RobotoMono-Regular"));
 
 	//stickman

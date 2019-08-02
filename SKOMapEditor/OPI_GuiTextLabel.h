@@ -9,7 +9,6 @@ namespace OPI_Gui
 	class TextLabel : public Element
 	{
 	public:
-		TextLabel();
 		TextLabel(int x, int y, OPI_Text *text);
 		virtual ~TextLabel();
 
