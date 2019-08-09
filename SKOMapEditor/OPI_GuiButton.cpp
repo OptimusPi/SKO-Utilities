@@ -12,6 +12,13 @@ OPI_Gui::Button::Button(std::string theme, int x, int y)
 	this->theme->render(this);
 }
 
+OPI_Gui::Button::Button(std::string theme, int x, int y, std::string text)
+{
+	Button::Button(theme, x, y);
+	auto textLabel = new OPI_Gui::TextLabel();
+	this->addElement(textLabel);
+}
+
 void OPI_Gui::Button::addCallback(std::function<void(void)> callback)
 {
 	this->callback = callback;

@@ -145,3 +145,17 @@ void OPI_Gui::GuiManager::handleMouseReleaseRight(int mouseX, int mouseY)
 			break;
 	}
 }
+
+int OPI_Gui::GuiManager::getScreenWidth()
+{
+	SDL_DisplayMode DM;
+	SDL_GetCurrentDisplayMode(0, &DM);
+	return DM.w;
+}
+
+int OPI_Gui::GuiManager::getScreenHeight()
+{
+	SDL_DisplayMode DM;
+	SDL_GetCurrentDisplayMode(0, &DM);
+	return DM.h;
+}

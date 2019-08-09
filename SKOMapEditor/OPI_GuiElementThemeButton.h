@@ -1,6 +1,6 @@
 #include "OPI_Image.h"
 #include "OPI_GuiElementTheme.h"
-#include "OPI_GuiButton.h";
+#include "OPI_GuiButton.h"
 
 #ifndef __OPI_GUI_ELEMENTTHEMEBUTTON_
 #define __OPI_GUI_ELEMENTTHEMEBUTTON_

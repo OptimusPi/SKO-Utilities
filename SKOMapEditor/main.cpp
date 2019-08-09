@@ -456,7 +456,7 @@ void DrawGameScene()
 
 void DrawElement(int x, int y, OPI_Gui::Element *element)
 {
-	DrawImage(x + element->x, y + element->y, element->getTexture());
+	DrawImage(x + element->x, y + element->y, element->getTexture(), 0.f);
 	for (OPI_Gui::Element* child : element->children) {
 		if (child->isVisible)
 			DrawElement(x + element->x, y + element->y, child);

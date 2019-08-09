@@ -5,7 +5,7 @@
 
 #include "OPI_GuiElement.h"
 #include "OPI_Image.h"
-#include "OPI_Text.h"
+#include "OPI_GuiTextLabel.h"
 #include "OPI_GuiThemeLoader.h"
 #include "OPI_GuiManager.h"
 #include "OPI_GuiElementThemeButton.h"
@@ -18,6 +18,7 @@ namespace OPI_Gui
 	{
 	public:
 		Button(std::string theme, int x, int y);
+		Button(std::string theme, int x, int y, std::string text);
 		virtual ~Button();
 		void addCallback(std::function<void(void)> callback);
 		bool isPressed = false;

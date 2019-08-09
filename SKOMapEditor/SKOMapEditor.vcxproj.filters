@@ -13,50 +13,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\GUI">
-      <UniqueIdentifier>{3031aecf-f956-4a67-b161-da410e5e7060}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GUI\Themes">
-      <UniqueIdentifier>{c186ac27-fbba-492c-8afe-830548b3904b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GUI\BaseElements">
-      <UniqueIdentifier>{6c5f9e93-806e-4259-8e85-fa17c63ee7fe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GUI">
-      <UniqueIdentifier>{4df5737e-bf09-4d82-b609-ecb0cf0978b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GUI\BaseElements">
-      <UniqueIdentifier>{d77abab7-a358-4844-ae9a-244768dc4ccc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GUI\Themes">
-      <UniqueIdentifier>{35d8807c-e602-4d11-8cdc-feffaee1936a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GUI\Managers">
-      <UniqueIdentifier>{a32902a3-c251-4150-a01c-c20e72cfad7a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GUI\Managers">
-      <UniqueIdentifier>{c4412dbd-4aab-4a09-bac3-403509557cf1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GUI\HighLevelElements">
-      <UniqueIdentifier>{3cd09678-0aca-4ba4-a7e1-8592d0f45339}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GUI\HighLevelElements">
-      <UniqueIdentifier>{ce20ecf4-37d9-440e-ae9b-1725c8d0fd92}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GUI\Enums">
-      <UniqueIdentifier>{e7daa2b1-6870-493b-a6cc-ae963f825793}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Graphics">
       <UniqueIdentifier>{6183b399-948b-4660-ae8b-f3813d069a77}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Engine">
       <UniqueIdentifier>{4d7b9eb6-29da-41a5-a648-ba2b8ffda115}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Text">
-      <UniqueIdentifier>{479171ed-667f-4853-b2a4-b8631100d9a2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Text">
-      <UniqueIdentifier>{3df65b30-3cd1-4373-93c9-06d532c00ee2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Graphics">
       <UniqueIdentifier>{0c90ca37-d194-4977-a5d9-9b2880e9b7dc}</UniqueIdentifier>
@@ -64,43 +25,82 @@
     <Filter Include="Source Files\Engine">
       <UniqueIdentifier>{de4a3983-c240-4939-891e-874256b77d94}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Graphics\Text">
+      <UniqueIdentifier>{479171ed-667f-4853-b2a4-b8631100d9a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\GUI">
+      <UniqueIdentifier>{3031aecf-f956-4a67-b161-da410e5e7060}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\GUI\Themes">
+      <UniqueIdentifier>{c186ac27-fbba-492c-8afe-830548b3904b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\GUI\BaseElements">
+      <UniqueIdentifier>{6c5f9e93-806e-4259-8e85-fa17c63ee7fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\GUI\Managers">
+      <UniqueIdentifier>{c4412dbd-4aab-4a09-bac3-403509557cf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\GUI\HighLevelElements">
+      <UniqueIdentifier>{3cd09678-0aca-4ba4-a7e1-8592d0f45339}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\GUI\Enums">
+      <UniqueIdentifier>{e7daa2b1-6870-493b-a6cc-ae963f825793}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\Text">
+      <UniqueIdentifier>{3df65b30-3cd1-4373-93c9-06d532c00ee2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\GUI">
+      <UniqueIdentifier>{4df5737e-bf09-4d82-b609-ecb0cf0978b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\GUI\BaseElements">
+      <UniqueIdentifier>{d77abab7-a358-4844-ae9a-244768dc4ccc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\GUI\Themes">
+      <UniqueIdentifier>{35d8807c-e602-4d11-8cdc-feffaee1936a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\GUI\Managers">
+      <UniqueIdentifier>{a32902a3-c251-4150-a01c-c20e72cfad7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\GUI\HighLevelElements">
+      <UniqueIdentifier>{ce20ecf4-37d9-440e-ae9b-1725c8d0fd92}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OPI_Image.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="OPI_GuiElement.h">
-      <Filter>Header Files\GUI\BaseElements</Filter>
+      <Filter>Header Files\Graphics\GUI\BaseElements</Filter>
     </ClInclude>
     <ClInclude Include="OPI_GuiManager.h">
-      <Filter>Header Files\GUI\Managers</Filter>
+      <Filter>Header Files\Graphics\GUI\Managers</Filter>
     </ClInclude>
     <ClInclude Include="OPI_GuiThemeLoader.h">
-      <Filter>Header Files\GUI\Managers</Filter>
+      <Filter>Header Files\Graphics\GUI\Managers</Filter>
     </ClInclude>
     <ClInclude Include="OPI_GuiCursorType.h">
-      <Filter>Header Files\GUI\Enums</Filter>
+      <Filter>Header Files\Graphics\GUI\Enums</Filter>
     </ClInclude>
     <ClInclude Include="OPI_GuiElementThemeType.h">
-      <Filter>Header Files\GUI\Enums</Filter>
+      <Filter>Header Files\Graphics\GUI\Enums</Filter>
     </ClInclude>
     <ClInclude Include="OPI_GuiElementTheme.h">
-      <Filter>Header Files\GUI\Themes</Filter>
+      <Filter>Header Files\Graphics\GUI\Themes</Filter>
     </ClInclude>
     <ClInclude Include="OPI_GuiElementThemeButton.h">
-      <Filter>Header Files\GUI\Themes</Filter>
+      <Filter>Header Files\Graphics\GUI\Themes</Filter>
     </ClInclude>
     <ClInclude Include="OPI_GuiElementThemeGridRect.h">
-      <Filter>Header Files\GUI\Themes</Filter>
+      <Filter>Header Files\Graphics\GUI\Themes</Filter>
     </ClInclude>
     <ClInclude Include="OPI_GuiElementThemeImage.h">
-      <Filter>Header Files\GUI\Themes</Filter>
+      <Filter>Header Files\Graphics\GUI\Themes</Filter>
     </ClInclude>
     <ClInclude Include="OPI_GuiButton.h">
-      <Filter>Header Files\GUI\BaseElements</Filter>
+      <Filter>Header Files\Graphics\GUI\BaseElements</Filter>
     </ClInclude>
     <ClInclude Include="OPI_GuiPanel.h">
-      <Filter>Header Files\GUI\BaseElements</Filter>
+      <Filter>Header Files\Graphics\GUI\BaseElements</Filter>
     </ClInclude>
     <ClInclude Include="OPI_Clock.h">
       <Filter>Header Files\Engine</Filter>
@@ -109,22 +109,22 @@
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="OPI_FontManager.h">
-      <Filter>Header Files\Text</Filter>
+      <Filter>Header Files\Graphics\Text</Filter>
     </ClInclude>
     <ClInclude Include="OPI_Sleep.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="OPI_Text.h">
-      <Filter>Header Files\Text</Filter>
+      <Filter>Header Files\Graphics\Text</Filter>
     </ClInclude>
     <ClInclude Include="OPI_GuiMessageBoxType.h">
-      <Filter>Header Files\GUI\Enums</Filter>
+      <Filter>Header Files\Graphics\GUI\Enums</Filter>
     </ClInclude>
     <ClInclude Include="OPI_GuiMessageBox.h">
-      <Filter>Header Files\GUI\HighLevelElements</Filter>
+      <Filter>Header Files\Graphics\GUI\HighLevelElements</Filter>
     </ClInclude>
     <ClInclude Include="OPI_GuiTextLabel.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Graphics\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -135,43 +135,43 @@
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="OPI_Fonts.cpp">
-      <Filter>Source Files\Text</Filter>
+      <Filter>Source Files\Graphics\Text</Filter>
     </ClCompile>
     <ClCompile Include="OPI_Text.cpp">
-      <Filter>Source Files\Text</Filter>
+      <Filter>Source Files\Graphics\Text</Filter>
     </ClCompile>
     <ClCompile Include="OPI_Timestep.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="OPI_GuiButton.cpp">
-      <Filter>Source Files\GUI\BaseElements</Filter>
+      <Filter>Source Files\Graphics\GUI\BaseElements</Filter>
     </ClCompile>
     <ClCompile Include="OPI_GuiElement.cpp">
-      <Filter>Source Files\GUI\BaseElements</Filter>
+      <Filter>Source Files\Graphics\GUI\BaseElements</Filter>
     </ClCompile>
     <ClCompile Include="OPI_GuiPanel.cpp">
-      <Filter>Source Files\GUI\BaseElements</Filter>
+      <Filter>Source Files\Graphics\GUI\BaseElements</Filter>
     </ClCompile>
     <ClCompile Include="OPI_GuiManager.cpp">
-      <Filter>Source Files\GUI\Managers</Filter>
+      <Filter>Source Files\Graphics\GUI\Managers</Filter>
     </ClCompile>
     <ClCompile Include="OPI_GuiThemeLoader.cpp">
-      <Filter>Source Files\GUI\Managers</Filter>
+      <Filter>Source Files\Graphics\GUI\Managers</Filter>
     </ClCompile>
     <ClCompile Include="OPI_GuiElementThemeButton.cpp">
-      <Filter>Source Files\GUI\Themes</Filter>
+      <Filter>Source Files\Graphics\GUI\Themes</Filter>
     </ClCompile>
     <ClCompile Include="OPI_GuiElementThemeGridRect.cpp">
-      <Filter>Source Files\GUI\Themes</Filter>
+      <Filter>Source Files\Graphics\GUI\Themes</Filter>
     </ClCompile>
     <ClCompile Include="OPI_GuiElementThemeImage.cpp">
-      <Filter>Source Files\GUI\Themes</Filter>
+      <Filter>Source Files\Graphics\GUI\Themes</Filter>
     </ClCompile>
     <ClCompile Include="OPI_GuiMessageBox.cpp">
-      <Filter>Source Files\GUI\HighLevelElements</Filter>
+      <Filter>Source Files\Graphics\GUI\HighLevelElements</Filter>
     </ClCompile>
     <ClCompile Include="OPI_GuiTextLabel.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Graphics\GUI\BaseElements</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

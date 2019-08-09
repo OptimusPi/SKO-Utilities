@@ -55,7 +55,7 @@ OPI_Gui::ElementTheme * OPI_Gui::ThemeLoader::getTheme(OPI_Gui::ElementThemeType
 void OPI_Gui::ThemeLoader::loadTheme_Image(std::string theme)
 {
 	OPI_Gui::ElementThemeImage *elementThemeImage = new OPI_Gui::ElementThemeImage();
-	std::string themePath = "IMG/GUI/themes/ice/" + theme + ".png";
+	std::string themePath = "IMG/GUI/themes/panel_images/" + theme + ".png";
 	elementThemeImage->texture = new OPI_Image(themePath);
 
 	// Insert into cache
