@@ -12,11 +12,18 @@ OPI_Gui::Button::Button(std::string theme, int x, int y)
 	this->theme->render(this);
 }
 
-OPI_Gui::Button::Button(std::string theme, int x, int y, std::string text)
+OPI_Gui::Button::Button(std::string theme, int x, int y, std::string text, TTF_Font* font)
 {
 	Button::Button(theme, x, y);
-	auto textLabel = new OPI_Gui::TextLabel();
-	this->addElement(textLabel);
+
+	if (font == nullptr) {
+		font = OPI_FontManager::getFont("default");
+	}
+	//auto buttonText = new OPI_Text(text, font);
+	//int buttonTextX = (this->theme->getMinimumWidth() - buttonText->contentRender.width) / 2;
+	//int buttonTextY = (this->theme->getMinimumHeight() - buttonText->contentRender.height) / 2;
+	//auto textLabel = new OPI_Gui::TextLabel(buttonTextX, buttonTextY, buttonText);
+	//this->addElement(textLabel);
 }
 
 void OPI_Gui::Button::addCallback(std::function<void(void)> callback)

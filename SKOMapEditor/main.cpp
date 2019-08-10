@@ -1206,13 +1206,12 @@ int main(int argc, char *argv[])
 
 	//TODO - Singleton with cached fonts
 	//TODO - load from config file
-	FontManager *fonts = new FontManager();
-	if (!fonts->init())
+	if (!OPI_FontManager::init("fonts/RobotoMono-Regular.ttf"))
 	{
 		printf("Could not initialize SDL_ttf!\n");
 	}
 
-	fonts->addFont("RobotoMono-Regular", "fonts/RobotoMono-Regular.ttf");
+	OPI_FontManager::addFont("RobotoMono-Regular", "fonts/RobotoMono-Regular.ttf");
 
 	//// Test out a GridRect panel
 	//auto *panel_GridRect = new OPI_Gui::Panel(OPI_Gui::ElementThemeType::GridRect, "ice", 100, 100, 433, 433);
@@ -1237,7 +1236,7 @@ int main(int argc, char *argv[])
 	//panel_Image->addElement(button_Image);
 
 	// Test out MessageBox
-	auto testFont = fonts->getFont("RobotoMono-Regular");
+	auto testFont = OPI_FontManager::getFont("RobotoMono-Regular");
 	auto *messageBoxTest = new OPI_Gui::MessageBox("Hello World!", testFont);
 
 	gui->addElement(messageBoxTest);
@@ -1257,7 +1256,7 @@ int main(int argc, char *argv[])
 	color.b = 200;
 
 
-	coords = new OPI_Text("1000, 400", fonts->getFont("RobotoMono-Regular"));
+	coords = new OPI_Text("1000, 400", OPI_FontManager::getFont("RobotoMono-Regular"));
 
 	//stickman
 	stickman.x = 0;

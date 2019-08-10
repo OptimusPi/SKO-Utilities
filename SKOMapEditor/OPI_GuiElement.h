@@ -22,11 +22,11 @@ namespace OPI_Gui
 		// Clear out existing texture and free SDL Surface
 		void setTexture(OPI_Image *texture);
 		OPI_Image *getTexture();
-		int x;
-		int y;
-		int width;
-		int height;
-		bool isVisible;
+		int x = 0;
+		int y = 0;
+		int width = 0;
+		int height = 0;
+		bool isVisible = true;
 
 		// Calculates the bounds given by the parent element container
 		int getMinimumX();

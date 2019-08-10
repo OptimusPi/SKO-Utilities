@@ -73,7 +73,7 @@ void OPI_Gui::MessageBox::addButtons()
 	case OPI_Gui::MessageBoxType::Okay:
 		okButtonX = (this->width / 2) - (buttonWidth / 2);
 		okButtonY = this->height - this->DefaultPadding/2 - buttonHeight;
-		okayButton = new OPI_Gui::Button("default", okButtonX, okButtonY);
+		okayButton = new OPI_Gui::Button("default", okButtonX, okButtonY, "Okay");
 		okayButton->isVisible = true;
 		addElement(okayButton);
 		break;

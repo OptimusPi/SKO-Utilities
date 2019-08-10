@@ -185,7 +185,7 @@
     <ClCompile Include="OPI_GuiElementThemeButton.cpp" />
     <ClCompile Include="OPI_GuiElementThemeGridRect.cpp" />
     <ClCompile Include="OPI_GuiElementThemeImage.cpp" />
-    <ClCompile Include="OPI_Fonts.cpp" />
+    <ClCompile Include="OPI_FontManager.cpp" />
     <ClCompile Include="OPI_GuiManager.cpp" />
     <ClCompile Include="OPI_GuiMessageBox.cpp" />
     <ClCompile Include="OPI_GuiTextLabel.cpp" />

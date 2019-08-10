@@ -15,13 +15,13 @@
 #endif
 
 #include "OPI_Image.h"
+#include "OPI_FontManager.h"
 
 class OPI_Text
 {
-      
 	public:
 		OPI_Text();
-		OPI_Text(std::string content, TTF_Font* font = NULL, bool wrapped = false);
+		OPI_Text(std::string content, TTF_Font* font, bool wrapped = false);
 		static bool init();
 		void setText(std::string content, TTF_Font* font = NULL, bool wrapped = false);
 		size_t length();

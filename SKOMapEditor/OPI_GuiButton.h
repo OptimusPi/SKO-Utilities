@@ -9,6 +9,7 @@
 #include "OPI_GuiThemeLoader.h"
 #include "OPI_GuiManager.h"
 #include "OPI_GuiElementThemeButton.h"
+#include "OPI_FontManager.h"
 
 #include <string>
 
@@ -18,7 +19,7 @@ namespace OPI_Gui
 	{
 	public:
 		Button(std::string theme, int x, int y);
-		Button(std::string theme, int x, int y, std::string text);
+		Button(std::string theme, int x, int y, std::string text, TTF_Font* font = nullptr);
 		virtual ~Button();
 		void addCallback(std::function<void(void)> callback);
 		bool isPressed = false;
