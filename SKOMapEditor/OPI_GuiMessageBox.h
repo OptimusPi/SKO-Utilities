@@ -32,7 +32,11 @@ namespace OPI_Gui
 		OPI_Text *message;
 		TTF_Font *font;
 		bool wordWrap = false;
-		const int DefaultPadding = 32;
+		const int DefaultPadding = 24;
+		int buttonRowHeight = 0;
+		int buttonHeight = 0;
+		int buttonWidth = 0;
+
 	private:
 		void addButtons();
 		void addText();

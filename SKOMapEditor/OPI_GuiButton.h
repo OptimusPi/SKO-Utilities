@@ -18,7 +18,6 @@ namespace OPI_Gui
 	class Button : public Element
 	{
 	public:
-		Button(std::string theme, int x, int y);
 		Button(std::string theme, int x, int y, std::string text, TTF_Font* font = nullptr);
 		virtual ~Button();
 		void addCallback(std::function<void(void)> callback);

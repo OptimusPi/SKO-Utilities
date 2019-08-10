@@ -6,6 +6,8 @@ OPI_Gui::TextLabel::TextLabel(int x, int y, OPI_Text * text)
 	this->x = x;
 	this->y = y;
 	this->setTexture(&text->contentRender);
+	this->width = this->getTexture()->width;
+	this->height = this->getTexture()->height;
 }
 
 
@@ -38,3 +40,4 @@ bool OPI_Gui::TextLabel::handleMouseReleaseLeft(int mouseX, int mouseY)
 {
 	return false;
 }
+

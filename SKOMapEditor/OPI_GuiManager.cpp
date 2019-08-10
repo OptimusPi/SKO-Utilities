@@ -6,7 +6,7 @@
 OPI_Gui::GuiManager * OPI_Gui::GuiManager::instance;
 OPI_Gui::GuiManager * OPI_Gui::GuiManager::getInstance()
 {
-	if (!OPI_Gui::GuiManager::instance) 
+	if (!OPI_Gui::GuiManager::instance)
 	{
 		OPI_Gui::GuiManager::instance = new OPI_Gui::GuiManager;
 	}

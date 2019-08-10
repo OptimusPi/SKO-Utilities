@@ -1237,9 +1237,12 @@ int main(int argc, char *argv[])
 
 	// Test out MessageBox
 	auto testFont = OPI_FontManager::getFont("RobotoMono-Regular");
-	auto *messageBoxTest = new OPI_Gui::MessageBox("Hello World!", testFont);
-
+	auto *messageBoxTest = new OPI_Gui::MessageBox("401: Unauthorized.", testFont);
 	gui->addElement(messageBoxTest);
+
+	auto testButton = new OPI_Gui::Button("default", 100, 100, "Hello");
+	gui->addElement(testButton);
+	
 
 	background.setImage("IMG/back.png");
 	selector.setImage("IMG/selector.png");
