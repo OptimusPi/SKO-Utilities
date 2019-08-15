@@ -20,7 +20,7 @@ namespace OPI_Gui
 	public:
 		Button(std::string theme, int x, int y, std::string text, TTF_Font* font = nullptr);
 		virtual ~Button();
-		void addCallback(std::function<void(void)> callback);
+		void addCallback(std::function<void()>);
 		bool isPressed = false;
 		bool isSelected = false;
 		bool isEnabled = true;
@@ -38,7 +38,7 @@ namespace OPI_Gui
 		OPI_Image *texture;
 		OPI_Text *text;
 
-		std::function<void(void)> callback;
+		std::function<void()> callback;
 	};
 }
 #endif

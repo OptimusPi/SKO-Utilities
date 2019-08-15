@@ -22,7 +22,7 @@ OPI_Gui::Button::Button(std::string theme, int x, int y, std::string text, TTF_F
 	this->addElement(textLabel);
 }
 
-void OPI_Gui::Button::addCallback(std::function<void(void)> callback)
+void OPI_Gui::Button::addCallback(std::function<void()> callback)
 {
 	this->callback = callback;
 }

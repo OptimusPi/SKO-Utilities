@@ -34,8 +34,8 @@ namespace OPI_Gui
 		void handleMouseReleaseRight(int mouseX, int mouseY);
 
 		// Get screen dimensions for help placing elements
-		int getScreenWidth();
-		int getScreenHeight();
+		int screenWidth;
+		int screenHeight;
 
 		// Recursive mouse events 
 		std::vector<OPI_Gui::Element*> children;

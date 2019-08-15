@@ -158,6 +158,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Global.h" />
     <ClInclude Include="OPI_GuiMessageBoxType.h" />
     <ClInclude Include="OPI_GuiElementThemeButton.h" />
     <ClInclude Include="OPI_GuiElementThemeGridRect.h" />

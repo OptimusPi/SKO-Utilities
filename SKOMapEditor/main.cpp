@@ -1,20 +1,19 @@
 
 #ifdef _WIN32
-#include "SDL.h"
-#include "SDL_Image.h"
-#include "SDL_opengl.h" 
-
-#else 
-#include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
-#include <SDL/SDL_opengl.h> 
+	#include "SDL.h" 
+	#include "SDL_Image.h" 
+	#include "SDL_opengl.h" 
+#else
+	#include <SDL/SDL.h> 
+	#include <SDL/SDL_image.h> 
+	#include <SDL/SDL_opengl.h> 
 #endif
 
-#include <stdio.h>
-#include <string>
-#include <sstream>
-#include <iostream>
-#include <fstream>
+#include <stdio.h> 
+#include <string> 
+#include <sstream> 
+#include <iostream> 
+#include <fstream> 
 #include "OPI_Timestep.h"
 #include "OPI_Text.h"
 #include "OPI_FontManager.h"
@@ -25,6 +24,11 @@
 #include "OPI_GuiButton.h"
 #include "OPI_GuiMessageBox.h"
 #include "OPI_FontManager.h"
+
+
+// TODO - get rid of Global.h
+#include "Global.h"
+SDL_Window *window;
 
 int originalWindowWidth = 1280;
 int originalWindowHeight = 720;
@@ -46,7 +50,7 @@ bool fringe_mode = 0;
 int save_notify;
 bool SHIFT_HELD = false;
 
-SDL_Window *screen;
+
 SDL_GLContext glContext;
 SDL_Rect collision_rect[32768];
 int collision_ox;
@@ -135,7 +139,7 @@ void DrawImage( int x, int y, const OPI_Image *img, float blendTolerance)
     glEnd();
 
 	glDisable(GL_BLEND);
-} 
+}
 
 void  DrawImage(int x, int y, const OPI_Image *img)
 {
@@ -362,18 +366,17 @@ void sizeScreen()
 
 	glMatrixMode(GL_TEXTURE);
 	glLoadIdentity();
-
 }
 
 void initScreen()
 {
-	screen = SDL_CreateWindow("SKO Map Editor v 0.9.0",
+	window = SDL_CreateWindow("SKO Map Editor v 0.9.0",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
 		windowWidth, windowHeight,
 		SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 
-	glContext = SDL_GL_CreateContext(screen);
+	glContext = SDL_GL_CreateContext(window);
 	sizeScreen();
 }
 
@@ -382,10 +385,9 @@ void drawText(OPI_Text *text);
 
 std::string save = "";
 
-
 void DrawGameScene()
 {
-	//image buffer and background                    
+	//image buffer and background
 	DrawImage(0, 0, &background);
 	DrawImage(512, 0, &background);
 	DrawImage(1024, 0, &background);
@@ -483,7 +485,7 @@ void Graphics()
 	drawText(coords);
 
 	//update screen
-	SDL_GL_SwapWindow(screen);
+	SDL_GL_SwapWindow(window);
 }
 
 void HandleInput()
@@ -1190,13 +1192,14 @@ int main(int argc, char *argv[])
 		loadmap(loadMapFilename);
 		current_tile = number_of_tiles;
 		current_rect = number_of_rects;
-		current_fringe= number_of_fringe;
+		current_fringe = number_of_fringe;
 	}
     
     OPI_Timestep *timestep = new OPI_Timestep(60);
     
-    if (SDL_Init( SDL_INIT_EVERYTHING ) == -1)
-        return 1;
+	if (SDL_Init(SDL_INIT_EVERYTHING) == -1) {
+		return 1;
+	}
 
     initScreen();
 	gui = OPI_Gui::GuiManager::getInstance();
@@ -1214,26 +1217,26 @@ int main(int argc, char *argv[])
 	OPI_FontManager::addFont("RobotoMono-Regular", "fonts/RobotoMono-Regular.ttf");
 
 	//// Test out a GridRect panel
-	//auto *panel_GridRect = new OPI_Gui::Panel(OPI_Gui::ElementThemeType::GridRect, "ice", 100, 100, 433, 433);
-	//panel_GridRect->isVisible = true;
-	//panel_GridRect->isClosable = true;
-	//panel_GridRect->isResizable = true;
-	//panel_GridRect->isMovable = true;
-	//gui->addElement(panel_GridRect);
+	auto *panel_GridRect = new OPI_Gui::Panel(OPI_Gui::ElementThemeType::GridRect, "ice", 100, 100, 433, 433);
+	panel_GridRect->isVisible = true;
+	panel_GridRect->isClosable = true;
+	panel_GridRect->isResizable = true;
+	panel_GridRect->isMovable = true;
+	gui->addElement(panel_GridRect);
 
-	//// Test out an Image panel
-	//auto *panel_Image = new OPI_Gui::Panel(OPI_Gui::ElementThemeType::Image, "vapor", 51, 51);
-	//panel_Image->isVisible = true;
-	//panel_Image->isResizable = false;
-	//panel_Image->isClosable = true;
-	//panel_Image->isMovable = true;
-	//panel_GridRect->addElement(panel_Image);
+	// Test out an Image panel
+	auto *panel_Image = new OPI_Gui::Panel(OPI_Gui::ElementThemeType::Image, "vapor", 51, 51);
+	panel_Image->isVisible = true;
+	panel_Image->isResizable = false;
+	panel_Image->isClosable = true;
+	panel_Image->isMovable = true;
+	panel_GridRect->addElement(panel_Image);
 
-	//// Test out button with normal image set render
-	//auto *button_Image = new OPI_Gui::Button("basic", 15, 15);
-	//button_Image->isVisible = true;
-	//button_Image->isEnabled = true;
-	//panel_Image->addElement(button_Image);
+	// Test out button with normal image set render
+	auto *button_Image = new OPI_Gui::Button("default", 15, 15, "Okay");
+	button_Image->isVisible = true;
+	button_Image->isEnabled = true;
+	panel_Image->addElement(button_Image);
 
 	// Test out MessageBox
 	auto testFont = OPI_FontManager::getFont("RobotoMono-Regular");
@@ -1243,7 +1246,6 @@ int main(int argc, char *argv[])
 	auto testButton = new OPI_Gui::Button("default", 100, 100, "Hello");
 	gui->addElement(testButton);
 	
-
 	background.setImage("IMG/back.png");
 	selector.setImage("IMG/selector.png");
 	stickman_img.setImage("IMG/stickman.png");
@@ -1257,7 +1259,6 @@ int main(int argc, char *argv[])
 	color.r = 255;
 	color.g = 200;
 	color.b = 200;
-
 
 	coords = new OPI_Text("1000, 400", OPI_FontManager::getFont("RobotoMono-Regular"));
 
@@ -1302,20 +1303,20 @@ int main(int argc, char *argv[])
             if (save_notify < clock())
                save_notify = 0;
                           
-                if (OPI_Clock::milliseconds() - coordsTicker  > 15)
-                {  
-                    //draw coords
-                    std::stringstream ss;
-                    ss << "(" << cursor_x+camera_x << ", " << cursor_y+camera_y << ")";
+            if (OPI_Clock::milliseconds() - coordsTicker  > 15)
+            {  
+                //draw coords
+                std::stringstream ss;
+                ss << "(" << cursor_x+camera_x << ", " << cursor_y+camera_y << ")";
 
-                    coords->setText(ss.str());
+                coords->setText(ss.str());
                     
-                    //reset ticker
-                    coordsTicker = OPI_Clock::milliseconds();
-                }        
+                //reset ticker
+                coordsTicker = OPI_Clock::milliseconds();
+            }        
                             
-				Graphics();
-				HandleInput();
+			Graphics();
+			HandleInput();
 
             if (!done && stickman_toggle)
                Physics();

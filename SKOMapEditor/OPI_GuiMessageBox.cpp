@@ -24,11 +24,14 @@ OPI_Gui::MessageBox::MessageBox(std::string message, TTF_Font* font, bool wordWr
 	this->addText();
 	this->addButtons();
 	this->theme->render(this);
-	this->x = 200;// OPI_Gui::GuiManager::getInstance()->getScreenWidth() / 2 - this->width * 2;
-	this->y = 200;// OPI_Gui::GuiManager::getInstance()->getScreenHeight() / 2 - this->height * 2;
+	this->x = OPI_Gui::GuiManager::getInstance()->screenWidth / 2 - this->width / 2;
+	this->y = OPI_Gui::GuiManager::getInstance()->screenHeight / 2 - this->height / 2;
 	this->isVisible = true;
+	this->isMovable = true;
 }
 
+
+//TODO don't duplicate constructor code
 OPI_Gui::MessageBox::MessageBox(std::string message, OPI_Gui::MessageBoxType messageBoxType, TTF_Font* font, bool wordWrap, OPI_Gui::ElementThemeType themeType, std::string theme)
 	: Panel(themeType, theme, 0, 0)
 {
@@ -39,10 +42,12 @@ OPI_Gui::MessageBox::MessageBox(std::string message, OPI_Gui::MessageBoxType mes
 	this->buttonRowHeight = this->buttonHeight + DefaultPadding;
 
 	this->message = new OPI_Text(message, font, wordWrap);
-	this->wordWrap = wordWrap;
-	this->theme->render(this);
+	this->wordWrap = wordWrap;	
 	this->addText();
 	this->addButtons();
+	this->theme->render(this);
+	this->x = OPI_Gui::GuiManager::getInstance()->screenWidth / 2 - this->width / 2;
+	this->y = OPI_Gui::GuiManager::getInstance()->screenHeight / 2 - this->height / 2;
 	this->isVisible = true;
 }
 
@@ -85,14 +90,29 @@ void OPI_Gui::MessageBox::addButtons()
 	OPI_Gui::Button *cancelButton = nullptr;
 	OPI_Gui::Button *yesButton = nullptr;
 	OPI_Gui::Button *noButton = nullptr;
+	std::function<void()> okayCallback;
+	std::function<void()> cancelCallback;
+	std::function<void()> yesCallback;
+	std::function<void()> noCallback;
 
 	switch (this->type)
 	{
 	case OPI_Gui::MessageBoxType::Okay:
+		// Position the Okay button in the center of the button row.
 		okButtonX = (this->width / 2) - (buttonWidth / 2);
 		okButtonY = this->height - this->DefaultPadding - buttonHeight;
+
+		// Create Okay button with default theme & font.
 		okayButton = new OPI_Gui::Button("default", okButtonX, okButtonY, "Okay");
 		okayButton->isVisible = true;
+
+		// Set click handler of Okay to close this Message Box.
+		okayCallback = [this]() {
+			this->isVisible = false;
+		};
+		okayButton->addCallback(okayCallback);
+
+		// Add Okay button
 		addElement(okayButton);
 		break;
 	case OPI_Gui::MessageBoxType::OkayCancel:

@@ -2,13 +2,21 @@
 #include "OPI_GuiPanel.h"
 
 
+// TODO - get rid of Global.h
+#include "Global.h"
+
+
 ///Singleton instance
 OPI_Gui::GuiManager * OPI_Gui::GuiManager::instance;
 OPI_Gui::GuiManager * OPI_Gui::GuiManager::getInstance()
 {
 	if (!OPI_Gui::GuiManager::instance)
 	{
-		OPI_Gui::GuiManager::instance = new OPI_Gui::GuiManager;
+		OPI_Gui::GuiManager *instance = new OPI_Gui::GuiManager;
+		OPI_Gui::GuiManager::instance = instance;
+
+		// Store current window width and height
+		SDL_GetWindowSize(window, &instance->screenWidth, &instance->screenHeight);
 	}
 
 	return OPI_Gui::GuiManager::instance;
@@ -115,17 +123,6 @@ void OPI_Gui::GuiManager::handleMousePressRight(int mouseX, int mouseY)
 	}
 }
 
-//void OPI_Gui::Manager::handleMouseReleaseLeft(OPI_Gui::Element *element, int mouseX, int mouseY)
-//{
-//	for (auto i = element->children.rbegin(); i != element->children.rend(); i++)
-//	{
-//		OPI_Gui::Element *child = *i;
-//		handleMouseReleaseLeft(child, mouseX, mouseY);
-//		if (element->handleMouseReleaseLeft(mouseX, mouseY))
-//			break;
-//	}
-//}
-
 void OPI_Gui::GuiManager::handleMouseReleaseLeft(int mouseX, int mouseY)
 {
 	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
@@ -144,18 +141,4 @@ void OPI_Gui::GuiManager::handleMouseReleaseRight(int mouseX, int mouseY)
 		if (element->handleMouseReleaseRight(mouseX, mouseY))
 			break;
 	}
-}
-
-int OPI_Gui::GuiManager::getScreenWidth()
-{
-	SDL_DisplayMode DM;
-	SDL_GetCurrentDisplayMode(0, &DM);
-	return DM.w;
-}
-
-int OPI_Gui::GuiManager::getScreenHeight()
-{
-	SDL_DisplayMode DM;
-	SDL_GetCurrentDisplayMode(0, &DM);
-	return DM.h;
 }
