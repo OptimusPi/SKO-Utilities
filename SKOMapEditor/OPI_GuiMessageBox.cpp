@@ -108,7 +108,7 @@ void OPI_Gui::MessageBox::addButtons()
 
 		// Set click handler of Okay to close this Message Box.
 		okayCallback = [this]() {
-			this->isVisible = false;
+			this->destroy();
 		};
 		okayButton->addCallback(okayCallback);
 

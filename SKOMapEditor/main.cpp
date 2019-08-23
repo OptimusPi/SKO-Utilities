@@ -105,46 +105,9 @@ int current_tile_img = 0;
   std::string loadMapFilename = "";
 
 
-void DrawImage( int x, int y, const OPI_Image *img, float blendTolerance) 
-{      
-     glColor3f(1.0f, 1.0f, 1.0f);     
-     glBindTexture( GL_TEXTURE_2D,  img->texture);
-	 
-	 glEnable(GL_BLEND);
-	 glAlphaFunc(GL_GREATER, blendTolerance); 
-	 glEnable(GL_ALPHA_TEST);
-	 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 
-      glBegin( GL_QUADS );
-    	//Top-left vertex (corner)
-    	glTexCoord2i( 0, 0 );
-    	glVertex3i( x, y, 0 );
-    	
-    	//Bottom-left vertex (corner)
-    	glTexCoord2i( 0, 1 );
-    	glVertex3i( x, y+img->height, 0 );
-    	
-    	//Bottom-right vertex (corner)
-    	glTexCoord2i( 1, 1 );
-    	glVertex3i( x+img->width, y+img->height, 0 );
-    	
-    	//Top-right vertex (corner)
-    	glTexCoord2i( 1, 0 );
-    	glVertex3i( x+img->width, y, 0 );
-    glEnd();
 
-	glDisable(GL_BLEND);
-}
-
-void  DrawImage(int x, int y, const OPI_Image *img)
-{
-	DrawImage(x, y, img, 0.7500);
-}
 
 OPI_Text* coords;
 
@@ -465,6 +428,7 @@ void DrawElement(int x, int y, OPI_Gui::Element *element)
 	}
 }
 
+//TODO - placeholder.. make OPI_Renderer and then make OPI_Gui::Manager use the below function (but use renderer instead of inline OpenGL)
 void DrawGui(OPI_Gui::GuiManager* gui)
 {
 	for (OPI_Gui::Element* child : gui->children) {
@@ -1417,7 +1381,7 @@ void drawText(OPI_Text *text)
          
 	float screen_x = text->x;
 	float screen_y = text->y;
-    DrawImage(10, 10, &text->contentRender, 0.1);
+    DrawImage(10, 10, &text->contentRender, 0.01);
 
 	//reset tint
 	glColor3f(1.0f, 1.0f, 1.0f);

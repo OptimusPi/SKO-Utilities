@@ -10,7 +10,13 @@ void OPI_Gui::Element::addElement(OPI_Gui::Element *element)
 	element->ensureBounds();
 
 	// Add to this Element's collection of child Elements
-	children.push_back(element);
+	this->children.push_back(element);
+}
+
+void OPI_Gui::Element::destroy()
+{
+	this->destroyed = true;
+
 }
 
 void OPI_Gui::Element::setTexture(OPI_Image * texture)

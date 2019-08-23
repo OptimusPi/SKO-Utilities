@@ -38,6 +38,10 @@ namespace OPI_Gui
 		// Add more elements to this element
 		void addElement(OPI_Gui::Element *element);
 
+		// destroy this element, remove it from its parent, and destroy all child elements safely.
+		bool destroyed = false;
+		void destroy();
+
 		// Any GUI Element may have children, such as:
 		// Panel can contain a few buttons and text
 		// Buttons can contain 
