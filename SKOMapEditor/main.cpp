@@ -90,7 +90,6 @@ OPI_Renderer *renderer;
   //images
   OPI_Image tile_img[256];
   OPI_Image background;
-  OPI_Image selector;
   OPI_Image stickman_img;
   OPI_Gui::GuiManager *gui;
 
@@ -310,7 +309,7 @@ void DrawGameScene()
 		int draw_y = tile_y[i] - (int)camera_y;
 
 		if (draw_x >= (int)(0 - tile_img[tile[i]].width) &&
-			draw_x < 1024 && draw_y < 600 &&
+			draw_x < renderer->originalWindowWidth && draw_y < renderer->originalWindowHeight &&
 			draw_y >= (int)(0 - tile_img[tile[i]].height))
 			renderer->drawImage(draw_x, draw_y, &tile_img[tile[i]]);
 	}
@@ -354,9 +353,8 @@ void DrawGameScene()
 			renderer->drawRect(newRect);
 	}
 
-	//draw gui selector
-	renderer->drawImage(144 + (mode - 1) * 64, 536, &selector);
-
+	//TODO - remove completely, here for reference only.
+	/*
 	if (fringe_mode)
 		renderer->drawImage(144 + (FRINGE_TOGGLE - 1) * 64, 536, &selector);
 
@@ -365,6 +363,7 @@ void DrawGameScene()
 
 	if (!stickman_toggle)
 		renderer->drawImage(144 + (STICKMAN_DELETE - 1) * 64, 536, &selector);
+		*/
 }
 
 void DrawElement(int x, int y, OPI_Gui::Element *element)
@@ -1111,7 +1110,8 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	renderer = new OPI_Renderer("SKO Map Editor v 0.9.0", 1280, 720);
+	// TODO auto detect screen size, make smaller if less than 1080p to render.
+	renderer = new OPI_Renderer("SKO Map Editor v 0.9.0", 1920, 1080);
 	renderer->initScreen();
 	OPI_Gui::GuiManager::create(renderer);
 	OPI_Gui::GuiManager::initCursors("IMG/GUI/cursors/normal.png", "IMG/GUI/cursors/move.png", "IMG/GUI/cursors/resize.png", "IMG/GUI/cursors/hourglass.png", "IMG/GUI/cursors/hand.png");
@@ -1158,7 +1158,6 @@ int main(int argc, char *argv[])
 	gui->addElement(testButton);
 	
 	background.setImage("IMG/back.png");
-	selector.setImage("IMG/selector.png");
 	stickman_img.setImage("IMG/stickman.png");
 
 	/*button_Image->addCallback([]() {

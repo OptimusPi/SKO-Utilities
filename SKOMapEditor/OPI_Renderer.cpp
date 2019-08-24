@@ -101,8 +101,13 @@ void OPI_Renderer::drawText(OPI_Text *text)
 
 void OPI_Renderer::drawRect(SDL_Rect rect)
 {
-	glColor3f(0.0f, 0.0f, 1.0f);
+	glColor3f(0.1f, 0.1f, 1.0f);
+
+	float lineWidth[2];
+	glGetFloatv(GL_LINE_WIDTH_RANGE, lineWidth);
+
 	glBegin(GL_LINE_LOOP);
+	glLineWidth(2.0f);
 	glVertex2f(rect.x + 0.5, rect.y + 0.5);
 	glVertex2f(rect.x + rect.w + 0.5, rect.y + 0.5);
 	glVertex2f(rect.x + rect.w + 0.5, rect.y + rect.h + 0.5);
