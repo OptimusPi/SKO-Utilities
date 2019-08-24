@@ -1,25 +1,56 @@
 #include "OPI_Renderer.h"
 
 
-OPI_Renderer::OPI_Renderer()
+OPI_Renderer::OPI_Renderer(std::string title, int windowWidth, int windowHeight)
 {
-
+	this->windowWidth = windowWidth;
+	this->windowHeight = windowHeight;
+	this->title = title;
 }
-
 
 OPI_Renderer::~OPI_Renderer()
 {
-
+	SDL_GL_DeleteContext(glContext);
 }
 
-
-void OPI_Renderer::DrawImage(int x, int y, const OPI_Image *img)
+void OPI_Renderer::initScreen()
 {
-	DrawImage(x, y, img, this->defaultBlendTolerance);
+	window = SDL_CreateWindow(this->title.c_str(),
+		SDL_WINDOWPOS_CENTERED,
+		SDL_WINDOWPOS_CENTERED,
+		windowWidth, windowHeight,
+		SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+
+	glContext = SDL_GL_CreateContext(window);
+	sizeScreen();
+}
+
+void OPI_Renderer::sizeScreen()
+{
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glViewport(0, 0, windowWidth, windowHeight);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	glOrtho(0.0f, originalWindowWidth, originalWindowHeight, 0.0f, -1.0f, 1.0f);
+
+	glMatrixMode(GL_TEXTURE);
+	glLoadIdentity();
+}
+
+void OPI_Renderer::drawImage(int x, int y, const OPI_Image *img)
+{
+	drawImage(x, y, img, this->defaultBlendTolerance);
 }
 
 
-void OPI_Renderer::DrawImage(int x, int y, const OPI_Image *img, float blendTolerance)
+void OPI_Renderer::drawImage(int x, int y, const OPI_Image *img, float blendTolerance)
 {
 	glColor3f(1.0f, 1.0f, 1.0f);
 	glBindTexture(GL_TEXTURE_2D, img->texture);
@@ -62,7 +93,7 @@ void OPI_Renderer::drawText(OPI_Text *text)
 
 	float screen_x = text->x;
 	float screen_y = text->y;
-	DrawImage(10, 10, &text->contentRender, 0.01);
+	drawImage(10, 10, &text->contentRender, 0.01);
 
 	//reset tint
 	glColor3f(1.0f, 1.0f, 1.0f);
@@ -77,4 +108,19 @@ void OPI_Renderer::drawRect(SDL_Rect rect)
 	glVertex2f(rect.x + rect.w + 0.5, rect.y + rect.h + 0.5);
 	glVertex2f(rect.x + 0.5, rect.y + rect.h + 0.5);
 	glEnd();
+}
+
+void OPI_Renderer::updateScreen()
+{
+	SDL_GL_SwapWindow(this->window);
+}
+
+int OPI_Renderer::getScaledMouseX(int mouse_x)
+{
+	return mouse_x * (float)this->originalWindowWidth / this->windowWidth;
+}
+
+int OPI_Renderer::getScaledMouseY(int mouse_y)
+{
+	return mouse_y * (float)this->originalWindowHeight / this->windowHeight;
 }

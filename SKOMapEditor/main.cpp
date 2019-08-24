@@ -24,16 +24,11 @@
 #include "OPI_GuiButton.h"
 #include "OPI_GuiMessageBox.h"
 #include "OPI_FontManager.h"
+#include "OPI_Renderer.h"
 
 
 // TODO - get rid of Global.h
 #include "Global.h"
-SDL_Window *window;
-
-int originalWindowWidth = 1280;
-int originalWindowHeight = 720;
-int windowWidth = 1280;
-int windowHeight = 720;
 
 //modes
 const char 
@@ -51,7 +46,6 @@ int save_notify;
 bool SHIFT_HELD = false;
 
 
-SDL_GLContext glContext;
 SDL_Rect collision_rect[32768];
 int collision_ox;
 int collision_oy;
@@ -78,6 +72,9 @@ int current_rect = 0;
 int current_fringe = 0;
 int current_tile_img = 0;
 
+
+// SDL2 rendering class
+OPI_Renderer *renderer;
   
   //mouse buttons
   bool RCLICK = false;
@@ -104,25 +101,7 @@ int current_tile_img = 0;
 	// SKOMapEditor.exe map0.map
   std::string loadMapFilename = "";
 
-
-
-
-
-
 OPI_Text* coords;
-
-
-
-void DrawRect(SDL_Rect rect)
-{
-     glColor3f(0.0f, 0.0f, 1.0f);
-     glBegin(GL_LINE_LOOP);
-     glVertex2f(rect.x + 0.5, rect.y + 0.5);
-     glVertex2f(rect.x+rect.w + 0.5, rect.y + 0.5);
-     glVertex2f(rect.x+rect.w + 0.5, rect.y+rect.h + 0.5);
-     glVertex2f(rect.x + 0.5, rect.y+rect.h + 0.5);
-     glEnd();
-}
 
 void cleanupInvisibleRects()
 {
@@ -312,48 +291,17 @@ void loadmap (std::string FileName)
 SDL_Cursor *pointer;
 
 
-void sizeScreen()
-{
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glViewport(0, 0, windowWidth, windowHeight);
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-	glOrtho(0.0f, originalWindowWidth, originalWindowHeight, 0.0f, -1.0f, 1.0f);
-
-	glMatrixMode(GL_TEXTURE);
-	glLoadIdentity();
-}
-
-void initScreen()
-{
-	window = SDL_CreateWindow("SKO Map Editor v 0.9.0",
-		SDL_WINDOWPOS_UNDEFINED,
-		SDL_WINDOWPOS_UNDEFINED,
-		windowWidth, windowHeight,
-		SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
-
-	glContext = SDL_GL_CreateContext(window);
-	sizeScreen();
-}
-
 void Physics();
-void drawText(OPI_Text *text);
 
 std::string save = "";
 
 void DrawGameScene()
 {
 	//image buffer and background
-	DrawImage(0, 0, &background);
-	DrawImage(512, 0, &background);
-	DrawImage(1024, 0, &background);
+	renderer->drawImage(0, 0, &background);
+	renderer->drawImage(1024, 0, &background);
+	renderer->drawImage(0, 1024, &background);
+	renderer->drawImage(1024, 1024, &background);
 
 	//draw tiles, only on screen
 	for (int i = 0; i < number_of_tiles; i++)
@@ -364,12 +312,12 @@ void DrawGameScene()
 		if (draw_x >= (int)(0 - tile_img[tile[i]].width) &&
 			draw_x < 1024 && draw_y < 600 &&
 			draw_y >= (int)(0 - tile_img[tile[i]].height))
-			DrawImage(draw_x, draw_y, &tile_img[tile[i]]);
+			renderer->drawImage(draw_x, draw_y, &tile_img[tile[i]]);
 	}
 
 	//stickman!
 	if (stickman_toggle)
-		DrawImage(stickman.x - 25 - camera_x, stickman.y - camera_y, &stickman_img);
+		renderer->drawImage(stickman.x - 25 - camera_x, stickman.y - camera_y, &stickman_img);
 
 	//draw tiles, only on screen
 	for (int i = 0; i < number_of_fringe; i++)
@@ -379,14 +327,14 @@ void DrawGameScene()
 		int draw_y = fringe_y[i] - (int)camera_y;
 
 		if (draw_x >= 0 - tile_img[fringe[i]].width &&
-			draw_x < originalWindowWidth && draw_y < originalWindowHeight &&
+			draw_x < renderer->originalWindowWidth && draw_y < renderer->originalWindowHeight &&
 			draw_y >= 0 - tile_img[fringe[i]].height)
-			DrawImage(draw_x, draw_y, &tile_img[fringe[i]]);
+			renderer->drawImage(draw_x, draw_y, &tile_img[fringe[i]]);
 	}
 
 	//draw current tile
 	if (mode == TILE_DRAW)
-		DrawImage(cursor_x / 32 * 32, cursor_y / 32 * 32, &tile_img[current_tile_img]);
+		renderer->drawImage(cursor_x / 32 * 32, cursor_y / 32 * 32, &tile_img[current_tile_img]);
 
 	//draw collision rects, only on screen  
 	for (int i = 0; i < number_of_rects; i++)
@@ -403,25 +351,25 @@ void DrawGameScene()
 			newRect.x < 1024 && newRect.y < 600 &&
 			newRect.y >= 0 - collision_rect[i].h)
 
-			DrawRect(newRect);
+			renderer->drawRect(newRect);
 	}
 
 	//draw gui selector
-	DrawImage(144 + (mode - 1) * 64, 536, &selector);
+	renderer->drawImage(144 + (mode - 1) * 64, 536, &selector);
 
 	if (fringe_mode)
-		DrawImage(144 + (FRINGE_TOGGLE - 1) * 64, 536, &selector);
+		renderer->drawImage(144 + (FRINGE_TOGGLE - 1) * 64, 536, &selector);
 
 	if (save_notify)
-		DrawImage(144 + (SAVE - 1) * 64, 536, &selector);
+		renderer->drawImage(144 + (SAVE - 1) * 64, 536, &selector);
 
 	if (!stickman_toggle)
-		DrawImage(144 + (STICKMAN_DELETE - 1) * 64, 536, &selector);
+		renderer->drawImage(144 + (STICKMAN_DELETE - 1) * 64, 536, &selector);
 }
 
 void DrawElement(int x, int y, OPI_Gui::Element *element)
 {
-	DrawImage(x + element->x, y + element->y, element->getTexture(), 0.f);
+	renderer->drawImage(x + element->x, y + element->y, element->getTexture(), 0.f);
 	for (OPI_Gui::Element* child : element->children) {
 		if (child->isVisible)
 			DrawElement(x + element->x, y + element->y, child);
@@ -443,13 +391,13 @@ void Graphics()
 	DrawGameScene();
 	
 	// Draw panels, text, and controls
-	DrawGui(gui);
+	DrawGui(OPI_Gui::GuiManager::getInstance());
 
 	// Draw coords
-	drawText(coords);
+	renderer->drawText(coords);
 
 	//update screen
-	SDL_GL_SwapWindow(window);
+	renderer->updateScreen();
 }
 
 void HandleInput()
@@ -479,9 +427,9 @@ void HandleInput()
 					event.window.windowID, event.window.data1,
 					event.window.data2);
 
-				windowWidth = event.window.data1;
-				windowHeight = event.window.data2;
-				sizeScreen();
+				renderer->windowWidth = event.window.data1;
+				renderer->windowHeight = event.window.data2;
+				renderer->sizeScreen();
 
 				break;
 			}
@@ -830,15 +778,9 @@ void HandleInput()
 
 		if (event.type == SDL_MOUSEMOTION)
 		{
-			//Get the mouse offsets
-			cursor_x = event.motion.x;
-			cursor_y = event.motion.y;
-
-			if (cursor_x > windowWidth)
-				cursor_x = windowWidth;
-
-			if (cursor_y > windowHeight)
-				cursor_y = windowHeight;
+			//Get the mouse offsets, scaled from screen space to window space
+			cursor_x = renderer->getScaledMouseX(event.motion.x);
+			cursor_y = renderer->getScaledMouseY(event.motion.y);
 
 			//draw the almost done rect
 			if (mode == COLLISION_DRAW && LCLICK)
@@ -999,15 +941,19 @@ void HandleInput()
 					}
 				}
 			}
-							  break;
+			 break;
 
 			case COLLISION_DRAW:
 				//go to next rect
 				number_of_rects++;
 
+				//Get the mouse offsets, scaled from screen space to window space
+				cursor_x = renderer->getScaledMouseX(event.motion.x);
+				cursor_y = renderer->getScaledMouseY(event.motion.y);
+
 				//Get the mouse offsets
-				collision_ox = event.button.x + (int)camera_x;
-				collision_oy = event.button.y + (int)camera_y;
+				collision_ox = cursor_x + (int)camera_x;
+				collision_oy = cursor_y + (int)camera_y;
 				collision_rect[current_rect].x = collision_ox;
 				collision_rect[current_rect].y = collision_oy;
 				collision_rect[current_rect].w = 0;
@@ -1077,8 +1023,8 @@ void HandleInput()
 				case TILE_DRAW:
 					if (!fringe_mode)
 					{
-						tile_x[current_tile] = (int)(event.button.x + (int)camera_x) / 32 * 32;
-						tile_y[current_tile] = (int)(event.button.y + (int)camera_y) / 32 * 32;
+						tile_x[current_tile] = (int)(cursor_x + (int)camera_x) / 32 * 32;
+						tile_y[current_tile] = (int)(cursor_y + (int)camera_y) / 32 * 32;
 						tile[current_tile] = current_tile_img;
 
 						//go to the next tile
@@ -1087,8 +1033,8 @@ void HandleInput()
 					}
 					else
 					{
-						fringe_x[current_fringe] = (int)(event.button.x + (int)camera_x) / 32 * 32;
-						fringe_y[current_fringe] = (int)(event.button.y + (int)camera_y) / 32 * 32;
+						fringe_x[current_fringe] = (int)(cursor_x + (int)camera_x) / 32 * 32;
+						fringe_y[current_fringe] = (int)(cursor_y + (int)camera_y) / 32 * 32;
 						fringe[current_fringe] = current_tile_img;
 
 						//go to the next tile
@@ -1165,9 +1111,10 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-    initScreen();
-	gui = OPI_Gui::GuiManager::getInstance();
-	gui->initCursors("IMG/GUI/cursors/normal.png", "IMG/GUI/cursors/move.png", "IMG/GUI/cursors/resize.png", "IMG/GUI/cursors/hourglass.png", "IMG/GUI/cursors/hand.png");
+	renderer = new OPI_Renderer("SKO Map Editor v 0.9.0", 1280, 720);
+	renderer->initScreen();
+	OPI_Gui::GuiManager::create(renderer);
+	OPI_Gui::GuiManager::initCursors("IMG/GUI/cursors/normal.png", "IMG/GUI/cursors/move.png", "IMG/GUI/cursors/resize.png", "IMG/GUI/cursors/hourglass.png", "IMG/GUI/cursors/hand.png");
 	
 	OPI_Gui::ElementThemeGridRect a = OPI_Gui::ElementThemeGridRect();
 
@@ -1295,8 +1242,8 @@ int main(int argc, char *argv[])
   printf("DONE\n");
 
 
-  SDL_GL_DeleteContext(glContext);
-
+  
+  delete renderer;
   SDL_Quit();
   return(0);
 }
@@ -1374,15 +1321,3 @@ void Physics()
 }
 
 
-void drawText(OPI_Text *text)
-{
-	//tint
-	glColor3f(text->R, text->G, text->B);
-         
-	float screen_x = text->x;
-	float screen_y = text->y;
-    DrawImage(10, 10, &text->contentRender, 0.01);
-
-	//reset tint
-	glColor3f(1.0f, 1.0f, 1.0f);
-}

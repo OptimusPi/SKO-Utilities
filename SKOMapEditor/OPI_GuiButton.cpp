@@ -29,7 +29,7 @@ void OPI_Gui::Button::addCallback(std::function<void()> callback)
 
 void OPI_Gui::Button::setCursor(OPI_Gui::CursorType cursor)
 {
-	OPI_Gui::GuiManager::getInstance()->setCursor(cursor);
+	OPI_Gui::GuiManager::setCursor(cursor);
 }
 
 bool OPI_Gui::Button::clickableContainsMouse(int mouseX, int mouseY)

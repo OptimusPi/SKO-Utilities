@@ -8,18 +8,15 @@
 
 ///Singleton instance
 OPI_Gui::GuiManager * OPI_Gui::GuiManager::instance;
-OPI_Gui::GuiManager * OPI_Gui::GuiManager::getInstance()
+void OPI_Gui::GuiManager::create(OPI_Renderer *renderer)
 {
-	if (!OPI_Gui::GuiManager::instance)
-	{
-		OPI_Gui::GuiManager *instance = new OPI_Gui::GuiManager;
-		OPI_Gui::GuiManager::instance = instance;
+	// Create instance
+	OPI_Gui::GuiManager *instance = new OPI_Gui::GuiManager;
+	OPI_Gui::GuiManager::instance = instance;
+	instance->renderer = renderer;
 
-		// Store current window width and height
-		SDL_GetWindowSize(window, &instance->screenWidth, &instance->screenHeight);
-	}
-
-	return OPI_Gui::GuiManager::instance;
+	// Store current window width and height
+	SDL_GetWindowSize(instance->renderer->window, &instance->screenWidth, &instance->screenHeight);
 }
 
 void OPI_Gui::GuiManager::initCursors(std::string normal, std::string move, std::string resize, std::string hourglass, std::string hand)
@@ -31,11 +28,11 @@ void OPI_Gui::GuiManager::initCursors(std::string normal, std::string move, std:
 	SDL_Surface* cursorSurfaceHourglass = OPI_Image::getSurface(hourglass);
 	SDL_Surface* cursorSurfaceHand = OPI_Image::getSurface(hand);
 
-	cursorNormal = SDL_CreateColorCursor(cursorSurfaceNormal, 0, 0);
-	cursorMove = SDL_CreateColorCursor(cursorSurfaceMove, cursorSurfaceMove->w / 2, cursorSurfaceMove->h / 2);
-	cursorResize = SDL_CreateColorCursor(cursorSurfaceResize, cursorSurfaceResize->w / 2, cursorSurfaceResize->h / 2);
-	cursorHourglass = SDL_CreateColorCursor(cursorSurfaceHourglass, cursorSurfaceHourglass->w / 2, cursorSurfaceHourglass->h / 2);
-	cursorHand = SDL_CreateColorCursor(cursorSurfaceHand, cursorSurfaceHand->w / 3, 0);
+	instance->cursorNormal = SDL_CreateColorCursor(cursorSurfaceNormal, 0, 0);
+	instance->cursorMove = SDL_CreateColorCursor(cursorSurfaceMove, cursorSurfaceMove->w / 2, cursorSurfaceMove->h / 2);
+	instance->cursorResize = SDL_CreateColorCursor(cursorSurfaceResize, cursorSurfaceResize->w / 2, cursorSurfaceResize->h / 2);
+	instance->cursorHourglass = SDL_CreateColorCursor(cursorSurfaceHourglass, cursorSurfaceHourglass->w / 2, cursorSurfaceHourglass->h / 2);
+	instance->cursorHand = SDL_CreateColorCursor(cursorSurfaceHand, cursorSurfaceHand->w / 3, 0);
 
 	// Free memory of loaded images
 	SDL_FreeSurface(cursorSurfaceNormal);
@@ -45,12 +42,12 @@ void OPI_Gui::GuiManager::initCursors(std::string normal, std::string move, std:
 	SDL_FreeSurface(cursorSurfaceHand);
 
 	// Set the default cursor
-	this->setCursor(OPI_Gui::CursorType::Normal);
+	instance->setCursor(OPI_Gui::CursorType::Normal);
 }
 
 void OPI_Gui::GuiManager::addElement(OPI_Gui::Element *element)
 {
-	children.push_back(element);
+	instance->children.push_back(element);
 }
 
 void OPI_Gui::GuiManager::setCursor(OPI_Gui::CursorType selectedCursor)
@@ -58,19 +55,19 @@ void OPI_Gui::GuiManager::setCursor(OPI_Gui::CursorType selectedCursor)
 	switch (selectedCursor)
 	{
 	case OPI_Gui::CursorType::Normal:
-		SDL_SetCursor(cursorNormal);
+		SDL_SetCursor(instance->cursorNormal);
 		break;
 	case OPI_Gui::CursorType::Move:
-		SDL_SetCursor(cursorMove);
+		SDL_SetCursor(instance->cursorMove);
 		break;
 	case OPI_Gui::CursorType::Resize:
-		SDL_SetCursor(cursorResize);
+		SDL_SetCursor(instance->cursorResize);
 		break;
 	case OPI_Gui::CursorType::Hourglass:
-		SDL_SetCursor(cursorHourglass);
+		SDL_SetCursor(instance->cursorHourglass);
 		break;
 	case OPI_Gui::CursorType::Hand:
-		SDL_SetCursor(cursorHand);
+		SDL_SetCursor(instance->cursorHand);
 		break;
 	default:break;
 	}
@@ -80,7 +77,7 @@ void OPI_Gui::GuiManager::setCursor(OPI_Gui::CursorType selectedCursor)
 
 bool OPI_Gui::GuiManager::handleMouseMove_InteractingElements(int mouseX, int mouseY)
 {
-	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
+	for (auto i = instance->children.rbegin(); i != instance->children.rend(); i++)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->isInteracting() && element->handleMouseMove(mouseX, mouseY))
@@ -92,10 +89,10 @@ bool OPI_Gui::GuiManager::handleMouseMove_InteractingElements(int mouseX, int mo
 void OPI_Gui::GuiManager::handleMouseMove(int mouseX, int mouseY)
 {
 	// Allow elements to pass over, under, and across each other when dragging without losing mouse focus
-	if (handleMouseMove_InteractingElements(mouseX, mouseY))
+	if (instance->handleMouseMove_InteractingElements(mouseX, mouseY))
 		return;
 
-	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
+	for (auto i = instance->children.rbegin(); i != instance->children.rend(); i++)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->handleMouseMove(mouseX, mouseY))
@@ -105,7 +102,7 @@ void OPI_Gui::GuiManager::handleMouseMove(int mouseX, int mouseY)
 
 void OPI_Gui::GuiManager::handleMousePressLeft(int mouseX, int mouseY)
 {
-	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
+	for (auto i = instance->children.rbegin(); i != instance->children.rend(); i++)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->handleMousePressLeft(mouseX, mouseY))
@@ -115,7 +112,7 @@ void OPI_Gui::GuiManager::handleMousePressLeft(int mouseX, int mouseY)
 
 void OPI_Gui::GuiManager::handleMousePressRight(int mouseX, int mouseY)
 {
-	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
+	for (auto i = instance->children.rbegin(); i != instance->children.rend(); i++)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->handleMousePressRight(mouseX, mouseY))
@@ -125,7 +122,7 @@ void OPI_Gui::GuiManager::handleMousePressRight(int mouseX, int mouseY)
 
 void OPI_Gui::GuiManager::handleMouseReleaseLeft(int mouseX, int mouseY)
 {
-	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
+	for (auto i = instance->children.rbegin(); i != instance->children.rend(); i++)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->handleMouseReleaseLeft(mouseX, mouseY))
@@ -135,10 +132,25 @@ void OPI_Gui::GuiManager::handleMouseReleaseLeft(int mouseX, int mouseY)
 
 void OPI_Gui::GuiManager::handleMouseReleaseRight(int mouseX, int mouseY)
 {
-	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
+	for (auto i = instance->children.rbegin(); i != instance->children.rend(); i++)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->handleMouseReleaseRight(mouseX, mouseY))
 			break;
 	}
+}
+
+int OPI_Gui::GuiManager::getScreenWidth()
+{
+	return instance->screenWidth;
+}
+
+int OPI_Gui::GuiManager::getScreenHeight()
+{
+	return instance->screenWidth;
+}
+
+OPI_Gui::GuiManager * OPI_Gui::GuiManager::getInstance()
+{
+	return OPI_Gui::GuiManager::instance;
 }

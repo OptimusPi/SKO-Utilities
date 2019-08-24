@@ -22,7 +22,7 @@ bool OPI_FontManager::init(std::string defaultFontPath)
 void OPI_FontManager::addFont(std::string fontName, std::string fontPath)
 {
 	// Load font from file
-	TTF_Font *font = TTF_OpenFont(fontPath.c_str(), 12);
+	TTF_Font *font = TTF_OpenFont(fontPath.c_str(), 14);
 
 	// If there was an error in loading the font
 	if (font == NULL)

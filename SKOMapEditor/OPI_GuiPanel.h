@@ -6,7 +6,7 @@
 #include "OPI_Image.h"
 #include "OPI_GuiManager.h"
 #include "OPI_GuiElement.h"
-#include "OPI_GuiElementThemeGridRect.h" // TODO is this needed
+#include "OPI_GuiElementThemeGridRect.h" // TODO is this needed ? :'(
 #include "OPI_GuiThemeLoader.h"
 
 #ifdef _WIN32

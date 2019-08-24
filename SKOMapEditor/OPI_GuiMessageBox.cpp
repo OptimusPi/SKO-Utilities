@@ -24,8 +24,8 @@ OPI_Gui::MessageBox::MessageBox(std::string message, TTF_Font* font, bool wordWr
 	this->addText();
 	this->addButtons();
 	this->theme->render(this);
-	this->x = OPI_Gui::GuiManager::getInstance()->screenWidth / 2 - this->width / 2;
-	this->y = OPI_Gui::GuiManager::getInstance()->screenHeight / 2 - this->height / 2;
+	this->x = OPI_Gui::GuiManager::getScreenWidth() / 2 - this->width / 2;
+	this->y = OPI_Gui::GuiManager::getScreenHeight() / 2 - this->height / 2;
 	this->isVisible = true;
 	this->isMovable = true;
 }
@@ -46,8 +46,8 @@ OPI_Gui::MessageBox::MessageBox(std::string message, OPI_Gui::MessageBoxType mes
 	this->addText();
 	this->addButtons();
 	this->theme->render(this);
-	this->x = OPI_Gui::GuiManager::getInstance()->screenWidth / 2 - this->width / 2;
-	this->y = OPI_Gui::GuiManager::getInstance()->screenHeight / 2 - this->height / 2;
+	this->x = OPI_Gui::GuiManager::getScreenWidth() / 2 - this->width / 2;
+	this->y = OPI_Gui::GuiManager::getScreenHeight() / 2 - this->height / 2;
 	this->isVisible = true;
 }
 
