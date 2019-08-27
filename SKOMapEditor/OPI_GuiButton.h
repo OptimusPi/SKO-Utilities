@@ -18,6 +18,7 @@ namespace OPI_Gui
 	class Button : public Element
 	{
 	public:
+		Button(std::string themeImage, int x, int y);
 		Button(std::string theme, int x, int y, std::string text, TTF_Font* font = nullptr);
 		virtual ~Button();
 		void addCallback(std::function<void()>);
@@ -31,6 +32,7 @@ namespace OPI_Gui
 		bool handleMousePressRight(int mouseX, int mouseY);
 		bool handleMouseReleaseRight(int mouseX, int mouseY);
 		bool handleMouseReleaseLeft(int mouseX, int mouseY);
+
 	private:
 		bool clickableContainsMouse(int mouseX, int mouseY);
 		void setCursor(CursorType cursor);

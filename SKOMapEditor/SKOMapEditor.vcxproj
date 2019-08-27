@@ -159,6 +159,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Global.h" />
+    <ClInclude Include="MainMenuGui.h" />
     <ClInclude Include="OPI_GuiMessageBoxType.h" />
     <ClInclude Include="OPI_GuiElementThemeButton.h" />
     <ClInclude Include="OPI_GuiElementThemeGridRect.h" />
@@ -182,6 +183,7 @@
     <ClInclude Include="OPI_GuiElementThemeType.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="MainMenuGui.cpp" />
     <ClCompile Include="OPI_GuiButton.cpp" />
     <ClCompile Include="OPI_GuiElement.cpp" />
     <ClCompile Include="OPI_GuiElementThemeButton.cpp" />

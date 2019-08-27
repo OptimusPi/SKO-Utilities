@@ -1,6 +1,27 @@
 #include "OPI_GuiButton.h"
 
 
+OPI_Gui::Button::Button(std::string themeImage, int x, int y)
+{
+	this->theme = (OPI_Gui::ElementThemeButtonImage*)(OPI_Gui::ThemeLoader::GetTheme(OPI_Gui::ElementThemeType::ButtonImage, theme));
+	this->x = x;
+	this->y = y;
+	this->width = width < this->theme->getMinimumWidth() ? this->theme->getMinimumWidth() : width;
+	this->height = height < this->theme->getMinimumHeight() ? this->theme->getMinimumHeight() : height;
+	this->width = this->width > this->theme->getMaximumWidth() && this->theme->getMaximumWidth() > 0 ? this->theme->getMinimumWidth() : this->width;
+	this->height = this->height > this->theme->getMaximumHeight() && this->theme->getMaximumHeight() > 0 ? this->theme->getMinimumHeight() : this->height;
+	this->theme->render(this);
+
+	if (font == nullptr) {
+		font = OPI_FontManager::getDefaultFont();
+	}
+	auto buttonText = new OPI_Text(text, font);
+	int buttonTextX = (this->theme->getMinimumWidth() - buttonText->contentRender.width) / 2;
+	int buttonTextY = (this->theme->getMinimumHeight() - buttonText->contentRender.height) / 2;
+	auto textLabel = new OPI_Gui::TextLabel(buttonTextX, buttonTextY, buttonText);
+	this->addElement(textLabel);
+}
+
 OPI_Gui::Button::Button(std::string theme, int x, int y, std::string text, TTF_Font* font)
 {
 	this->theme = (OPI_Gui::ElementThemeButton*)(OPI_Gui::ThemeLoader::GetTheme(OPI_Gui::ElementThemeType::Button, theme));

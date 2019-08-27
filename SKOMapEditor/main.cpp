@@ -27,8 +27,14 @@
 #include "OPI_Renderer.h"
 
 
+// GUI Implementations
+#include "MainMenuGui.h"
+
 // TODO - get rid of Global.h
 #include "Global.h"
+
+
+MainMenuGui* mainMenuGui = nullptr;
 
 //modes
 const char 
@@ -100,7 +106,7 @@ OPI_Renderer *renderer;
 	// SKOMapEditor.exe map0.map
   std::string loadMapFilename = "";
 
-OPI_Text* coords;
+
 
 void cleanupInvisibleRects()
 {
@@ -391,9 +397,6 @@ void Graphics()
 	
 	// Draw panels, text, and controls
 	DrawGui(OPI_Gui::GuiManager::getInstance());
-
-	// Draw coords
-	renderer->drawText(coords);
 
 	//update screen
 	renderer->updateScreen();
@@ -1110,13 +1113,6 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	// TODO auto detect screen size, make smaller if less than 1080p to render.
-	renderer = new OPI_Renderer("SKO Map Editor v 0.9.0", 1920, 1080);
-	renderer->initScreen();
-	OPI_Gui::GuiManager::create(renderer);
-	OPI_Gui::GuiManager::initCursors("IMG/GUI/cursors/normal.png", "IMG/GUI/cursors/move.png", "IMG/GUI/cursors/resize.png", "IMG/GUI/cursors/hourglass.png", "IMG/GUI/cursors/hand.png");
-	
-	OPI_Gui::ElementThemeGridRect a = OPI_Gui::ElementThemeGridRect();
 
 	//TODO - Singleton with cached fonts
 	//TODO - load from config file
@@ -1127,7 +1123,21 @@ int main(int argc, char *argv[])
 
 	OPI_FontManager::addFont("RobotoMono-Regular", "fonts/RobotoMono-Regular.ttf");
 
-	//// Test out a GridRect panel
+
+	// TODO auto detect screen size, make smaller if less than 1080p to render.
+	//renderer = new OPI_Renderer("SKO Map Editor v 0.9.0", 1280, 720);
+	renderer = new OPI_Renderer("SKO Map Editor v 0.9.0", 1920, 1080);
+	renderer->initScreen();
+	OPI_Gui::GuiManager::create(renderer);
+	OPI_Gui::GuiManager::initCursors("IMG/GUI/cursors/normal.png", "IMG/GUI/cursors/move.png", "IMG/GUI/cursors/resize.png", "IMG/GUI/cursors/hourglass.png", "IMG/GUI/cursors/hand.png");
+	
+	// Initialize main menu GUI
+	mainMenuGui = new MainMenuGui(OPI_Gui::GuiManager::getInstance());
+
+	OPI_Gui::ElementThemeGridRect a = OPI_Gui::ElementThemeGridRect();
+
+	//TODO remove this completely
+	// Test out a GridRect panel
 	auto *panel_GridRect = new OPI_Gui::Panel(OPI_Gui::ElementThemeType::GridRect, "ice", 100, 100, 433, 433);
 	panel_GridRect->isVisible = true;
 	panel_GridRect->isClosable = true;
@@ -1154,9 +1164,6 @@ int main(int argc, char *argv[])
 	auto *messageBoxTest = new OPI_Gui::MessageBox("401: Unauthorized.", testFont);
 	gui->addElement(messageBoxTest);
 
-	auto testButton = new OPI_Gui::Button("default", 100, 100, "Hello");
-	gui->addElement(testButton);
-	
 	background.setImage("IMG/back.png");
 	stickman_img.setImage("IMG/stickman.png");
 
@@ -1170,7 +1177,6 @@ int main(int argc, char *argv[])
 	color.g = 200;
 	color.b = 200;
 
-	coords = new OPI_Text("1000, 400", OPI_FontManager::getFont("RobotoMono-Regular"));
 
 	//stickman
 	stickman.x = 0;
@@ -1178,19 +1184,12 @@ int main(int argc, char *argv[])
 	stickman.w = 14;
 	stickman.h = 64;
 
-	//coords text
-	coords->setText("0,0", NULL);
-	coords->visible = true;
-	coords->x = 2;
-	coords->y = 2;
-	coords->R = 1.0f;
-	coords->G = 1.0f;
-	coords->B = 1.0f;
+
   
   for(int i = 0; i < 256; i++)//check if file exists, etc.
   {
      std::stringstream ss;
-     ss << "IMG/TILE/tile" << i << ".png";  
+     ss << "IMG/TILE/tile" << i << ".png";
      std::ifstream checker (ss.str());
      if (checker.is_open())
      {
@@ -1219,7 +1218,7 @@ int main(int argc, char *argv[])
                 std::stringstream ss;
                 ss << "(" << cursor_x+camera_x << ", " << cursor_y+camera_y << ")";
 
-                coords->setText(ss.str());
+				mainMenuGui->setCoords(ss.str());
                     
                 //reset ticker
                 coordsTicker = OPI_Clock::milliseconds();

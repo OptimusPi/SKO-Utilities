@@ -7,7 +7,8 @@ namespace OPI_Gui
 	{
 		Image,
 		GridRect,
-		Button
+		Button,
+		ButtonImage
 	};
 }
 

@@ -29,6 +29,7 @@ namespace OPI_Gui
 		void loadTheme_GridRect(std::string theme);
 		void loadTheme_Image(std::string theme);
 		void loadTheme_Button(std::string theme);
+		void loadTheme_ButtonImage(std::string themeImage);
 
 		// Get a unique key to look up in the dictionary
 		std::string generateKey(OPI_Gui::ElementThemeType type, std::string theme);

@@ -1,11 +1,28 @@
 #include "OPI_GuiTextLabel.h"
 
+OPI_Gui::TextLabel::TextLabel(OPI_Text * text)
+{
+	this->text = text;
+	this->x = text->x;
+	this->y = text->y;
+	this->setTexture(&text->contentRender);
+	this->width = this->getTexture()->width;
+	this->height = this->getTexture()->height;
+}
+
 OPI_Gui::TextLabel::TextLabel(int x, int y, OPI_Text * text)
 {
 	this->text = text;
 	this->x = x;
 	this->y = y;
 	this->setTexture(&text->contentRender);
+	this->width = this->getTexture()->width;
+	this->height = this->getTexture()->height;
+}
+
+void OPI_Gui::TextLabel::setText(OPI_Text *text)
+{
+	this->text = text;
 	this->width = this->getTexture()->width;
 	this->height = this->getTexture()->height;
 }
