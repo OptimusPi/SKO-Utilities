@@ -20,7 +20,7 @@ void MainMenuGui::setCoords(std::string coordsValue)
 
 void MainMenuGui::setupHotBar()
 {
-
+	auto *buttonAddTile = new OPI_Gui::Button("")
 }
 
 void MainMenuGui::setupCoordinates()

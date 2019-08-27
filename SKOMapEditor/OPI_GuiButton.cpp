@@ -3,7 +3,7 @@
 
 OPI_Gui::Button::Button(std::string themeImage, int x, int y)
 {
-	this->theme = (OPI_Gui::ElementThemeButtonImage*)(OPI_Gui::ThemeLoader::GetTheme(OPI_Gui::ElementThemeType::ButtonImage, theme));
+	this->theme = (OPI_Gui::ElementThemeButtonImage*)(OPI_Gui::ThemeLoader::GetTheme(OPI_Gui::ElementThemeType::ButtonImage, themeImage));
 	this->x = x;
 	this->y = y;
 	this->width = width < this->theme->getMinimumWidth() ? this->theme->getMinimumWidth() : width;

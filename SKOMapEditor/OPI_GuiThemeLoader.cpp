@@ -43,6 +43,9 @@ OPI_Gui::ElementTheme * OPI_Gui::ThemeLoader::getTheme(OPI_Gui::ElementThemeType
 		case ElementThemeType::Button:
 			this->loadTheme_Button(theme);
 			break;
+		case ElementThemeType::ButtonImage:
+			this->loadTheme_ButtonImage(theme);
+			break;
 		default:
 			throw std::logic_error("Invalid type provided to OPI_Gui::ThemeLoader!");
 		}
@@ -74,6 +77,20 @@ void OPI_Gui::ThemeLoader::loadTheme_Button(std::string theme)
 
 	//insert into cache
 	std::string key = generateKey(OPI_Gui::ElementThemeType::Button, theme);
+	this->themes.insert({ {key, elementThemeButton} });
+}
+
+void OPI_Gui::ThemeLoader::loadTheme_ButtonImage(std::string themeImage)
+{
+	OPI_Gui::ElementThemeButton *elementThemeButton = new OPI_Gui::ElementThemeButton();
+	std::string path = "IMG/GUI/themes/button_images/" + themeImage + "/";
+	elementThemeButton->textureEnabled = new OPI_Image(path + "enabled.png");
+	elementThemeButton->textureDisabled = new OPI_Image(path + "disabled.png");
+	elementThemeButton->texturePressed = new OPI_Image(path + "pressed.png");
+	elementThemeButton->textureSelected = new OPI_Image(path + "selected.png");
+
+	//insert into cache
+	std::string key = generateKey(OPI_Gui::ElementThemeType::Button, themeImage);
 	this->themes.insert({ {key, elementThemeButton} });
 }
 
