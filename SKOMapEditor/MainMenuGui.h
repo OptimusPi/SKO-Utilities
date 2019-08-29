@@ -5,6 +5,7 @@
 #include "OPI_FontManager.h"
 #include "OPI_GuiTextLabel.h"
 #include "OPI_GuiButton.h"
+#include "OPI_GuiPanel.h"
 
 class MainMenuGui
 {

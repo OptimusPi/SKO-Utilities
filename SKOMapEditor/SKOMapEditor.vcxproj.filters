@@ -135,6 +135,9 @@
     <ClInclude Include="MainMenuGui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OPI_GuiElementThemeButtonImage.h">
+      <Filter>Header Files\Graphics\GUI\Themes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -187,6 +190,9 @@
     </ClCompile>
     <ClCompile Include="MainMenuGui.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OPI_GuiElementThemeButtonImage.cpp">
+      <Filter>Source Files\Graphics\GUI\Themes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

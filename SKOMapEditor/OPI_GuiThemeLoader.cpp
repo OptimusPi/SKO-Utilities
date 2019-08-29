@@ -34,6 +34,8 @@ OPI_Gui::ElementTheme * OPI_Gui::ThemeLoader::getTheme(OPI_Gui::ElementThemeType
 	{
 		switch (type)
 		{
+		case ElementThemeType::Blank:
+			break;
 		case ElementThemeType::GridRect:
 			this->loadTheme_GridRect(theme);
 			break;
@@ -82,16 +84,13 @@ void OPI_Gui::ThemeLoader::loadTheme_Button(std::string theme)
 
 void OPI_Gui::ThemeLoader::loadTheme_ButtonImage(std::string themeImage)
 {
-	OPI_Gui::ElementThemeButton *elementThemeButton = new OPI_Gui::ElementThemeButton();
-	std::string path = "IMG/GUI/themes/button_images/" + themeImage + "/";
-	elementThemeButton->textureEnabled = new OPI_Image(path + "enabled.png");
-	elementThemeButton->textureDisabled = new OPI_Image(path + "disabled.png");
-	elementThemeButton->texturePressed = new OPI_Image(path + "pressed.png");
-	elementThemeButton->textureSelected = new OPI_Image(path + "selected.png");
+	OPI_Gui::ElementThemeButtonImage *elementThemeButtonImage = new OPI_Gui::ElementThemeButtonImage();
+	std::string path = "IMG/GUI/themes/button_images/" + themeImage;
+	elementThemeButtonImage->texture = new OPI_Image(path + ".png");
 
 	//insert into cache
-	std::string key = generateKey(OPI_Gui::ElementThemeType::Button, themeImage);
-	this->themes.insert({ {key, elementThemeButton} });
+	std::string key = generateKey(OPI_Gui::ElementThemeType::ButtonImage, themeImage);
+	this->themes.insert({ {key, elementThemeButtonImage} });
 }
 
 void OPI_Gui::ThemeLoader::loadTheme_GridRect(std::string theme)
@@ -187,6 +186,8 @@ std::string OPI_Gui::ThemeLoader::generateKey(OPI_Gui::ElementThemeType type, st
 
 	switch (type)
 	{
+	case OPI_Gui::ElementThemeType::Blank:
+		return "";
 	case OPI_Gui::ElementThemeType::Image:
 		key += "Image|";
 		break;
@@ -195,6 +196,9 @@ std::string OPI_Gui::ThemeLoader::generateKey(OPI_Gui::ElementThemeType type, st
 		break;
 	case OPI_Gui::ElementThemeType::Button:
 		key += "Button|";
+		break;
+	case OPI_Gui::ElementThemeType::ButtonImage:
+		key += "ButtonImage|";
 		break;
 	default:
 		throw std::invalid_argument("The provided ElementThemeType is invalid.");

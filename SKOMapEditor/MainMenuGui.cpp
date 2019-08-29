@@ -20,7 +20,42 @@ void MainMenuGui::setCoords(std::string coordsValue)
 
 void MainMenuGui::setupHotBar()
 {
-	auto *buttonAddTile = new OPI_Gui::Button("")
+	// 8 buttons with dimensions 64x64
+	auto panelWidth = 8 * 64;
+	auto panelHeight = 1 * 64 + 16;
+	// center horizontally, place at bottom of the screen
+	auto panelX = guiManager->getScreenWidth()/2 - panelWidth/2;
+	auto panelY = guiManager->getScreenHeight() - panelHeight;
+	// Create invisible panel 
+	//auto hotbarPanel = new OPI_Gui::Panel(panelX, panelY, panelWidth, panelHeight);
+	auto hotbarPanel = new OPI_Gui::Panel(OPI_Gui::ElementThemeType::GridRect, "ice", panelX, panelY, panelWidth, panelHeight);
+	hotbarPanel->isClosable = false;
+	hotbarPanel->isMovable = true;
+	hotbarPanel->isResizable = false;
+
+	
+	// Create the 8 main menu buttons with actions
+	auto *buttonAddTile = new OPI_Gui::Button("addTile", 64 * 0, 16);
+	auto *buttonDeleteTile = new OPI_Gui::Button("deleteTile", 64 * 1, 16);
+	auto *buttonToggleFringe = new OPI_Gui::Button("toggleFringe", 64 * 2, 16);
+	auto *buttonAddCollision = new OPI_Gui::Button("addCollision", 64 * 3, 16);
+	auto *buttonDeleteCollision = new OPI_Gui::Button("deleteCollision", 64 * 4, 16);
+	auto *buttonStartTest = new OPI_Gui::Button("startTest", 64 * 5, 16);
+	auto *buttonEndTest = new OPI_Gui::Button("endTest", 64 * 6, 16);
+	auto *buttonSave = new OPI_Gui::Button("save", 64 * 7, 16);
+
+	// Add the 8 buttons to the hotbar panel
+	hotbarPanel->addElement(buttonAddTile);
+	hotbarPanel->addElement(buttonDeleteTile);
+	hotbarPanel->addElement(buttonToggleFringe);
+	hotbarPanel->addElement(buttonAddCollision);
+	hotbarPanel->addElement(buttonDeleteCollision);
+	hotbarPanel->addElement(buttonStartTest);
+	hotbarPanel->addElement(buttonEndTest);
+	hotbarPanel->addElement(buttonSave);
+
+	// Add hotbar panel to gui manager
+	this->guiManager->addElement(hotbarPanel);
 }
 
 void MainMenuGui::setupCoordinates()

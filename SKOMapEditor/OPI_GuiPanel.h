@@ -21,11 +21,10 @@
 
 namespace OPI_Gui
 {
-	class GuiManager;
-
 	class Panel : public Element
 	{
 	public:
+		Panel(int x, int y, int width, int height);
 		Panel(OPI_Gui::ElementThemeType type, std::string theme, int x, int y, int width = 0, int height = 0);
 		virtual ~Panel();
 		void setWidth(short int width);

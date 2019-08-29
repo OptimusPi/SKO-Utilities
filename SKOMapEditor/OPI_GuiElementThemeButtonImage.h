@@ -1,5 +1,6 @@
-#ifndef __OPI_GUI_ELEMENTTHEMEBUTTON_
-#define __OPI_GUI_ELEMENTTHEMEBUTTON_
+#ifndef __OPI_GUIELEMENTBUTTONTHEMEIMAGE_
+#define __OPI_GUIELEMENTBUTTONTHEMEIMAGE_
+
 
 #include "OPI_Image.h"
 #include "OPI_GuiElementTheme.h"
@@ -9,24 +10,18 @@ namespace OPI_Gui
 {
 	class Button;
 
-	class ElementThemeButton : public ElementTheme 
+	class ElementThemeButtonImage : public ElementTheme
 	{
 	public:
-		ElementThemeButton();
-		virtual ~ElementThemeButton();
+		ElementThemeButtonImage();
+		virtual ~ElementThemeButtonImage();
 		int getMinimumWidth();
 		int getMinimumHeight();
 		int getMaximumWidth();
 		int getMaximumHeight();
 		void render(OPI_Gui::Element* element);
 		void render(OPI_Gui::Button* button);
-		OPI_Image *textureEnabled;
-		OPI_Image *textureDisabled;
-		OPI_Image *texturePressed;
-		OPI_Image *textureSelected;
-	private:
-		
+		OPI_Image *texture;
 	};
 }
-
 #endif

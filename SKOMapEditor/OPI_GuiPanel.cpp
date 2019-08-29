@@ -1,6 +1,15 @@
 #include "OPI_GuiPanel.h"
 
 
+OPI_Gui::Panel::Panel(int x, int y, int width, int height)
+{
+	this->theme = nullptr;
+	this->x = x;
+	this->y = y;
+	this->width = width;
+	this->height = height;
+}
+
 OPI_Gui::Panel::Panel(OPI_Gui::ElementThemeType type, std::string theme, int x, int y, int width, int height)
 {
 	this->theme = OPI_Gui::ThemeLoader::GetTheme(type, theme);

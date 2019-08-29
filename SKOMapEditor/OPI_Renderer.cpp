@@ -52,6 +52,10 @@ void OPI_Renderer::drawImage(int x, int y, const OPI_Image *img)
 
 void OPI_Renderer::drawImage(int x, int y, const OPI_Image *img, float blendTolerance)
 {
+	// Do not attempt to render null images, just continue.
+	if (img == nullptr)
+		return;
+
 	glColor3f(1.0f, 1.0f, 1.0f);
 	glBindTexture(GL_TEXTURE_2D, img->texture);
 

@@ -9,6 +9,7 @@
 #include "OPI_GuiThemeLoader.h"
 #include "OPI_GuiManager.h"
 #include "OPI_GuiElementThemeButton.h"
+#include "OPI_GuiElementThemeButtonImage.h"
 #include "OPI_FontManager.h"
 
 #include <string>
@@ -36,7 +37,7 @@ namespace OPI_Gui
 	private:
 		bool clickableContainsMouse(int mouseX, int mouseY);
 		void setCursor(CursorType cursor);
-		OPI_Gui::ElementThemeButton *theme;
+		OPI_Gui::ElementTheme *theme;
 		OPI_Image *texture;
 		OPI_Text *text;
 

@@ -5,6 +5,7 @@ namespace OPI_Gui
 {
 	enum class ElementThemeType
 	{
+		Blank,
 		Image,
 		GridRect,
 		Button,

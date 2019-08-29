@@ -32,7 +32,7 @@ int OPI_Gui::ElementThemeButton::getMaximumHeight()
 
 void OPI_Gui::ElementThemeButton::render(OPI_Gui::Element * element)
 {
-	return;
+	this->render((OPI_Gui::Button *)element);
 }
 
 void OPI_Gui::ElementThemeButton::render(OPI_Gui::Button * button)

@@ -147,7 +147,7 @@ int OPI_Gui::GuiManager::getScreenWidth()
 
 int OPI_Gui::GuiManager::getScreenHeight()
 {
-	return instance->screenWidth;
+	return instance->screenHeight;
 }
 
 OPI_Gui::GuiManager * OPI_Gui::GuiManager::getInstance()
