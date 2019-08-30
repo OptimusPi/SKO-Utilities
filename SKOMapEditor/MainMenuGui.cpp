@@ -1,5 +1,9 @@
 #include "MainMenuGui.h"
 
+// TODO remove this when I have a game logic controller class
+
+
+
 MainMenuGui::MainMenuGui(OPI_Gui::GuiManager *guiManager)
 {
 	this->guiManager = guiManager;
@@ -36,13 +40,37 @@ void MainMenuGui::setupHotBar()
 	
 	// Create the 8 main menu buttons with actions
 	auto *buttonAddTile = new OPI_Gui::Button("addTile", 64 * 0, 16);
+	buttonAddTile->addCallback([this]() {
+		setEditorMode(TILE_DRAW);
+	});
 	auto *buttonDeleteTile = new OPI_Gui::Button("deleteTile", 64 * 1, 16);
+	buttonDeleteTile->addCallback([this]() {
+		setEditorMode(TILE_DELETE);
+	});
 	auto *buttonToggleFringe = new OPI_Gui::Button("toggleFringe", 64 * 2, 16);
+	buttonToggleFringe->addCallback([this]() {
+		toggleEditorFringe();
+	});
 	auto *buttonAddCollision = new OPI_Gui::Button("addCollision", 64 * 3, 16);
+	buttonAddCollision->addCallback([this]() {
+		setEditorMode(COLLISION_DRAW);
+	});
 	auto *buttonDeleteCollision = new OPI_Gui::Button("deleteCollision", 64 * 4, 16);
+	buttonDeleteCollision->addCallback([this]() {
+		setEditorMode(COLLISION_DELETE);
+	});
 	auto *buttonStartTest = new OPI_Gui::Button("startTest", 64 * 5, 16);
+	buttonStartTest->addCallback([this]() {
+		setEditorMode(STICKMAN_DRAW);
+	});
 	auto *buttonEndTest = new OPI_Gui::Button("endTest", 64 * 6, 16);
+	buttonEndTest->addCallback([this]() {
+		setEditorMode(STICKMAN_DELETE);
+	});
 	auto *buttonSave = new OPI_Gui::Button("save", 64 * 7, 16);
+	buttonSave->addCallback([this]() {
+		saveMap();
+	});
 
 	// Add the 8 buttons to the hotbar panel
 	hotbarPanel->addElement(buttonAddTile);
@@ -76,5 +104,17 @@ void MainMenuGui::setupCoordinates()
 
 	// Add coords to gui manager
 	this->guiManager->addElement(coordsLabel);
+}
+
+
+void MainMenuGui::setEditorMode(char setting)
+{
+	// TODO - replace Global include with map editor state machine
+	mode = setting;
+}
+
+void MainMenuGui::toggleEditorFringe()
+{
+	fringe_mode = !fringe_mode;
 }
 

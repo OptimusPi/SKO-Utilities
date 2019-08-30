@@ -9,11 +9,11 @@
 	#include <SDL/SDL_opengl.h> 
 #endif
 
-#include <stdio.h> 
-#include <string> 
-#include <sstream> 
-#include <iostream> 
-#include <fstream> 
+#include <stdio.h>
+#include <string>
+#include <sstream>
+#include <iostream>
+#include <fstream>
 #include "OPI_Timestep.h"
 #include "OPI_Text.h"
 #include "OPI_FontManager.h"
@@ -37,9 +37,11 @@
 MainMenuGui* mainMenuGui = nullptr;
 
 //modes
-const char 
+#include "Global.h"
 
-TILE_DRAW = 1, TILE_DELETE = 2, 
+const char
+
+TILE_DRAW = 1, TILE_DELETE = 2,
 COLLISION_DRAW = 3, COLLISION_DELETE = 4,
 STICKMAN_DRAW = 5, STICKMAN_DELETE = 6,
 FRINGE_TOGGLE = 7,
@@ -478,146 +480,23 @@ void HandleInput()
 				mode = TILE_DELETE;
 				break;
 			case '3':
-				mode = COLLISION_DRAW;
+				fringe_mode = !fringe_mode;
 				break;
 			case '4':
-				mode = COLLISION_DELETE;
+				mode = COLLISION_DRAW;
 				break;
 			case '5':
-				mode = STICKMAN_DRAW;
+				mode = COLLISION_DELETE;
 				break;
 			case '6':
-				stickman_toggle = !stickman_toggle;
+				mode = STICKMAN_DRAW;
 				break;
 			case '7':
-				fringe_mode = !fringe_mode;
+				stickman_toggle = !stickman_toggle;
 				break;
 			case '8':
 			{
-				// Cleanup small rects you can't see
-				cleanupInvisibleRects();
-
-				//show selector for a second
-				save_notify = clock() + 120;
-
-				//default
-				std::string file = "Output.map";
-
-				//unless you have opened one
-				if (loadMapFilename.length() > 1)
-					file = loadMapFilename;
-
-				//dump all the memory into a file
-				std::ofstream MapFile(file.c_str(), std::ios::out | std::ios::binary);
-
-				if (MapFile.is_open())
-				{
-
-					//first say how many tiles
-					//break up the int as 4 bytes
-					unsigned char *p;
-					p = (unsigned char*)&number_of_tiles;
-					unsigned char b1 = p[0];
-					unsigned char b2 = p[1];
-					unsigned char b3 = p[2];
-					unsigned char b4 = p[3];
-
-					//spit out each of the bytes
-					MapFile << b1 << b2 << b3 << b4;
-
-					//put how many fringe
-					p = (unsigned char*)&number_of_fringe;
-					b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
-
-					//spit out each of the bytes
-					MapFile << b1 << b2 << b3 << b4;
-
-					//put how many rects
-					p = (unsigned char*)&number_of_rects;
-					b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
-
-					//spit out each of the bytes
-					MapFile << b1 << b2 << b3 << b4;
-
-
-					//spit out all the tiles
-					for (int i = 0; i < number_of_tiles; i++)
-					{
-						//x coords
-						p = (unsigned char*)&tile_x[i];
-						b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
-
-						//spit out each of the bytes
-						MapFile << b1 << b2 << b3 << b4;
-
-						//y coords
-						p = (unsigned char*)&tile_y[i];
-						b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
-
-						//spit out each of the bytes
-						MapFile << b1 << b2 << b3 << b4;
-
-						//tile number
-						MapFile << tile[i];
-
-					}
-
-					//spit out all the tiles
-					for (int i = 0; i < number_of_fringe; i++)
-					{
-						//x coords
-						p = (unsigned char*)&fringe_x[i];
-						b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
-
-						//spit out each of the bytes
-						MapFile << b1 << b2 << b3 << b4;
-
-						//y coords
-						p = (unsigned char*)&fringe_y[i];
-						b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
-
-						//spit out each of the bytes
-						MapFile << b1 << b2 << b3 << b4;
-
-						//fringe number
-						MapFile << fringe[i];
-
-					}
-
-					//spit out all the rects
-					for (int i = 0; i < number_of_rects; i++)
-					{
-						//x coords
-						p = (unsigned char*)&collision_rect[i].x;
-						b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
-
-						//spit out each of the bytes
-						MapFile << b1 << b2 << b3 << b4;
-
-						//y coords
-						p = (unsigned char*)&collision_rect[i].y;
-						b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
-
-						//spit out each of the bytes
-						MapFile << b1 << b2 << b3 << b4;
-
-						//width
-						p = (unsigned char*)&collision_rect[i].w;
-						b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
-
-						//spit out each of the bytes
-						MapFile << b1 << b2 << b3 << b4;
-
-						//height
-						p = (unsigned char*)&collision_rect[i].h;
-						b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
-
-						//spit out each of the bytes
-						MapFile << b1 << b2 << b3 << b4;
-					}
-
-					MapFile.close();
-				}
+				saveMap();
 			}
 			break;
 
@@ -982,7 +861,6 @@ void HandleInput()
 				for (; i < current_rect; i++)
 				{
 					collision_rect[i] = collision_rect[i + 1];
-
 				}
 
 
@@ -1319,3 +1197,130 @@ void Physics()
 }
 
 
+void saveMap()
+{
+	// Cleanup small rects you can't see
+	cleanupInvisibleRects();
+
+	//show selector for a second
+	save_notify = clock() + 120;
+
+	//default
+	std::string file = "Output.map";
+
+	//unless you have opened one
+	if (loadMapFilename.length() > 1)
+		file = loadMapFilename;
+
+	//dump all the memory into a file
+	std::ofstream MapFile(file.c_str(), std::ios::out | std::ios::binary);
+
+	if (MapFile.is_open())
+	{
+
+		//first say how many tiles
+		//break up the int as 4 bytes
+		unsigned char *p;
+		p = (unsigned char*)&number_of_tiles;
+		unsigned char b1 = p[0];
+		unsigned char b2 = p[1];
+		unsigned char b3 = p[2];
+		unsigned char b4 = p[3];
+
+		//spit out each of the bytes
+		MapFile << b1 << b2 << b3 << b4;
+
+		//put how many fringe
+		p = (unsigned char*)&number_of_fringe;
+		b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+
+		//spit out each of the bytes
+		MapFile << b1 << b2 << b3 << b4;
+
+		//put how many rects
+		p = (unsigned char*)&number_of_rects;
+		b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+
+		//spit out each of the bytes
+		MapFile << b1 << b2 << b3 << b4;
+
+
+		//spit out all the tiles
+		for (int i = 0; i < number_of_tiles; i++)
+		{
+			//x coords
+			p = (unsigned char*)&tile_x[i];
+			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+
+			//spit out each of the bytes
+			MapFile << b1 << b2 << b3 << b4;
+
+			//y coords
+			p = (unsigned char*)&tile_y[i];
+			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+
+			//spit out each of the bytes
+			MapFile << b1 << b2 << b3 << b4;
+
+			//tile number
+			MapFile << tile[i];
+
+		}
+
+		//spit out all the tiles
+		for (int i = 0; i < number_of_fringe; i++)
+		{
+			//x coords
+			p = (unsigned char*)&fringe_x[i];
+			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+
+			//spit out each of the bytes
+			MapFile << b1 << b2 << b3 << b4;
+
+			//y coords
+			p = (unsigned char*)&fringe_y[i];
+			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+
+			//spit out each of the bytes
+			MapFile << b1 << b2 << b3 << b4;
+
+			//fringe number
+			MapFile << fringe[i];
+
+		}
+
+		//spit out all the rects
+		for (int i = 0; i < number_of_rects; i++)
+		{
+			//x coords
+			p = (unsigned char*)&collision_rect[i].x;
+			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+
+			//spit out each of the bytes
+			MapFile << b1 << b2 << b3 << b4;
+
+			//y coords
+			p = (unsigned char*)&collision_rect[i].y;
+			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+
+			//spit out each of the bytes
+			MapFile << b1 << b2 << b3 << b4;
+
+			//width
+			p = (unsigned char*)&collision_rect[i].w;
+			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+
+			//spit out each of the bytes
+			MapFile << b1 << b2 << b3 << b4;
+
+			//height
+			p = (unsigned char*)&collision_rect[i].h;
+			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+
+			//spit out each of the bytes
+			MapFile << b1 << b2 << b3 << b4;
+		}
+
+		MapFile.close();
+	}
+}

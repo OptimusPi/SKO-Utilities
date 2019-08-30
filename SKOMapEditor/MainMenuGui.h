@@ -6,6 +6,8 @@
 #include "OPI_GuiTextLabel.h"
 #include "OPI_GuiButton.h"
 #include "OPI_GuiPanel.h"
+#include <functional>
+#include "Global.h"
 
 class MainMenuGui
 {
@@ -19,8 +21,14 @@ private:
 	OPI_Gui::GuiManager * guiManager = nullptr;
 	OPI_Text* coords = nullptr;
 	OPI_Gui::TextLabel * coordsLabel;
+
+	// Create Gui Elements
 	void setupHotBar();
 	void setupCoordinates();
+
+	// Helper callback functions
+	void setEditorMode(char setting);
+	void toggleEditorFringe();
 };
 
 #endif
