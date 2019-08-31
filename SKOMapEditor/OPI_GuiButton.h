@@ -20,7 +20,7 @@ namespace OPI_Gui
 	{
 	public:
 		Button(std::string themeImage, int x, int y);
-		Button(std::string theme, int x, int y, std::string text, TTF_Font* font = nullptr);
+		Button(std::string theme, int x, int y, OPI_Text * text);
 		virtual ~Button();
 		void addCallback(std::function<void()>);
 		bool isPressed = false;

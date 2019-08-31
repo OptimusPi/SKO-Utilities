@@ -3,6 +3,7 @@
 
 // Standard libraries
 #include <string>
+#include <sstream>
 #include <map>
 
 // Platform dependent includes
@@ -15,24 +16,25 @@
 #endif
 
 // Custom OPI Classes
-#include "OPI_Image.h"
+#include "OPI_Font.h"
 
 class OPI_FontManager
 {
 public:
 	static bool init(std::string defaultFontPath);
 	static void addFont(std::string fontName, std::string fontPath);
-	static TTF_Font* getFont(std::string fontName);
-	static TTF_Font* getDefaultFont();
-
-	// Key used for the default font
-	const std::string DEFAULT = "__DEFAULT__FONT__";
-
+	static OPI_Font* getFont(std::string fontName);
+	static OPI_Font* getDefaultFont();
 private:
 	static OPI_FontManager *instance;
 	static OPI_FontManager * getInstance();
 	OPI_FontManager() {};
-	std::map<std::string, TTF_Font*> loadedFonts;
+
+	// Key used for the default font
+	const std::string DEFAULT = "__DEFAULT__FONT__";
+
+	// Cache for lazy loaded fonts
+	std::map<std::string, OPI_Font*> loadedFonts;
 };
 
 

@@ -10,7 +10,7 @@ bool OPI_Gui::MessageBox::isInteracting()
 	return true;
 }
 
-OPI_Gui::MessageBox::MessageBox(std::string message, TTF_Font* font, bool wordWrap, OPI_Gui::ElementThemeType themeType, std::string theme)
+OPI_Gui::MessageBox::MessageBox(std::string message, OPI_Font* font, bool wordWrap, OPI_Gui::ElementThemeType themeType, std::string theme)
 	: Panel(themeType, theme, 0, 0)
 {
 	this->theme = OPI_Gui::ThemeLoader::GetTheme(themeType, theme);
@@ -32,7 +32,7 @@ OPI_Gui::MessageBox::MessageBox(std::string message, TTF_Font* font, bool wordWr
 
 
 //TODO don't duplicate constructor code
-OPI_Gui::MessageBox::MessageBox(std::string message, OPI_Gui::MessageBoxType messageBoxType, TTF_Font* font, bool wordWrap, OPI_Gui::ElementThemeType themeType, std::string theme)
+OPI_Gui::MessageBox::MessageBox(std::string message, OPI_Gui::MessageBoxType messageBoxType, OPI_Font* font, bool wordWrap, OPI_Gui::ElementThemeType themeType, std::string theme)
 	: Panel(themeType, theme, 0, 0)
 {
 	this->theme = OPI_Gui::ThemeLoader::GetTheme(themeType, theme);
@@ -94,6 +94,7 @@ void OPI_Gui::MessageBox::addButtons()
 	std::function<void()> cancelCallback;
 	std::function<void()> yesCallback;
 	std::function<void()> noCallback;
+	OPI_Text* okText = new OPI_Text("Okay", this->font, 14);
 
 	switch (this->type)
 	{
@@ -103,7 +104,7 @@ void OPI_Gui::MessageBox::addButtons()
 		okButtonY = this->height - this->DefaultPadding - buttonHeight;
 
 		// Create Okay button with default theme & font.
-		okayButton = new OPI_Gui::Button("default", okButtonX, okButtonY, "Okay");
+		okayButton = new OPI_Gui::Button("default", okButtonX, okButtonY, okText);
 		okayButton->isVisible = true;
 
 		// Set click handler of Okay to close this Message Box.
