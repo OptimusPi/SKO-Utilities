@@ -3,14 +3,14 @@
 
 
 #include "OPI_Image.h"
-#include "OPI_GuiElementTheme.h"
+#include "OPI_GuiButtonTheme.h"
 #include "OPI_GuiButton.h"
 
 namespace OPI_Gui
 {
 	class Button;
 
-	class ButtonThemeIcon : public ElementTheme
+	class ButtonThemeIcon : public ButtonTheme
 	{
 	public:
 		ButtonThemeIcon();

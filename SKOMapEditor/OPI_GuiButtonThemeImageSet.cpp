@@ -5,7 +5,6 @@ OPI_Gui::ButtonThemeImageSet::ButtonThemeImageSet()
 {
 }
 
-
 OPI_Gui::ButtonThemeImageSet::~ButtonThemeImageSet()
 {
 }
@@ -28,11 +27,6 @@ int OPI_Gui::ButtonThemeImageSet::getMaximumWidth()
 int OPI_Gui::ButtonThemeImageSet::getMaximumHeight()
 {
 	return this->textureEnabled->height;
-}
-
-void OPI_Gui::ButtonThemeImageSet::render(OPI_Gui::Element * element)
-{
-	this->render((OPI_Gui::Button *)element);
 }
 
 void OPI_Gui::ButtonThemeImageSet::render(OPI_Gui::Button * button)

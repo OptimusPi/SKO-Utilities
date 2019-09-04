@@ -13,15 +13,11 @@ namespace OPI_Gui
 	public:
 		ButtonTheme();
 		virtual ~ButtonTheme();
-		int getMinimumWidth();
-		int getMinimumHeight();
-		int getMaximumWidth();
-		int getMaximumHeight();
-		void render(OPI_Gui::Button* button);
-		OPI_Image *textureEnabled;
-		OPI_Image *textureDisabled;
-		OPI_Image *texturePressed;
-		OPI_Image *textureSelected;
+		virtual void render(OPI_Gui::Button *element) = 0;
+		virtual int getMinimumWidth() = 0;
+		virtual int getMinimumHeight() = 0;
+		virtual int getMaximumWidth() = 0;
+		virtual int getMaximumHeight() = 0;
 	};
 }
 

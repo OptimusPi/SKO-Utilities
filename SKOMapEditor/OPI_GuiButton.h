@@ -8,8 +8,7 @@
 #include "OPI_GuiTextLabel.h"
 #include "OPI_GuiThemeLoader.h"
 #include "OPI_GuiManager.h"
-#include "OPI_GuiElementThemeButton.h"
-#include "OPI_GuiElementThemeButtonImage.h"
+#include "OPI_GuiButtonTheme.h"
 #include "OPI_FontManager.h"
 
 #include <string>

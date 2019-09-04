@@ -18,7 +18,6 @@ namespace OPI_Gui
 		int getMinimumHeight();
 		int getMaximumWidth();
 		int getMaximumHeight();
-		void render(OPI_Gui::Element* element);
 		void render(OPI_Gui::Button* button);
 		OPI_Image *textureEnabled;
 		OPI_Image *textureDisabled;
