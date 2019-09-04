@@ -15,22 +15,22 @@ OPI_Gui::ElementThemeButtonImage::~ElementThemeButtonImage()
 
 int OPI_Gui::ElementThemeButtonImage::getMinimumWidth()
 {
-	return this->texture->width;
+	return this->textureEnabled->width;
 }
 
 int OPI_Gui::ElementThemeButtonImage::getMaximumWidth()
 {
-	return this->texture->width;
+	return this->textureEnabled->width;
 }
 
 int OPI_Gui::ElementThemeButtonImage::getMinimumHeight()
 {
-	return this->texture->height;
+	return this->textureEnabled->height;
 }
 
 int OPI_Gui::ElementThemeButtonImage::getMaximumHeight()
 {
-	return this->texture->height;
+	return this->textureEnabled->height;
 }
 
 void OPI_Gui::ElementThemeButtonImage::render(OPI_Gui::Element * element)

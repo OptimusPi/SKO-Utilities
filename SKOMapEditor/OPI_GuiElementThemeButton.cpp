@@ -37,7 +37,6 @@ void OPI_Gui::ElementThemeButton::render(OPI_Gui::Element * element)
 
 void OPI_Gui::ElementThemeButton::render(OPI_Gui::Button * button)
 {
-
 	if (!button->isEnabled)
 	{
 		button->setTexture(this->textureDisabled);

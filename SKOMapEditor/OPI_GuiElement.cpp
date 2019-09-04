@@ -16,7 +16,7 @@ void OPI_Gui::Element::addElement(OPI_Gui::Element *element)
 void OPI_Gui::Element::destroy()
 {
 	this->destroyed = true;
-
+	this->isVisible = false;
 }
 
 void OPI_Gui::Element::setTexture(OPI_Image * texture)

@@ -2,7 +2,6 @@
 #define __OPI_GUI_ELEMENTTHEME_
 
 #include <string>
-
 #include "OPI_GuiElement.h"
 
 namespace OPI_Gui

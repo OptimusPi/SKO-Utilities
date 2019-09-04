@@ -37,7 +37,7 @@ namespace OPI_Gui
 	private:
 		bool clickableContainsMouse(int mouseX, int mouseY);
 		void setCursor(CursorType cursor);
-		OPI_Gui::ElementTheme *theme;
+		OPI_Gui::ButtonTheme *theme;
 		OPI_Image *texture;
 		OPI_Text *text;
 

@@ -141,6 +141,9 @@
     <ClInclude Include="OPI_Font.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OPI_GuiButtonTheme.h">
+      <Filter>Header Files\Graphics\GUI\Themes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -199,6 +202,9 @@
     </ClCompile>
     <ClCompile Include="OPI_Font.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OPI_GuiButtonTheme.cpp">
+      <Filter>Source Files\Graphics\GUI\BaseElements</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -158,6 +158,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="OPI_GuiButtonTheme.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="MainMenuGui.h" />
     <ClInclude Include="OPI_Font.h" />
@@ -185,6 +186,7 @@
     <ClInclude Include="OPI_GuiElementThemeType.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="OPI_GuiButtonTheme.cpp" />
     <ClCompile Include="MainMenuGui.cpp" />
     <ClCompile Include="OPI_Font.cpp" />
     <ClCompile Include="OPI_GuiButton.cpp" />

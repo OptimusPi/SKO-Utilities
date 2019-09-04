@@ -73,8 +73,6 @@ void OPI_Gui::GuiManager::setCursor(OPI_Gui::CursorType selectedCursor)
 	}
 }
 
-
-
 bool OPI_Gui::GuiManager::handleMouseMove_InteractingElements(int mouseX, int mouseY)
 {
 	for (auto i = instance->children.rbegin(); i != instance->children.rend(); i++)
