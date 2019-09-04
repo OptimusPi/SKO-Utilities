@@ -64,6 +64,18 @@
     <Filter Include="Source Files\Graphics\GUI\HighLevelElements">
       <UniqueIdentifier>{ce20ecf4-37d9-440e-ae9b-1725c8d0fd92}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Graphics\GUI\Themes\Button">
+      <UniqueIdentifier>{12a46617-3efb-4f52-bb3f-50b24a24d32e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\GUI\Themes\Button">
+      <UniqueIdentifier>{82d5406a-ff44-4b57-afd1-4b63dfc71ee0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics\GUI\Themes\Element">
+      <UniqueIdentifier>{97300902-118f-455f-af65-31eb4f6c0d28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\GUI\Themes\Element">
+      <UniqueIdentifier>{401c1db8-90e5-4cd5-8dc0-b31e667b8908}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OPI_Image.h">
@@ -83,18 +95,6 @@
     </ClInclude>
     <ClInclude Include="OPI_GuiElementThemeType.h">
       <Filter>Header Files\Graphics\GUI\Enums</Filter>
-    </ClInclude>
-    <ClInclude Include="OPI_GuiElementTheme.h">
-      <Filter>Header Files\Graphics\GUI\Themes</Filter>
-    </ClInclude>
-    <ClInclude Include="OPI_GuiElementThemeButton.h">
-      <Filter>Header Files\Graphics\GUI\Themes</Filter>
-    </ClInclude>
-    <ClInclude Include="OPI_GuiElementThemeGridRect.h">
-      <Filter>Header Files\Graphics\GUI\Themes</Filter>
-    </ClInclude>
-    <ClInclude Include="OPI_GuiElementThemeImage.h">
-      <Filter>Header Files\Graphics\GUI\Themes</Filter>
     </ClInclude>
     <ClInclude Include="OPI_GuiButton.h">
       <Filter>Header Files\Graphics\GUI\BaseElements</Filter>
@@ -135,14 +135,26 @@
     <ClInclude Include="MainMenuGui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OPI_GuiElementThemeButtonImage.h">
-      <Filter>Header Files\Graphics\GUI\Themes</Filter>
-    </ClInclude>
     <ClInclude Include="OPI_Font.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OPI_GuiButtonTheme.h">
-      <Filter>Header Files\Graphics\GUI\Themes</Filter>
+      <Filter>Header Files\Graphics\GUI\Themes\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="OPI_GuiButtonThemeImageSet.h">
+      <Filter>Header Files\Graphics\GUI\Themes\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="OPI_GuiButtonThemeIcon.h">
+      <Filter>Header Files\Graphics\GUI\Themes\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="OPI_GuiElementTheme.h">
+      <Filter>Header Files\Graphics\GUI\Themes\Element</Filter>
+    </ClInclude>
+    <ClInclude Include="OPI_GuiElementThemeGridRect.h">
+      <Filter>Header Files\Graphics\GUI\Themes\Element</Filter>
+    </ClInclude>
+    <ClInclude Include="OPI_GuiElementThemeImage.h">
+      <Filter>Header Files\Graphics\GUI\Themes\Element</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -173,15 +185,6 @@
     <ClCompile Include="OPI_GuiThemeLoader.cpp">
       <Filter>Source Files\Graphics\GUI\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="OPI_GuiElementThemeButton.cpp">
-      <Filter>Source Files\Graphics\GUI\Themes</Filter>
-    </ClCompile>
-    <ClCompile Include="OPI_GuiElementThemeGridRect.cpp">
-      <Filter>Source Files\Graphics\GUI\Themes</Filter>
-    </ClCompile>
-    <ClCompile Include="OPI_GuiElementThemeImage.cpp">
-      <Filter>Source Files\Graphics\GUI\Themes</Filter>
-    </ClCompile>
     <ClCompile Include="OPI_GuiMessageBox.cpp">
       <Filter>Source Files\Graphics\GUI\HighLevelElements</Filter>
     </ClCompile>
@@ -197,14 +200,23 @@
     <ClCompile Include="MainMenuGui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OPI_GuiElementThemeButtonImage.cpp">
-      <Filter>Source Files\Graphics\GUI\Themes</Filter>
-    </ClCompile>
     <ClCompile Include="OPI_Font.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="OPI_GuiButtonTheme.cpp">
-      <Filter>Source Files\Graphics\GUI\BaseElements</Filter>
+      <Filter>Source Files\Graphics\GUI\Themes\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="OPI_GuiButtonThemeImageSet.cpp">
+      <Filter>Source Files\Graphics\GUI\Themes\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="OPI_GuiButtonThemeIcon.cpp">
+      <Filter>Source Files\Graphics\GUI\Themes\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="OPI_GuiElementThemeGridRect.cpp">
+      <Filter>Source Files\Graphics\GUI\Themes\Element</Filter>
+    </ClCompile>
+    <ClCompile Include="OPI_GuiElementThemeImage.cpp">
+      <Filter>Source Files\Graphics\GUI\Themes\Element</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -10,11 +10,11 @@ namespace OPI_Gui
 {
 	class Button;
 
-	class ElementThemeButtonImage : public ElementTheme
+	class ButtonThemeIcon : public ElementTheme
 	{
 	public:
-		ElementThemeButtonImage();
-		virtual ~ElementThemeButtonImage();
+		ButtonThemeIcon();
+		virtual ~ButtonThemeIcon();
 		int getMinimumWidth();
 		int getMinimumHeight();
 		int getMaximumWidth();

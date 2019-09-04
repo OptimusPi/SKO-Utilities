@@ -2,18 +2,18 @@
 #define __OPI_GUI_ELEMENTTHEMEBUTTON_
 
 #include "OPI_Image.h"
-#include "OPI_GuiElementTheme.h"
+#include "OPI_GuiButtonTheme.h"
 #include "OPI_GuiButton.h"
 
 namespace OPI_Gui
 {
 	class Button;
 
-	class ElementThemeButton : public ElementTheme 
+	class ButtonThemeImageSet : public ElementTheme 
 	{
 	public:
-		ElementThemeButton();
-		virtual ~ElementThemeButton();
+		ButtonThemeImageSet();
+		virtual ~ButtonThemeImageSet();
 		int getMinimumWidth();
 		int getMinimumHeight();
 		int getMaximumWidth();

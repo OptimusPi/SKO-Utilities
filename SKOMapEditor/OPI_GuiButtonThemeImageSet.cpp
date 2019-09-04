@@ -1,41 +1,41 @@
-#include "OPI_GuiElementThemeButton.h"
+#include "OPI_GuiButtonThemeImageSet.h"
 #include "OPI_GuiButton.h"
 
-OPI_Gui::ElementThemeButton::ElementThemeButton()
+OPI_Gui::ButtonThemeImageSet::ButtonThemeImageSet()
 {
 }
 
 
-OPI_Gui::ElementThemeButton::~ElementThemeButton()
+OPI_Gui::ButtonThemeImageSet::~ButtonThemeImageSet()
 {
 }
 
-int OPI_Gui::ElementThemeButton::getMinimumWidth()
-{
-	return this->textureEnabled->width;
-}
-
-int OPI_Gui::ElementThemeButton::getMinimumHeight()
-{
-	return this->textureEnabled->height;
-}
-
-int OPI_Gui::ElementThemeButton::getMaximumWidth()
+int OPI_Gui::ButtonThemeImageSet::getMinimumWidth()
 {
 	return this->textureEnabled->width;
 }
 
-int OPI_Gui::ElementThemeButton::getMaximumHeight()
+int OPI_Gui::ButtonThemeImageSet::getMinimumHeight()
 {
 	return this->textureEnabled->height;
 }
 
-void OPI_Gui::ElementThemeButton::render(OPI_Gui::Element * element)
+int OPI_Gui::ButtonThemeImageSet::getMaximumWidth()
+{
+	return this->textureEnabled->width;
+}
+
+int OPI_Gui::ButtonThemeImageSet::getMaximumHeight()
+{
+	return this->textureEnabled->height;
+}
+
+void OPI_Gui::ButtonThemeImageSet::render(OPI_Gui::Element * element)
 {
 	this->render((OPI_Gui::Button *)element);
 }
 
-void OPI_Gui::ElementThemeButton::render(OPI_Gui::Button * button)
+void OPI_Gui::ButtonThemeImageSet::render(OPI_Gui::Button * button)
 {
 	if (!button->isEnabled)
 	{

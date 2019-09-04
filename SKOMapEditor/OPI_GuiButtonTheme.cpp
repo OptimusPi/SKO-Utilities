@@ -2,8 +2,10 @@
 
 OPI_Gui::ButtonTheme::ButtonTheme()
 {
+
 }
 
 OPI_Gui::ButtonTheme::~ButtonTheme()
 {
+
 }

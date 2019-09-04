@@ -162,9 +162,9 @@
     <ClInclude Include="Global.h" />
     <ClInclude Include="MainMenuGui.h" />
     <ClInclude Include="OPI_Font.h" />
-    <ClInclude Include="OPI_GuiElementThemeButtonImage.h" />
+    <ClInclude Include="OPI_GuiButtonThemeIcon.h" />
     <ClInclude Include="OPI_GuiMessageBoxType.h" />
-    <ClInclude Include="OPI_GuiElementThemeButton.h" />
+    <ClInclude Include="OPI_GuiButtonThemeImageSet.h" />
     <ClInclude Include="OPI_GuiElementThemeGridRect.h" />
     <ClInclude Include="OPI_GuiCursorType.h" />
     <ClInclude Include="OPI_GuiElement.h" />
@@ -191,8 +191,8 @@
     <ClCompile Include="OPI_Font.cpp" />
     <ClCompile Include="OPI_GuiButton.cpp" />
     <ClCompile Include="OPI_GuiElement.cpp" />
-    <ClCompile Include="OPI_GuiElementThemeButton.cpp" />
-    <ClCompile Include="OPI_GuiElementThemeButtonImage.cpp" />
+    <ClCompile Include="OPI_GuiButtonThemeImageSet.cpp" />
+    <ClCompile Include="OPI_GuiButtonThemeIcon.cpp" />
     <ClCompile Include="OPI_GuiElementThemeGridRect.cpp" />
     <ClCompile Include="OPI_GuiElementThemeImage.cpp" />
     <ClCompile Include="OPI_FontManager.cpp" />
