@@ -9,7 +9,7 @@ namespace OPI_Gui
 {
 	class Button;
 
-	class ButtonThemeImageSet : public ElementTheme 
+	class ButtonThemeImageSet : public ButtonTheme 
 	{
 	public:
 		ButtonThemeImageSet();
