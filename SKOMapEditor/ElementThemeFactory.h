@@ -4,22 +4,22 @@
 #include <string>
 #include <map>
 
-#include "OPI_GuiElementTheme.h"
-#include "OPI_GuiElementThemeType.h"
+#include "ElementTheme.h"
+#include "ElementThemeType.h"
 
 namespace OPI_Gui
 {
 	/// Singleton
-	class ThemeLoader
+	class ElementThemeLoader
 	{
 	public:
 		static OPI_Gui::ElementTheme *GetTheme(OPI_Gui::ElementThemeType type, std::string theme);
 		OPI_Gui::ElementThemeType t;
 	private:
-		static ThemeLoader* getInstance();
-		static ThemeLoader *instance;
-		ThemeLoader();
-		virtual ~ThemeLoader();
+		static ElementThemeLoader* getInstance();
+		static ElementThemeLoader *instance;
+		ElementThemeLoader();
+		virtual ~ElementThemeLoader();
 
 		// Grab theme from cache if it exists, 
 		// else load it from disk.

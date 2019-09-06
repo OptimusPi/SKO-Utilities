@@ -9,8 +9,8 @@
 	#include <SDL/SDL.h>
 #endif
 
-#include "OPI_GuiCursorType.h"
-#include "OPI_GuiElement.h"
+#include "CursorType.h"
+#include "Element.h"
 #include "OPI_Renderer.h"
 
 namespace OPI_Gui

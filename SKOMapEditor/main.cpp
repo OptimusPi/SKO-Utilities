@@ -20,9 +20,9 @@
 #include "OPI_Clock.h"
 #include "OPI_Sleep.h"
 #include "OPI_GuiManager.h"
-#include "OPI_GuiPanel.h"
-#include "OPI_GuiButton.h"
-#include "OPI_GuiMessageBox.h"
+#include "Panel.h"
+#include "Button.h"
+#include "MessageBox.h"
 #include "OPI_FontManager.h"
 #include "OPI_Renderer.h"
 

@@ -1,16 +1,16 @@
 #include "OPI_Image.h"
-#include "OPI_GuiElementTheme.h"
+#include "ElementTheme.h"
 
 #ifndef __OPI_GUI_ELEMENTTHEMEIMAGE_
 #define __OPI_GUI_ELEMENTTHEMEIMAGE_
 
 namespace OPI_Gui
 {
-	class ElementThemeImage : public ElementTheme
+	class OPI_ElementThemeImage : public ElementTheme
 	{
 	public:
-		ElementThemeImage();
-		virtual ~ElementThemeImage();
+		OPI_ElementThemeImage();
+		virtual ~OPI_ElementThemeImage();
 		int getMinimumWidth();
 		int getMinimumHeight();
 		int getMaximumWidth();

@@ -1,7 +1,7 @@
 #ifndef __OPI_GUITEXTLABEL_H_
 #define	__OPI_GUITEXTLABEL_H_
 
-#include "OPI_GuiElement.h"
+#include "Element.h"
 #include "OPI_Text.h"
 
 namespace OPI_Gui

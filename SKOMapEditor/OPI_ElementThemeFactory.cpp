@@ -1,9 +1,9 @@
 #include <typeinfo>
 
-#include "OPI_GuiThemeLoader.h"
-#include "OPI_GuiElementThemeGridRect.h"
-#include "OPI_GuiElementThemeImage.h"
-#include "OPI_GuiElementThemeButton.h"
+#include "ElementThemeFactory.h"
+#include "ElementThemeGridRect.h"
+#include "ElementThemeImage.h"
+#include "ElementThemeButton.h"
 
 /// Singleton instance
 OPI_Gui::ThemeLoader * OPI_Gui::ThemeLoader::instance;
@@ -59,7 +59,7 @@ OPI_Gui::ElementTheme * OPI_Gui::ThemeLoader::getTheme(OPI_Gui::ElementThemeType
 
 void OPI_Gui::ThemeLoader::loadTheme_Image(std::string theme)
 {
-	OPI_Gui::ElementThemeImage *elementThemeImage = new OPI_Gui::ElementThemeImage();
+	OPI_Gui::OPI_ElementThemeImage *elementThemeImage = new OPI_Gui::OPI_ElementThemeImage();
 	std::string themePath = "IMG/GUI/themes/panel_images/" + theme + ".png";
 	elementThemeImage->texture = new OPI_Image(themePath);
 

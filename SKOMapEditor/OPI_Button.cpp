@@ -1,4 +1,4 @@
-#include "OPI_GuiButton.h"
+#include "Button.h"
 
 
 OPI_Gui::Button::Button(std::string themeImage, int x, int y)

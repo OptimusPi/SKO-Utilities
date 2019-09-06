@@ -2,7 +2,7 @@
 #define __OPI_GUI_BUTTONTHEME_H_
 
 #include "OPI_Image.h"
-#include "OPI_GuiButton.h"
+#include "Button.h"
 
 namespace OPI_Gui
 {
@@ -18,6 +18,10 @@ namespace OPI_Gui
 		virtual int getMinimumHeight() = 0;
 		virtual int getMaximumWidth() = 0;
 		virtual int getMaximumHeight() = 0;
+		OPI_Image *textureEnabled;
+		OPI_Image *textureDisabled;
+		OPI_Image *texturePressed;
+		OPI_Image *textureSelected;
 	};
 }
 

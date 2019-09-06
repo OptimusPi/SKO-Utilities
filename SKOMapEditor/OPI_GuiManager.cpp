@@ -1,5 +1,5 @@
-#include "OPI_GuiManager.h"
-#include "OPI_GuiPanel.h"
+#include "Manager.h"
+#include "Panel.h"
 
 
 // TODO - get rid of Global.h

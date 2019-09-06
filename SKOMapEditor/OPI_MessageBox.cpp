@@ -1,4 +1,4 @@
-#include "OPI_GuiMessageBox.h"
+#include "MessageBox.h"
 
 OPI_Gui::MessageBox::~MessageBox()
 {

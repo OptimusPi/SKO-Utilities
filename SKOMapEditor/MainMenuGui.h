@@ -1,11 +1,11 @@
 #ifndef __MAINMENUGUI_H_
 #define __MAINMENUGUI_H_
 
-#include "OPI_GuiManager.h"
-#include "OPI_FontManager.h"
-#include "OPI_GuiTextLabel.h"
-#include "OPI_GuiButton.h"
-#include "OPI_GuiPanel.h"
+#include "GuiManager.h"
+#include "FontManager.h"
+#include "TextLabel.h"
+#include "Button.h"
+#include "Panel.h"
 #include <functional>
 #include "Global.h"
 

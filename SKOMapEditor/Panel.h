@@ -3,11 +3,10 @@
 
 #include <vector>
 #include <string>
+
 #include "OPI_Image.h"
-#include "OPI_GuiManager.h"
-#include "OPI_GuiElement.h"
-#include "OPI_GuiElementThemeGridRect.h" // TODO is this needed ? :'(
-#include "OPI_GuiThemeLoader.h"
+#include "Element.h"
+#include "ElementThemeFactory.h"
 
 #ifdef _WIN32
 	#include "SDL.h"

@@ -1,4 +1,4 @@
-#include "OPI_GuiTextLabel.h"
+#include "TextLabel.h"
 
 OPI_Gui::TextLabel::TextLabel(OPI_Text * text)
 {

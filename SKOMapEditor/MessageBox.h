@@ -1,15 +1,15 @@
 #ifndef	__OPI_GUIMESSAGEBOX_
 #define __OPI_GUIMESSAGEBOX_
 
-#include "OPI_GuiElement.h"
-#include "OPI_GuiMessageBoxType.h"
-#include "OPI_GuiElementThemeType.h"
-#include "OPI_GuiThemeLoader.h"
+#include "Element.h"
+#include "MessageBoxType.h"
+#include "ElementThemeType.h"
+#include "ElementThemeFactory.h"
 #include "OPI_Image.h"
 #include "OPI_Text.h"
-#include "OPI_GuiTextLabel.h"
-#include "OPI_GuiButton.h"
-#include "OPI_GuiPanel.h"
+#include "TextLabel.h"
+#include "Button.h"
+#include "Panel.h"
 
 namespace OPI_Gui
 {
