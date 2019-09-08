@@ -164,8 +164,7 @@ bool OPI_Gui::Panel::handleMouseMove(int mouseX, int mouseY)
 	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
 	{
 		OPI_Gui::Element *element = *i;
-		if (element->handleMouseMove(mouseX - this->x, mouseY - this->y))
-			return true;
+		element->handleMouseMove(mouseX - this->x, mouseY - this->y);
 	}
 
 	if (this->isMovable && handleSection_Move(mouseX, mouseY))
@@ -188,12 +187,15 @@ bool OPI_Gui::Panel::handleMouseMove(int mouseX, int mouseY)
 
 bool OPI_Gui::Panel::handleMousePressLeft(int mouseX, int mouseY)
 {
+	// First check if mouse input is inside this Panel
+	bool panelContainsMouse = containsMouse(mouseX, mouseY, this->x, this->y, this->width, this->height);
+
 	//handle child mouse presses first
 	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->handleMousePressLeft(mouseX - this->x, mouseY - this->y))
-			return true;
+			break;
 	}
 
 	if (this->isMovable && handleSection_Move(mouseX, mouseY))
@@ -219,17 +221,20 @@ bool OPI_Gui::Panel::handleMousePressLeft(int mouseX, int mouseY)
 		return true;
 	}
 
-	return false;
+	return panelContainsMouse;
 }
 
 bool OPI_Gui::Panel::handleMouseReleaseLeft(int mouseX, int mouseY)
 {
+	// First check if mouse input is inside this Panel
+	bool panelContainsMouse = containsMouse(mouseX, mouseY, this->x, this->y, this->width, this->height);
+
 	//handle child mouse presses first
 	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->handleMouseReleaseLeft(mouseX - this->x, mouseY - this->y))
-			return true;
+			break;
 	}
 
 	if (this->isMovable && handleSection_Move(mouseX, mouseY))
@@ -244,33 +249,40 @@ bool OPI_Gui::Panel::handleMouseReleaseLeft(int mouseX, int mouseY)
 		return true;
 	}
 
-	return false;
+	return panelContainsMouse;
 }
 
 
 bool OPI_Gui::Panel::handleMousePressRight(int mouseX, int mouseY)
 {
+	// First check if mouse input is inside this Panel
+	bool panelContainsMouse = containsMouse(mouseX, mouseY, this->x, this->y, this->width, this->height);
+
+
 	//handle child mouse presses first
 	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->handleMousePressRight(mouseX - this->x, mouseY - this->y))
-			return true;
+			break;
 	}
 
-	return false;
+	return panelContainsMouse;
 }
 
 bool OPI_Gui::Panel::handleMouseReleaseRight(int mouseX, int mouseY)
 {
+	// First check if mouse input is inside this Panel
+	bool panelContainsMouse = containsMouse(mouseX, mouseY, this->x, this->y, this->width, this->height);
+
 	//handle child mouse presses first
 	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->handleMouseReleaseRight(mouseX - this->x, mouseY - this->y))
-			return true;
+			break;
 	}
-	return false;
+	return panelContainsMouse;
 }
 
 bool OPI_Gui::Panel::isInteracting()

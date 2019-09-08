@@ -29,11 +29,11 @@ namespace OPI_Gui
 		bool handleMouseMove_InteractingElements(int mouseX, int mouseY);
 
 		// Mouse events
-		static void handleMouseMove(int mouseX, int mouseY);
-		static void handleMousePressLeft(int mouseX, int mouseY);
-		static void handleMousePressRight(int mouseX, int mouseY);
-		static void handleMouseReleaseLeft(int mouseX, int mouseY);
-		static void handleMouseReleaseRight(int mouseX, int mouseY);
+		static bool handleMouseMove(int mouseX, int mouseY);
+		static bool handleMousePressLeft(int mouseX, int mouseY);
+		static bool handleMousePressRight(int mouseX, int mouseY);
+		static bool handleMouseReleaseLeft(int mouseX, int mouseY);
+		static bool handleMouseReleaseRight(int mouseX, int mouseY);
 
 		// Get screen dimensions for help placing elements
 		static int getScreenWidth();

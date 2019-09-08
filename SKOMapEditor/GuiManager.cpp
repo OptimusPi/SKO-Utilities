@@ -84,58 +84,71 @@ bool OPI_Gui::GuiManager::handleMouseMove_InteractingElements(int mouseX, int mo
 	return false;
 }
 
-void OPI_Gui::GuiManager::handleMouseMove(int mouseX, int mouseY)
+bool OPI_Gui::GuiManager::handleMouseMove(int mouseX, int mouseY)
 {
+	bool eventHandled = false;
+
 	// Allow elements to pass over, under, and across each other when dragging without losing mouse focus
 	if (instance->handleMouseMove_InteractingElements(mouseX, mouseY))
-		return;
+		return true;
 
 	for (auto i = instance->children.rbegin(); i != instance->children.rend(); i++)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->handleMouseMove(mouseX, mouseY))
-			break;
+			eventHandled = true;
 	}
+
+	return eventHandled;
 }
 
-void OPI_Gui::GuiManager::handleMousePressLeft(int mouseX, int mouseY)
+bool OPI_Gui::GuiManager::handleMousePressLeft(int mouseX, int mouseY)
 {
+	bool eventHandled = false;
 	for (auto i = instance->children.rbegin(); i != instance->children.rend(); i++)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->handleMousePressLeft(mouseX, mouseY))
-			break;
+			eventHandled = true;
 	}
+	return eventHandled;
 }
 
-void OPI_Gui::GuiManager::handleMousePressRight(int mouseX, int mouseY)
+bool OPI_Gui::GuiManager::handleMousePressRight(int mouseX, int mouseY)
 {
+	bool eventHandled = false;
 	for (auto i = instance->children.rbegin(); i != instance->children.rend(); i++)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->handleMousePressRight(mouseX, mouseY))
-			break;
+			eventHandled = true;
 	}
+	return eventHandled;
 }
 
-void OPI_Gui::GuiManager::handleMouseReleaseLeft(int mouseX, int mouseY)
+bool OPI_Gui::GuiManager::handleMouseReleaseLeft(int mouseX, int mouseY)
 {
+	bool eventHandled = false;
 	for (auto i = instance->children.rbegin(); i != instance->children.rend(); i++)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->handleMouseReleaseLeft(mouseX, mouseY))
-			break;
+			eventHandled = true;
 	}
+
+	return eventHandled;
 }
 
-void OPI_Gui::GuiManager::handleMouseReleaseRight(int mouseX, int mouseY)
+bool OPI_Gui::GuiManager::handleMouseReleaseRight(int mouseX, int mouseY)
 {
+	bool eventHandled = false;
 	for (auto i = instance->children.rbegin(); i != instance->children.rend(); i++)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->handleMouseReleaseRight(mouseX, mouseY))
-			break;
+			eventHandled = true;
 	}
+	return eventHandled;
 }
 
 int OPI_Gui::GuiManager::getScreenWidth()

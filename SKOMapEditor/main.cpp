@@ -26,7 +26,6 @@
 #include "FontManager.h"
 #include "OPI_Renderer.h"
 
-
 // GUI Implementations
 #include "MainMenuGui.h"
 
@@ -663,6 +662,11 @@ void HandleInput()
 			cursor_x = renderer->getScaledMouseX(event.motion.x);
 			cursor_y = renderer->getScaledMouseY(event.motion.y);
 
+			bool eventHandled = gui->handleMouseMove(cursor_x, cursor_y);
+
+			if (eventHandled)
+				break;
+
 			//draw the almost done rect
 			if (mode == COLLISION_DRAW && LCLICK)
 			{
@@ -723,13 +727,15 @@ void HandleInput()
 				stickman.x = cursor_x + camera_x;
 				stickman.y = cursor_y + camera_y;
 			}
-
-			gui->handleMouseMove(cursor_x, cursor_y);
 		}
 
 		if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT && !LCLICK)
 		{
-			gui->handleMousePressLeft(cursor_x, cursor_y);
+			bool eventHandled = gui->handleMousePressLeft(cursor_x, cursor_y);
+			LCLICK = true;
+
+			if (eventHandled)
+				break;
 
 			switch (mode)
 			{
@@ -883,20 +889,27 @@ void HandleInput()
 
 			}
 
-			LCLICK = true;
 		}
 
 		if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_RIGHT && !RCLICK)
 		{
-			gui->handleMousePressRight(cursor_x, cursor_y);
+			bool eventHandled = gui->handleMousePressRight(cursor_x, cursor_y);
 			RCLICK = true;
+			if (eventHandled)
+				break;
+
+			
 			//TODO - use RCLICK for collision rect editing
 		}
 		if (event.type == SDL_MOUSEBUTTONUP)
 		{
 			if (event.button.button == SDL_BUTTON_LEFT && LCLICK)
 			{
-				gui->handleMouseReleaseLeft(cursor_x, cursor_y);
+				bool eventHandled = gui->handleMouseReleaseLeft(cursor_x, cursor_y);
+				LCLICK = false;
+
+				if (eventHandled)
+					break;
 
 				switch (mode)
 				{
@@ -931,13 +944,18 @@ void HandleInput()
 					break;
 				}
 
-				LCLICK = false;
+				
 			}
 
 			if (event.button.button == SDL_BUTTON_RIGHT && RCLICK)
 			{
-				gui->handleMouseReleaseRight(cursor_x, cursor_y);
+				bool eventHandled = gui->handleMouseReleaseRight(cursor_x, cursor_y);
 				RCLICK = false;
+
+				if (eventHandled)
+					break;
+
+				
 			}
 		}
 	} //if poll event

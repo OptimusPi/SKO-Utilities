@@ -32,7 +32,7 @@ void MainMenuGui::setupHotBar()
 	auto panelY = guiManager->getScreenHeight() - panelHeight;
 	// Create invisible panel 
 	//auto hotbarPanel = new OPI_Gui::Panel(panelX, panelY, panelWidth, panelHeight);
-	auto hotbarPanel = new OPI_Gui::Panel(OPI_Gui::ElementThemeType::GridRect, "ice", panelX, panelY, panelWidth, panelHeight);
+	auto hotbarPanel = new OPI_Gui::Panel(OPI_Gui::ElementThemeType::GridRect, "ice", panelX, panelY, panelWidth + 100, panelHeight);
 	hotbarPanel->isClosable = false;
 	hotbarPanel->isMovable = true;
 	hotbarPanel->isResizable = false;
