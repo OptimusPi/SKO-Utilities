@@ -11,7 +11,7 @@ OPI_Gui::Panel::Panel(int x, int y, int width, int height)
 
 OPI_Gui::Panel::Panel(OPI_Gui::ElementThemeType type, std::string theme, int x, int y, int width, int height)
 {
-	this->theme = OPI_Gui::ElementThemeLoader::GetTheme(type, theme);
+	this->theme = OPI_Gui::ElementThemeFactory::GetTheme(type, theme);
 	this->x = x;
 	this->y = y;
 	this->width = width < this->theme->getMinimumWidth() ? this->theme->getMinimumWidth() : width;

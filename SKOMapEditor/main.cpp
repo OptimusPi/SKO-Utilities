@@ -15,15 +15,15 @@
 #include <iostream>
 #include <fstream>
 #include "OPI_Timestep.h"
-#include "OPI_Text.h"
-#include "OPI_FontManager.h"
+#include "TextComponent.h"
+#include "FontManager.h"
 #include "OPI_Clock.h"
 #include "OPI_Sleep.h"
-#include "OPI_GuiManager.h"
+#include "GuiManager.h"
 #include "Panel.h"
 #include "Button.h"
 #include "MessageBox.h"
-#include "OPI_FontManager.h"
+#include "FontManager.h"
 #include "OPI_Renderer.h"
 
 
@@ -994,12 +994,12 @@ int main(int argc, char *argv[])
 
 	//TODO - Singleton with cached fonts
 	//TODO - load from config file
-	if (!OPI_FontManager::init("fonts/RobotoMono-Regular.ttf"))
+	if (!OPI_Text::FontManager::init("fonts/RobotoMono-Regular.ttf"))
 	{
 		printf("Could not initialize SDL_ttf!\n");
 	}
 
-	OPI_FontManager::addFont("RobotoMono-Regular", "fonts/RobotoMono-Regular.ttf");
+	OPI_Text::FontManager::addFont("RobotoMono-Regular", "fonts/RobotoMono-Regular.ttf");
 
 
 	// TODO auto detect screen size, make smaller if less than 1080p to render.
@@ -1038,7 +1038,7 @@ int main(int argc, char *argv[])
 	//panel_Image->addElement(button_Image);
 
 	//// Test out MessageBox
-	//auto testFont = OPI_FontManager::getFont("RobotoMono-Regular");
+	//auto testFont = OPI_Font::FontManager::getFont("RobotoMono-Regular");
 	//auto *messageBoxTest = new OPI_Gui::MessageBox("401: Unauthorized.", testFont);
 	//gui->addElement(messageBoxTest);
 

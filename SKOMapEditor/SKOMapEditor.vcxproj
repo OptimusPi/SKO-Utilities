@@ -161,7 +161,7 @@
     <ClInclude Include="ButtonTheme.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="MainMenuGui.h" />
-    <ClInclude Include="OPI_Font.h" />
+    <ClInclude Include="Font.h" />
     <ClInclude Include="ButtonThemeFactory.h" />
     <ClInclude Include="MessageBoxType.h" />
     <ClInclude Include="ElementThemeGridRect.h" />
@@ -180,30 +180,30 @@
     <ClInclude Include="OPI_Clock.h" />
     <ClInclude Include="OPI_Image.h" />
     <ClInclude Include="OPI_Sleep.h" />
-    <ClInclude Include="OPI_Text.h" />
+    <ClInclude Include="TextComponent.h" />
     <ClInclude Include="ElementThemeFactory.h" />
     <ClInclude Include="ElementThemeType.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="OPI_ButtonTheme.cpp" />
+    <ClCompile Include="ButtonTheme.cpp" />
     <ClCompile Include="MainMenuGui.cpp" />
-    <ClCompile Include="OPI_Font.cpp" />
-    <ClCompile Include="OPI_Button.cpp" />
-    <ClCompile Include="OPI_GuiButtonThemeFactory.cpp" />
-    <ClCompile Include="OPI_Element.cpp" />
-    <ClCompile Include="OPI_ElementThemeGridRect.cpp" />
-    <ClCompile Include="OPI_ElementThemeImage.cpp" />
-    <ClCompile Include="OPI_FontManager.cpp" />
-    <ClCompile Include="OPI_GuiManager.cpp" />
-    <ClCompile Include="OPI_MessageBox.cpp" />
-    <ClCompile Include="OPI_TextLabel.cpp" />
+    <ClCompile Include="Font.cpp" />
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="ButtonThemeFactory.cpp" />
+    <ClCompile Include="Element.cpp" />
+    <ClCompile Include="ElementThemeGridRect.cpp" />
+    <ClCompile Include="ElementThemeImage.cpp" />
+    <ClCompile Include="FontManager.cpp" />
+    <ClCompile Include="GuiManager.cpp" />
+    <ClCompile Include="MessageBox.cpp" />
+    <ClCompile Include="TextComponent.cpp" />
+    <ClCompile Include="TextLabel.cpp" />
     <ClCompile Include="OPI_Image.cpp" />
-    <ClCompile Include="OPI_Panel.cpp" />
+    <ClCompile Include="Panel.cpp" />
     <ClCompile Include="OPI_Renderer.cpp" />
     <ClCompile Include="OPI_Timestep.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="OPI_Text.cpp" />
-    <ClCompile Include="OPI_ElementThemeFactory.cpp" />
+    <ClCompile Include="ElementThemeFactory.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

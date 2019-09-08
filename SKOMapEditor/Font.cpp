@@ -1,22 +1,22 @@
-#include "OPI_Font.h"
+#include "Font.h"
 
-OPI_Font::OPI_Font(std::string fontPath)
+OPI_Text::Font::Font(std::string fontPath)
 {
 	this->fontPath = fontPath;
 }
 
-OPI_Font::OPI_Font()
+OPI_Text::Font::Font()
 {
 }
 
-OPI_Font::~OPI_Font()
+OPI_Text::Font::~Font()
 {
 	for (auto keyValue: this->fontSizes) {
 		TTF_CloseFont(keyValue.second);
 	}
 }
 
-TTF_Font* OPI_Font::size(int fontPoint)
+TTF_Font* OPI_Text::Font::size(int fontPoint)
 {
 	// Check dictionary if this size exists, if not, then lazy load
 	if (this->fontSizes.count(fontPoint) == 0)
@@ -29,7 +29,7 @@ TTF_Font* OPI_Font::size(int fontPoint)
 	return this->fontSizes[fontPoint];
 }
 
-void OPI_Font::InitializeSDL_ttf()
+void OPI_Text::Font::InitializeSDL_ttf()
 {
 	//Initialize SDL_ttf
 	if (TTF_Init() == -1)
@@ -38,7 +38,7 @@ void OPI_Font::InitializeSDL_ttf()
 	}
 }
 
-TTF_Font * OPI_Font::loadFont(std::string fontPath, int fontPoint)
+TTF_Font * OPI_Text::Font::loadFont(std::string fontPath, int fontPoint)
 {
 	// Load font with the given fontPoint
 	TTF_Font *font = TTF_OpenFont(fontPath.c_str(), fontPoint);
@@ -46,7 +46,7 @@ TTF_Font * OPI_Font::loadFont(std::string fontPath, int fontPoint)
 	if (font == nullptr)
 	{
 		// Could not load font so bubble up exception
-		throw new std::logic_error("OPI_Font::loadFont(" + fontPath + ") failed!");
+		throw new std::logic_error("Font::loadFont(" + fontPath + ") failed!");
 	}
 
 	// Return loaded SDL_ttf font file

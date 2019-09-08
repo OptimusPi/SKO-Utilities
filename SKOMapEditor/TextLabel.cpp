@@ -1,6 +1,6 @@
 #include "TextLabel.h"
 
-OPI_Gui::TextLabel::TextLabel(OPI_Text * text)
+OPI_Gui::TextLabel::TextLabel(OPI_Text::TextComponent * text)
 {
 	this->text = text;
 	this->x = text->x;
@@ -10,7 +10,7 @@ OPI_Gui::TextLabel::TextLabel(OPI_Text * text)
 	this->height = this->getTexture()->height;
 }
 
-OPI_Gui::TextLabel::TextLabel(int x, int y, OPI_Text * text)
+OPI_Gui::TextLabel::TextLabel(int x, int y, OPI_Text::TextComponent * text)
 {
 	this->text = text;
 	this->x = x;
@@ -20,7 +20,7 @@ OPI_Gui::TextLabel::TextLabel(int x, int y, OPI_Text * text)
 	this->height = this->getTexture()->height;
 }
 
-void OPI_Gui::TextLabel::setText(OPI_Text *text)
+void OPI_Gui::TextLabel::setText(OPI_Text::TextComponent *text)
 {
 	this->text = text;
 	this->width = this->getTexture()->width;

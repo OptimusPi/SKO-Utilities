@@ -7,6 +7,7 @@
 #include "OPI_Image.h"
 #include "Element.h"
 #include "ElementThemeFactory.h"
+#include "GuiManager.h"
 
 #ifdef _WIN32
 	#include "SDL.h"

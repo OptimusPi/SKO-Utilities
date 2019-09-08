@@ -1,9 +1,9 @@
 #include "Button.h"
-
+#include "ButtonTheme.h"
 
 OPI_Gui::Button::Button(std::string themeImage, int x, int y)
 {
-	this->theme = OPI_Gui::ThemeLoader::GetTheme(OPI_Gui::ElementThemeType::ButtonImage, themeImage);
+	this->theme = OPI_Gui::ButtonThemeFactory::GetTheme(OPI_Gui::ElementThemeType::ButtonIcon, themeImage);
 	this->x = x;
 	this->y = y;
 	this->width = width < this->theme->getMinimumWidth() ? this->theme->getMinimumWidth() : width;
@@ -13,9 +13,9 @@ OPI_Gui::Button::Button(std::string themeImage, int x, int y)
 	this->theme->render(this);
 }
 
-OPI_Gui::Button::Button(std::string theme, int x, int y, OPI_Text * text)
+OPI_Gui::Button::Button(std::string theme, int x, int y, OPI_Text::TextComponent * text)
 {
-	this->theme = OPI_Gui::ThemeLoader::GetTheme(OPI_Gui::ElementThemeType::Button, theme);
+	this->theme = OPI_Gui::ButtonThemeFactory::GetTheme(OPI_Gui::ElementThemeType::Button, theme);
 	this->x = x;
 	this->y = y;
 	this->width = width < this->theme->getMinimumWidth() ? this->theme->getMinimumWidth() : width;

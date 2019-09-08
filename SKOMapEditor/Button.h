@@ -6,20 +6,24 @@
 #include "Element.h"
 #include "OPI_Image.h"
 #include "TextLabel.h"
-#include "ElementThemeFactory.h"
-#include "ButtonTheme.h"
-#include "OPI_FontManager.h"
+#include "ButtonThemeFactory.h"
+#include "FontManager.h"
+#include "GuiManager.h"
+#include "ElementThemeType.h"
+#include "TextComponent.h";
 
 #include <string>
 
 namespace OPI_Gui
 {
+	class ButtonTheme;
+
 	class Button : public Element
 	{
 	public:
 		Button(std::string themeImage, int x, int y);
-		Button(std::string theme, int x, int y, OPI_Text * text);
-		virtual ~Button();
+		Button(std::string theme, int x, int y, OPI_Text::TextComponent * text);
+		~Button();
 		void addCallback(std::function<void()>);
 		bool isPressed = false;
 		bool isSelected = false;
@@ -35,9 +39,9 @@ namespace OPI_Gui
 	private:
 		bool clickableContainsMouse(int mouseX, int mouseY);
 		void setCursor(CursorType cursor);
-		OPI_Gui::ButtonTheme *theme;
 		OPI_Image *texture;
-		OPI_Text *text;
+		OPI_Text::TextComponent *text;
+		ButtonTheme *theme;
 
 		std::function<void()> callback;
 	};

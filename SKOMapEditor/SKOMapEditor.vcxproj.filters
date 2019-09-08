@@ -82,8 +82,8 @@
     <Filter Include="Source Files\Graphics\GUI\Factories">
       <UniqueIdentifier>{b64fae00-2f14-4920-a335-520db754d6cc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Text">
-      <UniqueIdentifier>{629dfd99-50a1-4afc-b9cb-ebd796a36a2d}</UniqueIdentifier>
+    <Filter Include="Header Files\Graphics\Text\Managers">
+      <UniqueIdentifier>{c580a6bb-6a82-4c15-9ffd-9b466c367add}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -99,9 +99,6 @@
     <ClInclude Include="OPI_Sleep.h">
       <Filter>Header Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="OPI_Text.h">
-      <Filter>Header Files\Graphics\Text</Filter>
-    </ClInclude>
     <ClInclude Include="Global.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -110,9 +107,6 @@
     </ClInclude>
     <ClInclude Include="MainMenuGui.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OPI_Font.h">
-      <Filter>Header Files\Text</Filter>
     </ClInclude>
     <ClInclude Include="Button.h">
       <Filter>Header Files\Graphics\GUI\BaseElements</Filter>
@@ -160,6 +154,12 @@
       <Filter>Header Files\Graphics\GUI\Themes\Element</Filter>
     </ClInclude>
     <ClInclude Include="FontManager.h">
+      <Filter>Header Files\Graphics\Text\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="TextComponent.h">
+      <Filter>Header Files\Graphics\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
       <Filter>Header Files\Graphics\Text</Filter>
     </ClInclude>
   </ItemGroup>
@@ -167,17 +167,8 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OPI_Image.cpp">
-      <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="OPI_Text.cpp">
-      <Filter>Source Files\Graphics\Text</Filter>
-    </ClCompile>
     <ClCompile Include="OPI_Timestep.cpp">
       <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="OPI_FontManager.cpp">
-      <Filter>Source Files\Graphics\Text</Filter>
     </ClCompile>
     <ClCompile Include="OPI_Renderer.cpp">
       <Filter>Source Files\Graphics</Filter>
@@ -185,41 +176,50 @@
     <ClCompile Include="MainMenuGui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OPI_GuiManager.cpp">
-      <Filter>Source Files\Graphics\GUI\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="OPI_Button.cpp">
+    <ClCompile Include="Button.cpp">
       <Filter>Source Files\Graphics\GUI\BaseElements</Filter>
     </ClCompile>
-    <ClCompile Include="OPI_Element.cpp">
+    <ClCompile Include="Element.cpp">
       <Filter>Source Files\Graphics\GUI\BaseElements</Filter>
     </ClCompile>
-    <ClCompile Include="OPI_Panel.cpp">
+    <ClCompile Include="Panel.cpp">
       <Filter>Source Files\Graphics\GUI\BaseElements</Filter>
     </ClCompile>
-    <ClCompile Include="OPI_TextLabel.cpp">
+    <ClCompile Include="TextLabel.cpp">
       <Filter>Source Files\Graphics\GUI\BaseElements</Filter>
     </ClCompile>
-    <ClCompile Include="OPI_MessageBox.cpp">
+    <ClCompile Include="ElementThemeFactory.cpp">
+      <Filter>Source Files\Graphics\GUI\Factories</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageBox.cpp">
       <Filter>Source Files\Graphics\GUI\HighLevelElements</Filter>
     </ClCompile>
-    <ClCompile Include="OPI_ButtonTheme.cpp">
+    <ClCompile Include="GuiManager.cpp">
+      <Filter>Source Files\Graphics\GUI\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonTheme.cpp">
       <Filter>Source Files\Graphics\GUI\Themes\Button</Filter>
     </ClCompile>
-    <ClCompile Include="OPI_ElementThemeGridRect.cpp">
+    <ClCompile Include="ElementThemeGridRect.cpp">
       <Filter>Source Files\Graphics\GUI\Themes\Element</Filter>
     </ClCompile>
-    <ClCompile Include="OPI_ElementThemeImage.cpp">
+    <ClCompile Include="ElementThemeImage.cpp">
       <Filter>Source Files\Graphics\GUI\Themes\Element</Filter>
     </ClCompile>
-    <ClCompile Include="OPI_Font.cpp">
+    <ClCompile Include="Font.cpp">
       <Filter>Source Files\Graphics\Text</Filter>
     </ClCompile>
-    <ClCompile Include="OPI_ElementThemeFactory.cpp">
+    <ClCompile Include="FontManager.cpp">
+      <Filter>Source Files\Graphics\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="OPI_Image.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonThemeFactory.cpp">
       <Filter>Source Files\Graphics\GUI\Factories</Filter>
     </ClCompile>
-    <ClCompile Include="OPI_GuiButtonThemeFactory.cpp">
-      <Filter>Source Files\Graphics\GUI\Factories</Filter>
+    <ClCompile Include="TextComponent.cpp">
+      <Filter>Source Files\Graphics\Text</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

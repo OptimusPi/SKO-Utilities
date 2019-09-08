@@ -15,14 +15,16 @@
 #endif
 
 #include "OPI_Image.h"
-#include "OPI_Font.h"
+#include "Font.h"
 
-class OPI_Text
+namespace OPI_Text
 {
+	class TextComponent
+	{
 	public:
-		OPI_Text();
-		OPI_Text(std::string content, OPI_Font* font, int fontPoint = 12, bool wrapped = false);
-		void setText(std::string content, OPI_Font* font = nullptr , bool wrapped = false);
+		TextComponent();
+		TextComponent(std::string content, OPI_Text::Font* font, int fontPoint = 12, bool wrapped = false);
+		void setText(std::string content, OPI_Text::Font* font = nullptr, bool wrapped = false);
 		void setSize(int fontPoint);
 		size_t length();
 		float R, G, B;
@@ -33,11 +35,13 @@ class OPI_Text
 		OPI_Image contentRender;
 
 	private:
-		OPI_Font *font;
+		OPI_Text::Font *font;
 		int fontPoint;
 		std::string content;
 		SDL_Color color;
-		void renderImage(std::string content, OPI_Font* font, bool wrapped);
-};
+		void renderImage(std::string content, OPI_Text::Font* font, bool wrapped);
+	};
+
+}
 
 #endif

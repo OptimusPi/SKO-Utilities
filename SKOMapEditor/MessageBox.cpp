@@ -10,16 +10,16 @@ bool OPI_Gui::MessageBox::isInteracting()
 	return true;
 }
 
-OPI_Gui::MessageBox::MessageBox(std::string message, OPI_Font* font, bool wordWrap, OPI_Gui::ElementThemeType themeType, std::string theme)
+OPI_Gui::MessageBox::MessageBox(std::string message, OPI_Text::Font* font, bool wordWrap, OPI_Gui::ElementThemeType themeType, std::string theme)
 	: Panel(themeType, theme, 0, 0)
 {
-	this->theme = OPI_Gui::ThemeLoader::GetTheme(themeType, theme);
+	this->theme = OPI_Gui::ElementThemeFactory::GetTheme(themeType, theme);
 
-	this->buttonWidth = ThemeLoader::GetTheme(OPI_Gui::ElementThemeType::Button, "default")->getMaximumWidth();
-	this->buttonHeight = ThemeLoader::GetTheme(OPI_Gui::ElementThemeType::Button, "default")->getMaximumHeight();
+	this->buttonWidth = OPI_Gui::ElementThemeFactory::GetTheme(OPI_Gui::ElementThemeType::Button, "default")->getMaximumWidth();
+	this->buttonHeight = OPI_Gui::ElementThemeFactory::GetTheme(OPI_Gui::ElementThemeType::Button, "default")->getMaximumHeight();
 	this->buttonRowHeight = this->buttonHeight + DefaultPadding;
 
-	this->message = new OPI_Text(message, font, wordWrap);
+	this->message = new OPI_Text::TextComponent(message, font, wordWrap);
 	this->wordWrap = wordWrap;
 	this->addText();
 	this->addButtons();
@@ -32,16 +32,16 @@ OPI_Gui::MessageBox::MessageBox(std::string message, OPI_Font* font, bool wordWr
 
 
 //TODO don't duplicate constructor code
-OPI_Gui::MessageBox::MessageBox(std::string message, OPI_Gui::MessageBoxType messageBoxType, OPI_Font* font, bool wordWrap, OPI_Gui::ElementThemeType themeType, std::string theme)
+OPI_Gui::MessageBox::MessageBox(std::string message, OPI_Gui::MessageBoxType messageBoxType, OPI_Text::Font* font, bool wordWrap, OPI_Gui::ElementThemeType themeType, std::string theme)
 	: Panel(themeType, theme, 0, 0)
 {
-	this->theme = OPI_Gui::ThemeLoader::GetTheme(themeType, theme);
+	this->theme = OPI_Gui::ElementThemeFactory::GetTheme(themeType, theme);
 
-	this->buttonWidth = ThemeLoader::GetTheme(OPI_Gui::ElementThemeType::Button, "default")->getMaximumWidth();
-	this->buttonHeight = ThemeLoader::GetTheme(OPI_Gui::ElementThemeType::Button, "default")->getMaximumHeight();
+	this->buttonWidth = OPI_Gui::ElementThemeFactory::GetTheme(OPI_Gui::ElementThemeType::Button, "default")->getMaximumWidth();
+	this->buttonHeight = OPI_Gui::ElementThemeFactory::GetTheme(OPI_Gui::ElementThemeType::Button, "default")->getMaximumHeight();
 	this->buttonRowHeight = this->buttonHeight + DefaultPadding;
 
-	this->message = new OPI_Text(message, font, wordWrap);
+	this->message = new OPI_Text::TextComponent(message, font, wordWrap);
 	this->wordWrap = wordWrap;	
 	this->addText();
 	this->addButtons();
@@ -94,7 +94,7 @@ void OPI_Gui::MessageBox::addButtons()
 	std::function<void()> cancelCallback;
 	std::function<void()> yesCallback;
 	std::function<void()> noCallback;
-	OPI_Text* okText = new OPI_Text("Okay", this->font, 14);
+	OPI_Text::TextComponent* okText = new OPI_Text::TextComponent("Okay", this->font, 14);
 
 	switch (this->type)
 	{

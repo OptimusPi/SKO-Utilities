@@ -90,7 +90,7 @@ void OPI_Renderer::drawImage(int x, int y, const OPI_Image *img, float blendTole
 	glDisable(GL_BLEND);
 }
 
-void OPI_Renderer::drawText(OPI_Text *text)
+void OPI_Renderer::drawText(OPI_Text::TextComponent *text)
 {
 	//tint
 	glColor3f(text->R, text->G, text->B);

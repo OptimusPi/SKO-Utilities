@@ -16,26 +16,29 @@
 #endif
 
 // Custom OPI Classes
-#include "OPI_Font.h"
+#include "Font.h"
+#include "TextComponent.h"
 
-class OPI_FontManager
+namespace OPI_Text
 {
-public:
-	static bool init(std::string defaultFontPath);
-	static void addFont(std::string fontName, std::string fontPath);
-	static OPI_Font* getFont(std::string fontName);
-	static OPI_Font* getDefaultFont();
-private:
-	static OPI_FontManager *instance;
-	static OPI_FontManager * getInstance();
-	OPI_FontManager() {};
+	class FontManager
+	{
+	public:
+		static bool init(std::string defaultFontPath);
+		static void addFont(std::string fontName, std::string fontPath);
+		static OPI_Text::Font* getFont(std::string fontName);
+		static OPI_Text::Font* getDefaultFont();
+	private:
+		static FontManager *instance;
+		static FontManager * getInstance();
+		FontManager() {};
 
-	// Key used for the default font
-	const std::string DEFAULT = "__DEFAULT__FONT__";
+		// Key used for the default font
+		const std::string DEFAULT = "__DEFAULT__FONT__";
 
-	// Cache for lazy loaded fonts
-	std::map<std::string, OPI_Font*> loadedFonts;
-};
-
+		// Cache for lazy loaded fonts
+		std::map<std::string, OPI_Text::Font*> loadedFonts;
+	};
+}
 
 #endif

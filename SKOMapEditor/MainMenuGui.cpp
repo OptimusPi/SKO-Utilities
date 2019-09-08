@@ -89,7 +89,7 @@ void MainMenuGui::setupHotBar()
 void MainMenuGui::setupCoordinates()
 {
 	// Set up coordinates text
-	this->coords = new OPI_Text("(0, 0)", OPI_FontManager::getFont("RobotoMono-Regular"), 23);
+	this->coords = new OPI_Text::TextComponent("(0, 0)", OPI_Text::FontManager::getFont("RobotoMono-Regular"), 23);
 
 	this->coords->visible = true;
 	this->coords->x = 2;

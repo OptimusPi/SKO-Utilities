@@ -9,7 +9,7 @@ namespace OPI_Gui
 		Image,
 		GridRect,
 		Button,
-		ButtonImage
+		ButtonIcon
 	};
 }
 

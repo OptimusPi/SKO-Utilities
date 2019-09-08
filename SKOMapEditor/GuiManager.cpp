@@ -1,5 +1,5 @@
-#include "Manager.h"
-#include "Panel.h"
+#include "GuiManager.h"
+
 
 
 // TODO - get rid of Global.h

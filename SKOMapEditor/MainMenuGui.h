@@ -19,7 +19,7 @@ public:
 	void setCoords(std::string coordsValue);
 private:
 	OPI_Gui::GuiManager * guiManager = nullptr;
-	OPI_Text* coords = nullptr;
+	OPI_Text::TextComponent* coords = nullptr;
 	OPI_Gui::TextLabel * coordsLabel;
 
 	// Create Gui Elements

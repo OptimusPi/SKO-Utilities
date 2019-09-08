@@ -1,5 +1,5 @@
-#ifndef __OPI_GUI_THEMELOADER_
-#define __OPI_GUI_THEMELOADER_
+#ifndef __OPI_GUI_ELEMENTTHEMEFACTORY_
+#define __OPI_GUI_ELEMENTTHEMEFACTORY_
 
 #include <string>
 #include <map>
@@ -10,16 +10,16 @@
 namespace OPI_Gui
 {
 	/// Singleton
-	class ElementThemeLoader
+	class ElementThemeFactory
 	{
 	public:
 		static OPI_Gui::ElementTheme *GetTheme(OPI_Gui::ElementThemeType type, std::string theme);
 		OPI_Gui::ElementThemeType t;
 	private:
-		static ElementThemeLoader* getInstance();
-		static ElementThemeLoader *instance;
-		ElementThemeLoader();
-		virtual ~ElementThemeLoader();
+		static ElementThemeFactory* getInstance();
+		static ElementThemeFactory *instance;
+		ElementThemeFactory();
+		virtual ~ElementThemeFactory();
 
 		// Grab theme from cache if it exists, 
 		// else load it from disk.
@@ -28,8 +28,6 @@ namespace OPI_Gui
 		// Load themes from disk and add them to cache
 		void loadTheme_GridRect(std::string theme);
 		void loadTheme_Image(std::string theme);
-		void loadTheme_Button(std::string theme);
-		void loadTheme_ButtonImage(std::string themeImage);
 
 		// Get a unique key to look up in the dictionary
 		std::string generateKey(OPI_Gui::ElementThemeType type, std::string theme);

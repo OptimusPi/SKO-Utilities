@@ -3,26 +3,26 @@
 #include "ElementThemeFactory.h"
 #include "ElementThemeGridRect.h"
 #include "ElementThemeImage.h"
-#include "ElementThemeButton.h"
+#include "ButtonTheme.h"
 
 /// Singleton instance
-OPI_Gui::ThemeLoader * OPI_Gui::ThemeLoader::instance;
-OPI_Gui::ThemeLoader * OPI_Gui::ThemeLoader::getInstance()
+OPI_Gui::ElementThemeFactory * OPI_Gui::ElementThemeFactory::instance;
+OPI_Gui::ElementThemeFactory * OPI_Gui::ElementThemeFactory::getInstance()
 {
-	if (!OPI_Gui::ThemeLoader::instance)
+	if (!OPI_Gui::ElementThemeFactory::instance)
 	{
-		OPI_Gui::ThemeLoader::instance = new OPI_Gui::ThemeLoader;
+		OPI_Gui::ElementThemeFactory::instance = new OPI_Gui::ElementThemeFactory;
 	}
 
-	return OPI_Gui::ThemeLoader::instance;
+	return OPI_Gui::ElementThemeFactory::instance;
 }
 
-OPI_Gui::ElementTheme * OPI_Gui::ThemeLoader::GetTheme(OPI_Gui::ElementThemeType type, std::string theme)
+OPI_Gui::ElementTheme * OPI_Gui::ElementThemeFactory::GetTheme(OPI_Gui::ElementThemeType type, std::string theme)
 {
 	return 	getInstance()->getTheme(type, theme);
 }
 
-OPI_Gui::ElementTheme * OPI_Gui::ThemeLoader::getTheme(OPI_Gui::ElementThemeType type, std::string theme)
+OPI_Gui::ElementTheme * OPI_Gui::ElementThemeFactory::getTheme(OPI_Gui::ElementThemeType type, std::string theme)
 {
 	// Create compisite key for the dictionary lookup in the theme cache
 	// Example: "ElementThemeGridRect|ice" or "ElementThemeImage|stone"
@@ -42,14 +42,8 @@ OPI_Gui::ElementTheme * OPI_Gui::ThemeLoader::getTheme(OPI_Gui::ElementThemeType
 		case ElementThemeType::Image: 
 			 this->loadTheme_Image(theme);
 			break;
-		case ElementThemeType::Button:
-			this->loadTheme_Button(theme);
-			break;
-		case ElementThemeType::ButtonImage:
-			this->loadTheme_ButtonImage(theme);
-			break;
 		default:
-			throw std::logic_error("Invalid type provided to OPI_Gui::ThemeLoader!");
+			throw std::logic_error("Invalid type provided to OPI_Gui::ElementThemeFactory!");
 		}
 	}
 
@@ -57,7 +51,7 @@ OPI_Gui::ElementTheme * OPI_Gui::ThemeLoader::getTheme(OPI_Gui::ElementThemeType
 	return this->themes.at(key);
 }
 
-void OPI_Gui::ThemeLoader::loadTheme_Image(std::string theme)
+void OPI_Gui::ElementThemeFactory::loadTheme_Image(std::string theme)
 {
 	OPI_Gui::OPI_ElementThemeImage *elementThemeImage = new OPI_Gui::OPI_ElementThemeImage();
 	std::string themePath = "IMG/GUI/themes/panel_images/" + theme + ".png";
@@ -68,32 +62,7 @@ void OPI_Gui::ThemeLoader::loadTheme_Image(std::string theme)
 	this->themes.insert({ {key, elementThemeImage} });
 }
 
-void OPI_Gui::ThemeLoader::loadTheme_Button(std::string theme)
-{
-	OPI_Gui::ElementThemeButton *elementThemeButton = new OPI_Gui::ElementThemeButton();
-	std::string path = "IMG/GUI/themes/button/" + theme + "/";
-	elementThemeButton->textureEnabled = new OPI_Image(path + "enabled.png");
-	elementThemeButton->textureDisabled = new OPI_Image(path + "disabled.png");
-	elementThemeButton->texturePressed = new OPI_Image(path + "pressed.png");
-	elementThemeButton->textureSelected = new OPI_Image(path + "selected.png");
-
-	//insert into cache
-	std::string key = generateKey(OPI_Gui::ElementThemeType::Button, theme);
-	this->themes.insert({ {key, elementThemeButton} });
-}
-
-void OPI_Gui::ThemeLoader::loadTheme_ButtonImage(std::string themeImage)
-{
-	OPI_Gui::ElementThemeButtonImage *elementThemeButtonImage = new OPI_Gui::ElementThemeButtonImage();
-	std::string path = "IMG/GUI/themes/button_images/" + themeImage;
-	elementThemeButtonImage->texture = new OPI_Image(path + ".png");
-
-	//insert into cache
-	std::string key = generateKey(OPI_Gui::ElementThemeType::ButtonImage, themeImage);
-	this->themes.insert({ {key, elementThemeButtonImage} });
-}
-
-void OPI_Gui::ThemeLoader::loadTheme_GridRect(std::string theme)
+void OPI_Gui::ElementThemeFactory::loadTheme_GridRect(std::string theme)
 {
 	OPI_Gui::ElementThemeGridRect *elementThemeGridRect = new OPI_Gui::ElementThemeGridRect();
 
@@ -180,7 +149,7 @@ void OPI_Gui::ThemeLoader::loadTheme_GridRect(std::string theme)
 	this->themes.insert({ {key, elementThemeGridRect} });
 }
 
-std::string OPI_Gui::ThemeLoader::generateKey(OPI_Gui::ElementThemeType type, std::string theme)
+std::string OPI_Gui::ElementThemeFactory::generateKey(OPI_Gui::ElementThemeType type, std::string theme)
 {
 	std::string key = "";
 
@@ -197,9 +166,6 @@ std::string OPI_Gui::ThemeLoader::generateKey(OPI_Gui::ElementThemeType type, st
 	case OPI_Gui::ElementThemeType::Button:
 		key += "Button|";
 		break;
-	case OPI_Gui::ElementThemeType::ButtonImage:
-		key += "ButtonImage|";
-		break;
 	default:
 		throw std::invalid_argument("The provided ElementThemeType is invalid.");
 	}
@@ -208,11 +174,11 @@ std::string OPI_Gui::ThemeLoader::generateKey(OPI_Gui::ElementThemeType type, st
 	return key;
 }
 
-OPI_Gui::ThemeLoader::ThemeLoader()
+OPI_Gui::ElementThemeFactory::ElementThemeFactory()
 {
 }
 
 
-OPI_Gui::ThemeLoader::~ThemeLoader()
+OPI_Gui::ElementThemeFactory::~ElementThemeFactory()
 {
 }
