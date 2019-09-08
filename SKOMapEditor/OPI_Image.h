@@ -30,6 +30,8 @@ public:
 	void setImage(OPI_Image *source);
 	void setImage(SDL_Surface *surface);
 	static SDL_Surface* getSurface(std::string filePath);
+	static SDL_Surface* copySurface(SDL_Surface *surface);
+	static SDL_Surface* tintSurface(SDL_Surface *surface, unsigned int r, unsigned int g, unsigned int b, unsigned int a);
 	static GLuint generateTexture(SDL_Surface * surface);
 	static SDL_Surface* createBlankSurface(unsigned short int width, unsigned short int height);
 	static SDL_Surface* createColoredSurface(unsigned short width, unsigned short  height, unsigned char red, unsigned char green, unsigned char blue);

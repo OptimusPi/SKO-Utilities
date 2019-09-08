@@ -69,8 +69,22 @@ void OPI_Gui::ButtonThemeFactory::loadTheme_ButtonIcon(std::string themeImage)
 {
 	OPI_Gui::ButtonTheme *elementThemeButtonIcon = new OPI_Gui::ButtonTheme();
 	std::string path = "IMG/GUI/themes/button_images/" + themeImage;
-	elementThemeButtonIcon->textureEnabled = new OPI_Image(path + ".png");
-	//TODO 4 styates for icon buttons
+	auto surface = OPI_Image::getSurface(path + ".png");
+
+	// Enabled button - normal
+	elementThemeButtonIcon->textureEnabled = new OPI_Image(surface);
+
+	// Disabled button - greyed-out
+	SDL_Surface *disabledSurface = OPI_Image::tintSurface(surface, 120, 120, 120, 250);
+	elementThemeButtonIcon->textureDisabled = new OPI_Image(disabledSurface);
+	
+	// Selected button
+	SDL_Surface *selectedSurface = OPI_Image::tintSurface(surface, 200, 200, 255, 250);
+	elementThemeButtonIcon->textureSelected = new OPI_Image(selectedSurface);
+
+	// Pressed button
+	SDL_Surface *pressedSurface = OPI_Image::tintSurface(surface, 150, 150, 255, 200);
+	elementThemeButtonIcon->texturePressed = new OPI_Image(pressedSurface);
 
 	//insert into cache
 	std::string key = generateKey(OPI_Gui::ElementThemeType::ButtonIcon, themeImage);

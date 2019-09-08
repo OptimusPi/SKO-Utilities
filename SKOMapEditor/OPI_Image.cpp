@@ -28,6 +28,33 @@ OPI_Image::OPI_Image(SDL_Surface *surface)
 	setImage(surface);
 }
 
+SDL_Surface* OPI_Image::copySurface(SDL_Surface *surface)
+{
+	Uint32 rmask, gmask, bmask, amask;
+	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+		rmask = 0xff000000;
+		gmask = 0x00ff0000;
+		bmask = 0x0000ff00;
+		amask = 0x000000ff;
+	#else // little endian, like x86
+		rmask = 0x000000ff;
+		gmask = 0x0000ff00;
+		bmask = 0x00ff0000;
+		amask = 0xff000000;
+	#endif
+	return SDL_CreateRGBSurfaceFrom(surface->pixels, surface->w, surface->h, 32, surface->pitch, rmask, gmask, bmask, amask);
+}
+
+SDL_Surface* OPI_Image::tintSurface(SDL_Surface *surface, unsigned int r, unsigned int g, unsigned int b, unsigned int a)
+{
+	auto copy = OPI_Image::copySurface(surface);
+	SDL_SetSurfaceColorMod(copy, r, g, b);
+	SDL_SetSurfaceAlphaMod(copy, a);
+	auto canvas = OPI_Image::createBlankSurface(surface->w, surface->h);
+	SDL_BlitSurface(copy, NULL, canvas, NULL);
+	return canvas;
+}
+
 int pot(unsigned int x)
 {
 	return ((x != 0) && !(x & (x - 1)));
