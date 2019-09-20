@@ -6,6 +6,14 @@ OPI_Gui::ButtonToggleGroup::ButtonToggleGroup()
 {
 }
 
+OPI_Gui::ButtonToggleGroup::ButtonToggleGroup(std::vector<Button*> buttonGroup)
+{
+	for (auto &button : buttonGroup) // access by reference to avoid copying
+	{
+		this->addButton(button);
+	}
+}
+
 
 OPI_Gui::ButtonToggleGroup::~ButtonToggleGroup()
 {

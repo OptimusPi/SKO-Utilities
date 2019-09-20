@@ -10,6 +10,7 @@ namespace OPI_Gui
 	{
 	public:
 		ButtonToggleGroup();
+		ButtonToggleGroup(std::vector<Button *> buttonGroup);
 		virtual ~ButtonToggleGroup();
 		void processToggle(Button* button);
 		void addButton(Button *button);

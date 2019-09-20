@@ -80,11 +80,20 @@ void MainMenuGui::setupHotBar()
 		saveMap();
 	});
 
+
+/*
 	// Consider thes ebuttons as radio button group
 	auto tileEditorGroup = new OPI_Gui::ButtonToggleGroup();
 	tileEditorGroup->addButton(buttonAddTile);
 	tileEditorGroup->addButton(buttonDeleteTile);
 	tileEditorGroup->addButton(buttonEditTile);
+*/
+
+	new OPI_Gui::ButtonToggleGroup({
+		buttonAddTile,
+		buttonDeleteTile,
+		buttonEditTile
+	});
 
 	// Add the 8 buttons to the hotbar panel
 	hotbarPanel->addElement(buttonAddTile);
