@@ -27,7 +27,6 @@ void OPI_Renderer::initScreen()
 
 void OPI_Renderer::sizeScreen()
 {
-	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -35,13 +34,10 @@ void OPI_Renderer::sizeScreen()
 	glViewport(0, 0, windowWidth, windowHeight);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
+
 
 	glOrtho(0.0f, originalWindowWidth, originalWindowHeight, 0.0f, -1.0f, 1.0f);
 
-	glMatrixMode(GL_TEXTURE);
-	glLoadIdentity();
 }
 
 void OPI_Renderer::drawImage(int x, int y, const OPI_Image *img)
@@ -55,7 +51,9 @@ void OPI_Renderer::drawImage(int x, int y, const OPI_Image *img, float blendTole
 	// Do not attempt to render null images, just continue.
 	if (img == nullptr)
 		return;
-
+	glEnable(GL_TEXTURE_2D);
+	glMatrixMode(GL_TEXTURE);
+	glLoadIdentity();
 	glColor3f(1.0f, 1.0f, 1.0f);
 	glBindTexture(GL_TEXTURE_2D, img->texture);
 
@@ -87,7 +85,7 @@ void OPI_Renderer::drawImage(int x, int y, const OPI_Image *img, float blendTole
 	glVertex3i(x + img->width, y, 0);
 	glEnd();
 
-	glDisable(GL_BLEND);
+	glFlush();
 }
 
 void OPI_Renderer::drawText(OPI_Text::TextComponent *text)
@@ -103,19 +101,46 @@ void OPI_Renderer::drawText(OPI_Text::TextComponent *text)
 	glColor3f(1.0f, 1.0f, 1.0f);
 }
 
-void OPI_Renderer::drawRect(SDL_Rect rect)
+void OPI_Renderer::drawRect(SDL_Rect rect, unsigned char r, unsigned char g, unsigned char b)
 {
-	glColor3f(0.1f, 0.1f, 1.0f);
+	float fR = r == 0? 0.0f : 255.0/r;
+	float fG = g == 0? 0.0f : 255.0/g;
+	float fB = b == 0? 0.0f : 255.0/b;
 
-	float lineWidth[2];
-	glGetFloatv(GL_LINE_WIDTH_RANGE, lineWidth);
+	glEnable(GL_BLEND);
+	glAlphaFunc(GL_GREATER, 0.1);
+	glEnable(GL_ALPHA_TEST);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	glDisable(GL_TEXTURE_2D);
+	glLoadIdentity();
+
+	//Draw rect
 	glBegin(GL_LINE_LOOP);
-	glLineWidth(2.0f);
-	glVertex2f(rect.x + 0.5, rect.y + 0.5);
-	glVertex2f(rect.x + rect.w + 0.5, rect.y + 0.5);
-	glVertex2f(rect.x + rect.w + 0.5, rect.y + rect.h + 0.5);
-	glVertex2f(rect.x + 0.5, rect.y + rect.h + 0.5);
+	glColor4f(fR, fG, fB, 0.75f);
+	glVertex2f(rect.x - 0.5f, rect.y - 0.5f);
+	glVertex2f(rect.x + rect.w, rect.y);
+	glVertex2f(rect.x + rect.w, rect.y + rect.h);
+	glVertex2f(rect.x, rect.y + rect.h);
+	glEnd();
+
+	//Draw outside border
+	glBegin(GL_LINE_LOOP);
+	glColor4f(fR/2, fG/2, fB/2, 0.15f);
+	glVertex2f(rect.x - 1.5f, rect.y - 1.5f);
+	glVertex2f(rect.x + rect.w + 1, rect.y - 1);
+	glVertex2f(rect.x + rect.w + 1, rect.y + rect.h + 1);
+	glVertex2f(rect.x - 1, rect.y + rect.h + 1);
+	glEnd();
+
+	//Draw inside border
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0, 0, 0);
+	glColor4f(fR, fG, fB, 0.25f);
+	glVertex2f(rect.x + 0.5f, rect.y + 0.5f);
+	glVertex2f(rect.x + rect.w - 1, rect.y + 1);
+	glVertex2f(rect.x + rect.w - 1, rect.y + rect.h - 1);
+	glVertex2f(rect.x + 1, rect.y + rect.h - 1);
 	glEnd();
 }
 

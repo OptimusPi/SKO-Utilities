@@ -28,6 +28,8 @@ namespace OPI_Gui
 		bool isPressed = false;
 		bool isSelected = false;
 		bool isEnabled = true;
+		bool isToggle = false;
+		bool isToggleOn = false;
 
 		// Input handlers
 		bool handleMouseMove(int mouseX, int mouseY);

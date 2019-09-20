@@ -87,6 +87,10 @@ bool OPI_Gui::Button::handleMousePressLeft(int mouseX, int mouseY)
 		this->isPressed = true;
 		this->theme->render(this);
 		setCursor(OPI_Gui::CursorType::Hand);
+
+		if (this->isToggle)
+			this->isToggleOn = !this->isToggleOn;
+
 		return true;
 	}
 	return false;

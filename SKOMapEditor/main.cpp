@@ -32,19 +32,19 @@
 // TODO - get rid of Global.h
 #include "Global.h"
 
-
 MainMenuGui* mainMenuGui = nullptr;
 
 //modes
 #include "Global.h"
 
+// TODO enum
 const char
-
 TILE_DRAW = 1, TILE_DELETE = 2,
-COLLISION_DRAW = 3, COLLISION_DELETE = 4,
-STICKMAN_DRAW = 5, STICKMAN_DELETE = 6,
-FRINGE_TOGGLE = 7,
-SAVE = 8;
+TOGGLE_FRINGE = 3,
+COLLISION_DRAW = 4, COLLISION_DELETE = 5,
+TOGGLE_TEST = 6, 
+EDIT_TILE = 7, EDIT_COLLISION = 8,
+SAVE = 9;
 
 char mode = TILE_DRAW;
 int num_tiles = 0;
@@ -345,7 +345,6 @@ void DrawGameScene()
 	//draw collision rects, only on screen  
 	for (int i = 0; i < number_of_rects; i++)
 	{
-
 		SDL_Rect newRect;
 
 		newRect.x = collision_rect[i].x - (int)camera_x;
@@ -356,8 +355,7 @@ void DrawGameScene()
 		if (newRect.x >= 0 - collision_rect[i].w &&
 			newRect.x < 1024 && newRect.y < 600 &&
 			newRect.y >= 0 - collision_rect[i].h)
-
-			renderer->drawRect(newRect);
+			renderer->drawRect(newRect, 0, 200, 200);
 	}
 
 	//TODO - remove completely, here for reference only.
@@ -393,6 +391,9 @@ void DrawGui(OPI_Gui::GuiManager* gui)
 
 void Graphics()
 {
+	glClearColor(0.00f, 0.00f, 0.00f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	// Draw map, tiles, etc
 	DrawGameScene();
 	
@@ -488,7 +489,7 @@ void HandleInput()
 				mode = COLLISION_DELETE;
 				break;
 			case '6':
-				mode = STICKMAN_DRAW;
+				mode = TOGGLE_TEST;
 				break;
 			case '7':
 				stickman_toggle = !stickman_toggle;
@@ -548,7 +549,7 @@ void HandleInput()
 				if (current_fringe > 0 && mode == TILE_DRAW && fringe_mode)
 					fringe_y[current_fringe - 1]--;
 
-				if (mode == STICKMAN_DRAW)
+				if (mode == TOGGLE_TEST)
 					y_speed = -6;
 				if (mode == COLLISION_DRAW && current_rect > 0)
 				{
@@ -722,7 +723,7 @@ void HandleInput()
 					fringe_y[current_fringe] = (int)(cursor_y + camera_y) / 32 * 32;
 				}
 			}
-			if (mode == STICKMAN_DRAW && LCLICK)
+			if (mode == TOGGLE_TEST && LCLICK)
 			{
 				stickman.x = cursor_x + camera_x;
 				stickman.y = cursor_y + camera_y;
@@ -879,7 +880,7 @@ void HandleInput()
 								   break;
 
 
-			case STICKMAN_DRAW:
+			case TOGGLE_TEST:
 				stickman_toggle = true;
 				stickman.x = cursor_x + camera_x;
 				stickman.y = cursor_y + camera_y;
@@ -1073,15 +1074,12 @@ int main(int argc, char *argv[])
 	color.g = 200;
 	color.b = 200;
 
-
 	//stickman
 	stickman.x = 0;
 	stickman.y = 0;
 	stickman.w = 14;
 	stickman.h = 64;
 
-
-  
   for(int i = 0; i < 256; i++)//check if file exists, etc.
   {
      std::stringstream ss;
@@ -1098,9 +1096,9 @@ int main(int argc, char *argv[])
   }
 
 
-  while (!done)
-  {
-        timestep->Update();
+	while (!done)
+	{
+		timestep->Update();
                            
         if (!done && timestep->Check())
         {
@@ -1135,8 +1133,6 @@ int main(int argc, char *argv[])
   
   printf("DONE\n");
 
-
-  
   delete renderer;
   SDL_Quit();
   return(0);
@@ -1152,13 +1148,9 @@ bool blocked(float box1_x1, float box1_y1, float box1_x2, float box1_y2)
           float box2_x2 = collision_rect[r].x + collision_rect[r].w;
           float box2_y2 = collision_rect[r].y + collision_rect[r].h;
 
-
           if (box1_x2 > box2_x1 && box1_x1 < box2_x2 && box1_y2 > box2_y1 && box1_y1 < box2_y2)
           {
-            // printf("collision with rect[%i]\n\tme:\t{%i,%i,%i,%i}\n\tit:\t{%i,%i,%i,%i}\n", r, box1_x1, box1_y1, box1_x2, box1_y2, box2_x1, box2_y1, box2_x2, box2_y2);
-            // printf("%i > %i && %i < %i && %i > %i && %i < %i\n\n", box1_x2, box2_x1, box1_x1, box2_x2, box1_y2, box2_y1, box1_y1, box2_y2);
              return true;
-
           }
      }
      return false;
@@ -1166,52 +1158,50 @@ bool blocked(float box1_x1, float box1_y1, float box1_x2, float box1_y2)
 
 void Physics()
 {
-              //fall
-             if (y_speed < 10){ 
-                 y_speed += GRAVITY;
-             }
+	//fall
+	if (y_speed < 10)
+	{ 
+		y_speed += GRAVITY;
+	}
 
-             //verical collision detection
-             bool block_y = blocked(stickman.x, stickman.y+y_speed + 0 + 0.25, stickman.x + 14, stickman.y+y_speed + 63);
+	//verical collision detection
+	bool block_y = blocked(stickman.x, stickman.y+y_speed + 0 + 0.25, stickman.x + 14, stickman.y+y_speed + 63);
 
+	//vertical movement
+	if (!block_y)
+	{
+		//not blocked, fall
+		stickman.y += y_speed; 
+	}
+	else
+	{  
+		y_speed = 0;
+	}
 
-             //vertical movement
-             if (!block_y)
-             {//not blocked, fall
+	//horizontal collision detection
+	bool block_x = blocked(stickman.x + x_speed , stickman.y , stickman.x + x_speed + 14, stickman.y + 63);
 
-                stickman.y += y_speed; 
-             }
-             else
-             {  
-                y_speed = 0;
-             }
+	//horizontal movement
+	if (!block_x)
+	{
+		//not blocked, walk
+		stickman.x += (x_speed);
+	}
 
-             //horizontal collision detection
-             bool block_x = blocked(stickman.x + x_speed , stickman.y , stickman.x + x_speed + 14, stickman.y + 63);
+    if (LEFT && x_speed != -2)
+    {
+		x_speed = -2;
+    }
+    if (RIGHT && x_speed != 2)
+    {
+		x_speed = 2;
+    }
 
-             //horizontal movement
-             if (!block_x)
-             {//not blocked, walk
-                stickman.x += (x_speed);
-             }
-
-
-                 if (LEFT && x_speed != -2)
-                 {
-                    x_speed = -2;
-                 }
-                 if (RIGHT && x_speed != 2)
-                 {
-                    x_speed = 2;
-                 }
-
-
-                 if (LEFT == RIGHT)
-                 {
-                    if (x_speed != 0)
-                       x_speed = 0;
-                 }
-                 
+    if (LEFT == RIGHT)
+    {
+		if (x_speed != 0)
+			x_speed = 0;
+    }    
 }
 
 

@@ -16,7 +16,7 @@ public:
 	void drawImage(int x, int y, const OPI_Image *img);
 	void drawImage(int x, int y, const OPI_Image *img, float blendTolerance);
 	void drawText(OPI_Text::TextComponent *text);
-	void drawRect(SDL_Rect rect);
+	void drawRect(SDL_Rect rect, unsigned char r, unsigned char g, unsigned char b);
 
 	// Screen functions
 	void initScreen();
