@@ -1,9 +1,5 @@
 #include "MainMenuGui.h"
 
-// TODO remove this when I have a game logic controller class
-
-
-
 MainMenuGui::MainMenuGui(OPI_Gui::GuiManager *guiManager)
 {
 	this->guiManager = guiManager;
@@ -83,6 +79,12 @@ void MainMenuGui::setupHotBar()
 	buttonSave->addCallback([this]() {
 		saveMap();
 	});
+
+	// Consider thes ebuttons as radio button group
+	auto tileEditorGroup = new OPI_Gui::ButtonToggleGroup();
+	tileEditorGroup->addButton(buttonAddTile);
+	tileEditorGroup->addButton(buttonDeleteTile);
+	tileEditorGroup->addButton(buttonEditTile);
 
 	// Add the 8 buttons to the hotbar panel
 	hotbarPanel->addElement(buttonAddTile);

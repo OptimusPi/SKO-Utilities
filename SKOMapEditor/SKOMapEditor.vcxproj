@@ -159,6 +159,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ButtonTheme.h" />
+    <ClInclude Include="ButtonToggleGroup.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="MainMenuGui.h" />
     <ClInclude Include="Font.h" />
@@ -186,6 +187,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ButtonTheme.cpp" />
+    <ClCompile Include="ButtonToggleGroup.cpp" />
     <ClCompile Include="MainMenuGui.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Button.cpp" />

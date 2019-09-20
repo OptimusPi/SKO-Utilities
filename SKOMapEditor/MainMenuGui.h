@@ -8,6 +8,7 @@
 #include "Panel.h"
 #include <functional>
 #include "Global.h"
+#include "ButtonToggleGroup.h"
 
 class MainMenuGui
 {

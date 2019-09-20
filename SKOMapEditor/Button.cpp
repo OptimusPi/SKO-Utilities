@@ -1,5 +1,6 @@
 #include "Button.h"
 #include "ButtonTheme.h"
+#include "ButtonToggleGroup.h"
 
 OPI_Gui::Button::Button(std::string themeImage, int x, int y)
 {
@@ -52,6 +53,12 @@ bool OPI_Gui::Button::clickableContainsMouse(int mouseX, int mouseY)
 	return true;
 }
 
+void OPI_Gui::Button::toggleOff()
+{
+	this->isToggleOn = false;
+	this->theme->render(this);
+}
+
 bool OPI_Gui::Button::handleMouseMove(int mouseX, int mouseY)
 {
 	if (!this->isEnabled)
@@ -89,7 +96,16 @@ bool OPI_Gui::Button::handleMousePressLeft(int mouseX, int mouseY)
 		setCursor(OPI_Gui::CursorType::Hand);
 
 		if (this->isToggle)
+		{
+			// Flip the switch on this toggle button.
 			this->isToggleOn = !this->isToggleOn;
+
+			// Process the entire group, if this is to be treated like a radio button.
+			if (this->toggleGroup != nullptr)
+			{
+				this->toggleGroup->processToggle(this);
+			}
+		}
 
 		return true;
 	}

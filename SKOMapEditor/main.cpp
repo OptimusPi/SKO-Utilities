@@ -353,22 +353,10 @@ void DrawGameScene()
 		newRect.w = collision_rect[i].w;
 
 		if (newRect.x >= 0 - collision_rect[i].w &&
-			newRect.x < 1024 && newRect.y < 600 &&
+			newRect.x < renderer->originalWindowWidth && newRect.y < renderer->originalWindowHeight &&
 			newRect.y >= 0 - collision_rect[i].h)
 			renderer->drawRect(newRect, 0, 200, 200);
 	}
-
-	//TODO - remove completely, here for reference only.
-	/*
-	if (fringe_mode)
-		renderer->drawImage(144 + (FRINGE_TOGGLE - 1) * 64, 536, &selector);
-
-	if (save_notify)
-		renderer->drawImage(144 + (SAVE - 1) * 64, 536, &selector);
-
-	if (!stickman_toggle)
-		renderer->drawImage(144 + (STICKMAN_DELETE - 1) * 64, 536, &selector);
-		*/
 }
 
 void DrawElement(int x, int y, OPI_Gui::Element *element)

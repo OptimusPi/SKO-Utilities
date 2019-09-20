@@ -118,7 +118,7 @@ void OPI_Renderer::drawRect(SDL_Rect rect, unsigned char r, unsigned char g, uns
 	//Draw rect
 	glBegin(GL_LINE_LOOP);
 	glColor4f(fR, fG, fB, 0.75f);
-	glVertex2f(rect.x - 0.5f, rect.y - 0.5f);
+	glVertex2f(rect.x, rect.y);
 	glVertex2f(rect.x + rect.w, rect.y);
 	glVertex2f(rect.x + rect.w, rect.y + rect.h);
 	glVertex2f(rect.x, rect.y + rect.h);
@@ -127,7 +127,7 @@ void OPI_Renderer::drawRect(SDL_Rect rect, unsigned char r, unsigned char g, uns
 	//Draw outside border
 	glBegin(GL_LINE_LOOP);
 	glColor4f(fR/2, fG/2, fB/2, 0.15f);
-	glVertex2f(rect.x - 1.5f, rect.y - 1.5f);
+	glVertex2f(rect.x - 1.0f, rect.y - 1.0f);
 	glVertex2f(rect.x + rect.w + 1, rect.y - 1);
 	glVertex2f(rect.x + rect.w + 1, rect.y + rect.h + 1);
 	glVertex2f(rect.x - 1, rect.y + rect.h + 1);
@@ -137,7 +137,7 @@ void OPI_Renderer::drawRect(SDL_Rect rect, unsigned char r, unsigned char g, uns
 	glBegin(GL_LINE_LOOP);
 	glColor3f(0, 0, 0);
 	glColor4f(fR, fG, fB, 0.25f);
-	glVertex2f(rect.x + 0.5f, rect.y + 0.5f);
+	glVertex2f(rect.x, rect.y);
 	glVertex2f(rect.x + rect.w - 1, rect.y + 1);
 	glVertex2f(rect.x + rect.w - 1, rect.y + rect.h - 1);
 	glVertex2f(rect.x + 1, rect.y + rect.h - 1);

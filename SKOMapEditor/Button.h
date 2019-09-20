@@ -17,6 +17,7 @@
 namespace OPI_Gui
 {
 	class ButtonTheme;
+	class ButtonToggleGroup;
 
 	class Button : public Element
 	{
@@ -30,6 +31,8 @@ namespace OPI_Gui
 		bool isEnabled = true;
 		bool isToggle = false;
 		bool isToggleOn = false;
+		ButtonToggleGroup *toggleGroup;
+		void toggleOff();
 
 		// Input handlers
 		bool handleMouseMove(int mouseX, int mouseY);
@@ -37,6 +40,7 @@ namespace OPI_Gui
 		bool handleMousePressRight(int mouseX, int mouseY);
 		bool handleMouseReleaseRight(int mouseX, int mouseY);
 		bool handleMouseReleaseLeft(int mouseX, int mouseY);
+
 
 	private:
 		bool clickableContainsMouse(int mouseX, int mouseY);
