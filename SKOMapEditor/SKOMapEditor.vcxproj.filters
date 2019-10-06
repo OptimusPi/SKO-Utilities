@@ -85,6 +85,24 @@
     <Filter Include="Header Files\Graphics\Text\Managers">
       <UniqueIdentifier>{c580a6bb-6a82-4c15-9ffd-9b466c367add}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\MapEditor">
+      <UniqueIdentifier>{3d963a35-154e-4c5c-83dd-e5bfc6b377b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MapEditor">
+      <UniqueIdentifier>{b003c2c2-8921-49aa-bd8d-f39393b0c199}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SKO">
+      <UniqueIdentifier>{9d4e4803-b2be-40f9-b5a1-00f36698adb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SKO">
+      <UniqueIdentifier>{c152ad03-e5e1-4db5-81a6-b5570403716a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SKO\Map">
+      <UniqueIdentifier>{c0491d7c-8b61-4b4e-b213-14a047288ddf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SKO\Map">
+      <UniqueIdentifier>{7a3a9576-f626-48a8-8b42-6169bdd4b948}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OPI_Image.h">
@@ -104,9 +122,6 @@
     </ClInclude>
     <ClInclude Include="OPI_Renderer.h">
       <Filter>Header Files\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="MainMenuGui.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Button.h">
       <Filter>Header Files\Graphics\GUI\BaseElements</Filter>
@@ -165,6 +180,21 @@
     <ClInclude Include="ButtonToggleGroup.h">
       <Filter>Header Files\Graphics\GUI\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="MapEditorManager.h">
+      <Filter>Header Files\MapEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenuGui.h">
+      <Filter>Header Files\MapEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>Header Files\SKO\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Header Files\SKO\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="SDL_headers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -175,9 +205,6 @@
     </ClCompile>
     <ClCompile Include="OPI_Renderer.cpp">
       <Filter>Source Files\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="MainMenuGui.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Button.cpp">
       <Filter>Source Files\Graphics\GUI\BaseElements</Filter>
@@ -226,6 +253,18 @@
     </ClCompile>
     <ClCompile Include="ButtonToggleGroup.cpp">
       <Filter>Source Files\Graphics\GUI\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="MapEditorManager.cpp">
+      <Filter>Source Files\MapEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenuGui.cpp">
+      <Filter>Source Files\MapEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>Source Files\SKO\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Source Files\SKO\Map</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

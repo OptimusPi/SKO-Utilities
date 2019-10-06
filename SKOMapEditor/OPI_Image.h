@@ -1,19 +1,7 @@
 #include <string>
 #include <cstdlib>
 
-#ifdef _WIN32
-#include "SDL.h"
-#include "SDL_image.h"
-#include "SDL_opengl.h"
-#elif defined __APPLE__
-#include <OpenGL/gl.h>
-#include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
-#elif defined __linux__
-#include <GL/gl.h>
-#include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
-#endif 
+#include "SDL_headers.h"
 
 #ifndef __OPI_IMAGE_H_
 #define __OPI_IMAGE_H_

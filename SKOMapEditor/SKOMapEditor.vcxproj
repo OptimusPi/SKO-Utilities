@@ -164,6 +164,7 @@
     <ClInclude Include="MainMenuGui.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="ButtonThemeFactory.h" />
+    <ClInclude Include="MapEditorManager.h" />
     <ClInclude Include="MessageBoxType.h" />
     <ClInclude Include="ElementThemeGridRect.h" />
     <ClInclude Include="CursorType.h" />
@@ -175,6 +176,9 @@
     <ClInclude Include="GuiManager.h" />
     <ClInclude Include="MessageBox.h" />
     <ClInclude Include="Panel.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="SDL_headers.h" />
+    <ClInclude Include="Tile.h" />
     <ClInclude Include="TextLabel.h" />
     <ClInclude Include="OPI_Renderer.h" />
     <ClInclude Include="OPI_Timestep.h" />
@@ -197,7 +201,10 @@
     <ClCompile Include="ElementThemeImage.cpp" />
     <ClCompile Include="FontManager.cpp" />
     <ClCompile Include="GuiManager.cpp" />
+    <ClCompile Include="MapEditorManager.cpp" />
     <ClCompile Include="MessageBox.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TextComponent.cpp" />
     <ClCompile Include="TextLabel.cpp" />
     <ClCompile Include="OPI_Image.cpp" />

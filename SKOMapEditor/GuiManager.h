@@ -3,11 +3,7 @@
 
 #include <list>
 
-#ifdef _WIN32
-	#include "SDL.h"
-#else 
-	#include <SDL/SDL.h>
-#endif
+#include "SDL_headers.h"
 
 #include "OPI_Renderer.h"
 #include "CursorType.h"

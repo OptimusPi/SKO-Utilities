@@ -1,13 +1,5 @@
 
-#ifdef _WIN32
-	#include "SDL.h" 
-	#include "SDL_Image.h" 
-	#include "SDL_opengl.h" 
-#else
-	#include <SDL/SDL.h> 
-	#include <SDL/SDL_image.h> 
-	#include <SDL/SDL_opengl.h> 
-#endif
+#include "SDL_headers.h"
 
 #include <stdio.h>
 #include <string>
@@ -25,6 +17,7 @@
 #include "MessageBox.h"
 #include "FontManager.h"
 #include "OPI_Renderer.h"
+#include "Map.h"
 
 // GUI Implementations
 #include "MainMenuGui.h"
@@ -33,6 +26,7 @@
 #include "Global.h"
 
 MainMenuGui* mainMenuGui = nullptr;
+SKO_Map::Map *map = nullptr;
 
 //modes
 #include "Global.h"
@@ -53,16 +47,7 @@ int save_notify;
 bool SHIFT_HELD = false;
 
 
-SDL_Rect collision_rect[32768];
-int collision_ox;
-int collision_oy;
-int tile_x[32768], tile_y[32768];
-unsigned char tile[32768];
-int fringe_x[32768], fringe_y[32768];
-unsigned char fringe[32768];
-int number_of_tiles = 0;
-int number_of_rects = 0;
-int number_of_fringe = 0;
+
 bool stickman_toggle = false;
 
 SDL_Rect stickman;
@@ -72,13 +57,6 @@ bool RIGHT = false, LEFT = false;
 
 // Global variables
 SDL_Event event;
-float camera_x = 0, camera_y = 0;
-int cursor_x = 0, cursor_y = 0;
-int current_tile = 0;
-int current_rect = 0;
-int current_fringe = 0;
-int current_tile_img = 0;
-
 
 // SDL2 rendering class
 OPI_Renderer *renderer;
@@ -107,193 +85,6 @@ OPI_Renderer *renderer;
 	// SKOMapEditor.exe map0.map
   std::string loadMapFilename = "";
 
-
-
-void cleanupInvisibleRects()
-{
-	//Delete any collision rectangles that are too small.
-	for (int i = 0; i < current_rect; i++) {
-		if (collision_rect[i].h < 4 || collision_rect[i].w < 4) {
-			for (; i < current_rect; i++) {
-				collision_rect[i] = collision_rect[i + 1];
-			}
-			current_rect--;
-			number_of_rects--;
-		}
-	}
-}
-
-void loadmap (std::string FileName)
-{
-     std::ifstream MapFile(FileName.c_str(), std::ios::in|std::ios::binary|std::ios::ate);
-      
-     if (MapFile.is_open())
-     {
-        //loading variables
-        std::ifstream::pos_type size;
-        char * memblock;  
-
-        //allocate memory
-        size = MapFile.tellg();
-        memblock = (char *)malloc(size);
-
-        //load the file into memory
-        MapFile.seekg (0, std::ios::beg);
-        MapFile.read (memblock, size);
-        //close file
-        MapFile.close();
-
-        //hold the result...
-        unsigned int num;
-        
-        //build an int from 4 bytes
-        ((char*)&num)[0] = memblock[0];
-        ((char*)&num)[1] = memblock[1];
-        ((char*)&num)[2] = memblock[2];
-        ((char*)&num)[3] = memblock[3];
-
-        
-        //store the number into variables
-        number_of_tiles = num;              
-
-        //build an int from 4 bytes
-        ((char*)&num)[0] = memblock[4];
-        ((char*)&num)[1] = memblock[5];
-        ((char*)&num)[2] = memblock[6];
-        ((char*)&num)[3] = memblock[7];
-
-        //store the number into variables
-        number_of_fringe = num;
-        
-        //build an int from 4 bytes
-        ((char*)&num)[0] = memblock[8];
-        ((char*)&num)[1] = memblock[9];
-        ((char*)&num)[2] = memblock[10];
-        ((char*)&num)[3] = memblock[11];
-
-        //store the number into variables
-        number_of_rects = num;
-        
-
-        //
-        //tiles
-        //
-        int last_i = 11;
-        
-        for (int i = 0; i < number_of_tiles; i++)
-        {
-            //9 bytes per tile silly ;)
-            
-            //build an int from 4 bytes
-            ((char*)&num)[0] = memblock[last_i+1+i*9];
-            ((char*)&num)[1] = memblock[last_i+2+i*9];
-            ((char*)&num)[2] = memblock[last_i+3+i*9];
-            ((char*)&num)[3] = memblock[last_i+4+i*9];
-
-            //store the number into variables
-            tile_x[i] = num;
-
-
-            //build an int from 4 bytes
-            ((char*)&num)[0] = memblock[last_i+5+i*9];
-            ((char*)&num)[1] = memblock[last_i+6+i*9];
-            ((char*)&num)[2] = memblock[last_i+7+i*9];
-            ((char*)&num)[3] = memblock[last_i+8+i*9];
-
-            //store the number into variables
-            tile_y[i] = num;
-
-            //store the number into variables
-            tile[i] = memblock[last_i+9+i*9];
-            
-            
-        }
-
-        last_i += number_of_tiles*9;
-        //
-        //fringe tiles
-        //
-        for (int i = 0; i < number_of_fringe; i++)
-        {
-            //9 bytes per tile silly ;)
-            
-            //build an int from 4 bytes
-            ((char*)&num)[0] = memblock[last_i+1+i*9];
-            ((char*)&num)[1] = memblock[last_i+2+i*9];
-            ((char*)&num)[2] = memblock[last_i+3+i*9];
-            ((char*)&num)[3] = memblock[last_i+4+i*9];
-
-            //store the number into variables
-            fringe_x[i] = num;
-
-
-            //build an int from 4 bytes
-            ((char*)&num)[0] = memblock[last_i+5+i*9];
-            ((char*)&num)[1] = memblock[last_i+6+i*9];
-            ((char*)&num)[2] = memblock[last_i+7+i*9];
-            ((char*)&num)[3] = memblock[last_i+8+i*9];
-
-            //store the number into variables
-            fringe_y[i] = num;
-
-            //store the number into variables
-            fringe[i] = memblock[last_i+9+i*9];
-            
-            
-        }
-        last_i += number_of_fringe * 9;
-        //
-        //rects
-        //
-        for (int i = 0; i < number_of_rects; i++)
-        {
-            //read the map file
-            //build an int from 4 bytes
-            ((char*)&num)[0] = memblock[last_i+1+i*16];
-            ((char*)&num)[1] = memblock[last_i+2+i*16];
-            ((char*)&num)[2] = memblock[last_i+3+i*16];
-            ((char*)&num)[3] = memblock[last_i+4+i*16];
-
-            //store the number into variables
-            collision_rect[i].x = num;
-
-
-            //build an int from 4 bytes
-            ((char*)&num)[0] = memblock[last_i+5+i*16];
-            ((char*)&num)[1] = memblock[last_i+6+i*16];
-            ((char*)&num)[2] = memblock[last_i+7+i*16];
-            ((char*)&num)[3] = memblock[last_i+8+i*16];
-
-            //store the number into variables
-            collision_rect[i].y = num;
-
-
-            //build an int from 4 bytes
-            ((char*)&num)[0] = memblock[last_i+9+i*16];
-            ((char*)&num)[1] = memblock[last_i+10+i*16];
-            ((char*)&num)[2] = memblock[last_i+11+i*16]; 
-            ((char*)&num)[3] = memblock[last_i+12+i*16];
-
-            //store the number into variables
-            collision_rect[i].w = num;
-            
-            //build an int from 4 bytes
-            ((char*)&num)[0] = memblock[last_i+13+i*16];
-            ((char*)&num)[1] = memblock[last_i+14+i*16];
-            ((char*)&num)[2] = memblock[last_i+15+i*16];
-            ((char*)&num)[3] = memblock[last_i+16+i*16];
-
-
-            //store the number into variables
-            collision_rect[i].h = num;
-         }
-
-         free(memblock);
-     }
-
-	 cleanupInvisibleRects();
-}
-
 SDL_Cursor *pointer;
 
 
@@ -309,26 +100,28 @@ void DrawGameScene()
 	renderer->drawImage(0, 1024, &background);
 	renderer->drawImage(1024, 1024, &background);
 
-	//draw tiles, only on screen
-	for (int i = 0; i < number_of_tiles; i++)
+	//draw background tiles, only on screen
+	for (int i = 0; i < map->backGroundTiles; i++)
 	{
-		int draw_x = tile_x[i] - (int)camera_x;
-		int draw_y = tile_y[i] - (int)camera_y;
+		OPI_Map::Tile *tile = mapEditorManager->getBackgroundTile(i);
+		int drawX = map->tile[i] - (int)camera_x;
+		int drawY = map->tile[i] - (int)camera_y;
+		
 
-		if (draw_x >= (int)(0 - tile_img[tile[i]].width) &&
-			draw_x < renderer->originalWindowWidth && draw_y < renderer->originalWindowHeight &&
-			draw_y >= (int)(0 - tile_img[tile[i]].height))
-			renderer->drawImage(draw_x, draw_y, &tile_img[tile[i]]);
+		if (drawX >= (int)(0 - tile_img[tile[i]].width) &&
+			drawX < renderer->originalWindowWidth &&
+			drawY < renderer->originalWindowHeight &&
+			drawY >= (int)(0 - tile_img[tile[i]].height))
+			renderer->drawImage(drawX, drawY, tile);
 	}
 
 	//stickman!
-	if (stickman_toggle)
+	if (stickman_toggle) //TODO - mapEditorState.stickmanVisible
 		renderer->drawImage(stickman.x - 25 - camera_x, stickman.y - camera_y, &stickman_img);
 
 	//draw tiles, only on screen
-	for (int i = 0; i < number_of_fringe; i++)
+	for (int i = 0; i < map->number_of_fringe; i++)
 	{
-
 		int draw_x = fringe_x[i] - (int)camera_x;
 		int draw_y = fringe_y[i] - (int)camera_y;
 
@@ -929,7 +722,7 @@ void HandleInput()
 				case COLLISION_DRAW:
 					current_rect++;
 					// Cleanup small rects you can't see
-					cleanupInvisibleRects();
+					SKO_Map::cleanupInvisibleRects(map);
 					break;
 				}
 
@@ -986,7 +779,7 @@ int main(int argc, char *argv[])
 	// Open requested map file
 	if (loadMapFilename.length() > 0)
 	{
-		loadmap(loadMapFilename);
+		map = new SKO_Map::Map(loadMapFilename);
 		current_tile = number_of_tiles;
 		current_rect = number_of_rects;
 		current_fringe = number_of_fringe;
@@ -1144,6 +937,7 @@ bool blocked(float box1_x1, float box1_y1, float box1_x2, float box1_y2)
      return false;
 }
 
+
 void Physics()
 {
 	//fall
@@ -1190,133 +984,4 @@ void Physics()
 		if (x_speed != 0)
 			x_speed = 0;
     }    
-}
-
-
-void saveMap()
-{
-	// Cleanup small rects you can't see
-	cleanupInvisibleRects();
-
-	//show selector for a second
-	save_notify = clock() + 120;
-
-	//default
-	std::string file = "Output.map";
-
-	//unless you have opened one
-	if (loadMapFilename.length() > 1)
-		file = loadMapFilename;
-
-	//dump all the memory into a file
-	std::ofstream MapFile(file.c_str(), std::ios::out | std::ios::binary);
-
-	if (MapFile.is_open())
-	{
-
-		//first say how many tiles
-		//break up the int as 4 bytes
-		unsigned char *p;
-		p = (unsigned char*)&number_of_tiles;
-		unsigned char b1 = p[0];
-		unsigned char b2 = p[1];
-		unsigned char b3 = p[2];
-		unsigned char b4 = p[3];
-
-		//spit out each of the bytes
-		MapFile << b1 << b2 << b3 << b4;
-
-		//put how many fringe
-		p = (unsigned char*)&number_of_fringe;
-		b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
-
-		//spit out each of the bytes
-		MapFile << b1 << b2 << b3 << b4;
-
-		//put how many rects
-		p = (unsigned char*)&number_of_rects;
-		b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
-
-		//spit out each of the bytes
-		MapFile << b1 << b2 << b3 << b4;
-
-
-		//spit out all the tiles
-		for (int i = 0; i < number_of_tiles; i++)
-		{
-			//x coords
-			p = (unsigned char*)&tile_x[i];
-			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
-
-			//spit out each of the bytes
-			MapFile << b1 << b2 << b3 << b4;
-
-			//y coords
-			p = (unsigned char*)&tile_y[i];
-			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
-
-			//spit out each of the bytes
-			MapFile << b1 << b2 << b3 << b4;
-
-			//tile number
-			MapFile << tile[i];
-
-		}
-
-		//spit out all the tiles
-		for (int i = 0; i < number_of_fringe; i++)
-		{
-			//x coords
-			p = (unsigned char*)&fringe_x[i];
-			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
-
-			//spit out each of the bytes
-			MapFile << b1 << b2 << b3 << b4;
-
-			//y coords
-			p = (unsigned char*)&fringe_y[i];
-			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
-
-			//spit out each of the bytes
-			MapFile << b1 << b2 << b3 << b4;
-
-			//fringe number
-			MapFile << fringe[i];
-
-		}
-
-		//spit out all the rects
-		for (int i = 0; i < number_of_rects; i++)
-		{
-			//x coords
-			p = (unsigned char*)&collision_rect[i].x;
-			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
-
-			//spit out each of the bytes
-			MapFile << b1 << b2 << b3 << b4;
-
-			//y coords
-			p = (unsigned char*)&collision_rect[i].y;
-			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
-
-			//spit out each of the bytes
-			MapFile << b1 << b2 << b3 << b4;
-
-			//width
-			p = (unsigned char*)&collision_rect[i].w;
-			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
-
-			//spit out each of the bytes
-			MapFile << b1 << b2 << b3 << b4;
-
-			//height
-			p = (unsigned char*)&collision_rect[i].h;
-			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
-
-			//spit out each of the bytes
-			MapFile << b1 << b2 << b3 << b4;
-		}
-
-		MapFile.close();
-	}
 }

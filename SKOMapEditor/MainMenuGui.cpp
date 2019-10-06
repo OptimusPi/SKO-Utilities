@@ -81,19 +81,8 @@ void MainMenuGui::setupHotBar()
 	});
 
 
-/*
-	// Consider thes ebuttons as radio button group
-	auto tileEditorGroup = new OPI_Gui::ButtonToggleGroup();
-	tileEditorGroup->addButton(buttonAddTile);
-	tileEditorGroup->addButton(buttonDeleteTile);
-	tileEditorGroup->addButton(buttonEditTile);
-*/
-
-	new OPI_Gui::ButtonToggleGroup({
-		buttonAddTile,
-		buttonDeleteTile,
-		buttonEditTile
-	});
+	// Consider these buttons as radio button group
+	new OPI_Gui::ButtonToggleGroup({ buttonAddTile, buttonDeleteTile, buttonEditTile });
 
 	// Add the 8 buttons to the hotbar panel
 	hotbarPanel->addElement(buttonAddTile);
@@ -118,9 +107,9 @@ void MainMenuGui::setupCoordinates()
 	this->coords->visible = true;
 	this->coords->x = 2;
 	this->coords->y = 2;
-	this->coords->R = 1.00f;
+	this->coords->R = 0.90f;
 	this->coords->G = 0.90f;
-	this->coords->B = 0.95f;
+	this->coords->B = 1.00f;
 
 	// Set up text label
 	OPI_Gui::TextLabel * coordsLabel = new OPI_Gui::TextLabel(this->coords->x, this->coords->y, this->coords);
