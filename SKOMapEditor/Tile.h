@@ -8,6 +8,9 @@ namespace SKO_Map
 	public:
 		Tile();
 		virtual ~Tile();
+		int x = 0;
+		int y = 0;
+		unsigned char tileId;
 	};
 }
 #endif

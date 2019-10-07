@@ -5,7 +5,8 @@
 #include "SDL_headers.h"
 #include <string>
 #include <vector>
-#include <iostream>
+#include <fstream>
+
 #include "Tile.h"
 
 
@@ -19,12 +20,12 @@ namespace SKO_Map
 
 		virtual ~Map();
 
-		std::vector<Tile*> backGroundTiles;
-		std::vector<Tile*> fringeTiles;
+		std::vector<Tile> backgroundTiles;
+		std::vector<Tile> fringeTiles;
 		std::vector<SDL_Rect*> collisionRects;
 		void saveMap();
-		void saveMap(std::string fileName);
-		void loadMap(std::string fileName);
+		void saveMap(std::string filePath);
+		void loadMap(std::string filePath);
 		int collision_ox = 0;
 		int collision_oy = 0;// TODO rename
 	private:

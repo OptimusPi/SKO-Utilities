@@ -13,18 +13,21 @@ SKO_MapEditor::Manager::~Manager()
 // Clean up useless rectangles (<4x4 pixels) to a SKO_Map in-place.
 void SKO_MapEditor::Manager::cleanupInvisibleRects(SKO_Map::Map *map)
 {
+	std::vector<int> invisibleRectIds;
+
 	//Delete any collision rectangles that are too small.
-	for (int i = 0; i < map->collisionRects.length(); i++) // TODO how do I tell # of elements in the vector? OR TODO - convert to foreach
+	for (int i = 0; i < map->collisionRects.size(); i++)
 	{
-		if (collision_rect[i].h < 4 || collision_rect[i].w < 4)
+		if (map->collisionRects[i]->h < 4 || map->collisionRects[i]->w < 4)
 		{
-			for (; i < current_rect; i++)
-			{
-				collision_rect[i] = collision_rect[i + 1];
-			}
 			current_rect--;
-			number_of_rects--;
+			invisibleRectIds.push_back(i);
 		}
+	}
+
+	for (int i = 0; i < invisibleRectIds.size(); i++)
+	{
+		map->collisionRects.erase(map->collisionRects.begin() + invisibleRectIds[i]);
 	}
 }
 
