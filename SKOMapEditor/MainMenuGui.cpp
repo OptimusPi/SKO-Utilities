@@ -13,10 +13,17 @@ MainMenuGui::~MainMenuGui()
 }
 
 void MainMenuGui::setCoords(std::string coordsValue)
-{
+{ 
 	this->coords->setText(coordsValue);
-}
+} 
 
+void MainMenuGui::drawGui()
+{
+	for (OPI_Gui::Element* child : this->guiManager->children) {
+		if (child->isVisible)
+			this->guiManager->drawElement(0, 0, child);
+	}
+}
 
 void MainMenuGui::setupHotBar()
 {

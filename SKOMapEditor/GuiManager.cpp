@@ -161,6 +161,15 @@ int OPI_Gui::GuiManager::getScreenHeight()
 	return instance->screenHeight;
 }
 
+void OPI_Gui::GuiManager::drawElement(int x, int y, OPI_Gui::Element * element)
+{
+	renderer->drawImage(x + element->x, y + element->y, element->getTexture(), 0.f);
+	for (OPI_Gui::Element* child : element->children) {
+		if (child->isVisible)
+			drawElement(x + element->x, y + element->y, child);
+	}
+}
+
 OPI_Gui::GuiManager * OPI_Gui::GuiManager::getInstance()
 {
 	return OPI_Gui::GuiManager::instance;

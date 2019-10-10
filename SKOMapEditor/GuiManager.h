@@ -29,16 +29,20 @@ namespace OPI_Gui
 		static bool handleMousePressLeft(int mouseX, int mouseY);
 		static bool handleMousePressRight(int mouseX, int mouseY);
 		static bool handleMouseReleaseLeft(int mouseX, int mouseY);
-		static bool handleMouseReleaseRight(int mouseX, int mouseY);
+		static bool handleMouseReleaseRight(int mouseX, int mouseY); 
 
 		// Get screen dimensions for help placing elements
 		static int getScreenWidth();
 		static int getScreenHeight();
 
+		// Render an element
+		void drawElement(int x, int y, OPI_Gui::Element *element);
+
 		// All elements added to the GUI Manager
 		std::vector<OPI_Gui::Element*> children;
 
 		static GuiManager* getInstance();
+
 	private:
 		SDL_Cursor *cursorNormal;
 		SDL_Cursor *cursorMove;

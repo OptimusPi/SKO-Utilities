@@ -269,7 +269,6 @@ void SKO_Map::Map::loadMap(std::string filePath)
 			//store the number into variables
 			collisionRects[i]->x = num;
 
-
 			//build an int from 4 bytes
 			((char*)&num)[0] = memblock[last_i + 5 + i * 16];
 			((char*)&num)[1] = memblock[last_i + 6 + i * 16];
@@ -279,9 +278,8 @@ void SKO_Map::Map::loadMap(std::string filePath)
 			//store the number into variables
 			collisionRects[i]->y = num;
 
-
 			//build an int from 4 bytes
-			((char*)&num)[0] = memblock[last_i + 9 + i * 16];
+			((char*)&num)[0] = memblock[last_i + 9  + i * 16];
 			((char*)&num)[1] = memblock[last_i + 10 + i * 16];
 			((char*)&num)[2] = memblock[last_i + 11 + i * 16];
 			((char*)&num)[3] = memblock[last_i + 12 + i * 16];
