@@ -86,20 +86,12 @@ void Physics();
 
 std::string save = "";
 
-	for (OPI_Gui::Element* child : gui->children) {
-		if (child->isVisible)
-			DrawElement(0, 0, child);
-	}
-}
-
 void Graphics()
 {
 	glClearColor(0.00f, 0.00f, 0.00f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
 	// Draw map, tiles, etc
-	DrawGameScene();
-	
 	mapEditorManager->DrawGameScene();
 
 	// Draw Map Editor Gui
