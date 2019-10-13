@@ -9,7 +9,6 @@
 #include <functional>
 #include "Global.h"
 #include "ButtonToggleGroup.h"
-#include "OPI_Renderer.h"
 
 class MainMenuGui
 {
@@ -23,7 +22,6 @@ private:
 	OPI_Gui::GuiManager * guiManager = nullptr;
 	OPI_Text::TextComponent* coords = nullptr;
 	OPI_Gui::TextLabel * coordsLabel;
-	OPI_Renderer * renderer;
 
 	// Create Gui Elements
 	void setupHotBar();

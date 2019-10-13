@@ -7,18 +7,18 @@
 
 // press F to pay respects :'(
 
+extern bool done;
+extern char mode;
 extern void saveMap();
 extern bool fringe_mode;
-extern char mode;
 
-extern const char
-
-TILE_DRAW, TILE_DELETE,
-TOGGLE_FRINGE,
-COLLISION_DRAW, COLLISION_DELETE,
-TOGGLE_TEST,
-EDIT_TILE, EDIT_COLLISION,
-SAVE;
-
+// TODO enum
+const char
+TILE_DRAW = 1, TILE_DELETE = 2,
+TOGGLE_FRINGE = 3,
+COLLISION_DRAW = 4, COLLISION_DELETE = 5,
+TOGGLE_TEST = 6,
+EDIT_TILE = 7, EDIT_COLLISION = 8,
+SAVE = 9;
 
 #endif

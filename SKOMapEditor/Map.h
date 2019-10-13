@@ -20,14 +20,12 @@ namespace SKO_Map
 
 		virtual ~Map();
 
-		std::vector<Tile> backgroundTiles;
-		std::vector<Tile> fringeTiles;
+		std::vector<Tile*> backgroundTiles;
+		std::vector<Tile*> fringeTiles;
 		std::vector<SDL_Rect*> collisionRects;
 		void saveMap();
 		void saveMap(std::string filePath);
 		void loadMap(std::string filePath);
-		int collision_ox = 0;
-		int collision_oy = 0;// TODO rename
 	private:
 		std::string filePath;
 	};

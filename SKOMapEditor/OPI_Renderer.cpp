@@ -144,6 +144,12 @@ void OPI_Renderer::drawRect(SDL_Rect rect, unsigned char r, unsigned char g, uns
 	glEnd();
 }
 
+void OPI_Renderer::startDraw()
+{
+	glClearColor(0.00f, 0.00f, 0.00f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
 void OPI_Renderer::updateScreen()
 {
 	SDL_GL_SwapWindow(this->window);

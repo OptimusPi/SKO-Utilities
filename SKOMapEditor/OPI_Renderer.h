@@ -21,7 +21,9 @@ public:
 	// Screen functions
 	void initScreen();
 	void sizeScreen();
+	void startDraw();
 	void updateScreen();
+
 
 	// Converting mouse from screen space to window render coordinates
 	int getScaledMouseX(int mouse_x);

@@ -2,18 +2,25 @@
 #define __SKO_MAPEDITORMANAGER_H_
 
 
-#include "Map.h"
 #include <string>
+
+#include "Tile.h"
+#include "Map.h"
 #include "OPI_Renderer.h"
 #include "GuiManager.h"
+#include "OPI_Clock.h"
+#include "MainMenuGui.h"
+
+
 
 namespace SKO_MapEditor
 {
+
 	//TODO Singleton
 	class Manager
 	{
 	public:
-		Manager(OPI_Renderer * renderer);
+		Manager(OPI_Renderer * renderer, MainMenuGui *mainMenuGui);
 		virtual ~Manager();
 		void saveMap();
 		void saveMap(std::string filename);
@@ -28,9 +35,14 @@ namespace SKO_MapEditor
 		void DrawGui();
 
 		// Handle input 
-		void HandleInput(SDL_Event event);
+		void HandleInput();
+
+		// Process logic loop
+		void processLoop();
 
 	private:
+		SDL_Event event;
+		MainMenuGui *mainMenuGui;
 		OPI_Renderer * renderer;
 		SKO_Map::Map * map;
 		float camera_x = 0, camera_y = 0;
@@ -39,12 +51,39 @@ namespace SKO_MapEditor
 		int current_rect = 0;
 		int current_fringe = 0;
 		int current_tile_img = 0;
+		int num_tile_images = 0;
+		int collision_ox = 0;
+		int collision_oy = 0;
+		bool fringe_mode = false;
 
 		//images
 		OPI_Image tile_img[256];
 		OPI_Image background;
 		OPI_Image stickman_img;
 		OPI_Gui::GuiManager *gui;
+
+		//mouse buttons
+		bool RCLICK = false;
+		bool LCLICK = false;
+
+		bool placing_tile = false;
+		bool placing_fringe = false;
+
+		char mode = TILE_DRAW;
+		int save_notify;
+		bool SHIFT_HELD = false;
+		bool stickman_toggle = false;
+		unsigned long int coordsTicker = 0;
+
+		SDL_Rect stickman;
+		float x_speed, y_speed;
+		const float GRAVITY = 0.175;
+		bool RIGHT = false, LEFT = false;
+
+		// Simulate Physics of test stickman
+		bool isBlocked(SDL_Rect rect);
+		void physics();
+		void graphics();
 	};
 }
 

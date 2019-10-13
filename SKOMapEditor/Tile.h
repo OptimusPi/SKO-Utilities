@@ -7,6 +7,7 @@ namespace SKO_Map
 	{
 	public:
 		Tile();
+		Tile(int x, int y, unsigned char tileId);
 		virtual ~Tile();
 		int x = 0;
 		int y = 0;

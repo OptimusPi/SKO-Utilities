@@ -1,8 +1,31 @@
 #include "MapEditorManager.h"
 
-SKO_MapEditor::Manager::Manager(OPI_Renderer * renderer)
+#include "Global.h"
+
+SKO_MapEditor::Manager::Manager(OPI_Renderer * renderer, MainMenuGui *mainMenuGui)
 {
 	this->renderer = renderer;
+	this->mainMenuGui = mainMenuGui;
+
+	// Load tiles and images
+	background.setImage("IMG/back.png");
+	stickman_img.setImage("IMG/stickman.png");
+
+	// Load tileset
+	for (int i = 0; i < 256; i++)//check if file exists, etc.
+	{
+		std::stringstream ss;
+		ss << "IMG/TILE/tile" << i << ".png";
+		std::ifstream checker(ss.str());
+		if (checker.is_open())
+		{
+			checker.close();
+			tile_img[i].setImage(ss.str());
+			num_tile_images = i;
+		}
+		else
+			break;
+	}
 }
 
 SKO_MapEditor::Manager::~Manager()
@@ -57,6 +80,11 @@ void SKO_MapEditor::Manager::loadMap(std::string fileName)
 
 	// Edge case where accidental small rectangles are leftover, clean these up
 	SKO_MapEditor::Manager::cleanupInvisibleRects(this->map);
+
+	// Set map current rect
+	current_rect = map->collisionRects.size();
+	current_fringe = map->fringeTiles.size();
+	current_tile = map->backgroundTiles.size();
 }
 
 void SKO_MapEditor::Manager::DrawGameScene()
@@ -68,18 +96,20 @@ void SKO_MapEditor::Manager::DrawGameScene()
 	renderer->drawImage(1024, 1024, &background);
 
 	//draw background tiles, only on screen
-	for (int i = 0; i < map->backGroundTiles; i++)
+	for (int i = 0; i < map->backgroundTiles.size(); i++)
 	{   
-		OPI_Map::Tile *tile = mapEditorManager->getBackgroundTile(i);
-		int drawX = map->tile[i] - (int)camera_x;
-		int drawY = map->tile[i] - (int)camera_y;
+		SKO_Map::Tile *tile = map->backgroundTiles[i];
+		OPI_Image *tileImg = &tile_img[tile->tileId];
+
+		int drawX = tile->x - (int)camera_x;
+		int drawY = tile->y - (int)camera_y;
 
 
-		if (drawX >= (int)(0 - tile_img[tile[i]].width) &&
+		if (drawX >= (int)(0 - tileImg->width) &&
 			drawX < renderer->originalWindowWidth &&
 			drawY < renderer->originalWindowHeight &&
-			drawY >= (int)(0 - tile_img[tile[i]].height))
-			renderer->drawImage(drawX, drawY, tile);
+			drawY >= (int)(0 - tileImg->height))
+			renderer->drawImage(drawX, drawY, tileImg);
 	}
 
 	//stickman!
@@ -87,15 +117,21 @@ void SKO_MapEditor::Manager::DrawGameScene()
 		renderer->drawImage(stickman.x - 25 - camera_x, stickman.y - camera_y, &stickman_img);
 
 	//draw tiles, only on screen
-	for (int i = 0; i < map->number_of_fringe; i++)
+	//draw background tiles, only on screen
+	for (int i = 0; i < map->fringeTiles.size(); i++)
 	{
-		int draw_x = fringe_x[i] - (int)camera_x;
-		int draw_y = fringe_y[i] - (int)camera_y;
+		SKO_Map::Tile *tile = map->fringeTiles[i];
+		OPI_Image *tileImg = &tile_img[tile->tileId];
 
-		if (draw_x >= 0 - tile_img[fringe[i]].width &&
-			draw_x < renderer->originalWindowWidth && draw_y < renderer->originalWindowHeight &&
-			draw_y >= 0 - tile_img[fringe[i]].height)
-			renderer->drawImage(draw_x, draw_y, &tile_img[fringe[i]]);
+		int drawX = tile->x - (int)camera_x;
+		int drawY = tile->y - (int)camera_y;
+
+
+		if (drawX >= (int)(0 - tileImg->width) &&
+			drawX < renderer->originalWindowWidth &&
+			drawY < renderer->originalWindowHeight &&
+			drawY >= (int)(0 - tileImg->height))
+			renderer->drawImage(drawX, drawY, tileImg);
 	}
 
 	//draw current tile
@@ -103,18 +139,18 @@ void SKO_MapEditor::Manager::DrawGameScene()
 		renderer->drawImage(cursor_x / 32 * 32, cursor_y / 32 * 32, &tile_img[current_tile_img]);
 
 	//draw collision rects, only on screen
-	for (int i = 0; i < number_of_rects; i++)
+	for (int i = 0; i < map->collisionRects.size(); i++)
 	{
 		SDL_Rect newRect;
 
-		newRect.x = collision_rect[i].x - (int)camera_x;
-		newRect.y = collision_rect[i].y - (int)camera_y;
-		newRect.h = collision_rect[i].h;
-		newRect.w = collision_rect[i].w;
+		newRect.x = map->collisionRects[i]->x - (int)camera_x;
+		newRect.y = map->collisionRects[i]->y - (int)camera_y;
+		newRect.h = map->collisionRects[i]->h;
+		newRect.w = map->collisionRects[i]->w;
 
-		if (newRect.x >= 0 - collision_rect[i].w &&
+		if (newRect.x >= 0 - newRect.w &&
 			newRect.x < renderer->originalWindowWidth && newRect.y < renderer->originalWindowHeight &&
-			newRect.y >= 0 - collision_rect[i].h)
+			newRect.y >= 0 - newRect.h)
 			renderer->drawRect(newRect, 0, 200, 200);
 	}
 }
@@ -129,7 +165,7 @@ void SKO_MapEditor::Manager::DrawGui()
 }
 
 
-void HandleInput(SDL_Event event)
+void SKO_MapEditor::Manager::HandleInput()
 {
 	while (SDL_PollEvent(&event))
 	{
@@ -262,24 +298,24 @@ void HandleInput(SDL_Event event)
 				break;
 
 			case SDLK_PAGEDOWN:
-				if (current_tile_img < num_tiles)
+				if (current_tile_img < num_tile_images)
 					current_tile_img++;
 				break;
 
 			case 'w':
 				if (current_tile > 0 && mode == TILE_DRAW && !fringe_mode)
-					tile_y[current_tile - 1]--;
+					map->backgroundTiles[current_tile - 1]->x--;
 				if (current_fringe > 0 && mode == TILE_DRAW && fringe_mode)
-					fringe_y[current_fringe - 1]--;
+					map->fringeTiles[current_fringe - 1]->x--;
 
 				if (mode == TOGGLE_TEST)
 					y_speed = -6;
 				if (mode == COLLISION_DRAW && current_rect > 0)
 				{
-					if (collision_rect[current_rect - 1].y > 0)
+					if (map->collisionRects[current_rect - 1]->y > 0)
 					{
-						collision_rect[current_rect - 1].y--;
-						collision_rect[current_rect - 1].w++;
+						map->collisionRects[current_rect - 1]->y--;
+						map->collisionRects[current_rect - 1]->w++;
 					}
 				}
 				break;
@@ -287,50 +323,50 @@ void HandleInput(SDL_Event event)
 
 				if (current_tile > 0 && mode == TILE_DRAW && !fringe_mode)
 				{
-					tile_x[current_tile - 1]--;
+					map->backgroundTiles[current_tile - 1]->x--;
 				}
 				if (current_fringe > 0 && mode == TILE_DRAW && fringe_mode)
 				{
-					fringe_x[current_fringe - 1]--;
+					map->fringeTiles[current_fringe - 1]->x--;
 				}
 
 				LEFT = true;
 
 				if (mode == COLLISION_DRAW && current_rect > 0)
 				{
-					if (collision_rect[current_rect - 1].x > 0)
+					if (map->collisionRects[current_rect - 1]->x > 0)
 					{
-						collision_rect[current_rect - 1].x--;
-						collision_rect[current_rect - 1].w++;
+						map->collisionRects[current_rect - 1]->x--;
+						map->collisionRects[current_rect - 1]->w++;
 					}
 				}
 				break;
 			case 's':
 				if (current_tile > 0 && mode == TILE_DRAW && !fringe_mode)
-					tile_y[current_tile - 1]++;
+					map->backgroundTiles[current_tile - 1]->y++;
 				if (current_fringe > 0 && mode == TILE_DRAW && fringe_mode)
-					fringe_y[current_fringe - 1]++;
+					map->fringeTiles[current_fringe - 1]->y++;
 
 				if (mode == COLLISION_DRAW && current_rect > 0)
 				{
-					collision_rect[current_rect - 1].y++;
-					collision_rect[current_rect - 1].h--;
+					map->collisionRects[current_rect - 1]->y++;
+					map->collisionRects[current_rect - 1]->h--;
 				}
 
 				break;
 			case 'd':
 
 				if (current_tile > 0 && mode == TILE_DRAW && !fringe_mode)
-					tile_x[current_tile - 1]++;
+					map->backgroundTiles[current_tile - 1]->x++;
 				if (current_fringe > 0 && mode == TILE_DRAW && fringe_mode)
-					fringe_x[current_fringe - 1]++;
+					map->fringeTiles[current_fringe - 1]->x++;
 
 				RIGHT = true;
 
 				if (mode == COLLISION_DRAW && current_rect > 0)
 				{
-					collision_rect[current_rect - 1].x++;
-					collision_rect[current_rect - 1].w--;
+					map->collisionRects[current_rect - 1]->x++;
+					map->collisionRects[current_rect - 1]->w--;
 				}
 				break;
 
@@ -338,31 +374,31 @@ void HandleInput(SDL_Event event)
 			case 'i':
 				if (mode == COLLISION_DRAW && current_rect > 0)
 				{
-					if (collision_rect[current_rect - 1].h > 0)
+					if (map->collisionRects[current_rect - 1]->h > 0)
 					{
-						collision_rect[current_rect - 1].h--;
+						map->collisionRects[current_rect - 1]->h--;
 					}
 				}
 				break;
 			case 'j':
 				if (mode == COLLISION_DRAW && current_rect > 0)
 				{
-					if (collision_rect[current_rect - 1].w > 0)
+					if (map->collisionRects[current_rect - 1]->w > 0)
 					{
-						collision_rect[current_rect - 1].w--;
+						map->collisionRects[current_rect - 1]->w--;
 					}
 				}
 				break;
 			case 'k':
 				if (mode == COLLISION_DRAW && current_rect > 0)
 				{
-					collision_rect[current_rect - 1].h++;
+					map->collisionRects[current_rect - 1]->h++;
 				}
 				break;
 			case 'l':
 				if (mode == COLLISION_DRAW && current_rect > 0)
 				{
-					collision_rect[current_rect - 1].w++;
+					map->collisionRects[current_rect - 1]->w++;
 				}
 				break;
 
@@ -404,7 +440,7 @@ void HandleInput(SDL_Event event)
 				//
 				if (cx > collision_ox)
 				{
-					x1 = collision_rect[current_rect].x;
+					x1 = map->collisionRects[current_rect]->x;
 					x2 = cx;
 				}
 				else
@@ -418,7 +454,7 @@ void HandleInput(SDL_Event event)
 				//
 				if (cy > collision_oy)
 				{
-					y1 = collision_rect[current_rect].y;
+					y1 = map->collisionRects[current_rect]->y;
 					y2 = cy;
 				}
 				else
@@ -428,22 +464,22 @@ void HandleInput(SDL_Event event)
 				}
 
 				//adjust the width and height
-				collision_rect[current_rect].x = x1;
-				collision_rect[current_rect].w = x2 - x1;
-				collision_rect[current_rect].y = y1;
-				collision_rect[current_rect].h = y2 - y1;
+				map->collisionRects[current_rect]->x = x1;
+				map->collisionRects[current_rect]->w = x2 - x1;
+				map->collisionRects[current_rect]->y = y1;
+				map->collisionRects[current_rect]->h = y2 - y1;
 			}
 			if (mode == TILE_DRAW && LCLICK)
 			{
 				if (!fringe_mode)
 				{
-					tile_x[current_tile] = (int)(cursor_x + camera_x) / 32 * 32;
-					tile_y[current_tile] = (int)(cursor_y + camera_y) / 32 * 32;
+					map->backgroundTiles[current_tile]->x = (int)(cursor_x + camera_x) / 32 * 32;
+					map->backgroundTiles[current_tile]->y = (int)(cursor_y + camera_y) / 32 * 32;
 				}
 				else
 				{
-					fringe_x[current_fringe] = (int)(cursor_x + camera_x) / 32 * 32;
-					fringe_y[current_fringe] = (int)(cursor_y + camera_y) / 32 * 32;
+					map->fringeTiles[current_fringe]->x = (int)(cursor_x + camera_x) / 32 * 32;
+					map->fringeTiles[current_fringe]->y = (int)(cursor_y + camera_y) / 32 * 32;
 				}
 			}
 			if (mode == TOGGLE_TEST && LCLICK)
@@ -469,25 +505,24 @@ void HandleInput(SDL_Event event)
 				{
 					if (!placing_tile)
 					{
-						number_of_tiles++;
 						placing_tile = true;
 					}
 
-					tile_x[current_tile] = (int)(cursor_x + (int)camera_x) / 32 * 32;
-					tile_y[current_tile] = (int)(cursor_y + (int)camera_y) / 32 * 32;
-					tile[current_tile] = current_tile_img;
+					int x = (int)(cursor_x + (int)camera_x) / 32 * 32;
+					int y = (int)(cursor_y + (int)camera_y) / 32 * 32;
+
+					map->backgroundTiles.push_back(new SKO_Map::Tile(x, y, current_tile_img));
 				}
 				else
 				{
 					if (!placing_fringe)
 					{
-						number_of_fringe++;
 						placing_fringe = true;
 					}
 
-					fringe_x[current_fringe] = (int)(cursor_x + (int)camera_x) / 32 * 32;
-					fringe_y[current_fringe] = (int)(cursor_y + (int)camera_y) / 32 * 32;
-					fringe[current_fringe] = current_tile_img;
+					int x = (int)(cursor_x + (int)camera_x) / 32 * 32;
+					int y = (int)(cursor_y + (int)camera_y) / 32 * 32;
+					map->fringeTiles.push_back(new SKO_Map::Tile(x, y, current_tile_img));
 				}
 				break;
 
@@ -499,64 +534,44 @@ void HandleInput(SDL_Event event)
 
 				if (!fringe_mode)
 				{
-					bool found = false;
+					int at = -1;
 					for (i = 0; i < current_tile; i++)
 					{
-						if (x > tile_x[i] && x < tile_x[i] + tile_img[tile[i]].width &&
-							y > tile_y[i] && y < tile_y[i] + tile_img[tile[i]].height)
+						if (x > map->backgroundTiles[i]->x && x < map->backgroundTiles[i]->x + tile_img[map->backgroundTiles[i]->tileId].width &&
+							y > map->backgroundTiles[i]->y && y < map->backgroundTiles[i]->y + tile_img[map->backgroundTiles[i]->tileId].height)
 						{
-							found = true;
+							at = i;
 							break;
 						}
 					}
 
-					//move all tiles back in the array
-					for (; found && i < current_tile; i++)
-					{
-						tile[i] = tile[i + 1];
-						tile_x[i] = tile_x[i + 1];
-						tile_y[i] = tile_y[i + 1];
-					}
+					if (at >= 0)
+						map->backgroundTiles.erase(map->backgroundTiles.begin()+at);
 
-					//we deleted a tile. current position is one less now.
-					if (found) {
-						current_tile--;
-						number_of_tiles--;
-					}
+					current_tile--;
 				}
 				else
 				{
-					bool found = false;
+					int at = -1;
 					for (i = 0; i < current_fringe; i++)
 					{
-						if (x > fringe_x[i] && x < fringe_x[i] + tile_img[fringe[i]].width &&
-							y > fringe_y[i] && y < fringe_y[i] + tile_img[fringe[i]].height)
+						if (x > map->fringeTiles[i]->x && x < map->fringeTiles[i]->x + tile_img[map->fringeTiles[i]->tileId].width &&
+							y > map->fringeTiles[i]->y && y < map->fringeTiles[i]->y + tile_img[map->fringeTiles[i]->tileId].height)
 						{
-							found = true;
+							at = i;
 							break;
 						}
 					}
 
-					//move all tiles back in the array
-					for (; found && i < current_fringe; i++)
-					{
-						fringe[i] = fringe[i + 1];
-						fringe_x[i] = fringe_x[i + 1];
-						fringe_y[i] = fringe_y[i + 1];
-					}
+					if (at >= 0)
+						map->fringeTiles.erase(map->fringeTiles.begin() + at);
 
-					//we deleted a tile. current position is one less now.
-					if (found) {
-						current_fringe--;
-						number_of_fringe--;
-					}
+					current_fringe--;
 				}
 			}
-							  break;
+			break;
 
 			case COLLISION_DRAW:
-				//go to next rect
-				number_of_rects++;
 
 				//Get the mouse offsets, scaled from screen space to window space
 				cursor_x = renderer->getScaledMouseX(event.motion.x);
@@ -565,10 +580,13 @@ void HandleInput(SDL_Event event)
 				//Get the mouse offsets
 				collision_ox = cursor_x + (int)camera_x;
 				collision_oy = cursor_y + (int)camera_y;
-				collision_rect[current_rect].x = collision_ox;
-				collision_rect[current_rect].y = collision_oy;
-				collision_rect[current_rect].w = 0;
-				collision_rect[current_rect].h = 0;
+
+				SDL_Rect newRect;
+				newRect.x = collision_ox;
+				newRect.y = collision_oy;
+				newRect.w = 0;
+				newRect.h = 0;
+				map->collisionRects.push_back(&newRect);
 				break;
 
 			case COLLISION_DELETE: {
@@ -576,31 +594,22 @@ void HandleInput(SDL_Event event)
 				int i;
 				int x = cursor_x + camera_x;
 				int y = cursor_y + camera_y;
-				bool found = false;
+				int at = -1;
 				for (i = 0; i < current_rect; i++)
 				{
-					if (x > collision_rect[i].x && x < collision_rect[i].x + collision_rect[i].w &&
-						y > collision_rect[i].y && y < collision_rect[i].y + collision_rect[i].h)
+					if (x > map->collisionRects[i]->x && x < map->collisionRects[i]->x + map->collisionRects[i]->w &&
+						y > map->collisionRects[i]->y && y < map->collisionRects[i]->y + map->collisionRects[i]->h)
 					{
-						found = true;
+						at = i;
 						break;
 					}
 				}
 
-				//move all tiles back in the array
-				for (; i < current_rect; i++)
-				{
-					collision_rect[i] = collision_rect[i + 1];
-				}
-
-
-				//we deleted a rect. current position is one less now.
-				if (found) {
-					current_rect--;
-					number_of_rects--;
-				}
+				if (at >= 0)
+					map->collisionRects.erase(map->collisionRects.begin() + at);
+				current_rect--;
 			}
-								   break;
+			break;
 
 
 			case TOGGLE_TEST:
@@ -640,9 +649,9 @@ void HandleInput(SDL_Event event)
 				case TILE_DRAW:
 					if (!fringe_mode)
 					{
-						tile_x[current_tile] = (int)(cursor_x + (int)camera_x) / 32 * 32;
-						tile_y[current_tile] = (int)(cursor_y + (int)camera_y) / 32 * 32;
-						tile[current_tile] = current_tile_img;
+						map->backgroundTiles[current_tile]->x = (int)(cursor_x + (int)camera_x) / 32 * 32;
+						map->backgroundTiles[current_tile]->y = (int)(cursor_y + (int)camera_y) / 32 * 32;
+						map->backgroundTiles[current_tile]->tileId = current_tile_img;
 
 						//go to the next tile
 						current_tile++;
@@ -650,9 +659,9 @@ void HandleInput(SDL_Event event)
 					}
 					else
 					{
-						fringe_x[current_fringe] = (int)(cursor_x + (int)camera_x) / 32 * 32;
-						fringe_y[current_fringe] = (int)(cursor_y + (int)camera_y) / 32 * 32;
-						fringe[current_fringe] = current_tile_img;
+						map->fringeTiles[current_fringe]->x = (int)(cursor_x + (int)camera_x) / 32 * 32;
+						map->fringeTiles[current_fringe]->y = (int)(cursor_y + (int)camera_y) / 32 * 32;
+						map->fringeTiles[current_fringe]->tileId = current_tile_img;
 
 						//go to the next tile
 						current_fringe++;
@@ -664,7 +673,7 @@ void HandleInput(SDL_Event event)
 				case COLLISION_DRAW:
 					current_rect++;
 					// Cleanup small rects you can't see
-					SKO_Map::cleanupInvisibleRects(map);
+					cleanupInvisibleRects(map);
 					break;
 				}
 
@@ -683,4 +692,114 @@ void HandleInput(SDL_Event event)
 			}
 		}
 	} //if poll event
+}
+
+void SKO_MapEditor::Manager::processLoop()
+{
+	//if save notify is in the past, clear it
+	if (save_notify < clock())
+		save_notify = 0;
+
+	if (OPI_Clock::milliseconds() - coordsTicker > 15)
+	{
+		//draw coords
+		std::stringstream ss;
+		ss << "(" << cursor_x + camera_x << ", " << cursor_y + camera_y << ")";
+
+		mainMenuGui->setCoords(ss.str());
+
+		//reset ticker
+		coordsTicker = OPI_Clock::milliseconds();
+	}
+
+	graphics();
+	HandleInput();
+
+	if (!done && stickman_toggle)
+		physics();
+
+	//prevent repeats
+	this->event.type = 0;
+}
+
+// Simulate Physics of test stickman
+
+bool SKO_MapEditor::Manager::isBlocked(SDL_Rect rect)
+{
+	for (int i = 0; i < this->map->collisionRects.size(); i++)
+	{
+		if (SDL_HasIntersection(&rect, this->map->collisionRects[i]))
+			return true;
+	}
+
+	return false;
+}
+
+void SKO_MapEditor::Manager::graphics()
+{
+	renderer->startDraw();
+
+	// Draw map, tiles, etc
+	DrawGameScene();
+
+	// Draw Map Editor Gui
+	DrawGui();
+
+	//update screen
+	renderer->updateScreen();
+}
+
+void SKO_MapEditor::Manager::physics()
+{
+	// fall
+	if (y_speed < 10)
+	{
+		y_speed += GRAVITY;
+	}
+
+	//verical collision detection
+	SDL_Rect stickmanRect;
+	stickmanRect.x = stickman.x;
+	stickmanRect.y = stickman.y + y_speed;
+	stickmanRect.w = 14;
+	stickmanRect.h = 63;
+	bool block_y = isBlocked(stickmanRect);
+
+	//vertical movement
+	if (!block_y)
+	{
+		//not blocked, fall
+		stickman.y += y_speed;
+	}
+	else
+	{
+		y_speed = 0;
+	}
+
+	//horizontal collision detection
+	stickmanRect.x = stickman.x + x_speed;
+	stickmanRect.y = stickman.y;
+	bool block_x = isBlocked(stickmanRect);
+
+	//horizontal movement
+	if (!block_x)
+	{
+		//not blocked, walk
+		stickman.x += (x_speed);
+	}
+
+	if (LEFT && x_speed != -2)
+	{
+		x_speed = -2;
+	}
+	if (RIGHT && x_speed != 2)
+	{
+		x_speed = 2;
+	}
+
+	if (LEFT == RIGHT)
+	{
+		if (x_speed != 0)
+			x_speed = 0;
+	}
 }

@@ -3,12 +3,11 @@
 
 SKO_Map::Map::Map()
 {
-
 }
 
-SKO_Map::Map::Map(std::string fileNme)
+SKO_Map::Map::Map(std::string filePath)
 {
-
+	loadMap(filePath);
 }
 
 SKO_Map::Map::~Map()
@@ -61,42 +60,42 @@ void SKO_Map::Map::saveMap(std::string filePath)
 		for (int i = 0; i < number_of_tiles; i++)
 		{
 			//x coords
-			p = (unsigned char*)(backgroundTiles[i].x);
+			p = (unsigned char*)(backgroundTiles[i]->x);
 			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
 
 			//spit out each of the bytes
 			MapFile << b1 << b2 << b3 << b4;
 
 			//y coords
-			p = (unsigned char*)backgroundTiles[i].y;
+			p = (unsigned char*)backgroundTiles[i]->y;
 			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
 
 			//spit out each of the bytes
 			MapFile << b1 << b2 << b3 << b4;
 
 			//tile number
-			MapFile << backgroundTiles[i].tileId;
+			MapFile << backgroundTiles[i]->tileId;
 		}
 
 		//spit out all the tiles
 		for (int i = 0; i < number_of_fringe; i++)
 		{
 			//x coords
-			p = (unsigned char*)fringeTiles[i].x;
+			p = (unsigned char*)fringeTiles[i]->x;
 			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
 
 			//spit out each of the bytes
 			MapFile << b1 << b2 << b3 << b4;
 
 			//y coords
-			p = (unsigned char*)&fringeTiles[i].y;
+			p = (unsigned char*)&fringeTiles[i]->y;
 			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
 
 			//spit out each of the bytes
 			MapFile << b1 << b2 << b3 << b4;
 
 			//fringe number
-			MapFile << fringeTiles[i].tileId;
+			MapFile << fringeTiles[i]->tileId;
 
 		}
 
@@ -206,7 +205,7 @@ void SKO_Map::Map::loadMap(std::string filePath)
 			((char*)&num)[3] = memblock[last_i + 4 + i * 9];
 
 			//store the number into variables
-			this->backgroundTiles[i].x = num;
+			backgroundTiles[i]->x = num;
 
 			//build an int from 4 bytes
 			((char*)&num)[0] = memblock[last_i + 5 + i * 9];
@@ -215,10 +214,10 @@ void SKO_Map::Map::loadMap(std::string filePath)
 			((char*)&num)[3] = memblock[last_i + 8 + i * 9];
 
 			//store the number into variables
-			backgroundTiles[i].y = num;
+			backgroundTiles[i]->y = num;
 
 			//store the number into variables
-			backgroundTiles[i].tileId = (unsigned char)memblock[last_i + 9 + i * 9];
+			backgroundTiles[i]->tileId = (unsigned char)memblock[last_i + 9 + i * 9];
 		}
 
 		last_i += number_of_tiles * 9;
@@ -236,7 +235,7 @@ void SKO_Map::Map::loadMap(std::string filePath)
 			((char*)&num)[3] = memblock[last_i + 4 + i * 9];
 
 			//store the number into variables
-			fringeTiles[i].x = num;
+			fringeTiles[i]->x = num;
 
 
 			//build an int from 4 bytes
@@ -246,10 +245,10 @@ void SKO_Map::Map::loadMap(std::string filePath)
 			((char*)&num)[3] = memblock[last_i + 8 + i * 9];
 
 			//store the number into variables
-			fringeTiles[i].y = num;
+			fringeTiles[i]->y = num;
 
 			//store the number into variables
-			fringeTiles[i].tileId = memblock[last_i + 9 + i * 9];
+			fringeTiles[i]->tileId = memblock[last_i + 9 + i * 9];
 
 
 		}

@@ -29,48 +29,19 @@
 #include "Global.h"
  
 MainMenuGui* mainMenuGui = nullptr;
-SKO_Map::Map *map = nullptr;
-
-// TODO enum
-const char
-TILE_DRAW = 1, TILE_DELETE = 2,
-TOGGLE_FRINGE = 3,
-COLLISION_DRAW = 4, COLLISION_DELETE = 5,
-TOGGLE_TEST = 6, 
-EDIT_TILE = 7, EDIT_COLLISION = 8,
-SAVE = 9;
-
-char mode = TILE_DRAW;
-int num_tiles = 0;
-bool fringe_mode = 0;
-int save_notify;
-bool SHIFT_HELD = false;
-bool stickman_toggle = false;
-
-SDL_Rect stickman;
-float x_speed, y_speed;
-const float GRAVITY = 0.175;
-bool RIGHT = false, LEFT = false;
 
 // SDL2 rendering class
-OPI_Renderer *renderer;
+OPI_Renderer *renderer = nullptr;
   
 // Gui Manager
 OPI_Gui::GuiManager *guiManager = nullptr;
 
 // Map Editor Manager
 SKO_MapEditor::Manager *mapEditorManager = nullptr;
-
-//mouse buttons
-bool RCLICK = false;
-bool LCLICK = false;
-  
-bool placing_tile = false;
-bool placing_fringe = false;
 //main loop
 bool done = false;
   
-unsigned long int coordsTicker = 0;
+
 
 //font.setImage("IMG/font.png");
 
@@ -82,23 +53,14 @@ std::string loadMapFilename = "";
 SDL_Cursor *pointer;
 
 
-void Physics();
 
 std::string save = "";
 
-void Graphics()
+
+
+void saveMap()
 {
-	glClearColor(0.00f, 0.00f, 0.00f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-	// Draw map, tiles, etc
-	mapEditorManager->DrawGameScene();
-
-	// Draw Map Editor Gui
-	mapEditorManager->DrawGui();
-
-	//update screen
-	renderer->updateScreen();
+	mapEditorManager->saveMap();
 }
 
 #ifdef _WIN32
@@ -134,19 +96,19 @@ int main(int argc, char *argv[])
 
 #endif
 
+
+	mapEditorManager = new SKO_MapEditor::Manager(renderer, mainMenuGui);
+
 	// Open requested map file
 	if (loadMapFilename.length() > 0)
-	{ 
-		map = new SKO_Map::Map(loadMapFilename);
-		current_tile = number_of_tiles;
-		current_rect = number_of_rects;
-		current_fringe = number_of_fringe;
-	} 
+	{
+		mapEditorManager->loadMap(loadMapFilename);
+	}
     
     OPI_Timestep *timestep = new OPI_Timestep(60);
     
-	if (SDL_Init(SDL_INIT_EVERYTHING) == -1) {
-
+	if (SDL_Init(SDL_INIT_EVERYTHING) == -1) 
+	{
 		return 1;
 	}
 
@@ -169,12 +131,12 @@ int main(int argc, char *argv[])
 	OPI_Gui::GuiManager::initCursors("IMG/GUI/cursors/normal.png", "IMG/GUI/cursors/move.png", "IMG/GUI/cursors/resize.png", "IMG/GUI/cursors/hourglass.png", "IMG/GUI/cursors/hand.png");
 	
 	// Initialize main menu GUI
-	mainMenuGui = new MainMenuGui(OPI_Gui::GuiManager::getInstance(), renderer);
+	mainMenuGui = new MainMenuGui(OPI_Gui::GuiManager::getInstance());
 
 	//OPI_Gui::ElementThemeGridRect a = OPI_Gui::ElementThemeGridRect();
 
-	////TODO remove this completely
-	//// Test out a GridRect panel
+	// TODO remove this completely
+	// Test out a GridRect panel
 	//auto *panel_GridRect = new OPI_Gui::Panel(OPI_Gui::ElementThemeType::GridRect, "ice", 100, 100, 433, 433);
 	//panel_GridRect->isVisible = true;
 	//panel_GridRect->isClosable = true;
@@ -201,147 +163,21 @@ int main(int argc, char *argv[])
 	//auto *messageBoxTest = new OPI_Gui::MessageBox("401: Unauthorized.", testFont);
 	//gui->addElement(messageBoxTest);
 
-	background.setImage("IMG/back.png");
-	stickman_img.setImage("IMG/stickman.png");
-
-	/*button_Image->addCallback([]() {
-		std::cout << "ButtonClickTest ran." << std::endl; 
-	});*/
-
-	//Render the text
-	SDL_Color color;
-	color.r = 255;
-	color.g = 200;
-	color.b = 200;
-
-	//stickman
-	stickman.x = 0;
-	stickman.y = 0;
-	stickman.w = 14;
-	stickman.h = 64;
-
-	// Load tileset
-  for(int i = 0; i < 256; i++)//check if file exists, etc.
-  {
-     std::stringstream ss;
-     ss << "IMG/TILE/tile" << i << ".png";
-     std::ifstream checker (ss.str());
-     if (checker.is_open())
-     {
-        checker.close();
-        tile_img[i].setImage(ss.str());
-        num_tiles = i;
-     }
-     else
-        break;
-  }
-
-
 	while (!done)
 	{
 		timestep->Update();
                            
-        if (!done && timestep->Check())
-        {
-			//if save notify is in the past, clear it
-            if (save_notify < clock())
-               save_notify = 0;
-                          
-            if (OPI_Clock::milliseconds() - coordsTicker  > 15)
-            {  
-                //draw coords
-                std::stringstream ss;
-                ss << "(" << cursor_x+camera_x << ", " << cursor_y+camera_y << ")";
-
-				mainMenuGui->setCoords(ss.str());
-                    
-                //reset ticker
-                coordsTicker = OPI_Clock::milliseconds();
-            }        
-                            
-			Graphics();
-			mapEditorManager->HandleInput();
-
-            if (!done && stickman_toggle)
-               Physics();
-            
-            //prevent repeats
-            event.type = 0;
-      }//while check
+		if (!done && timestep->Check())
+		{
+			mapEditorManager->processLoop();
+		 }
       
-	  OPI_Sleep::microseconds(100);
-  }//while !done
+	  OPI_Sleep::milliseconds(1);
+	}//while !done
   
   printf("DONE\n");
 
   delete renderer;
   SDL_Quit();
   return(0);
-}
-
-
-bool blocked(float box1_x1, float box1_y1, float box1_x2, float box1_y2)
-{
-     for (int r = 0; r < number_of_rects; r++)
-     {
-          float box2_x1 = collision_rect[r].x;
-          float box2_y1 = collision_rect[r].y;
-          float box2_x2 = collision_rect[r].x + collision_rect[r].w;
-          float box2_y2 = collision_rect[r].y + collision_rect[r].h;
-
-          if (box1_x2 > box2_x1 && box1_x1 < box2_x2 && box1_y2 > box2_y1 && box1_y1 < box2_y2)
-          {
-             return true;
-          }
-     }
-     return false;
-}
-
-
-void Physics()
-{
-	//fall
-	if (y_speed < 10)
-	{ 
-		y_speed += GRAVITY;
-	}
-
-	//verical collision detection
-	bool block_y = blocked(stickman.x, stickman.y+y_speed + 0 + 0.25, stickman.x + 14, stickman.y+y_speed + 63);
-
-	//vertical movement
-	if (!block_y)
-	{
-		//not blocked, fall
-		stickman.y += y_speed; 
-	}
-	else
-	{  
-		y_speed = 0;
-	}
-
-	//horizontal collision detection
-	bool block_x = blocked(stickman.x + x_speed , stickman.y , stickman.x + x_speed + 14, stickman.y + 63);
-
-	//horizontal movement
-	if (!block_x)
-	{
-		//not blocked, walk
-		stickman.x += (x_speed);
-	}
-
-    if (LEFT && x_speed != -2)
-    {
-		x_speed = -2;
-    }
-    if (RIGHT && x_speed != 2)
-    {
-		x_speed = 2;
-    }
-
-    if (LEFT == RIGHT)
-    {
-		if (x_speed != 0)
-			x_speed = 0;
-    }    
 }
