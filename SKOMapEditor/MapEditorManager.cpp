@@ -2,10 +2,12 @@
 
 #include "Global.h"
 
-SKO_MapEditor::Manager::Manager(OPI_Renderer * renderer, MainMenuGui *mainMenuGui)
+SKO_MapEditor::Manager::Manager(OPI_Renderer * renderer, MainMenuGui *mainMenuGui, OPI_Gui::GuiManager *gui)
 {
 	this->renderer = renderer;
 	this->mainMenuGui = mainMenuGui;
+	this->gui = gui;
+	this->map = new SKO_Map::Map();
 
 	// Load tiles and images
 	background.setImage("IMG/back.png");
@@ -32,7 +34,7 @@ SKO_MapEditor::Manager::~Manager()
 {
 
 }
-
+ 
 // Clean up useless rectangles (<4x4 pixels) to a SKO_Map in-place.
 void SKO_MapEditor::Manager::cleanupInvisibleRects(SKO_Map::Map *map)
 {
@@ -41,19 +43,19 @@ void SKO_MapEditor::Manager::cleanupInvisibleRects(SKO_Map::Map *map)
 	//Delete any collision rectangles that are too small.
 	for (int i = 0; i < map->collisionRects.size(); i++)
 	{
-		if (map->collisionRects[i]->h < 4 || map->collisionRects[i]->w < 4)
+		if (map->collisionRects[i].h < 4 || map->collisionRects[i].w < 4)
 		{
 			current_rect--;
 			invisibleRectIds.push_back(i);
-		}
-	}
+		}  
+	}	
 
 	for (int i = 0; i < invisibleRectIds.size(); i++)
 	{
 		map->collisionRects.erase(map->collisionRects.begin() + invisibleRectIds[i]);
 	}
 }
-
+ 
 void SKO_MapEditor::Manager::saveMap(std::string fileLocation)
 {
 	// Cleanup small rects you can't see
@@ -82,9 +84,9 @@ void SKO_MapEditor::Manager::loadMap(std::string fileName)
 	SKO_MapEditor::Manager::cleanupInvisibleRects(this->map);
 
 	// Set map current rect
-	current_rect = map->collisionRects.size();
-	current_fringe = map->fringeTiles.size();
-	current_tile = map->backgroundTiles.size();
+	current_rect = map->collisionRects.size() - 1;
+	current_fringe = map->fringeTiles.size() - 1;
+	current_tile = map->backgroundTiles.size() - 1;
 }
 
 void SKO_MapEditor::Manager::DrawGameScene()
@@ -143,10 +145,10 @@ void SKO_MapEditor::Manager::DrawGameScene()
 	{
 		SDL_Rect newRect;
 
-		newRect.x = map->collisionRects[i]->x - (int)camera_x;
-		newRect.y = map->collisionRects[i]->y - (int)camera_y;
-		newRect.h = map->collisionRects[i]->h;
-		newRect.w = map->collisionRects[i]->w;
+		newRect.x = map->collisionRects[i].x - (int)camera_x;
+		newRect.y = map->collisionRects[i].y - (int)camera_y;
+		newRect.h = map->collisionRects[i].h;
+		newRect.w = map->collisionRects[i].w;
 
 		if (newRect.x >= 0 - newRect.w &&
 			newRect.x < renderer->originalWindowWidth && newRect.y < renderer->originalWindowHeight &&
@@ -312,10 +314,10 @@ void SKO_MapEditor::Manager::HandleInput()
 					y_speed = -6;
 				if (mode == COLLISION_DRAW && current_rect > 0)
 				{
-					if (map->collisionRects[current_rect - 1]->y > 0)
+					if (map->collisionRects[current_rect - 1].y > 0)
 					{
-						map->collisionRects[current_rect - 1]->y--;
-						map->collisionRects[current_rect - 1]->w++;
+						map->collisionRects[current_rect - 1].y--;
+						map->collisionRects[current_rect - 1].w++;
 					}
 				}
 				break;
@@ -334,10 +336,10 @@ void SKO_MapEditor::Manager::HandleInput()
 
 				if (mode == COLLISION_DRAW && current_rect > 0)
 				{
-					if (map->collisionRects[current_rect - 1]->x > 0)
+					if (map->collisionRects[current_rect - 1].x > 0)
 					{
-						map->collisionRects[current_rect - 1]->x--;
-						map->collisionRects[current_rect - 1]->w++;
+						map->collisionRects[current_rect - 1].x--;
+						map->collisionRects[current_rect - 1].w++;
 					}
 				}
 				break;
@@ -349,8 +351,8 @@ void SKO_MapEditor::Manager::HandleInput()
 
 				if (mode == COLLISION_DRAW && current_rect > 0)
 				{
-					map->collisionRects[current_rect - 1]->y++;
-					map->collisionRects[current_rect - 1]->h--;
+					map->collisionRects[current_rect - 1].y++;
+					map->collisionRects[current_rect - 1].h--;
 				}
 
 				break;
@@ -365,8 +367,8 @@ void SKO_MapEditor::Manager::HandleInput()
 
 				if (mode == COLLISION_DRAW && current_rect > 0)
 				{
-					map->collisionRects[current_rect - 1]->x++;
-					map->collisionRects[current_rect - 1]->w--;
+					map->collisionRects[current_rect - 1].x++;
+					map->collisionRects[current_rect - 1].w--;
 				}
 				break;
 
@@ -374,31 +376,31 @@ void SKO_MapEditor::Manager::HandleInput()
 			case 'i':
 				if (mode == COLLISION_DRAW && current_rect > 0)
 				{
-					if (map->collisionRects[current_rect - 1]->h > 0)
+					if (map->collisionRects[current_rect - 1].h > 0)
 					{
-						map->collisionRects[current_rect - 1]->h--;
+						map->collisionRects[current_rect - 1].h--;
 					}
 				}
 				break;
 			case 'j':
 				if (mode == COLLISION_DRAW && current_rect > 0)
 				{
-					if (map->collisionRects[current_rect - 1]->w > 0)
+					if (map->collisionRects[current_rect - 1].w > 0)
 					{
-						map->collisionRects[current_rect - 1]->w--;
+						map->collisionRects[current_rect - 1].w--;
 					}
 				}
 				break;
 			case 'k':
 				if (mode == COLLISION_DRAW && current_rect > 0)
 				{
-					map->collisionRects[current_rect - 1]->h++;
+					map->collisionRects[current_rect - 1].h++;
 				}
 				break;
 			case 'l':
 				if (mode == COLLISION_DRAW && current_rect > 0)
 				{
-					map->collisionRects[current_rect - 1]->w++;
+					map->collisionRects[current_rect - 1].w++;
 				}
 				break;
 
@@ -440,7 +442,7 @@ void SKO_MapEditor::Manager::HandleInput()
 				//
 				if (cx > collision_ox)
 				{
-					x1 = map->collisionRects[current_rect]->x;
+					x1 = map->collisionRects[current_rect].x;
 					x2 = cx;
 				}
 				else
@@ -454,7 +456,7 @@ void SKO_MapEditor::Manager::HandleInput()
 				//
 				if (cy > collision_oy)
 				{
-					y1 = map->collisionRects[current_rect]->y;
+					y1 = map->collisionRects[current_rect].y;
 					y2 = cy;
 				}
 				else
@@ -464,10 +466,10 @@ void SKO_MapEditor::Manager::HandleInput()
 				}
 
 				//adjust the width and height
-				map->collisionRects[current_rect]->x = x1;
-				map->collisionRects[current_rect]->w = x2 - x1;
-				map->collisionRects[current_rect]->y = y1;
-				map->collisionRects[current_rect]->h = y2 - y1;
+				map->collisionRects[current_rect].x = x1;
+				map->collisionRects[current_rect].w = x2 - x1;
+				map->collisionRects[current_rect].y = y1;
+				map->collisionRects[current_rect].h = y2 - y1;
 			}
 			if (mode == TILE_DRAW && LCLICK)
 			{
@@ -545,10 +547,11 @@ void SKO_MapEditor::Manager::HandleInput()
 						}
 					}
 
-					if (at >= 0)
-						map->backgroundTiles.erase(map->backgroundTiles.begin()+at);
-
-					current_tile--;
+					if (at >= 0) 
+					{
+						map->backgroundTiles.erase(map->backgroundTiles.begin() + at);
+						current_tile--;
+					}
 				}
 				else
 				{
@@ -564,14 +567,17 @@ void SKO_MapEditor::Manager::HandleInput()
 					}
 
 					if (at >= 0)
+					{
 						map->fringeTiles.erase(map->fringeTiles.begin() + at);
-
-					current_fringe--;
+						current_fringe--;
+					}
 				}
 			}
 			break;
 
 			case COLLISION_DRAW:
+
+				current_rect++;
 
 				//Get the mouse offsets, scaled from screen space to window space
 				cursor_x = renderer->getScaledMouseX(event.motion.x);
@@ -586,7 +592,7 @@ void SKO_MapEditor::Manager::HandleInput()
 				newRect.y = collision_oy;
 				newRect.w = 0;
 				newRect.h = 0;
-				map->collisionRects.push_back(&newRect);
+				map->collisionRects.push_back(newRect);
 				break;
 
 			case COLLISION_DELETE: {
@@ -597,8 +603,8 @@ void SKO_MapEditor::Manager::HandleInput()
 				int at = -1;
 				for (i = 0; i < current_rect; i++)
 				{
-					if (x > map->collisionRects[i]->x && x < map->collisionRects[i]->x + map->collisionRects[i]->w &&
-						y > map->collisionRects[i]->y && y < map->collisionRects[i]->y + map->collisionRects[i]->h)
+					if (x > map->collisionRects[i].x && x < map->collisionRects[i].x + map->collisionRects[i].w &&
+						y > map->collisionRects[i].y && y < map->collisionRects[i].y + map->collisionRects[i].h)
 					{
 						at = i;
 						break;
@@ -606,8 +612,10 @@ void SKO_MapEditor::Manager::HandleInput()
 				}
 
 				if (at >= 0)
+				{
 					map->collisionRects.erase(map->collisionRects.begin() + at);
-				current_rect--;
+					current_rect--;
+				}
 			}
 			break;
 
@@ -649,12 +657,14 @@ void SKO_MapEditor::Manager::HandleInput()
 				case TILE_DRAW:
 					if (!fringe_mode)
 					{
+						//go to the next tile
+						current_tile++;
+
 						map->backgroundTiles[current_tile]->x = (int)(cursor_x + (int)camera_x) / 32 * 32;
 						map->backgroundTiles[current_tile]->y = (int)(cursor_y + (int)camera_y) / 32 * 32;
 						map->backgroundTiles[current_tile]->tileId = current_tile_img;
 
-						//go to the next tile
-						current_tile++;
+						
 						placing_tile = false;
 					}
 					else
@@ -671,7 +681,6 @@ void SKO_MapEditor::Manager::HandleInput()
 					break;
 
 				case COLLISION_DRAW:
-					current_rect++;
 					// Cleanup small rects you can't see
 					cleanupInvisibleRects(map);
 					break;
@@ -728,7 +737,7 @@ bool SKO_MapEditor::Manager::isBlocked(SDL_Rect rect)
 {
 	for (int i = 0; i < this->map->collisionRects.size(); i++)
 	{
-		if (SDL_HasIntersection(&rect, this->map->collisionRects[i]))
+		if (SDL_HasIntersection(&rect, &this->map->collisionRects[i]))
 			return true;
 	}
 

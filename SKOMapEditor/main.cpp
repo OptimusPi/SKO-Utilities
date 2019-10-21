@@ -56,7 +56,8 @@ SDL_Cursor *pointer;
 
 std::string save = "";
 
-
+char mode = 0;
+bool fringe_mode = false;
 
 void saveMap()
 {
@@ -95,24 +96,15 @@ int main(int argc, char *argv[])
 	}
 
 #endif
-
-
-	mapEditorManager = new SKO_MapEditor::Manager(renderer, mainMenuGui);
-
-	// Open requested map file
-	if (loadMapFilename.length() > 0)
-	{
-		mapEditorManager->loadMap(loadMapFilename);
-	}
     
-    OPI_Timestep *timestep = new OPI_Timestep(60);
-    
+   
 	if (SDL_Init(SDL_INIT_EVERYTHING) == -1) 
 	{
 		return 1;
 	}
 
-
+	OPI_Timestep *timestep = new OPI_Timestep(60);
+    
 	//TODO - Singleton with cached fonts
 	//TODO - load from config file
 	if (!OPI_Text::FontManager::init("fonts/RobotoMono-Regular.ttf"))
@@ -129,9 +121,19 @@ int main(int argc, char *argv[])
 	renderer->initScreen();
 	OPI_Gui::GuiManager::create(renderer);
 	OPI_Gui::GuiManager::initCursors("IMG/GUI/cursors/normal.png", "IMG/GUI/cursors/move.png", "IMG/GUI/cursors/resize.png", "IMG/GUI/cursors/hourglass.png", "IMG/GUI/cursors/hand.png");
-	
+
 	// Initialize main menu GUI
 	mainMenuGui = new MainMenuGui(OPI_Gui::GuiManager::getInstance());
+
+	// Initialize map editor manager
+	mapEditorManager = new SKO_MapEditor::Manager(renderer, mainMenuGui, OPI_Gui::GuiManager::getInstance());
+
+	// Open requested map file
+	if (loadMapFilename.length() > 0)
+	{
+		mapEditorManager->loadMap(loadMapFilename);
+	}
+
 
 	//OPI_Gui::ElementThemeGridRect a = OPI_Gui::ElementThemeGridRect();
 
@@ -166,14 +168,14 @@ int main(int argc, char *argv[])
 	while (!done)
 	{
 		timestep->Update();
-                           
+                
 		if (!done && timestep->Check())
-		{
+		{ 
 			mapEditorManager->processLoop();
-		 }
+		} 
       
-	  OPI_Sleep::milliseconds(1);
-	}//while !done
+		OPI_Sleep::milliseconds(1);
+	} //while !done
   
   printf("DONE\n");
 

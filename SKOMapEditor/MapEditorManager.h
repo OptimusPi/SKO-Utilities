@@ -20,7 +20,7 @@ namespace SKO_MapEditor
 	class Manager
 	{
 	public:
-		Manager(OPI_Renderer * renderer, MainMenuGui *mainMenuGui);
+		Manager(OPI_Renderer * renderer, MainMenuGui *mainMenuGui, OPI_Gui::GuiManager *gui);
 		virtual ~Manager();
 		void saveMap();
 		void saveMap(std::string filename);
@@ -54,7 +54,6 @@ namespace SKO_MapEditor
 		int num_tile_images = 0;
 		int collision_ox = 0;
 		int collision_oy = 0;
-		bool fringe_mode = false;
 
 		//images
 		OPI_Image tile_img[256];
@@ -69,7 +68,6 @@ namespace SKO_MapEditor
 		bool placing_tile = false;
 		bool placing_fringe = false;
 
-		char mode = TILE_DRAW;
 		int save_notify;
 		bool SHIFT_HELD = false;
 		bool stickman_toggle = false;

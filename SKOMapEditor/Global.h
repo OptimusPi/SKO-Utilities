@@ -9,8 +9,9 @@
 
 extern bool done;
 extern char mode;
-extern void saveMap();
 extern bool fringe_mode;
+extern void saveMap();
+
 
 // TODO enum
 const char

@@ -15,17 +15,21 @@ namespace SKO_Map
 	class Map
 	{
 	public:
-		Map();
-		Map(std::string filePath);
+		Map(); 
+		Map(std::string filePath); 
 
 		virtual ~Map();
 
 		std::vector<Tile*> backgroundTiles;
 		std::vector<Tile*> fringeTiles;
-		std::vector<SDL_Rect*> collisionRects;
+		std::vector<SDL_Rect> collisionRects;
 		void saveMap();
-		void saveMap(std::string filePath);
-		void loadMap(std::string filePath);
+		void saveMap(std::string filePath); 
+		void loadMap(std::string filePath); 
+		
+		// New version to save as Json and read Json
+		void saveMapJson(std::string filePath);
+		void loadMapJson(std::string filePath);
 	private:
 		std::string filePath;
 	};
