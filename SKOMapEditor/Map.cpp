@@ -60,7 +60,7 @@ void SKO_Map::Map::saveMap(std::string filePath)
 		for (int i = 0; i < number_of_tiles; i++)
 		{
 			//x coords
-			unsigned char *p = (unsigned char*)(backgroundTiles[i]->x);
+			unsigned char *p = (unsigned char*)(&backgroundTiles[i]->x);
 			unsigned char b1 = p[0]; 
 			unsigned char b2 = p[1]; 
 			unsigned char b3 = p[2]; 
@@ -70,7 +70,7 @@ void SKO_Map::Map::saveMap(std::string filePath)
 			MapFile << b1 << b2 << b3 << b4;
 
 			//y coords
-			p = (unsigned char*)backgroundTiles[i]->y;
+			p = (unsigned char*)(&backgroundTiles[i]->y);
 			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
 
 			//spit out each of the bytes
@@ -84,7 +84,7 @@ void SKO_Map::Map::saveMap(std::string filePath)
 		for (int i = 0; i < number_of_fringe; i++)
 		{
 			//x coords
-			unsigned char *p = (unsigned char*)fringeTiles[i]->x;
+			unsigned char *p = (unsigned char*)&fringeTiles[i]->x;
 			unsigned char b1 = p[0]; 
 			unsigned char b2 = p[1]; 
 			unsigned char b3 = p[2]; 
@@ -146,12 +146,13 @@ void SKO_Map::Map::saveMap(std::string filePath)
 
 		MapFile.close();
 	}
+
+	saveMapINI(filePath + ".ini");
 }
 
 void SKO_Map::Map::loadMap(std::string filePath)
 {
 	std::ifstream MapFile(filePath, std::ios::in | std::ios::binary | std::ios::ate);
-
 	this->filePath = filePath;
 
 	if (MapFile.is_open())
@@ -164,11 +165,11 @@ void SKO_Map::Map::loadMap(std::string filePath)
 		size = MapFile.tellg();
 		memblock = (char *)malloc(size);
 
-		//load the file into memory 
+		//load the file into memory      
 		MapFile.seekg(0, std::ios::beg); 
-		MapFile.read(memblock, size); 
-		//close file 
-		MapFile.close(); 
+		MapFile.read(memblock, size);    
+		//close file                     
+		MapFile.close();                 
 
 		//hold the result... 
 		unsigned int num;    
@@ -281,7 +282,6 @@ void SKO_Map::Map::loadMap(std::string filePath)
 			((char*)&num)[3] = memblock[last_i + 4 + i * 16];
 
 			//store the number into variables
-			SDL_Rect newRect;
 			int x = num;
 
 			//build an int from 4 bytes
@@ -312,13 +312,80 @@ void SKO_Map::Map::loadMap(std::string filePath)
 			//store the number into variables
 			int h = num;
 
-			newRect.h = h;
-			newRect.w = w;
-			newRect.x = x;
-			newRect.y = y;
+			SDL_Rect newRect;
+			newRect.x = (unsigned short int)x;
+			newRect.y = (unsigned short int)y;
+			newRect.h = (short int)h;
+			newRect.w = (short int)w;
 			this->collisionRects.push_back(newRect);
 		}
 
 		free(memblock);
 	}
+}
+
+
+void SKO_Map::Map::saveMapINI(std::string filePath)
+{
+	const int VERSION_MAJOR = 1;
+	const int VERSION_MINOR = 0;
+
+	//open the file 
+	std::ofstream mapFile(filePath);
+
+	// Title and version
+	mapFile << "# Stick Knights Online Map File" << std::endl;
+	mapFile << std::endl;
+	mapFile << "[version]" <<std::endl;
+	mapFile << "version = " << VERSION_MAJOR << "." << VERSION_MINOR << std::endl;
+	mapFile << std::endl;
+
+	//output the counts of everything: tiles & collisions
+	mapFile << "[count]" << std::endl;
+	mapFile << "background_tiles = " << this->backgroundTiles.size() << std::endl;
+	mapFile << "fringe_tiles = " << this->fringeTiles.size() << std::endl;
+	mapFile << "collision_rects = " << this->collisionRects.size() << std::endl;
+	mapFile << std::endl;
+
+	//output the background tiles
+	mapFile << "[background_tiles]" << std::endl;
+	for (int i = 0; i < this->backgroundTiles.size(); i++)
+	{
+		mapFile << "background_tile_x_" << i << " = " << this->backgroundTiles[i]->x << std::endl;
+		mapFile << "background_tile_y_" << i << " = " << this->backgroundTiles[i]->y << std::endl;
+		mapFile << "background_tile_id_" << i << " = " << (int)this->backgroundTiles[i]->tileId << std::endl;
+		mapFile << std::endl;
+	}
+	mapFile << std::endl;
+
+	//output the fringe tiles
+	mapFile << "[fringe_tiles]" << std::endl;
+	for (int i = 0; i < this->fringeTiles.size(); i++)
+	{
+		mapFile << "fringe_tile_x_" << i << " = " << this->fringeTiles[i]->x << std::endl;
+		mapFile << "fringe_tile_y_" << i << " = " << this->fringeTiles[i]->y << std::endl;
+		mapFile << "fringe_tile_id_" << i << " = " << (int)this->fringeTiles[i]->tileId << std::endl;
+		mapFile << std::endl;
+	}
+	mapFile << std::endl;
+
+	//output the collision rectangles
+	mapFile << "[collision_rects]" << std::endl;
+	for (int i = 0; i < this->collisionRects.size(); i++)
+	{
+		mapFile << "collision_tile_x_" << i << " = " << this->collisionRects[i].x << std::endl;
+		mapFile << "collision_tile_y_" << i << " = " << this->collisionRects[i].y << std::endl;
+		mapFile << "collision_tile_w_" << i << " = " << this->collisionRects[i].w << std::endl;
+		mapFile << "collision_tile_h_" << i << " = " << this->collisionRects[i].h << std::endl;
+
+		mapFile << std::endl;
+	}
+	mapFile << std::endl;
+
+
+}
+
+void SKO_Map::Map::loadMapINI(std::string filePath)
+{
+
 }

@@ -669,12 +669,13 @@ void SKO_MapEditor::Manager::HandleInput()
 					}
 					else
 					{
+
+						current_fringe++;
 						map->fringeTiles[current_fringe]->x = (int)(cursor_x + (int)camera_x) / 32 * 32;
 						map->fringeTiles[current_fringe]->y = (int)(cursor_y + (int)camera_y) / 32 * 32;
 						map->fringeTiles[current_fringe]->tileId = current_tile_img;
 
 						//go to the next tile
-						current_fringe++;
 						placing_fringe = false;
 					}
 
