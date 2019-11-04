@@ -161,6 +161,8 @@
     <ClInclude Include="ButtonTheme.h" />
     <ClInclude Include="ButtonToggleGroup.h" />
     <ClInclude Include="Global.h" />
+    <ClInclude Include="ini.h" />
+    <ClInclude Include="INIReader.h" />
     <ClInclude Include="MainMenuGui.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="ButtonThemeFactory.h" />
@@ -192,6 +194,8 @@
   <ItemGroup>
     <ClCompile Include="ButtonTheme.cpp" />
     <ClCompile Include="ButtonToggleGroup.cpp" />
+    <ClCompile Include="ini.cpp" />
+    <ClCompile Include="INIReader.cpp" />
     <ClCompile Include="MainMenuGui.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Button.cpp" />

@@ -1,5 +1,7 @@
 #include "Map.h"
-
+#include "INIReader.h" // TODO - make class for map saving/loading
+#include <fstream> // TODO - make class for map saving/loading
+#include <sstream>
 
 SKO_Map::Map::Map()
 {
@@ -151,6 +153,7 @@ void SKO_Map::Map::saveMap(std::string filePath)
 }
 
 // TODO load from INI
+// DEPRECATED
 void SKO_Map::Map::loadMap(std::string filePath)
 {
 	std::ifstream MapFile(filePath, std::ios::in | std::ios::binary | std::ios::ate);
@@ -326,6 +329,7 @@ void SKO_Map::Map::loadMap(std::string filePath)
 }
 
 
+
 void SKO_Map::Map::saveMapINI(std::string filePath)
 {
 	const int VERSION_MAJOR = 1;
@@ -390,5 +394,157 @@ void SKO_Map::Map::saveMapINI(std::string filePath)
 
 void SKO_Map::Map::loadMapINI(std::string filePath)
 {
+	//open map config file
+	printf("Reading Map config from: %s\n", filePath.c_str());
+	INIReader configFile(filePath);
+	if (configFile.ParseError() < 0) {
+		printf("error: Can't load '%s'\n", filePath.c_str());
+		return;
+	}
 
+	//load portals
+	// note: portals are server-side
+	// 	  so they don't load on the client
+	//load enemies
+	int num_enemies = configFile.GetInteger("count", "enemies", 0);
+	printf("num_enemies is %i\n", num_enemies);
+	for (int enemy = 0; enemy < num_enemies; enemy++) {
+		std::stringstream ss;
+		ss << "enemy" << enemy;
+
+		//load sprite type from file
+		std::string spriteType = configFile.Get(ss.str(), "sprite", "");
+		printf("spriteType is %s\n", spriteType.c_str());
+		Enemy[enemy] = SKO_Enemy(spriteType);
+	}
+
+	//load signs
+	num_signs = configFile.GetInteger("count", "signs", 0);
+	printf("num_signs is %i\n", num_signs);
+
+	for (int sign = 0; sign < num_signs; sign++) {
+		std::stringstream ss;
+		ss << "sign" << sign;
+
+		Sign[sign] = SKO_Sign();
+		Sign[sign].x = configFile.GetInteger(ss.str(), "x", 0);
+		Sign[sign].y = configFile.GetInteger(ss.str(), "y", 0);
+		Sign[sign].w = configFile.GetInteger(ss.str(), "w", 0);
+		Sign[sign].h = configFile.GetInteger(ss.str(), "h", 0);
+
+		printf("Sign[sign].NUM_LINES is %i\n", Sign[sign].NUM_LINES);
+
+		//get all the lines of the text
+		for (int line = 0; line < Sign[sign].NUM_LINES; line++) {
+			std::stringstream ss1;
+			ss1 << "line" << line;
+			std::string txt = configFile.Get(ss.str(), ss1.str(), "");
+			if (txt.length())
+				txt = txt.substr(1);
+			Sign[sign].line[line].SetText(txt.c_str());
+			printf("%s is: %s\n", ss1.str().c_str(), txt.c_str());
+		}
+	}
+
+	//load shops
+	num_shops = configFile.GetInteger("count", "shops", 0);
+	printf("num_shops is %i\n", num_shops);
+
+	//start at i= 1 ... why?
+	//  because ID 0 is reserved for the bank
+	for (int i = 0; i <= num_shops; i++) {
+		Shop[i] = SKO_Shop();
+		std::stringstream ss1;
+		ss1 << "shop" << i;
+		std::string shopStr = ss1.str();
+		//loop all the X Y places
+		for (int x = 0; x < 6; x++) {
+			for (int y = 0; y < 4; y++) {
+				std::stringstream ss2, ss3;
+				ss2 << "item" << "_" << "x" << x << "_" << "y" << y;
+				ss3 << "price" << "_" << "x" << x << "_" << "y" << y;
+
+				//x  y  (item[0], price[1])
+				std::string itemStr = ss2.str().c_str();
+				std::string priceStr = ss3.str().c_str();
+
+				//now load from config file the items and prices
+				Shop[i].item[x][y][0]
+					= configFile.GetInteger(shopStr.c_str(), itemStr.c_str(), 0);
+				Shop[i].item[x][y][1]
+					= configFile.GetInteger(shopStr.c_str(), priceStr.c_str(), 0);
+			}
+		}
+
+		//all done loading shops for now.
+		//in the future, maybe a shop title etc.
+	}
+
+	//load stalls
+	num_stalls = configFile.GetInteger("count", "stalls", 0);
+	printf("num_stalls is %i\n", num_stalls);
+
+	for (int i = 0; i < num_stalls; i++) {
+		std::stringstream ss1;
+		ss1 << "stall" << i;
+		std::string stallStr = ss1.str();
+
+		Stall[i] = SKO_Stall();
+		Stall[i].shopId = configFile.GetInteger(stallStr, "shopId", 0);
+		Stall[i].x = configFile.GetInteger(stallStr, "x", 0);
+		Stall[i].y = configFile.GetInteger(stallStr, "y", 0);
+		Stall[i].w = configFile.GetInteger(stallStr, "w", 0);
+		Stall[i].h = configFile.GetInteger(stallStr, "h", 0);
+	}
+
+	//load targets
+	num_targets = configFile.GetInteger("count", "targets", 0);
+	printf("num_targets is %i\n", num_targets);
+
+	for (int i = 0; i < num_targets; i++) {
+		std::stringstream ss1;
+		ss1 << "target" << i;
+		std::string targetStr = ss1.str();
+
+		Target[i] = SKO_Target();
+		Target[i].pic = configFile.GetInteger(targetStr, "sprite", 0);
+		Target[i].x = configFile.GetInteger(targetStr, "x", 0);
+		Target[i].y = configFile.GetInteger(targetStr, "y", 0);
+		Target[i].w = configFile.GetInteger(targetStr, "w", 0);
+		Target[i].h = configFile.GetInteger(targetStr, "h", 0);
+	}
+
+	//load npcs
+	num_npcs = configFile.GetInteger("count", "npcs", 0);
+	printf("num_npcs is %i\n", num_npcs);
+
+	for (int i = 0; i < num_npcs; i++) {
+		std::stringstream ss1;
+		ss1 << "npc" << i;
+		std::string targetStr = ss1.str();
+
+		NPC[i] = SKO_NPC();
+		NPC[i].sprite = configFile.GetInteger(targetStr, "sprite", 0);
+		NPC[i].x = NPC[i].sx = configFile.GetInteger(targetStr, "x", 0);
+		NPC[i].y = NPC[i].sy = configFile.GetInteger(targetStr, "y", 0);
+		NPC[i].final = configFile.GetInteger(targetStr, "final", 0);
+		NPC[i].num_pages = configFile.GetInteger(targetStr, "pages", 0);
+		NPC[i].quest = configFile.GetInteger(targetStr, "quest", -1); //-1 for non quest NPCs
+
+		//get all the lines of the text
+		for (int page = 0; page < NPC[i].num_pages; page++)
+			for (int line = 0; line < NPC[i].NUM_LINES; line++)
+			{
+				std::stringstream ss1;
+				ss1 << "page_" << page << "_";
+				ss1 << "line_" << line;
+				std::string txt = configFile.Get(targetStr, ss1.str(), "");
+				if (txt.length())
+					txt = txt.substr(1);
+				NPC[i].line[page][line]->SetText(txt.c_str());
+				printf("NPC %s is: %s\n", ss1.str().c_str(), txt.c_str());
+			}
+
+
+	}
 }

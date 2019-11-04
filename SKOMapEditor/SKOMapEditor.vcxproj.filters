@@ -195,6 +195,12 @@
     <ClInclude Include="SDL_headers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="INIReader.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="ini.h">
+      <Filter>Header Files\Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -265,6 +271,12 @@
     </ClCompile>
     <ClCompile Include="Map.cpp">
       <Filter>Source Files\SKO\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="INIReader.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="ini.cpp">
+      <Filter>Source Files\Engine</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
