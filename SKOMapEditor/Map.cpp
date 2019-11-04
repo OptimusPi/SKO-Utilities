@@ -150,6 +150,7 @@ void SKO_Map::Map::saveMap(std::string filePath)
 	saveMapINI(filePath + ".ini");
 }
 
+// TODO load from INI
 void SKO_Map::Map::loadMap(std::string filePath)
 {
 	std::ifstream MapFile(filePath, std::ios::in | std::ios::binary | std::ios::ate);
@@ -381,6 +382,8 @@ void SKO_Map::Map::saveMapINI(std::string filePath)
 		mapFile << std::endl;
 	}
 	mapFile << std::endl;
+
+
 
 
 }
