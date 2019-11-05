@@ -4,8 +4,8 @@
 
 #include <string>
 
-#include "Tile.h"
-#include "Map.h"
+#include "SKO_MapTile.h"
+#include "SKO_Map.h"
 #include "OPI_Renderer.h"
 #include "GuiManager.h"
 #include "OPI_Clock.h"

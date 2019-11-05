@@ -186,12 +186,6 @@
     <ClInclude Include="MainMenuGui.h">
       <Filter>Header Files\MapEditor</Filter>
     </ClInclude>
-    <ClInclude Include="Tile.h">
-      <Filter>Header Files\SKO\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="Map.h">
-      <Filter>Header Files\SKO\Map</Filter>
-    </ClInclude>
     <ClInclude Include="SDL_headers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -200,6 +194,18 @@
     </ClInclude>
     <ClInclude Include="ini.h">
       <Filter>Header Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="SKO_MapReader.h">
+      <Filter>Header Files\SKO\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="SKO_MapWriter.h">
+      <Filter>Header Files\SKO\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="SKO_Map.h">
+      <Filter>Header Files\SKO\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="SKO_MapTile.h">
+      <Filter>Header Files\SKO\Map</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -266,17 +272,23 @@
     <ClCompile Include="MainMenuGui.cpp">
       <Filter>Source Files\MapEditor</Filter>
     </ClCompile>
-    <ClCompile Include="Tile.cpp">
-      <Filter>Source Files\SKO\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="Map.cpp">
-      <Filter>Source Files\SKO\Map</Filter>
-    </ClCompile>
     <ClCompile Include="INIReader.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="ini.cpp">
       <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="SKO_MapReader.cpp">
+      <Filter>Source Files\SKO\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="SKO_MapWriter.cpp">
+      <Filter>Source Files\SKO\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="SKO_MapTile.cpp">
+      <Filter>Source Files\SKO\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="SKO_Map.cpp">
+      <Filter>Source Files\SKO\Map</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

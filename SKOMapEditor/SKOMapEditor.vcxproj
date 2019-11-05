@@ -178,9 +178,10 @@
     <ClInclude Include="GuiManager.h" />
     <ClInclude Include="MessageBox.h" />
     <ClInclude Include="Panel.h" />
-    <ClInclude Include="Map.h" />
+    <ClInclude Include="SKO_Map.h" />
+    <ClInclude Include="SKO_MapReader.h" />
     <ClInclude Include="SDL_headers.h" />
-    <ClInclude Include="Tile.h" />
+    <ClInclude Include="SKO_MapTile.h" />
     <ClInclude Include="TextLabel.h" />
     <ClInclude Include="OPI_Renderer.h" />
     <ClInclude Include="OPI_Timestep.h" />
@@ -190,6 +191,7 @@
     <ClInclude Include="TextComponent.h" />
     <ClInclude Include="ElementThemeFactory.h" />
     <ClInclude Include="ElementThemeType.h" />
+    <ClInclude Include="SKO_MapWriter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ButtonTheme.cpp" />
@@ -207,8 +209,9 @@
     <ClCompile Include="GuiManager.cpp" />
     <ClCompile Include="MapEditorManager.cpp" />
     <ClCompile Include="MessageBox.cpp" />
-    <ClCompile Include="Map.cpp" />
-    <ClCompile Include="Tile.cpp" />
+    <ClCompile Include="SKO_Map.cpp" />
+    <ClCompile Include="SKO_MapReader.cpp" />
+    <ClCompile Include="SKO_MapTile.cpp" />
     <ClCompile Include="TextComponent.cpp" />
     <ClCompile Include="TextLabel.cpp" />
     <ClCompile Include="OPI_Image.cpp" />
@@ -217,6 +220,7 @@
     <ClCompile Include="OPI_Timestep.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ElementThemeFactory.cpp" />
+    <ClCompile Include="SKO_MapWriter.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

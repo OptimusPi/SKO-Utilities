@@ -1,4 +1,4 @@
-#include "Tile.h"
+#include "SKO_MapTile.h"
 
 SKO_Map::Tile::Tile()
 {

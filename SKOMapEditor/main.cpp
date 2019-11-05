@@ -19,7 +19,7 @@
 #include "Button.h"
 #include "MessageBox.h"
 #include "FontManager.h"
-#include "Map.h"
+#include "SKO_Map.h"
 #include "MapEditorManager.h"
 
 // GUI Implementations

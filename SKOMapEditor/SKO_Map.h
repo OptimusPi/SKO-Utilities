@@ -7,14 +7,14 @@
 #include <vector>
 #include <fstream>
 
-#include "Tile.h"
+#include "SKO_MapTile.h"
 
 
 namespace SKO_Map
 {
 	class Map
 	{ 
-	public: 
+	public:  
 		Map(); 
 		Map(std::string filePath); 
 		virtual ~Map(); 
@@ -29,8 +29,9 @@ namespace SKO_Map
 		// New version to save as INI and read INI
 		void saveMapINI(std::string filePath);
 		void loadMapINI(std::string filePath); 
-	private:
 		std::string filePath;
+	private:
+		
 	};
 }
 
