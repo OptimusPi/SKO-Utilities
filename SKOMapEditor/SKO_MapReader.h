@@ -16,6 +16,12 @@ namespace SKO_Map
 	private:
 		// Load game objects
 		void loadPortals(SKO_Map::Map * map, INIReader mapIni);
+		void loadSigns(SKO_Map::Map * map, INIReader mapIni);
+		void loadEnemies(SKO_Map::Map * map, INIReader mapIni);
+		void loadStalls(SKO_Map::Map * map, INIReader mapIni);
+		void loadShops(SKO_Map::Map * map, INIReader mapIni);
+		void loadTargets(SKO_Map::Map * map, INIReader mapIni);
+		void loadNpcs(SKO_Map::Map * map, INIReader mapIni);
 	};
 }
 

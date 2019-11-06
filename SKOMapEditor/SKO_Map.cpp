@@ -443,9 +443,6 @@ void SKO_Map::Map::loadMapINI(std::string filePath)
 
 
 		}
-
-
-
 	}
 
 	//load shops
