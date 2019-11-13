@@ -207,6 +207,36 @@
     <ClInclude Include="SKO_MapTile.h">
       <Filter>Header Files\SKO\Map</Filter>
     </ClInclude>
+    <ClInclude Include="SKO_Enemy.h">
+      <Filter>Header Files\SKO</Filter>
+    </ClInclude>
+    <ClInclude Include="SKO_Item.h">
+      <Filter>Header Files\SKO</Filter>
+    </ClInclude>
+    <ClInclude Include="SKO_item_defs.h">
+      <Filter>Header Files\SKO</Filter>
+    </ClInclude>
+    <ClInclude Include="SKO_ItemObject.h">
+      <Filter>Header Files\SKO</Filter>
+    </ClInclude>
+    <ClInclude Include="SKO_Shop.h">
+      <Filter>Header Files\SKO</Filter>
+    </ClInclude>
+    <ClInclude Include="SKO_Stall.h">
+      <Filter>Header Files\SKO</Filter>
+    </ClInclude>
+    <ClInclude Include="SKO_Target.h">
+      <Filter>Header Files\SKO</Filter>
+    </ClInclude>
+    <ClInclude Include="SKO_Portal.h">
+      <Filter>Header Files\SKO</Filter>
+    </ClInclude>
+    <ClInclude Include="SKO_Sign.h">
+      <Filter>Header Files\SKO</Filter>
+    </ClInclude>
+    <ClInclude Include="SKO_Npc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -289,6 +319,33 @@
     </ClCompile>
     <ClCompile Include="SKO_Map.cpp">
       <Filter>Source Files\SKO\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="SKO_Enemy.cpp">
+      <Filter>Source Files\SKO</Filter>
+    </ClCompile>
+    <ClCompile Include="SKO_Item.cpp">
+      <Filter>Source Files\SKO</Filter>
+    </ClCompile>
+    <ClCompile Include="SKO_ItemObject.cpp">
+      <Filter>Source Files\SKO</Filter>
+    </ClCompile>
+    <ClCompile Include="SKO_Shop.cpp">
+      <Filter>Source Files\SKO</Filter>
+    </ClCompile>
+    <ClCompile Include="SKO_Target.cpp">
+      <Filter>Source Files\SKO</Filter>
+    </ClCompile>
+    <ClCompile Include="SKO_Stall.cpp">
+      <Filter>Source Files\SKO</Filter>
+    </ClCompile>
+    <ClCompile Include="SKO_Sign.cpp">
+      <Filter>Source Files\SKO</Filter>
+    </ClCompile>
+    <ClCompile Include="SKO_Portal.cpp">
+      <Filter>Source Files\SKO</Filter>
+    </ClCompile>
+    <ClCompile Include="SKO_Npc.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

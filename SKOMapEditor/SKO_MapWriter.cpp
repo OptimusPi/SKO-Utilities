@@ -1,4 +1,4 @@
-#include "Writer.h"
+#include "SKO_MapWriter.h"
 
 
 SKO_Map::Writer::Writer()

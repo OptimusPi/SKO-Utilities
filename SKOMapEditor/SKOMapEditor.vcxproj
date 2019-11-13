@@ -93,7 +93,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -178,10 +178,20 @@
     <ClInclude Include="GuiManager.h" />
     <ClInclude Include="MessageBox.h" />
     <ClInclude Include="Panel.h" />
+    <ClInclude Include="SKO_Enemy.h" />
+    <ClInclude Include="SKO_Item.h" />
+    <ClInclude Include="SKO_ItemObject.h" />
+    <ClInclude Include="SKO_item_defs.h" />
     <ClInclude Include="SKO_Map.h" />
     <ClInclude Include="SKO_MapReader.h" />
     <ClInclude Include="SDL_headers.h" />
     <ClInclude Include="SKO_MapTile.h" />
+    <ClInclude Include="SKO_Npc.h" />
+    <ClInclude Include="SKO_Portal.h" />
+    <ClInclude Include="SKO_Shop.h" />
+    <ClInclude Include="SKO_Sign.h" />
+    <ClInclude Include="SKO_Stall.h" />
+    <ClInclude Include="SKO_Target.h" />
     <ClInclude Include="TextLabel.h" />
     <ClInclude Include="OPI_Renderer.h" />
     <ClInclude Include="OPI_Timestep.h" />
@@ -209,9 +219,18 @@
     <ClCompile Include="GuiManager.cpp" />
     <ClCompile Include="MapEditorManager.cpp" />
     <ClCompile Include="MessageBox.cpp" />
+    <ClCompile Include="SKO_Enemy.cpp" />
+    <ClCompile Include="SKO_Item.cpp" />
+    <ClCompile Include="SKO_ItemObject.cpp" />
     <ClCompile Include="SKO_Map.cpp" />
     <ClCompile Include="SKO_MapReader.cpp" />
     <ClCompile Include="SKO_MapTile.cpp" />
+    <ClCompile Include="SKO_Npc.cpp" />
+    <ClCompile Include="SKO_Portal.cpp" />
+    <ClCompile Include="SKO_Shop.cpp" />
+    <ClCompile Include="SKO_Sign.cpp" />
+    <ClCompile Include="SKO_Stall.cpp" />
+    <ClCompile Include="SKO_Target.cpp" />
     <ClCompile Include="TextComponent.cpp" />
     <ClCompile Include="TextLabel.cpp" />
     <ClCompile Include="OPI_Image.cpp" />

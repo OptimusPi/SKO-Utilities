@@ -3,14 +3,6 @@
 #include <exception>
 #include <sstream>
 
-// SKO Models
-#include "SKO_Portal.h" // TODO import models from SKO-Server
-#include "SKO_Sign.h"
-#include "SKO_Enemy.h" 
-#include "SKO_Stall.h"
-#include "SKO_Shop.h"
-#include "SKO_Target.h"
-
 
 SKO_Map::Map * SKO_Map::Reader::loadMap(std::string filePath)
 {
@@ -30,7 +22,7 @@ SKO_Map::Map * SKO_Map::Reader::loadMap(std::string filePath)
 	loadEnemies(map, mapIni); 
 	loadStalls(map, mapIni);  
 	loadShops(map, mapIni);   
-	loadTargets(map, mapIni);
+	loadTargets(map, mapIni); 
 	loadNpcs(map, mapIni);
 }
 
@@ -44,7 +36,7 @@ void SKO_Map::Reader::loadPortals(SKO_Map::Map * map, INIReader mapIni)
 	for (int i = 0; i < num_portals; i++)
 	{
 		std::stringstream ss;
-		ss << "portal" << portal;
+		ss << "portal" << i;
 
 		// load portal parameters
 		SKO_Portal * portal = new SKO_Portal();
@@ -58,7 +50,7 @@ void SKO_Map::Reader::loadPortals(SKO_Map::Map * map, INIReader mapIni)
 		portal->level_required = mapIni.GetInteger(ss.str(), "level_required", 0);
 
 		// Add portal to map collection
-		map->portals->push_back(portal);
+		map->portals.push_back(portal);
 	}
 }
 
@@ -92,7 +84,7 @@ void SKO_Map::Reader::loadSigns(SKO_Map::Map * map, INIReader mapIni)
 			printf("%s is: %s\n", ss1.str().c_str(), txt.c_str());
 		}
 
-		map->signs->push_back(sign);
+		map->signs.push_back(sign);
 	}
 }
 
@@ -102,7 +94,7 @@ void SKO_Map::Reader::loadEnemies(SKO_Map::Map * map, INIReader mapIni)
 	int num_enemies = mapIni.GetInteger("count", "enemies", 0);
 	printf("num_enemies is %i", num_enemies);
 
-	for (int i = 0; i < num_portals; i++)
+	for (int i = 0; i < num_enemies; i++)
 	{
 		std::stringstream ss;
 		ss << "enemy" << i;
@@ -149,7 +141,7 @@ void SKO_Map::Reader::loadEnemies(SKO_Map::Map * map, INIReader mapIni)
 		enemy->hp = enemy->hp_max;
 
 		// Add portal to map collection
-		map->enemies->push_back(enemy);
+		map->enemies.push_back(enemy);
 	}
 }
 
@@ -172,7 +164,7 @@ void SKO_Map::Reader::loadStalls(SKO_Map::Map * map, INIReader mapIni)
 		stall->w = mapIni.GetInteger(stallStr, "w", 0);
 		stall->h = mapIni.GetInteger(stallStr, "h", 0);
 
-		map->stalls->push_back(stall);
+		map->stalls.push_back(stall);
 	}
 }
 
@@ -212,7 +204,7 @@ void SKO_Map::Reader::loadShops(SKO_Map::Map * map, INIReader mapIni)
 		}
 		//in the future, maybe a shop title etc. TODO
 
-		map->shops->push_back(map);
+		map->shops.push_back(shop);
 	}
 }
 
@@ -233,7 +225,7 @@ void SKO_Map::Reader::loadTargets(SKO_Map::Map * map, INIReader mapIni)
 		target->y = mapIni.GetInteger(targetStr, "y", 0);
 		target->w = mapIni.GetInteger(targetStr, "w", 0);
 		target->h = mapIni.GetInteger(targetStr, "h", 0);
-		map->targets->push_back(target);
+		map->targets.push_back(target);
 	}
 }
 
@@ -249,7 +241,7 @@ void SKO_Map::Reader::loadNpcs(SKO_Map::Map * map, INIReader mapIni)
 		ss1 << "npc" << i;
 		std::string targetStr = ss1.str();
 
-		SKO_NPC * npc = new SKO_NPC();
+		SKO_Npc * npc = new SKO_Npc();
 		npc->sprite = mapIni.GetInteger(targetStr, "sprite", 0);
 		npc->x = npc->sx = mapIni.GetInteger(targetStr, "x", 0);
 		npc->y = npc->sy = mapIni.GetInteger(targetStr, "y", 0);
@@ -260,7 +252,7 @@ void SKO_Map::Reader::loadNpcs(SKO_Map::Map * map, INIReader mapIni)
 		//get all the lines of the text
 		for (int page = 0; page < npc->num_pages; page++)
 		{
-			for (int line = 0; line < SKO_NPC::NUM_LINES; line++)
+			for (int line = 0; line < SKO_Npc::NUM_LINES; line++)
 			{
 				std::stringstream ss1;
 				ss1 << "page_" << page << "_";
@@ -268,12 +260,12 @@ void SKO_Map::Reader::loadNpcs(SKO_Map::Map * map, INIReader mapIni)
 				std::string txt = mapIni.Get(targetStr, ss1.str(), "");
 				if (txt.length())
 					txt = txt.substr(1);
-				npc->line[page][line]->SetText(txt.c_str());
+				npc->line[page][line]->SetText(txt.c_str());//TODO new OPI_Text method
 				printf("NPC %s is: %s\n", ss1.str().c_str(), txt.c_str());
 			}
 		}
 
-		map->npcs->push_back(npc);
+		map->npcs.push_back(npc);
 	}
 }
 
