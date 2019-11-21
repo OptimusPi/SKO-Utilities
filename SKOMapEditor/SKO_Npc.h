@@ -13,23 +13,33 @@ public:
 	void Respawn();
 
 	//coords
-	float x, y;
-	int x1,x2,y1,y2;
-	float x_speed, y_speed;
-	int w, h;
+	float x = 0;
+	float y = 0;
+	int x1 = 0;
+	int x2 = 0;
+	int y1 = 0;
+	int y2 = 0;
+	float x_speed = 0;
+	int y_speed = 0;
+	int w = 0;
+	int h = 0;
 	//spawn
-	int sx, sy;
-	unsigned long long int AI_ticker;       
-	unsigned long long int AI_period;
+	int sx = 0;
+	int sy = 0;
+	unsigned long long int AI_ticker = 0;       
+	unsigned long long int AI_period = 0;
 
-	bool facing_right; 
-	bool ground;
-	int current_frame;
-	unsigned long long int animation_ticker;
+	bool facing_right = true; 
+	bool ground = false;
+	int current_frame = 0;
+	unsigned long long int animation_ticker = 0;
 
+	int sprite = 0;
+	int quest = 0;
+	std::string finalPage = "";
 
-
-
+	static const int NUM_LINES = 10;
+	static const int MAX_PAGES = 10;
 };
 
 #endif

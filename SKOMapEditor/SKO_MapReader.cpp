@@ -245,12 +245,12 @@ void SKO_Map::Reader::loadNpcs(SKO_Map::Map * map, INIReader mapIni)
 		npc->sprite = mapIni.GetInteger(targetStr, "sprite", 0);
 		npc->x = npc->sx = mapIni.GetInteger(targetStr, "x", 0);
 		npc->y = npc->sy = mapIni.GetInteger(targetStr, "y", 0);
-		npc->final = mapIni.GetInteger(targetStr, "final", 0); // TODO change `final` to not match C++11 keyword `final`
-		npc->num_pages = mapIni.GetInteger(targetStr, "pages", 0);
+		npc->finalPage = mapIni.GetInteger(targetStr, "final", 0); // TODO change `final` to not match C++11 keyword `final`
+		int num_pages = mapIni.GetInteger(targetStr, "pages", 0);
 		npc->quest = mapIni.GetInteger(targetStr, "quest", -1); //-1 for non quest NPCs
 
 		//get all the lines of the text
-		for (int page = 0; page < npc->num_pages; page++)
+		for (int page = 0; page < num_pages; page++)
 		{
 			for (int line = 0; line < SKO_Npc::NUM_LINES; line++)
 			{
