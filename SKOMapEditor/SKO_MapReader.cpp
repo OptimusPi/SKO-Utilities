@@ -220,7 +220,7 @@ void SKO_Map::Reader::loadTargets(SKO_Map::Map * map, INIReader mapIni)
 		std::string targetStr = ss1.str();
 
 		SKO_Target *target = new SKO_Target();
-		target->pic = mapIni.GetInteger(targetStr, "sprite", 0);
+		target->picId = mapIni.GetInteger(targetStr, "sprite", 0);
 		target->x = mapIni.GetInteger(targetStr, "x", 0);
 		target->y = mapIni.GetInteger(targetStr, "y", 0);
 		target->w = mapIni.GetInteger(targetStr, "w", 0);
