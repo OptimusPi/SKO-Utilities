@@ -1,9 +1,10 @@
 #ifndef __SKO_NPC_H_
 #define __SKO_NPC_H_
 
-
+#include <vector>
 #include <iostream>
 #include <cstdio>
+#include "TextComponent.h"
 
 class SKO_Npc
 {
@@ -37,6 +38,7 @@ public:
 	int sprite = 0;
 	int quest = 0;
 	std::string finalPage = "";
+	std::vector<OPI_Text::TextComponent*> lines;
 
 	static const int NUM_LINES = 10;
 	static const int MAX_PAGES = 10;

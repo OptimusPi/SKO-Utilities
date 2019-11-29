@@ -2,7 +2,7 @@
 #include <fstream>
 #include <exception>
 #include <sstream>
-
+#include "TextComponent.h"
 
 SKO_Map::Map * SKO_Map::Reader::loadMap(std::string filePath)
 {
@@ -80,7 +80,9 @@ void SKO_Map::Reader::loadSigns(SKO_Map::Map * map, INIReader mapIni)
 			std::string txt = mapIni.Get(ss.str(), ss1.str(), "");
 			if (txt.length())
 				txt = txt.substr(1);
-			sign->line[line].SetText(txt.c_str());
+			// Add new dialogue lines one at a time
+			auto textComponent = new OPI_Text::TextComponent(txt, nullptr);
+			sign->lines.push_back(textComponent);
 			printf("%s is: %s\n", ss1.str().c_str(), txt.c_str());
 		}
 
@@ -260,7 +262,12 @@ void SKO_Map::Reader::loadNpcs(SKO_Map::Map * map, INIReader mapIni)
 				std::string txt = mapIni.Get(targetStr, ss1.str(), "");
 				if (txt.length())
 					txt = txt.substr(1);
-				npc->line[page][line]->SetText(txt.c_str());//TODO new OPI_Text method
+
+
+				// Add new dialogue lines one at a time
+				auto textComponent = new OPI_Text::TextComponent(txt, nullptr);
+				npc->lines.push_back(textComponent);
+
 				printf("NPC %s is: %s\n", ss1.str().c_str(), txt.c_str());
 			}
 		}
