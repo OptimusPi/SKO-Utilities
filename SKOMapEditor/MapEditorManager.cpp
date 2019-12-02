@@ -1,6 +1,7 @@
 #include "MapEditorManager.h"
 
 #include "Global.h"
+#include <set>
 
 SKO_MapEditor::Manager::Manager(OPI_Renderer * renderer, MainMenuGui *mainMenuGui, OPI_Gui::GuiManager *gui)
 {
@@ -43,18 +44,55 @@ void SKO_MapEditor::Manager::cleanupInvisibleRects(SKO_Map::Map *map)
 	//Delete any collision rectangles that are too small.
 	for (int i = 0; i < map->collisionRects.size(); i++)
 	{
-		if (map->collisionRects[i].h < 4 || map->collisionRects[i].w < 4)
+		if (map->collisionRects[i].h < 3 && map->collisionRects[i].w < 3)
 		{
 			current_rect--;
 			invisibleRectIds.push_back(i);
-		}  
+		}
 	}	
 
-	for (int i = 0; i < invisibleRectIds.size(); i++)
+	for (int i = invisibleRectIds.size() - 1; i > 0; i--)
 	{
 		map->collisionRects.erase(map->collisionRects.begin() + invisibleRectIds[i]);
 	}
 }
+
+void SKO_MapEditor::Manager::removeDuplicateTiles(std::vector<SKO_Map::Tile*> *tiles)
+{
+	std::vector<int> duplicateTileIds = std::vector<int>();
+
+	// Find duplicate tiles
+	for (int i = 0; i < tiles->size(); i++)
+	{
+		SKO_Map::Tile *tileA = (*tiles)[i];
+		for (int i2 = i + 1; i2 < tiles->size(); i2++)
+		{
+			SKO_Map::Tile *tileB = (*tiles)[i2];
+
+			if (tileA->tileId == tileB->tileId && tileA->x == tileB->x && tileA->y == tileB->y)
+			{
+				// Remove the first tile, because the last tile wins, since it is on top.
+				duplicateTileIds.push_back(i);
+				break;
+			}
+		}
+	}
+
+	// Remove duplicate tiles from the back of the list to the front
+	for (int i = duplicateTileIds.size() - 1; i > 0; i--)
+	{
+		int at = duplicateTileIds[i];
+		tiles->erase(tiles->begin() + at);
+	}
+
+}
+
+void SKO_MapEditor::Manager::removeDuplicateTiles(SKO_Map::Map *map)
+{
+	removeDuplicateTiles(&map->backgroundTiles);
+	removeDuplicateTiles(&map->fringeTiles);
+}
+
  
 void SKO_MapEditor::Manager::saveMap(std::string fileLocation)
 {
@@ -82,6 +120,8 @@ void SKO_MapEditor::Manager::loadMap(std::string fileName)
 
 	// Edge case where accidental small rectangles are leftover, clean these up
 	SKO_MapEditor::Manager::cleanupInvisibleRects(this->map);
+
+	removeDuplicateTiles(map);
 
 	// Set map current rect
 	current_rect = map->collisionRects.size() - 1;

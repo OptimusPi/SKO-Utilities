@@ -49,7 +49,7 @@ namespace SKO_Map
 		void loadMap(std::string filePath); 
 		
 		// New version to save as INI and read INI
-		void saveMapINI(std::string filePath);
+		void saveMapINI(std::string filePath); 
 		void loadMapINI(std::string filePath); 
 		std::string filePath;
 	private:

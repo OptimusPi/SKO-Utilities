@@ -2,7 +2,6 @@
 #define __SKO_MAP_READER_H_
 
 #include "INIReader.h"
-
 #include "SKO_Map.h"
 
 #include <string>

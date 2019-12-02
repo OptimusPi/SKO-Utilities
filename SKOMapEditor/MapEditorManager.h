@@ -15,7 +15,6 @@
 
 namespace SKO_MapEditor
 {
-
 	//TODO Singleton
 	class Manager
 	{
@@ -27,6 +26,10 @@ namespace SKO_MapEditor
 		void loadMap(std::string filename);
 		// Clean up useless rectangles (<4x4 pixels) to a SKO_Map in-place.
 		void cleanupInvisibleRects(SKO_Map::Map *map);
+
+		//Clean up accidentally duplicated tiles
+		void removeDuplicateTiles(std::vector<SKO_Map::Tile*> *tiles);
+		void removeDuplicateTiles(SKO_Map::Map *map);
 
 		// Draw: sky, map layers, and player test object
 		void DrawGameScene();
