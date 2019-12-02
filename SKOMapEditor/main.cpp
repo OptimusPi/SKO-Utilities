@@ -28,6 +28,7 @@
 // TODO - get rid of Global.h
 #include "Global.h"
  
+SKO_Map::Reader *mapReader = nullptr;
 MainMenuGui* mainMenuGui = nullptr;
 
 // SDL2 rendering class
@@ -125,8 +126,11 @@ int main(int argc, char *argv[])
 	// Initialize main menu GUI
 	mainMenuGui = new MainMenuGui(OPI_Gui::GuiManager::getInstance());
 
+	// Initialize map loader
+	mapReader = new SKO_Map::Reader("MAP/");
+
 	// Initialize map editor manager
-	mapEditorManager = new SKO_MapEditor::Manager(renderer, mainMenuGui, OPI_Gui::GuiManager::getInstance());
+	mapEditorManager = new SKO_MapEditor::Manager(renderer, mainMenuGui, mapReader);
 
 	// Open requested map file
 	if (loadMapFilename.length() > 0)

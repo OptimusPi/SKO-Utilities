@@ -11,16 +11,24 @@ namespace SKO_Map
 	class Reader
 	{
 	public:
-		static SKO_Map::Map *loadMap(std::string filePath);
+		Reader(std::string fileLocation, std::string fileExtension = ".ini");
+		virtual ~Reader();
+		
+		SKO_Map::Map *loadMap(std::string mapFile);
+		std::string fileLocation;
+		std::string fileExtension;
 	private:
 		// Load game objects
-		static void loadPortals(SKO_Map::Map * map, INIReader mapIni);
-		static void loadSigns(SKO_Map::Map * map, INIReader mapIni);
-		static void loadEnemies(SKO_Map::Map * map, INIReader mapIni);
-		static void loadStalls(SKO_Map::Map * map, INIReader mapIni);
-		static void loadShops(SKO_Map::Map * map, INIReader mapIni);
-		static void loadTargets(SKO_Map::Map * map, INIReader mapIni);
-		static void loadNpcs(SKO_Map::Map * map, INIReader mapIni);
+		void loadBackgroundTiles(SKO_Map::Map * map, INIReader mapIni);
+		void loadFringeTiles(SKO_Map::Map * map, INIReader mapIni);
+		void loadCollisionRects(SKO_Map::Map * map, INIReader mapIni);
+		void loadPortals(SKO_Map::Map * map, INIReader mapIni);
+		void loadSigns(SKO_Map::Map * map, INIReader mapIni);
+		void loadEnemies(SKO_Map::Map * map, INIReader mapIni);
+		void loadStalls(SKO_Map::Map * map, INIReader mapIni);
+		void loadShops(SKO_Map::Map * map, INIReader mapIni);
+		void loadTargets(SKO_Map::Map * map, INIReader mapIni);
+		void loadNpcs(SKO_Map::Map * map, INIReader mapIni);
 	};
 }
 

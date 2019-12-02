@@ -7,10 +7,6 @@ SKO_Map::Map::Map()
 {
 }
 
-SKO_Map::Map::Map(std::string filePath)
-{
-	loadMap(filePath);
-}
 
 SKO_Map::Map::~Map()
 {
@@ -24,6 +20,8 @@ void SKO_Map::Map::saveMap()
 
 void SKO_Map::Map::saveMap(std::string filePath)
 {
+	// TODO use SKO_Map::MapWriter
+
 	//dump all the memory into a file
 	std::ofstream MapFile(filePath, std::ios::out | std::ios::binary);
 	int number_of_tiles = this->backgroundTiles.size();

@@ -10,7 +10,11 @@ OPI_Text::TextComponent::TextComponent()
 
 OPI_Text::TextComponent::TextComponent(std::string content, OPI_Text::Font* font,  int fontPoint, bool wrapped)
 {
-	//TODO move RGB to parameters with default value
+	// TODO maybe a better way to handle this?
+	if (content.length() == 0)
+		content = " ";
+
+	// TODO move RGB to parameters with default value
 	R = 255;
 	G = 255;
 	B = 255;

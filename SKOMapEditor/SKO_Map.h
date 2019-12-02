@@ -26,7 +26,6 @@ namespace SKO_Map
 	{ 
 	public:  
 		Map(); 
-		Map(std::string filePath); 
 		virtual ~Map(); 
 
 		// Static map objects

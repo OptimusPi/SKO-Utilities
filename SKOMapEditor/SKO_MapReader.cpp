@@ -3,29 +3,151 @@
 #include <exception>
 #include <sstream>
 #include "TextComponent.h"
+#include "FontManager.h"
 
-SKO_Map::Map * SKO_Map::Reader::loadMap(std::string filePath)
+
+SKO_Map::Reader::Reader(std::string fileLocation, std::string fileExtension)
+{
+	if (fileLocation.find_last_of("/") == fileLocation.length() - 1)
+	{
+		// IF path ends in a / keep it that way
+		this->fileLocation = fileLocation;
+	}
+	else
+	{
+		// Else add slash to end of file location
+		this->fileLocation = fileLocation + "/";
+	}
+
+	this->fileExtension = fileExtension;
+}
+SKO_Map::Reader::~Reader()
+{
+
+}
+
+SKO_Map::Map * SKO_Map::Reader::loadMap(std::string fileName)
 {
 	SKO_Map::Map *map = new SKO_Map::Map();
-	map->filePath = filePath;
+	// Example:
+	//		fileLocation for this class is: "MAP/"
+	//		fileName for this function call is: "map0"
+	//		filePath will be "MAP/map0.map.ini"
+	std::string filePath = this->fileLocation + fileName + fileExtension;
 
 	// Open the file to read
 	INIReader mapIni(filePath);
-	if (mapIni.ParseError() < 0) 
+	if (mapIni.ParseError() < 0)
 	{ 
 		std::string error = "Failed to load INI file: " + filePath;
 		throw new std::ios_base::failure(error);
-	} 
+	}
 
-	loadPortals(map, mapIni); 
-	loadSigns(map, mapIni);   
+	loadBackgroundTiles(map, mapIni); // TODO fix with new format, it doesnt match other objects
+	loadFringeTiles(map, mapIni); // TODO fix with new format, it doesnt match other objects
+	loadCollisionRects(map, mapIni); // TODO fix with new format, it doesnt match other objects
+
+	loadPortals(map, mapIni);
+	loadSigns(map, mapIni);
 	loadEnemies(map, mapIni); 
 	loadStalls(map, mapIni);  
 	loadShops(map, mapIni);   
 	loadTargets(map, mapIni); 
 	loadNpcs(map, mapIni);
+
+	// TODO loadNatureEngine();
+
+	return map;
+}
+void SKO_Map::Reader::loadBackgroundTiles(SKO_Map::Map * map, INIReader mapIni)
+{
+	// load background tiles
+	int num_background_tiles = mapIni.GetInteger("count", "background_tiles", 0);
+	printf("num_background_tiles is %i", num_background_tiles);
+
+	for (int i = 0; i < num_background_tiles; i++)
+	{
+		std::stringstream ssx;
+		ssx << "background_tile_x_" << i;
+		
+		std::stringstream ssy;
+		ssy << "background_tile_y_" << i;
+
+		std::stringstream ssid;
+		ssid << "background_tile_id_" << i;
+
+		int x = mapIni.GetInteger("background_tiles", ssx.str(), 0);
+		int y = mapIni.GetInteger("background_tiles", ssy.str(), 0);
+		int id = mapIni.GetInteger("background_tiles", ssid.str(), 0);
+
+		// Add background tile to map collection
+		SKO_Map::Tile *backgroundTile = new SKO_Map::Tile(x, y, id);
+		map->backgroundTiles.push_back(backgroundTile);
+	}
 }
 
+void SKO_Map::Reader::loadFringeTiles(SKO_Map::Map * map, INIReader mapIni)
+{
+	// load fringe tiles
+	int num_fringe_tiles = mapIni.GetInteger("count", "fringe_tiles", 0);
+	printf("num_fringe_tiles is %i", num_fringe_tiles);
+
+	for (int i = 0; i < num_fringe_tiles; i++)
+	{
+		std::stringstream ssx;
+		ssx << "fringe_tile_x_" << i;
+
+		std::stringstream ssy;
+		ssy << "fringe_tile_y_" << i;
+
+		std::stringstream ssid;
+		ssid << "fringe_tile_id_" << i;
+
+		int x = mapIni.GetInteger("fringe_tiles", ssx.str(),  0);
+		int y = mapIni.GetInteger("fringe_tiles", ssy.str(),  0);
+		int id = mapIni.GetInteger("fringe_tiles", ssid.str(), 0);
+
+		// Add fringe tile to map collection
+		SKO_Map::Tile *fringeTile = new SKO_Map::Tile(x, y, id);
+		map->fringeTiles.push_back(fringeTile);
+	}
+}
+
+void SKO_Map::Reader::loadCollisionRects(SKO_Map::Map * map, INIReader mapIni)
+{
+	// load background tiles
+	int num_collision_rects = mapIni.GetInteger("count", "collision_rects", 0);
+	printf("num_collision_rects is %i", num_collision_rects);
+
+	for (int i = 0; i < num_collision_rects; i++)
+	{
+		std::stringstream ssx;
+		ssx << "collision_tile_x_" << i;
+
+		std::stringstream ssy;
+		ssy << "collision_tile_y_" << i;
+
+		std::stringstream ssw;
+		ssw << "collision_tile_w_" << i;
+
+		std::stringstream ssh;
+		ssh << "collision_tile_h_" << i;
+
+		int x = mapIni.GetInteger("collision_rects", ssx.str(), 0);
+		int y = mapIni.GetInteger("collision_rects", ssy.str(), 0);
+		int w = mapIni.GetInteger("collision_rects", ssw.str(), 0);
+		int h = mapIni.GetInteger("collision_rects", ssh.str(), 0);
+
+		// Add background tile to map collection
+		SDL_Rect collisionRect;
+		collisionRect.x = x;
+		collisionRect.y = y;
+		collisionRect.w = w;
+		collisionRect.h = h;
+
+		map->collisionRects.push_back(collisionRect);
+	}
+}
 
 void SKO_Map::Reader::loadPortals(SKO_Map::Map * map, INIReader mapIni)
 {
@@ -80,8 +202,13 @@ void SKO_Map::Reader::loadSigns(SKO_Map::Map * map, INIReader mapIni)
 			std::string txt = mapIni.Get(ss.str(), ss1.str(), "");
 			if (txt.length())
 				txt = txt.substr(1);
+
 			// Add new dialogue lines one at a time
-			auto textComponent = new OPI_Text::TextComponent(txt, nullptr);
+			// TODO - save Font in .ini file for this object
+			auto textComponent = new OPI_Text::TextComponent(txt, OPI_Text::FontManager::getFont("RobotoMono-Regular"));
+			
+
+
 			sign->lines.push_back(textComponent);
 			printf("%s is: %s\n", ss1.str().c_str(), txt.c_str());
 		}
@@ -265,7 +392,7 @@ void SKO_Map::Reader::loadNpcs(SKO_Map::Map * map, INIReader mapIni)
 
 
 				// Add new dialogue lines one at a time
-				auto textComponent = new OPI_Text::TextComponent(txt, nullptr);
+				auto textComponent = new OPI_Text::TextComponent(txt, OPI_Text::FontManager::getFont("RobotoMono-Regular"));
 				npc->lines.push_back(textComponent);
 
 				printf("NPC %s is: %s\n", ss1.str().c_str(), txt.c_str());

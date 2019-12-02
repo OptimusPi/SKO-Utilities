@@ -3,12 +3,13 @@
 #include "Global.h"
 #include <set>
 
-SKO_MapEditor::Manager::Manager(OPI_Renderer * renderer, MainMenuGui *mainMenuGui, OPI_Gui::GuiManager *gui)
+SKO_MapEditor::Manager::Manager(OPI_Renderer * renderer, MainMenuGui *mainMenuGui, SKO_Map::Reader *mapReader)
 {
 	this->renderer = renderer;
 	this->mainMenuGui = mainMenuGui;
-	this->gui = gui;
+	this->gui = OPI_Gui::GuiManager::getInstance();
 	this->map = new SKO_Map::Map();
+	this->mapReader = mapReader;
 
 	// Load tiles and images
 	background.setImage("IMG/back.png");
@@ -116,12 +117,12 @@ void SKO_MapEditor::Manager::saveMap()
 void SKO_MapEditor::Manager::loadMap(std::string fileName)
 {
 	// Load map
-	this->map = new SKO_Map::Map(fileName);
+	this->map = this->mapReader->loadMap(fileName);
 
 	// Edge case where accidental small rectangles are leftover, clean these up
-	SKO_MapEditor::Manager::cleanupInvisibleRects(this->map);
-
-	removeDuplicateTiles(map);
+	//SKO_MapEditor::Manager::cleanupInvisibleRects(this->map);
+	// Remove tiles that are the same tileID and same X and same Y values
+	//removeDuplicateTiles(map);
 
 	// Set map current rect
 	current_rect = map->collisionRects.size() - 1;

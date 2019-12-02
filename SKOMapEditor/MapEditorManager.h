@@ -10,7 +10,7 @@
 #include "GuiManager.h"
 #include "OPI_Clock.h"
 #include "MainMenuGui.h"
-
+#include "SKO_MapReader.h"
 
 
 namespace SKO_MapEditor
@@ -19,7 +19,7 @@ namespace SKO_MapEditor
 	class Manager
 	{
 	public:
-		Manager(OPI_Renderer * renderer, MainMenuGui *mainMenuGui, OPI_Gui::GuiManager *gui);
+		Manager(OPI_Renderer * renderer, MainMenuGui *mainMenuGui, SKO_Map::Reader *mapReader);
 		virtual ~Manager();
 		void saveMap();
 		void saveMap(std::string filename);
@@ -48,6 +48,7 @@ namespace SKO_MapEditor
 		MainMenuGui *mainMenuGui;
 		OPI_Renderer * renderer;
 		SKO_Map::Map * map;
+		SKO_Map::Reader * mapReader;
 		float camera_x = 0, camera_y = 0;
 		int cursor_x = 0, cursor_y = 0;
 		int current_tile = 0;
