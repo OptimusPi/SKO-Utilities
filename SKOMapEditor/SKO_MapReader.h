@@ -11,17 +11,19 @@ namespace SKO_Map
 	class Reader
 	{
 	public:
-		Reader(std::string fileLocation, std::string fileExtension = ".ini");
+		Reader(std::string directoryLocation, std::string fileExtension = ".ini");
 		virtual ~Reader();
 		
 		SKO_Map::Map *loadMap(std::string mapFile);
 		std::string fileLocation;
 		std::string fileExtension;
 	private:
-		// Load game objects
+		// Load dimensions and graphics
 		void loadBackgroundTiles(SKO_Map::Map * map, INIReader mapIni);
 		void loadFringeTiles(SKO_Map::Map * map, INIReader mapIni);
 		void loadCollisionRects(SKO_Map::Map * map, INIReader mapIni);
+
+		// Load game objects
 		void loadPortals(SKO_Map::Map * map, INIReader mapIni);
 		void loadSigns(SKO_Map::Map * map, INIReader mapIni);
 		void loadEnemies(SKO_Map::Map * map, INIReader mapIni);

@@ -33,11 +33,11 @@ namespace OPI_Text
 		unsigned short int width, height;
 		bool visible;
 		OPI_Image contentRender;
+		std::string content;
 
 	private:
 		OPI_Text::Font *font;
 		int fontPoint;
-		std::string content;
 		SDL_Color color;
 		void renderImage(std::string content, OPI_Text::Font* font, bool wrapped);
 	};
