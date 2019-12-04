@@ -13,8 +13,9 @@ class SKO_Stall
       int w, h;
       
             
-      //is it a shop?
-      int shopId;
+      // "bank" is the bank
+	  // other is a shop
+      std::string type = "";
       
       SKO_Stall(int shopId, int x_in, int y_in, int w_in, int h_in);
       SKO_Stall();

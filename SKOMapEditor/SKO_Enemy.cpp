@@ -28,9 +28,10 @@ respawn_ticker = 0;
 	
 }
 
-SKO_Enemy::SKO_Enemy(int x1_in, int y1_in, int x2_in, int y2_in, int sx_in, int sy_in)
+SKO_Enemy::SKO_Enemy(std::string type, int x1_in, int y1_in, int x2_in, int y2_in, int sx_in, int sy_in)
 {
 SKO_Enemy();
+	 this->type = type;
      facing_right = true;
       attacking = false;
       current_frame = 0;

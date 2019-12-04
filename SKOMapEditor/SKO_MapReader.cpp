@@ -49,7 +49,7 @@ SKO_Map::Map * SKO_Map::Reader::loadMap(std::string fileName)
 
 	loadPortals(map, mapIni);
 	loadSigns(map, mapIni);
-	loadEnemies(map, mapIni); 
+	loadEnemies(map, mapIni); // TODO fix with new format, it doesnt match other objects
 	loadStalls(map, mapIni);  
 	loadShops(map, mapIni);   
 	loadTargets(map, mapIni); 
@@ -230,10 +230,11 @@ void SKO_Map::Reader::loadEnemies(SKO_Map::Map * map, INIReader mapIni)
 
 		// load portal parameters
 		SKO_Enemy * enemy = new SKO_Enemy();
-		enemy->x1 = mapIni.GetInteger(ss.str(), "x1", 0);
-		enemy->x2 = mapIni.GetInteger(ss.str(), "x2", 0);
-		enemy->y1 = mapIni.GetInteger(ss.str(), "y1", 0);
-		enemy->y2 = mapIni.GetInteger(ss.str(), "y2", 0);
+		enemy->type = mapIni.Get(ss.str(), "sprite", 0); // TODO fix with new format, it doesnt match other objects
+		enemy->x1 = mapIni.GetInteger(ss.str(), "x1", 0); // TODO fix with new format, it doesnt match other objects
+		enemy->x2 = mapIni.GetInteger(ss.str(), "x2", 0); // TODO fix with new format, it doesnt match other objects
+		enemy->y1 = mapIni.GetInteger(ss.str(), "y1", 0); // TODO fix with new format, it doesnt match other objects
+		enemy->y2 = mapIni.GetInteger(ss.str(), "y2", 0); // TODO fix with new format, it doesnt match other objects
 		
 		enemy->sx = mapIni.GetInteger(ss.str(), "spawn_x", 0);
 		enemy->sy = mapIni.GetInteger(ss.str(), "spawn_y", 0);

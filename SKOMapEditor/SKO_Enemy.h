@@ -25,19 +25,29 @@ class SKO_Enemy
 {
 	public:
 		SKO_Enemy();
-		SKO_Enemy(int x1_in, int y1_in, int x2_in, int y2_in, int sx_in, int sy_in);  
+		SKO_Enemy(std::string type, int x1_in, int y1_in, int x2_in, int y2_in, int sx_in, int sy_in);  
 		void Respawn();
 		void addLoot(unsigned int item_id, unsigned int amount, float chance);
 		SKO_ItemObject getLootItem();
 
+		//What type of enemy is this?
+		std::string type;
+
 		//coords
-		float x, y;
-		float x_speed, y_speed;
+		float x = 0.0f;
+		float y = 0.0f;
+		float x_speed = 0.0f;
+		float y_speed = 0.0f;
+
+		//spawn location
+		int spawn_x = 0;
+		int spawn_y = 0;
+
 		//collision rect
 		int x1,x2,y1,y2;
-		//spawn
-		int sx, sy;
 
+
+		// 
 		unsigned int defense;
 		unsigned int strength;
 		unsigned int hp;
