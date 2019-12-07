@@ -14,7 +14,7 @@ class SKO_Target
 		int 	y = 0;
 		int 	w = 0;
 		int 	h = 0;
-		int 	id = 0;
+		int 	type = 0;
 		bool 	active = true;
 		int 	loot = 0;// TODO why not a vector of loot items, huh?
 		unsigned long long int respawn_ticker = 0;

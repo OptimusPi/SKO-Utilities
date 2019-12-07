@@ -6,7 +6,7 @@ SKO_Target::SKO_Target()
 	y    = 0;
 	w    = 0;
 	h    = 0;
-	id   = 0;
+	type   = 0;
 	loot = 0; 
 	active = true;
 	required_weapon = -1;
@@ -18,7 +18,7 @@ SKO_Target::SKO_Target(int x_in, int y_in, int w_in, int h_in, int id_in, int lo
 	y    = y_in;
 	w    = w_in;
 	h    = h_in;
-	id   = id_in;
+	type   = id_in;
 	loot = loot_in;
 	active = true;
 	required_weapon = -1;

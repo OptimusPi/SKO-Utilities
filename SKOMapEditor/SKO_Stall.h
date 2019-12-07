@@ -2,15 +2,20 @@
 #ifndef __SKO_STALL_H_
 #define __SKO_STALL_H_
 
+#include <string>
+
 class SKO_Stall
 {
       //to hold shops and banks...maybe more!
       public:
       
       //where is this stand at?
-      int x, y;
+	  int x = 0;
+	  int y = 0;
+
       //how wide is it? how tall? I want a button for it man.
-      int w, h;
+	  int w = 0;
+	  int h = 0;
       
             
       // "bank" is the bank

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <cstdio>
 #include "TextComponent.h"
+#include "DialogPage.h"
 
 class SKO_Npc
 {
@@ -25,8 +26,8 @@ public:
 	int w = 0;
 	int h = 0;
 	//spawn
-	int sx = 0;
-	int sy = 0;
+	int spawn_x = 0;
+	int spawn_y = 0;
 	unsigned long long int AI_ticker = 0;       
 	unsigned long long int AI_period = 0;
 
@@ -38,11 +39,9 @@ public:
 	int sprite = 0;
 	int quest = 0;
 	std::string finalPage = "";
-	std::vector<OPI_Text::TextComponent*> lines;
-
-	static const int NUM_LINES = 10;
-	static const int MAX_PAGES = 10;
+	std::vector<DialogPage*> pages;
 };
+
 
 #endif
 

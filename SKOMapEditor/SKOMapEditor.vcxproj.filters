@@ -237,6 +237,9 @@
     <ClInclude Include="SKO_Npc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DialogPage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -345,6 +348,9 @@
       <Filter>Source Files\SKO</Filter>
     </ClCompile>
     <ClCompile Include="SKO_Npc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogPage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

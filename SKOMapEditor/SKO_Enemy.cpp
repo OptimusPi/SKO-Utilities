@@ -28,7 +28,7 @@ respawn_ticker = 0;
 	
 }
 
-SKO_Enemy::SKO_Enemy(std::string type, int x1_in, int y1_in, int x2_in, int y2_in, int sx_in, int sy_in)
+SKO_Enemy::SKO_Enemy(std::string type, int x1_in, int y1_in, int x2_in, int y2_in, int spawn_x_in, int spawn_y_in)
 {
 SKO_Enemy();
 	 this->type = type;
@@ -39,14 +39,16 @@ SKO_Enemy();
       attack_ticker = 0;
       ground = true;
       
+	  // TODO change to simply use type of enemy
      //collision rect
      x1 = x1_in;
      x2 = x2_in;
      y1 = y1_in;
      y2 = y2_in;
+
      //spawn
-     sx = sx_in;
-     sy = sy_in;
+     spawn_x = spawn_x_in;
+	 spawn_y = spawn_y_in;
      
      defense = 1;
      strength = 4;
@@ -55,8 +57,8 @@ SKO_Enemy();
      AI_period = 3000; 
      AI_pos = 0;
      
-     x = sx;
-     y = sy;
+     x = spawn_x;
+     y = spawn_y;
      x_speed = 0;
      y_speed = 0;
      
@@ -77,9 +79,9 @@ SKO_Enemy();
 
 void SKO_Enemy::Respawn()
 {
-     printf("Enemy Respawn - Well, sx is %i and sy is %i and x1 is %i and x2 is %i\n", sx, sy, x1, x2);
-     x = sx;
-     y = sy;
+     printf("Enemy Respawn - Well, spawn_x is %i and spawn_y is %i and x1 is %i and x2 is %i\n", spawn_x, spawn_y, x1, x2);
+     x = spawn_x;
+     y = spawn_y;
      x_speed = 0;
      y_speed = 0;
      

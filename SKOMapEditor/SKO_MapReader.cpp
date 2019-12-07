@@ -67,17 +67,17 @@ void SKO_Map::Reader::loadBackgroundTiles(SKO_Map::Map * map, INIReader mapIni)
 
 	for (int i = 0; i < num_background_tiles; i++)
 	{
-		std::stringstream ssx;
-		ssx << "background_tile_x_" << i;
+		std::stringstream sspawn_x;
+		sspawn_x << "background_tile_x_" << i;
 		
-		std::stringstream ssy;
-		ssy << "background_tile_y_" << i;
+		std::stringstream sspawn_y;
+		sspawn_y << "background_tile_y_" << i;
 
 		std::stringstream ssid;
 		ssid << "background_tile_id_" << i;
 
-		int x = mapIni.GetInteger("background_tiles", ssx.str(), 0);
-		int y = mapIni.GetInteger("background_tiles", ssy.str(), 0);
+		int x = mapIni.GetInteger("background_tiles", sspawn_x.str(), 0);
+		int y = mapIni.GetInteger("background_tiles", sspawn_y.str(), 0);
 		int id = mapIni.GetInteger("background_tiles", ssid.str(), 0);
 
 		// Add background tile to map collection
@@ -94,17 +94,17 @@ void SKO_Map::Reader::loadFringeTiles(SKO_Map::Map * map, INIReader mapIni)
 
 	for (int i = 0; i < num_fringe_tiles; i++)
 	{
-		std::stringstream ssx;
-		ssx << "fringe_tile_x_" << i;
+		std::stringstream sspawn_x;
+		sspawn_x << "fringe_tile_x_" << i;
 
-		std::stringstream ssy;
-		ssy << "fringe_tile_y_" << i;
+		std::stringstream sspawn_y;
+		sspawn_y << "fringe_tile_y_" << i;
 
 		std::stringstream ssid;
 		ssid << "fringe_tile_id_" << i;
 
-		int x = mapIni.GetInteger("fringe_tiles", ssx.str(),  0);
-		int y = mapIni.GetInteger("fringe_tiles", ssy.str(),  0);
+		int x = mapIni.GetInteger("fringe_tiles", sspawn_x.str(),  0);
+		int y = mapIni.GetInteger("fringe_tiles", sspawn_y.str(),  0);
 		int id = mapIni.GetInteger("fringe_tiles", ssid.str(), 0);
 
 		// Add fringe tile to map collection
@@ -121,11 +121,11 @@ void SKO_Map::Reader::loadCollisionRects(SKO_Map::Map * map, INIReader mapIni)
 
 	for (int i = 0; i < num_collision_rects; i++)
 	{
-		std::stringstream ssx;
-		ssx << "collision_tile_x_" << i;
+		std::stringstream sspawn_x;
+		sspawn_x << "collision_tile_x_" << i;
 
-		std::stringstream ssy;
-		ssy << "collision_tile_y_" << i;
+		std::stringstream sspawn_y;
+		sspawn_y << "collision_tile_y_" << i;
 
 		std::stringstream ssw;
 		ssw << "collision_tile_w_" << i;
@@ -133,8 +133,8 @@ void SKO_Map::Reader::loadCollisionRects(SKO_Map::Map * map, INIReader mapIni)
 		std::stringstream ssh;
 		ssh << "collision_tile_h_" << i;
 
-		int x = mapIni.GetInteger("collision_rects", ssx.str(), 0);
-		int y = mapIni.GetInteger("collision_rects", ssy.str(), 0);
+		int x = mapIni.GetInteger("collision_rects", sspawn_x.str(), 0);
+		int y = mapIni.GetInteger("collision_rects", sspawn_y.str(), 0);
 		int w = mapIni.GetInteger("collision_rects", ssw.str(), 0);
 		int h = mapIni.GetInteger("collision_rects", ssh.str(), 0);
 
@@ -236,8 +236,8 @@ void SKO_Map::Reader::loadEnemies(SKO_Map::Map * map, INIReader mapIni)
 		enemy->y1 = mapIni.GetInteger(ss.str(), "y1", 0); // TODO fix with new format, it doesnt match other objects
 		enemy->y2 = mapIni.GetInteger(ss.str(), "y2", 0); // TODO fix with new format, it doesnt match other objects
 		
-		enemy->sx = mapIni.GetInteger(ss.str(), "spawn_x", 0);
-		enemy->sy = mapIni.GetInteger(ss.str(), "spawn_y", 0);
+		enemy->spawn_x = mapIni.GetInteger(ss.str(), "spawn_x", 0);
+		enemy->spawn_y = mapIni.GetInteger(ss.str(), "spawn_y", 0);
 
 		enemy->hp_max = mapIni.GetInteger(ss.str(), "hp", 0);
 		enemy->strength = mapIni.GetInteger(ss.str(), "strength", 0);
@@ -266,8 +266,8 @@ void SKO_Map::Reader::loadEnemies(SKO_Map::Map * map, INIReader mapIni)
 			enemy->addLoot(loot_item, loot_amount, loot_chance);
 		}
 
-		enemy->x = enemy->sx;
-		enemy->y = enemy->sy;
+		enemy->x = enemy->spawn_x;
+		enemy->y = enemy->spawn_y;
 		enemy->hp = enemy->hp_max;
 
 		// Add portal to map collection
@@ -288,7 +288,7 @@ void SKO_Map::Reader::loadStalls(SKO_Map::Map * map, INIReader mapIni)
 		std::string stallStr = ss1.str();
 
 		SKO_Stall * stall = new SKO_Stall();
-		stall->shopId = mapIni.GetInteger(stallStr, "shopId", 0);
+		stall->type = mapIni.GetInteger(stallStr, "shopId", 0);
 		stall->x = mapIni.GetInteger(stallStr, "x", 0);
 		stall->y = mapIni.GetInteger(stallStr, "y", 0);
 		stall->w = mapIni.GetInteger(stallStr, "w", 0);
@@ -373,8 +373,8 @@ void SKO_Map::Reader::loadNpcs(SKO_Map::Map * map, INIReader mapIni)
 
 		SKO_Npc * npc = new SKO_Npc();
 		npc->sprite = mapIni.GetInteger(targetStr, "sprite", 0);
-		npc->x = npc->sx = mapIni.GetInteger(targetStr, "x", 0);
-		npc->y = npc->sy = mapIni.GetInteger(targetStr, "y", 0);
+		npc->x = npc->spawn_x = mapIni.GetInteger(targetStr, "x", 0);
+		npc->y = npc->spawn_y = mapIni.GetInteger(targetStr, "y", 0);
 		npc->finalPage = mapIni.GetInteger(targetStr, "final", 0); // TODO change `final` to not match C++11 keyword `final`
 		int num_pages = mapIni.GetInteger(targetStr, "pages", 0);
 		npc->quest = mapIni.GetInteger(targetStr, "quest", -1); //-1 for non quest NPCs
@@ -382,7 +382,7 @@ void SKO_Map::Reader::loadNpcs(SKO_Map::Map * map, INIReader mapIni)
 		//get all the lines of the text
 		for (int page = 0; page < num_pages; page++)
 		{
-			for (int line = 0; line < SKO_Npc::NUM_LINES; line++)
+			for (int line = 0; line < 10; line++) // TODO change this to use number of lines
 			{
 				std::stringstream ss1;
 				ss1 << "page_" << page << "_";
@@ -394,7 +394,7 @@ void SKO_Map::Reader::loadNpcs(SKO_Map::Map * map, INIReader mapIni)
 
 				// Add new dialogue lines one at a time
 				auto textComponent = new OPI_Text::TextComponent(txt, OPI_Text::FontManager::getFont("RobotoMono-Regular"));
-				npc->lines.push_back(textComponent);
+				npc->pages[page]->lines.push_back(textComponent);
 
 				printf("NPC %s is: %s\n", ss1.str().c_str(), txt.c_str());
 			}
