@@ -230,7 +230,7 @@ void SKO_Map::Reader::loadEnemies(SKO_Map::Map * map, INIReader mapIni)
 
 		// load portal parameters
 		SKO_Enemy * enemy = new SKO_Enemy();
-		enemy->type = mapIni.Get(ss.str(), "sprite", 0); // TODO fix with new format, it doesnt match other objects
+		enemy->type = mapIni.Get(ss.str(), "sprite", ""); // TODO fix with new format, it doesnt match other objects
 		enemy->x1 = mapIni.GetInteger(ss.str(), "x1", 0); // TODO fix with new format, it doesnt match other objects
 		enemy->x2 = mapIni.GetInteger(ss.str(), "x2", 0); // TODO fix with new format, it doesnt match other objects
 		enemy->y1 = mapIni.GetInteger(ss.str(), "y1", 0); // TODO fix with new format, it doesnt match other objects
@@ -382,6 +382,9 @@ void SKO_Map::Reader::loadNpcs(SKO_Map::Map * map, INIReader mapIni)
 		//get all the lines of the text
 		for (int page = 0; page < num_pages; page++)
 		{
+			// Add new page to NPC
+			npc->pages.push_back(new DialogPage());
+
 			for (int line = 0; line < 10; line++) // TODO change this to use number of lines
 			{
 				std::stringstream ss1;
@@ -390,7 +393,6 @@ void SKO_Map::Reader::loadNpcs(SKO_Map::Map * map, INIReader mapIni)
 				std::string txt = mapIni.Get(targetStr, ss1.str(), "");
 				if (txt.length())
 					txt = txt.substr(1);
-
 
 				// Add new dialogue lines one at a time
 				auto textComponent = new OPI_Text::TextComponent(txt, OPI_Text::FontManager::getFont("RobotoMono-Regular"));
