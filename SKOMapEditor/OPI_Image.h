@@ -26,6 +26,7 @@ public:
 	GLuint texture;
 	unsigned int width;
 	unsigned int height;
+	std::string fileLocation = "";
 };
 
 #endif

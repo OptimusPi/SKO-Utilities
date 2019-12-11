@@ -2,6 +2,7 @@
 #include "INIReader.h" // TODO - make class for map saving/loading
 #include <fstream> // TODO - make class for map saving/loading
 #include <sstream>
+#include "SKO_MapWriter.h"
 
 SKO_Map::Map::Map()
 {
@@ -22,6 +23,10 @@ void SKO_Map::Map::saveMap(std::string filePath)
 {
 	// TODO use SKO_Map::MapWriter
 
+	SKO_Map::Writer::saveMap(this);
+
+	return;
+	// LEGACY Crap
 	//dump all the memory into a file
 	std::ofstream MapFile(filePath, std::ios::out | std::ios::binary);
 	int number_of_tiles = this->backgroundTiles.size();
@@ -330,8 +335,6 @@ void SKO_Map::Map::loadMap(std::string filePath)
 
 void SKO_Map::Map::saveMapINI(std::string filePath)
 {
-	const int VERSION_MAJOR = 1;
-	const int VERSION_MINOR = 0;
 
 	//open the file 
 	std::ofstream mapFile(filePath);

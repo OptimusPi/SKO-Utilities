@@ -84,8 +84,6 @@ void OPI_Renderer::drawImage(int x, int y, const OPI_Image *img, float blendTole
 	glTexCoord2i(1, 0);
 	glVertex3i(x + img->width, y, 0);
 	glEnd();
-
-	glFlush();
 }
 
 void OPI_Renderer::drawText(OPI_Text::TextComponent *text)

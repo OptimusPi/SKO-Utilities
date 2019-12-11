@@ -32,7 +32,7 @@ namespace SKO_MapEditor
 		void removeDuplicateTiles(SKO_Map::Map *map);
 
 		// Draw: sky, map layers, and player test object
-		void DrawGameScene();
+		void DrawGameScene(int camera_x, int camera_y);
 
 		// Draw all map editor gui
 		void DrawGui();

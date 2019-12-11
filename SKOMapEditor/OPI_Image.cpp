@@ -15,11 +15,13 @@ OPI_Image::~OPI_Image()
 
 OPI_Image::OPI_Image(std::string filename)
 {
+	fileLocation = filename;
 	setImage(filename);
 }
 
 OPI_Image::OPI_Image(OPI_Image *source)
 {
+	fileLocation = source->fileLocation;
 	setImage(source);
 }
 
@@ -62,6 +64,8 @@ int pot(unsigned int x)
 
 void OPI_Image::setImage(SDL_Surface * surface)
 {
+	// TODO do I really want to do this? 
+	// it could interfere with other OPI_Image that are running.
 	//Clean up old texture memory from OpenGL
 	if (texture)
 	{
@@ -81,6 +85,7 @@ void OPI_Image::setImage(SDL_Surface * surface)
 
 void OPI_Image::setImage(std::string path)
 {
+	this->fileLocation = path;
 	SDL_Surface *surface = OPI_Image::getSurface(path);
 	setImage(surface);
 	SDL_FreeSurface(surface);
@@ -88,6 +93,7 @@ void OPI_Image::setImage(std::string path)
 
 void OPI_Image::setImage(OPI_Image *source)
 {
+	this->fileLocation = source->fileLocation;
 	texture = source->texture;
 	width = source->width;
 	height = source->height;
@@ -102,9 +108,9 @@ SDL_Surface* OPI_Image::getSurface(std::string filePath)
 
 GLuint OPI_Image::generateTexture(SDL_Surface * surface)
 {
-	GLuint tex[1];			// This is a handle to our texture object
+	GLuint tex = 0;			// This is a handle to our texture object
 	GLenum texture_format = GL_RGBA;
-	GLint  nOfColors;
+	GLint  nOfColors = 0;
 
 	if (surface)
 	{
@@ -126,16 +132,16 @@ GLuint OPI_Image::generateTexture(SDL_Surface * surface)
 				texture_format = GL_BGR;
 		}
 		else {
-			printf("WARNING: not truecolor OPI_Image! [%s]\n");
+			printf("WARNING: not truecolor OPI_Image! [from surface pointer]\n");
 			texture_format = GL_RGBA;
 		}
 
 
 		// Have OpenGL generate a texture object handle for us
-		glGenTextures(1, tex);
+		glGenTextures(1, &tex);
 
 		// Bind the texture object
-		glBindTexture(GL_TEXTURE_2D, tex[0]);
+		glBindTexture(GL_TEXTURE_2D, tex);
 
 
 		// Set the texture's stretching properties
@@ -147,7 +153,7 @@ GLuint OPI_Image::generateTexture(SDL_Surface * surface)
 			texture_format, GL_UNSIGNED_BYTE, surface->pixels);
 	}
 
-	return tex[0];
+	return tex;
 } 
 
  

@@ -4,6 +4,7 @@
 #include "ElementThemeGridRect.h"
 #include "ElementThemeImage.h"
 #include "ButtonTheme.h"
+#include <stdexcept>
 
 /// Singleton instance
 OPI_Gui::ButtonThemeFactory * OPI_Gui::ButtonThemeFactory::instance;

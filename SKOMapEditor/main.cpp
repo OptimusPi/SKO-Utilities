@@ -174,11 +174,12 @@ int main(int argc, char *argv[])
 		timestep->Update();
                 
 		if (!done && timestep->Check())
-		{ 
+		{
 			mapEditorManager->processLoop();
-		} 
+		}
       
 		OPI_Sleep::milliseconds(1);
+
 	} //while !done
   
   printf("DONE\n");

@@ -130,7 +130,7 @@ void SKO_MapEditor::Manager::loadMap(std::string fileName)
 	current_tile = map->backgroundTiles.size() - 1;
 }
 
-void SKO_MapEditor::Manager::DrawGameScene()
+void SKO_MapEditor::Manager::DrawGameScene(int camera_x, int camera_y)
 {
 	//image buffer and background
 	renderer->drawImage(0, 0, &background);
@@ -140,42 +140,48 @@ void SKO_MapEditor::Manager::DrawGameScene()
 
 	//draw background tiles, only on screen
 	for (int i = 0; i < map->backgroundTiles.size(); i++)
-	{   
+	{
 		SKO_Map::Tile *tile = map->backgroundTiles[i];
 		OPI_Image *tileImg = &tile_img[tile->tileId];
 
-		int drawX = tile->x - (int)camera_x;
-		int drawY = tile->y - (int)camera_y;
-
+		int drawX = tile->x - camera_x;
+		int drawY = tile->y - camera_y;
 
 		if (drawX >= (int)(0 - tileImg->width) &&
 			drawX < renderer->originalWindowWidth &&
 			drawY < renderer->originalWindowHeight &&
 			drawY >= (int)(0 - tileImg->height))
+		{
 			renderer->drawImage(drawX, drawY, tileImg);
+		}
 	}
 
 	//stickman!
 	if (stickman_toggle) //TODO - mapEditorState.stickmanVisible
 		renderer->drawImage(stickman.x - 25 - camera_x, stickman.y - camera_y, &stickman_img);
 
-	//draw tiles, only on screen
-	//draw background tiles, only on screen
+
+	//draw finge tiles, only on screen
 	for (int i = 0; i < map->fringeTiles.size(); i++)
 	{
 		SKO_Map::Tile *tile = map->fringeTiles[i];
 		OPI_Image *tileImg = &tile_img[tile->tileId];
 
-		int drawX = tile->x - (int)camera_x;
-		int drawY = tile->y - (int)camera_y;
 
+		int drawX = tile->x - camera_x;
+		int drawY = tile->y - camera_y;
 
 		if (drawX >= (int)(0 - tileImg->width) &&
 			drawX < renderer->originalWindowWidth &&
 			drawY < renderer->originalWindowHeight &&
 			drawY >= (int)(0 - tileImg->height))
+		{
 			renderer->drawImage(drawX, drawY, tileImg);
+		}
+		
 	}
+
+	
 
 	//draw current tile
 	if (mode == TILE_DRAW)
@@ -191,8 +197,9 @@ void SKO_MapEditor::Manager::DrawGameScene()
 		newRect.h = map->collisionRects[i].h;
 		newRect.w = map->collisionRects[i].w;
 
-		if (newRect.x >= 0 - newRect.w &&
-			newRect.x < renderer->originalWindowWidth && newRect.y < renderer->originalWindowHeight &&
+		if (newRect.x >= 0 - newRect.w && 
+			newRect.x < renderer->originalWindowWidth && 
+			newRect.y < renderer->originalWindowHeight &&
 			newRect.y >= 0 - newRect.h)
 			renderer->drawRect(newRect, 0, 200, 200);
 	}
@@ -791,7 +798,7 @@ void SKO_MapEditor::Manager::graphics()
 	renderer->startDraw();
 
 	// Draw map, tiles, etc
-	DrawGameScene();
+	DrawGameScene((int)this->camera_x, (int)this->camera_y);
 
 	// Draw Map Editor Gui
 	DrawGui();

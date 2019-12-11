@@ -288,7 +288,7 @@ void SKO_Map::Reader::loadStalls(SKO_Map::Map * map, INIReader mapIni)
 		std::string stallStr = ss1.str();
 
 		SKO_Stall * stall = new SKO_Stall();
-		stall->type = mapIni.GetInteger(stallStr, "shopId", 0);
+		stall->type = mapIni.Get(stallStr, "shopId", "bank");// TODO separate out into content file: shops.ini
 		stall->x = mapIni.GetInteger(stallStr, "x", 0);
 		stall->y = mapIni.GetInteger(stallStr, "y", 0);
 		stall->w = mapIni.GetInteger(stallStr, "w", 0);
@@ -375,7 +375,7 @@ void SKO_Map::Reader::loadNpcs(SKO_Map::Map * map, INIReader mapIni)
 		npc->sprite = mapIni.GetInteger(targetStr, "sprite", 0);
 		npc->x = npc->spawn_x = mapIni.GetInteger(targetStr, "x", 0);
 		npc->y = npc->spawn_y = mapIni.GetInteger(targetStr, "y", 0);
-		npc->finalPage = mapIni.GetInteger(targetStr, "final", 0); // TODO change `final` to not match C++11 keyword `final`
+		npc->finalPage = mapIni.Get(targetStr, "final", "");
 		int num_pages = mapIni.GetInteger(targetStr, "pages", 0);
 		npc->quest = mapIni.GetInteger(targetStr, "quest", -1); //-1 for non quest NPCs
 
