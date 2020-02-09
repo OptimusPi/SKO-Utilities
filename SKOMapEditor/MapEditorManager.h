@@ -51,9 +51,9 @@ namespace SKO_MapEditor
 		SKO_Map::Reader * mapReader;
 		float camera_x = 0, camera_y = 0;
 		int cursor_x = 0, cursor_y = 0;
-		int current_tile = 0;
-		int current_rect = 0;
-		int current_fringe = 0;
+		int current_tile = -1;
+		int current_rect = -1;
+		int current_fringe = -1;
 		int current_tile_img = 0;
 		int num_tile_images = 0;
 		int collision_ox = 0;

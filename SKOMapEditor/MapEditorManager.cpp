@@ -45,6 +45,7 @@ void SKO_MapEditor::Manager::cleanupInvisibleRects(SKO_Map::Map *map)
 	//Delete any collision rectangles that are too small.
 	for (int i = 0; i < map->collisionRects.size(); i++)
 	{
+		// If rect is nearly invisible, remove it
 		if (map->collisionRects[i].h < 3 && map->collisionRects[i].w < 3)
 		{
 			current_rect--;
@@ -56,6 +57,9 @@ void SKO_MapEditor::Manager::cleanupInvisibleRects(SKO_Map::Map *map)
 	{
 		map->collisionRects.erase(map->collisionRects.begin() + invisibleRectIds[i]);
 	}
+
+	// set current rect to last rect in list
+	current_rect = map->collisionRects.size() - 1;
 }
 
 void SKO_MapEditor::Manager::removeDuplicateTiles(std::vector<SKO_Map::Tile*> *tiles)
@@ -360,7 +364,7 @@ void SKO_MapEditor::Manager::HandleInput()
 
 				if (mode == TOGGLE_TEST)
 					y_speed = -6;
-				if (mode == COLLISION_DRAW && current_rect > 0)
+				if (mode == COLLISION_DRAW && current_rect >= 0)
 				{
 					if (map->collisionRects[current_rect - 1].y > 0)
 					{
@@ -382,7 +386,7 @@ void SKO_MapEditor::Manager::HandleInput()
 
 				LEFT = true;
 
-				if (mode == COLLISION_DRAW && current_rect > 0)
+				if (mode == COLLISION_DRAW && current_rect >= 0)
 				{
 					if (map->collisionRects[current_rect - 1].x > 0)
 					{
@@ -397,7 +401,7 @@ void SKO_MapEditor::Manager::HandleInput()
 				if (current_fringe > 0 && mode == TILE_DRAW && fringe_mode)
 					map->fringeTiles[current_fringe - 1]->y++;
 
-				if (mode == COLLISION_DRAW && current_rect > 0)
+				if (mode == COLLISION_DRAW && current_rect >= 0)
 				{
 					map->collisionRects[current_rect - 1].y++;
 					map->collisionRects[current_rect - 1].h--;
@@ -413,7 +417,7 @@ void SKO_MapEditor::Manager::HandleInput()
 
 				RIGHT = true;
 
-				if (mode == COLLISION_DRAW && current_rect > 0)
+				if (mode == COLLISION_DRAW && current_rect >= 0)
 				{
 					map->collisionRects[current_rect - 1].x++;
 					map->collisionRects[current_rect - 1].w--;
@@ -422,7 +426,7 @@ void SKO_MapEditor::Manager::HandleInput()
 
 				//smaller rects
 			case 'i':
-				if (mode == COLLISION_DRAW && current_rect > 0)
+				if (mode == COLLISION_DRAW && current_rect >= 0)
 				{
 					if (map->collisionRects[current_rect - 1].h > 0)
 					{
@@ -431,7 +435,7 @@ void SKO_MapEditor::Manager::HandleInput()
 				}
 				break;
 			case 'j':
-				if (mode == COLLISION_DRAW && current_rect > 0)
+				if (mode == COLLISION_DRAW && current_rect >= 0)
 				{
 					if (map->collisionRects[current_rect - 1].w > 0)
 					{
@@ -440,13 +444,13 @@ void SKO_MapEditor::Manager::HandleInput()
 				}
 				break;
 			case 'k':
-				if (mode == COLLISION_DRAW && current_rect > 0)
+				if (mode == COLLISION_DRAW && current_rect >= 0)
 				{
 					map->collisionRects[current_rect - 1].h++;
 				}
 				break;
 			case 'l':
-				if (mode == COLLISION_DRAW && current_rect > 0)
+				if (mode == COLLISION_DRAW && current_rect >= 0)
 				{
 					map->collisionRects[current_rect - 1].w++;
 				}
@@ -478,7 +482,7 @@ void SKO_MapEditor::Manager::HandleInput()
 				break;
 
 			//draw the almost done rect
-			if (mode == COLLISION_DRAW && LCLICK)
+			if (mode == COLLISION_DRAW && current_rect >= 0 && LCLICK)
 			{
 				//variables for easy determining
 				int cx = cursor_x + (int)camera_x;
@@ -525,6 +529,7 @@ void SKO_MapEditor::Manager::HandleInput()
 				{
 					map->backgroundTiles[current_tile]->x = (int)(cursor_x + camera_x) / 32 * 32;
 					map->backgroundTiles[current_tile]->y = (int)(cursor_y + camera_y) / 32 * 32;
+
 				}
 				else
 				{
@@ -708,20 +713,18 @@ void SKO_MapEditor::Manager::HandleInput()
 						//go to the next tile
 						current_tile++;
 
-						map->backgroundTiles[current_tile]->x = (int)(cursor_x + (int)camera_x) / 32 * 32;
-						map->backgroundTiles[current_tile]->y = (int)(cursor_y + (int)camera_y) / 32 * 32;
-						map->backgroundTiles[current_tile]->tileId = current_tile_img;
-
+						int x = (int)(cursor_x + (int)camera_x) / 32 * 32;
+						int y = (int)(cursor_y + (int)camera_y) / 32 * 32;
+						map->backgroundTiles.push_back(new SKO_Map::Tile(x, y, current_tile_img));
 						
 						placing_tile = false;
 					}
 					else
 					{
-
 						current_fringe++;
-						map->fringeTiles[current_fringe]->x = (int)(cursor_x + (int)camera_x) / 32 * 32;
-						map->fringeTiles[current_fringe]->y = (int)(cursor_y + (int)camera_y) / 32 * 32;
-						map->fringeTiles[current_fringe]->tileId = current_tile_img;
+						int x = (int)(cursor_x + (int)camera_x) / 32 * 32;
+						int y = (int)(cursor_y + (int)camera_y) / 32 * 32;
+						map->fringeTiles.push_back(new SKO_Map::Tile(x, y, current_tile_img));
 
 						//go to the next tile
 						placing_fringe = false;
