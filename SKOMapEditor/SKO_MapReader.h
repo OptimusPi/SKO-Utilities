@@ -11,12 +11,11 @@ namespace SKO_Map
 	class Reader
 	{
 	public:
-		Reader(std::string directoryLocation, std::string fileExtension = ".ini");
+		Reader(std::string directoryLocation);
 		virtual ~Reader();
 		
 		SKO_Map::Map *loadMap(std::string mapFile);
 		std::string fileLocation;
-		std::string fileExtension;
 	private:
 		// Load dimensions and graphics
 		void loadBackgroundTiles(SKO_Map::Map * map, INIReader mapIni);

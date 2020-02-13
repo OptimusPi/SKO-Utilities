@@ -6,7 +6,7 @@
 #include "FontManager.h"
 
 
-SKO_Map::Reader::Reader(std::string fileLocation, std::string fileExtension)
+SKO_Map::Reader::Reader(std::string fileLocation)
 {
 	if (fileLocation.find_last_of("/") == fileLocation.length() - 1)
 	{
@@ -18,8 +18,6 @@ SKO_Map::Reader::Reader(std::string fileLocation, std::string fileExtension)
 		// Else add slash to end of file location
 		this->fileLocation = fileLocation + "/";
 	}
-
-	this->fileExtension = fileExtension;
 }
 SKO_Map::Reader::~Reader()
 {
@@ -33,7 +31,7 @@ SKO_Map::Map * SKO_Map::Reader::loadMap(std::string fileName)
 	//		fileLocation for this class is: "MAP/"
 	//		fileName for this function call is: "map0"
 	//		filePath will be "MAP/map0.map.ini"
-	std::string filePath = this->fileLocation + fileName + fileExtension;
+	std::string filePath = this->fileLocation + fileName;
 
 	// Open the file to read
 	INIReader mapIni(filePath);
@@ -42,6 +40,8 @@ SKO_Map::Map * SKO_Map::Reader::loadMap(std::string fileName)
 		std::string error = "Failed to load INI file: " + filePath;
 		throw new std::ios_base::failure(error);
 	}
+
+	map->filePath = filePath;
 
 	loadBackgroundTiles(map, mapIni); // TODO fix with new format, it doesnt match other objects
 	loadFringeTiles(map, mapIni); // TODO fix with new format, it doesnt match other objects
@@ -67,18 +67,13 @@ void SKO_Map::Reader::loadBackgroundTiles(SKO_Map::Map * map, INIReader mapIni)
 
 	for (int i = 0; i < num_background_tiles; i++)
 	{
-		std::stringstream sspawn_x;
-		sspawn_x << "background_tile_x_" << i;
-		
-		std::stringstream sspawn_y;
-		sspawn_y << "background_tile_y_" << i;
+		std::stringstream section;
+		section << "background_tile" << i;
 
-		std::stringstream ssid;
-		ssid << "background_tile_id_" << i;
 
-		int x = mapIni.GetInteger("background_tiles", sspawn_x.str(), 0);
-		int y = mapIni.GetInteger("background_tiles", sspawn_y.str(), 0);
-		int id = mapIni.GetInteger("background_tiles", ssid.str(), 0);
+		int x = mapIni.GetInteger(section.str(), "x", 0);
+		int y = mapIni.GetInteger(section.str(), "y", 0);
+		int id = mapIni.GetInteger(section.str(), "tile_id", 0);
 
 		// Add background tile to map collection
 		SKO_Map::Tile *backgroundTile = new SKO_Map::Tile(x, y, id);
@@ -95,13 +90,13 @@ void SKO_Map::Reader::loadFringeTiles(SKO_Map::Map * map, INIReader mapIni)
 	for (int i = 0; i < num_fringe_tiles; i++)
 	{
 		std::stringstream sspawn_x;
-		sspawn_x << "fringe_tile_x_" << i;
+		sspawn_x << "x" << i;
 
 		std::stringstream sspawn_y;
-		sspawn_y << "fringe_tile_y_" << i;
+		sspawn_y << "y" << i;
 
 		std::stringstream ssid;
-		ssid << "fringe_tile_id_" << i;
+		ssid << "tile_id" << i;
 
 		int x = mapIni.GetInteger("fringe_tiles", sspawn_x.str(),  0);
 		int y = mapIni.GetInteger("fringe_tiles", sspawn_y.str(),  0);

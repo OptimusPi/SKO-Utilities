@@ -123,6 +123,7 @@ void SKO_MapEditor::Manager::loadMap(std::string fileName)
 	// Load map
 	this->map = this->mapReader->loadMap(fileName);
 
+	// TODO enable this if needed
 	// Edge case where accidental small rectangles are leftover, clean these up
 	//SKO_MapEditor::Manager::cleanupInvisibleRects(this->map);
 	// Remove tiles that are the same tileID and same X and same Y values
@@ -358,18 +359,18 @@ void SKO_MapEditor::Manager::HandleInput()
 
 			case 'w':
 				if (current_tile > 0 && mode == TILE_DRAW && !fringe_mode)
-					map->backgroundTiles[current_tile - 1]->x--;
+					map->backgroundTiles[current_tile]->x--;
 				if (current_fringe > 0 && mode == TILE_DRAW && fringe_mode)
-					map->fringeTiles[current_fringe - 1]->x--;
+					map->fringeTiles[current_fringe]->x--;
 
 				if (mode == TOGGLE_TEST)
 					y_speed = -6;
 				if (mode == COLLISION_DRAW && current_rect >= 0)
 				{
-					if (map->collisionRects[current_rect - 1].y > 0)
+					if (map->collisionRects[current_rect].y > 0)
 					{
-						map->collisionRects[current_rect - 1].y--;
-						map->collisionRects[current_rect - 1].w++;
+						map->collisionRects[current_rect].y--;
+						map->collisionRects[current_rect].w++;
 					}
 				}
 				break;
@@ -377,50 +378,50 @@ void SKO_MapEditor::Manager::HandleInput()
 
 				if (current_tile > 0 && mode == TILE_DRAW && !fringe_mode)
 				{
-					map->backgroundTiles[current_tile - 1]->x--;
+					map->backgroundTiles[current_tile]->x--;
 				}
 				if (current_fringe > 0 && mode == TILE_DRAW && fringe_mode)
 				{
-					map->fringeTiles[current_fringe - 1]->x--;
+					map->fringeTiles[current_fringe]->x--;
 				}
 
 				LEFT = true;
 
 				if (mode == COLLISION_DRAW && current_rect >= 0)
 				{
-					if (map->collisionRects[current_rect - 1].x > 0)
+					if (map->collisionRects[current_rect].x > 0)
 					{
-						map->collisionRects[current_rect - 1].x--;
-						map->collisionRects[current_rect - 1].w++;
+						map->collisionRects[current_rect].x--;
+						map->collisionRects[current_rect].w++;
 					}
 				}
 				break;
 			case 's':
 				if (current_tile > 0 && mode == TILE_DRAW && !fringe_mode)
-					map->backgroundTiles[current_tile - 1]->y++;
+					map->backgroundTiles[current_tile]->y++;
 				if (current_fringe > 0 && mode == TILE_DRAW && fringe_mode)
-					map->fringeTiles[current_fringe - 1]->y++;
+					map->fringeTiles[current_fringe]->y++;
 
 				if (mode == COLLISION_DRAW && current_rect >= 0)
 				{
-					map->collisionRects[current_rect - 1].y++;
-					map->collisionRects[current_rect - 1].h--;
+					map->collisionRects[current_rect].y++;
+					map->collisionRects[current_rect].h--;
 				}
 
 				break;
 			case 'd':
 
 				if (current_tile > 0 && mode == TILE_DRAW && !fringe_mode)
-					map->backgroundTiles[current_tile - 1]->x++;
+					map->backgroundTiles[current_tile]->x++;
 				if (current_fringe > 0 && mode == TILE_DRAW && fringe_mode)
-					map->fringeTiles[current_fringe - 1]->x++;
+					map->fringeTiles[current_fringe]->x++;
 
 				RIGHT = true;
 
 				if (mode == COLLISION_DRAW && current_rect >= 0)
 				{
-					map->collisionRects[current_rect - 1].x++;
-					map->collisionRects[current_rect - 1].w--;
+					map->collisionRects[current_rect].x++;
+					map->collisionRects[current_rect].w--;
 				}
 				break;
 
@@ -428,31 +429,31 @@ void SKO_MapEditor::Manager::HandleInput()
 			case 'i':
 				if (mode == COLLISION_DRAW && current_rect >= 0)
 				{
-					if (map->collisionRects[current_rect - 1].h > 0)
+					if (map->collisionRects[current_rect].h > 0)
 					{
-						map->collisionRects[current_rect - 1].h--;
+						map->collisionRects[current_rect].h--;
 					}
 				}
 				break;
 			case 'j':
 				if (mode == COLLISION_DRAW && current_rect >= 0)
 				{
-					if (map->collisionRects[current_rect - 1].w > 0)
+					if (map->collisionRects[current_rect].w > 0)
 					{
-						map->collisionRects[current_rect - 1].w--;
+						map->collisionRects[current_rect].w--;
 					}
 				}
 				break;
 			case 'k':
 				if (mode == COLLISION_DRAW && current_rect >= 0)
 				{
-					map->collisionRects[current_rect - 1].h++;
+					map->collisionRects[current_rect].h++;
 				}
 				break;
 			case 'l':
 				if (mode == COLLISION_DRAW && current_rect >= 0)
 				{
-					map->collisionRects[current_rect - 1].w++;
+					map->collisionRects[current_rect].w++;
 				}
 				break;
 
@@ -525,13 +526,13 @@ void SKO_MapEditor::Manager::HandleInput()
 			}
 			if (mode == TILE_DRAW && LCLICK)
 			{
-				if (!fringe_mode)
+				if (!fringe_mode && current_tile >= 0)
 				{
 					map->backgroundTiles[current_tile]->x = (int)(cursor_x + camera_x) / 32 * 32;
 					map->backgroundTiles[current_tile]->y = (int)(cursor_y + camera_y) / 32 * 32;
 
 				}
-				else
+				else if (current_fringe)
 				{
 					map->fringeTiles[current_fringe]->x = (int)(cursor_x + camera_x) / 32 * 32;
 					map->fringeTiles[current_fringe]->y = (int)(cursor_y + camera_y) / 32 * 32;

@@ -3,7 +3,7 @@
 void SKO_Map::Writer::saveMap(SKO_Map::Map * map)
 {
 	// Open the output, overwriting the entire file.
-	std::ofstream *file = new std::ofstream(map->filePath + ".2.ini");
+	std::ofstream* file = new std::ofstream(map->filePath); // TODO - remove this, tempoorarily being used to convert old maps to new format... +".2.ini");
 
 	// Save map header and count
 	saveMetaData(map, file);
