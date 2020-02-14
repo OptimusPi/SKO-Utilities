@@ -300,7 +300,7 @@ void SKO_Map::Reader::loadShops(SKO_Map::Map * map, INIReader mapIni)
 	printf("num_shops is %i\n", num_shops);
 
 	// Why does this for loop use <= num_shops? Because shop0 doesn't ever exist; it refers to the bank.
-	for (int i = 0; i <= num_shops; i++)
+	for (int i = 0; i < num_shops; i++)
 	{
 		SKO_Shop *shop = new SKO_Shop();
 		std::stringstream ss1;

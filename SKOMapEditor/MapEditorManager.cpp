@@ -631,8 +631,10 @@ void SKO_MapEditor::Manager::HandleInput()
 					}
 				}
 			}
-							break;
+			break;
 
+
+			// TODO separate all these giant switch statements please
 			case COLLISION_DRAW: {
 
 				current_rect++;
