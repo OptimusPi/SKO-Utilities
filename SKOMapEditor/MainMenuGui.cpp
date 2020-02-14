@@ -42,63 +42,65 @@ void MainMenuGui::setupHotBar()
 
 	
 	// Create the 8 main menu buttons with actions
-	auto *buttonAddTile = new OPI_Gui::Button("addTile", 64 * 0, 16);
-	buttonAddTile->isToggle = true;
-	buttonAddTile->addCallback([this]() {
-		setEditorMode(TILE_DRAW);
-	});
-	auto *buttonDeleteTile = new OPI_Gui::Button("deleteTile", 64 * 1, 16);
-	buttonDeleteTile->isToggle = true;
-	buttonDeleteTile->addCallback([this]() {
-		setEditorMode(TILE_DELETE);
-	});
-	auto *buttonToggleFringe = new OPI_Gui::Button("toggleFringe", 64 * 2, 16);
+	auto* buttonToggleFringe = new OPI_Gui::Button("toggleFringe", 64 * 0, 16);
 	buttonToggleFringe->isToggle = true;
 	buttonToggleFringe->addCallback([this]() {
 		toggleEditorFringe();
 	});
-	auto *buttonAddCollision = new OPI_Gui::Button("addCollision", 64 * 3, 16);
-	buttonAddCollision->isToggle = true;
-	buttonAddCollision->addCallback([this]() {
-		setEditorMode(COLLISION_DRAW);
+	auto *buttonAddTile = new OPI_Gui::Button("addTile", 64 * 1, 16);
+	buttonAddTile->isToggle = true;
+	buttonAddTile->addCallback([this]() {
+		setEditorMode(TILE_DRAW);
 	});
-	auto *buttonDeleteCollision = new OPI_Gui::Button("deleteCollision", 64 * 4, 16);
-	buttonDeleteCollision->isToggle = true;
-	buttonDeleteCollision->addCallback([this]() {
-		setEditorMode(COLLISION_DELETE);
-	});
-	auto *buttonToggleTest = new OPI_Gui::Button("toggleTest", 64 * 5, 16);
-	buttonToggleTest->isToggle = true;
-	buttonToggleTest->addCallback([this]() {
-		setEditorMode(TOGGLE_TEST);
-	});
-	auto *buttonEditTile = new OPI_Gui::Button("editTile", 64 * 6, 16);
+	auto* buttonEditTile = new OPI_Gui::Button("editTile", 64 * 2, 16);
 	buttonEditTile->isToggle = true;
 	buttonEditTile->addCallback([this]() {
 		setEditorMode(EDIT_TILE);
 	});
-	auto *buttonEditCollision = new OPI_Gui::Button("editCollision", 64 * 7, 16);
+	auto *buttonDeleteTile = new OPI_Gui::Button("deleteTile", 64 * 3, 16);
+	buttonDeleteTile->isToggle = true;
+	buttonDeleteTile->addCallback([this]() {
+		setEditorMode(TILE_DELETE);
+	});
+
+	auto *buttonAddCollision = new OPI_Gui::Button("addCollision", 64 * 4, 16);
+	buttonAddCollision->isToggle = true;
+	buttonAddCollision->addCallback([this]() {
+		setEditorMode(COLLISION_DRAW);
+	});
+	auto* buttonEditCollision = new OPI_Gui::Button("editCollision", 64 * 5, 16);
 	buttonEditCollision->isToggle = true;
 	buttonEditCollision->addCallback([this]() {
 		setEditorMode(EDIT_COLLISION);
+		});
+	auto *buttonDeleteCollision = new OPI_Gui::Button("deleteCollision", 64 * 6, 16);
+	buttonDeleteCollision->isToggle = true;
+	buttonDeleteCollision->addCallback([this]() {
+		setEditorMode(COLLISION_DELETE);
+	});
+	auto *buttonToggleTest = new OPI_Gui::Button("toggleTest", 64 * 7, 16);
+	buttonToggleTest->isToggle = true;
+	buttonToggleTest->addCallback([this]() {
+		setEditorMode(TOGGLE_TEST);
 	});
 	auto *buttonSave = new OPI_Gui::Button("save", 64 * 8, 16);
 	buttonSave->addCallback([this]() {
 		saveMap();
 	});
 
-
+   
 	// Consider these buttons as radio button group
-	new OPI_Gui::ButtonToggleGroup({ buttonAddTile, buttonDeleteTile, buttonEditTile });
+	new OPI_Gui::ButtonToggleGroup({ buttonAddTile, buttonDeleteTile, buttonEditTile, buttonAddCollision, buttonDeleteCollision, buttonEditCollision });
 
 	// Add the 8 buttons to the hotbar panel
-	hotbarPanel->addElement(buttonAddTile);
-	hotbarPanel->addElement(buttonDeleteTile);
 	hotbarPanel->addElement(buttonToggleFringe);
+	hotbarPanel->addElement(buttonAddTile);
+	hotbarPanel->addElement(buttonEditTile);
+	hotbarPanel->addElement(buttonDeleteTile);
+
 	hotbarPanel->addElement(buttonAddCollision);
 	hotbarPanel->addElement(buttonDeleteCollision);
 	hotbarPanel->addElement(buttonToggleTest);
-	hotbarPanel->addElement(buttonEditTile);
 	hotbarPanel->addElement(buttonEditCollision);
 	hotbarPanel->addElement(buttonSave);
 

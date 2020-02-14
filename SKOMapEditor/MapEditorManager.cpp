@@ -559,6 +559,8 @@ void SKO_MapEditor::Manager::HandleInput()
 			case TILE_DRAW:
 				if (!fringe_mode)
 				{
+					current_tile++;
+
 					if (!placing_tile)
 					{
 						placing_tile = true;
@@ -571,6 +573,8 @@ void SKO_MapEditor::Manager::HandleInput()
 				}
 				else
 				{
+					current_fringe++;
+
 					if (!placing_fringe)
 					{
 						placing_fringe = true;
@@ -593,15 +597,15 @@ void SKO_MapEditor::Manager::HandleInput()
 					int at = -1;
 					for (i = 0; i <= current_tile; i++)
 					{
-						if (x > map->backgroundTiles[i]->x && x < map->backgroundTiles[i]->x + tile_img[map->backgroundTiles[i]->tileId].width &&
-							y > map->backgroundTiles[i]->y && y < map->backgroundTiles[i]->y + tile_img[map->backgroundTiles[i]->tileId].height)
+						if (x > map->backgroundTiles[i]->x&& x < map->backgroundTiles[i]->x + tile_img[map->backgroundTiles[i]->tileId].width &&
+							y > map->backgroundTiles[i]->y&& y < map->backgroundTiles[i]->y + tile_img[map->backgroundTiles[i]->tileId].height)
 						{
 							at = i;
 							break;
 						}
 					}
 
-					if (at >= 0) 
+					if (at >= 0)
 					{
 						map->backgroundTiles.erase(map->backgroundTiles.begin() + at);
 						current_tile--;
@@ -612,8 +616,8 @@ void SKO_MapEditor::Manager::HandleInput()
 					int at = -1;
 					for (i = 0; i <= current_fringe; i++)
 					{
-						if (x > map->fringeTiles[i]->x && x < map->fringeTiles[i]->x + tile_img[map->fringeTiles[i]->tileId].width &&
-							y > map->fringeTiles[i]->y && y < map->fringeTiles[i]->y + tile_img[map->fringeTiles[i]->tileId].height)
+						if (x > map->fringeTiles[i]->x&& x < map->fringeTiles[i]->x + tile_img[map->fringeTiles[i]->tileId].width &&
+							y > map->fringeTiles[i]->y&& y < map->fringeTiles[i]->y + tile_img[map->fringeTiles[i]->tileId].height)
 						{
 							at = i;
 							break;
@@ -627,9 +631,9 @@ void SKO_MapEditor::Manager::HandleInput()
 					}
 				}
 			}
-			break;
+							break;
 
-			case COLLISION_DRAW:
+			case COLLISION_DRAW: {
 
 				current_rect++;
 
@@ -648,7 +652,7 @@ void SKO_MapEditor::Manager::HandleInput()
 				newRect.h = 0;
 				map->collisionRects.push_back(newRect);
 				break;
-
+			}
 			case COLLISION_DELETE: {
 				//find a collision to delete
 				int i;
@@ -711,23 +715,10 @@ void SKO_MapEditor::Manager::HandleInput()
 				case TILE_DRAW:
 					if (!fringe_mode)
 					{
-						//go to the next tile
-						current_tile++;
-
-						int x = (int)(cursor_x + (int)camera_x) / 32 * 32;
-						int y = (int)(cursor_y + (int)camera_y) / 32 * 32;
-						map->backgroundTiles.push_back(new SKO_Map::Tile(x, y, current_tile_img));
-						
 						placing_tile = false;
 					}
 					else
 					{
-						current_fringe++;
-						int x = (int)(cursor_x + (int)camera_x) / 32 * 32;
-						int y = (int)(cursor_y + (int)camera_y) / 32 * 32;
-						map->fringeTiles.push_back(new SKO_Map::Tile(x, y, current_tile_img));
-
-						//go to the next tile
 						placing_fringe = false;
 					}
 
