@@ -20,7 +20,7 @@ OPI_Gui::ButtonThemeFactory * OPI_Gui::ButtonThemeFactory::getInstance()
 
 OPI_Gui::ButtonTheme * OPI_Gui::ButtonThemeFactory::GetTheme(OPI_Gui::ElementThemeType type, std::string theme)
 {
-	return 	getInstance()->getTheme(type, theme);
+	return getInstance()->getTheme(type, theme);
 }
 
 OPI_Gui::ButtonTheme * OPI_Gui::ButtonThemeFactory::getTheme(OPI_Gui::ElementThemeType type, std::string theme)
@@ -60,6 +60,7 @@ void OPI_Gui::ButtonThemeFactory::loadTheme_Button(std::string theme)
 	elementThemeButton->textureDisabled = new OPI_Image(path + "disabled.png");
 	elementThemeButton->texturePressed = new OPI_Image(path + "pressed.png");
 	elementThemeButton->textureSelected = new OPI_Image(path + "selected.png");
+	elementThemeButton->title = theme;
 
 	//insert into cache
 	std::string key = generateKey(OPI_Gui::ElementThemeType::Button, theme);

@@ -25,7 +25,9 @@ OPI_Gui::Button::Button(std::string theme, int x, int y, OPI_Text::TextComponent
 	this->height = this->height > this->theme->getMaximumHeight() && this->theme->getMaximumHeight() > 0 ? this->theme->getMinimumHeight() : this->height;
 	this->theme->render(this);
 
-
+	this->text = text;
+	this->texture = nullptr;
+	this->toggleGroup = nullptr;
 	auto buttonText = text;
 	int buttonTextX = (this->theme->getMinimumWidth() - buttonText->contentRender.width) / 2;
 	int buttonTextY = (this->theme->getMinimumHeight() - buttonText->contentRender.height) / 2;

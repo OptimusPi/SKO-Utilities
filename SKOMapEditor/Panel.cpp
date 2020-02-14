@@ -160,6 +160,10 @@ bool OPI_Gui::Panel::handleSection_Close(int mouseX, int mouseY)
 
 bool OPI_Gui::Panel::handleMouseMove(int mouseX, int mouseY)
 {
+	// First check if mouse input is inside this Panel
+	bool panelContainsMouse = containsMouse(mouseX, mouseY, this->x, this->y, this->width, this->height);
+
+
 	//handle child mouse presses first
 	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
 	{
@@ -182,7 +186,7 @@ bool OPI_Gui::Panel::handleMouseMove(int mouseX, int mouseY)
 		return true;
 	}
 
-	return false;
+	return panelContainsMouse;
 }
 
 bool OPI_Gui::Panel::handleMousePressLeft(int mouseX, int mouseY)

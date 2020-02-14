@@ -532,7 +532,7 @@ void SKO_MapEditor::Manager::HandleInput()
 					map->backgroundTiles[current_tile]->y = (int)(cursor_y + camera_y) / 32 * 32;
 
 				}
-				else if (current_fringe)
+				else if (current_fringe && current_fringe >= 0)
 				{
 					map->fringeTiles[current_fringe]->x = (int)(cursor_x + camera_x) / 32 * 32;
 					map->fringeTiles[current_fringe]->y = (int)(cursor_y + camera_y) / 32 * 32;
@@ -591,7 +591,7 @@ void SKO_MapEditor::Manager::HandleInput()
 				if (!fringe_mode)
 				{
 					int at = -1;
-					for (i = 0; i < current_tile; i++)
+					for (i = 0; i <= current_tile; i++)
 					{
 						if (x > map->backgroundTiles[i]->x && x < map->backgroundTiles[i]->x + tile_img[map->backgroundTiles[i]->tileId].width &&
 							y > map->backgroundTiles[i]->y && y < map->backgroundTiles[i]->y + tile_img[map->backgroundTiles[i]->tileId].height)
@@ -610,7 +610,7 @@ void SKO_MapEditor::Manager::HandleInput()
 				else
 				{
 					int at = -1;
-					for (i = 0; i < current_fringe; i++)
+					for (i = 0; i <= current_fringe; i++)
 					{
 						if (x > map->fringeTiles[i]->x && x < map->fringeTiles[i]->x + tile_img[map->fringeTiles[i]->tileId].width &&
 							y > map->fringeTiles[i]->y && y < map->fringeTiles[i]->y + tile_img[map->fringeTiles[i]->tileId].height)
@@ -655,7 +655,7 @@ void SKO_MapEditor::Manager::HandleInput()
 				int x = cursor_x + camera_x;
 				int y = cursor_y + camera_y;
 				int at = -1;
-				for (i = 0; i < current_rect; i++)
+				for (i = 0; i <= current_rect; i++)
 				{
 					if (x > map->collisionRects[i].x && x < map->collisionRects[i].x + map->collisionRects[i].w &&
 						y > map->collisionRects[i].y && y < map->collisionRects[i].y + map->collisionRects[i].h)

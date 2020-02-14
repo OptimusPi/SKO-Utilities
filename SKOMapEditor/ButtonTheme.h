@@ -3,7 +3,6 @@
 
 #include "OPI_Image.h"
 
-
 namespace OPI_Gui
 {
 	class Button;
@@ -22,6 +21,7 @@ namespace OPI_Gui
 		OPI_Image *textureDisabled;
 		OPI_Image *texturePressed;
 		OPI_Image *textureSelected;
+		std::string title = "";
 	};
 }
 
