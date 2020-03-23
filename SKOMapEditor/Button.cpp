@@ -27,7 +27,6 @@ OPI_Gui::Button::Button(std::string theme, int x, int y, OPI_Text::TextComponent
 
 	this->text = text;
 	this->texture = nullptr;
-	this->toggleGroup = nullptr;
 	auto buttonText = text;
 	int buttonTextX = (this->theme->getMinimumWidth() - buttonText->contentRender.width) / 2;
 	int buttonTextY = (this->theme->getMinimumHeight() - buttonText->contentRender.height) / 2;
@@ -103,9 +102,9 @@ bool OPI_Gui::Button::handleMousePressLeft(int mouseX, int mouseY)
 			this->isToggleOn = !this->isToggleOn;
 
 			// Process the entire group, if this is to be treated like a radio button.
-			if (this->toggleGroup != nullptr)
+			for (auto toggleGroup : this->toggleGroups)
 			{
-				this->toggleGroup->processToggle(this);
+				toggleGroup->processToggle(this);
 			}
 		}
 

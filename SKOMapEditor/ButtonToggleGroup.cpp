@@ -36,5 +36,5 @@ void OPI_Gui::ButtonToggleGroup::addButton(Button * button)
 
 	// Add the button toggle group to the button elemnt.
 	// That way, it can ask the group to process the toggle graphic without worrying about it.
-	button->toggleGroup = this;
+	button->toggleGroups.push_back(this);
 }

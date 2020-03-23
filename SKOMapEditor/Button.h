@@ -31,7 +31,7 @@ namespace OPI_Gui
 		bool isEnabled = true;
 		bool isToggle = false;
 		bool isToggleOn = false;
-		ButtonToggleGroup *toggleGroup;
+		std::vector<ButtonToggleGroup*> toggleGroups;
 		void toggleOff();
 
 		// Input handlers

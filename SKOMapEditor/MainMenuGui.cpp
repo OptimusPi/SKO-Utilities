@@ -91,6 +91,8 @@ void MainMenuGui::setupHotBar()
    
 	// Consider these buttons as radio button group
 	new OPI_Gui::ButtonToggleGroup({ buttonAddTile, buttonDeleteTile, buttonEditTile, buttonAddCollision, buttonDeleteCollision, buttonEditCollision });
+	new OPI_Gui::ButtonToggleGroup({ buttonToggleFringe, buttonAddCollision, buttonDeleteCollision, buttonEditCollision });
+
 
 	// Add the 8 buttons to the hotbar panel
 	hotbarPanel->addElement(buttonToggleFringe);
