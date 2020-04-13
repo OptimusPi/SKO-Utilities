@@ -43,6 +43,10 @@ namespace SKO_MapEditor
 		// Process logic loop
 		void processLoop();
 
+		// Load map editor images such as tilesets, stickman, background
+		void loadImages();
+		void loadTilesets();
+
 	private:
 		SDL_Event event;
 		MainMenuGui *mainMenuGui;

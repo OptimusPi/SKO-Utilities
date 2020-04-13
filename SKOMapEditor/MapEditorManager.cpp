@@ -10,26 +10,7 @@ SKO_MapEditor::Manager::Manager(OPI_Renderer * renderer, MainMenuGui *mainMenuGu
 	this->gui = OPI_Gui::GuiManager::getInstance();
 	this->map = new SKO_Map::Map();
 	this->mapReader = mapReader;
-
-	// Load tiles and images
-	background.setImage("IMG/back.png");
-	stickman_img.setImage("IMG/stickman.png");
-
-	// Load tileset
-	for (int i = 0; i < 256; i++)//check if file exists, etc.
-	{
-		std::stringstream ss;
-		ss << "IMG/TILE/tile" << i << ".png";
-		std::ifstream checker(ss.str());
-		if (checker.is_open())
-		{
-			checker.close();
-			tile_img[i].setImage(ss.str());
-			num_tile_images = i;
-		}
-		else
-			break;
-	}
+	this->loadImages();
 }
 
 SKO_MapEditor::Manager::~Manager()
@@ -37,6 +18,31 @@ SKO_MapEditor::Manager::~Manager()
 
 }
  
+void SKO_MapEditor::Manager::loadImages()
+{
+	this->background.setImage("IMG/back.png");
+	this->stickman_img.setImage("IMG/stickman.png");
+
+	// load tilesets
+
+	//// Load tileset
+	//for (int i = 0; i < 256; i++)//check if file exists, etc.
+	//{
+	//	std::stringstream ss;
+	//	ss << "IMG/TILE/tile" << i << ".png";
+	//	std::ifstream checker(ss.str());
+	//	if (checker.is_open())
+	//	{
+	//		checker.close();
+	//		tile_img[i].setImage(ss.str());
+	//		num_tile_images = i;
+	//	}
+	//	else
+	//		break;
+	//}
+}
+
+
 // Clean up useless rectangles (<4x4 pixels) to a SKO_Map in-place.
 void SKO_MapEditor::Manager::cleanupInvisibleRects(SKO_Map::Map *map)
 {
