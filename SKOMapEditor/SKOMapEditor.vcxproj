@@ -187,6 +187,7 @@
     <ClInclude Include="SKO_MapReader.h" />
     <ClInclude Include="SDL_headers.h" />
     <ClInclude Include="SKO_MapTile.h" />
+    <ClInclude Include="SKO_MapTileset.h" />
     <ClInclude Include="SKO_Npc.h" />
     <ClInclude Include="SKO_Portal.h" />
     <ClInclude Include="SKO_Shop.h" />
@@ -227,6 +228,7 @@
     <ClCompile Include="SKO_Map.cpp" />
     <ClCompile Include="SKO_MapReader.cpp" />
     <ClCompile Include="SKO_MapTile.cpp" />
+    <ClCompile Include="SKO_MapTileset.cpp" />
     <ClCompile Include="SKO_Npc.cpp" />
     <ClCompile Include="SKO_Portal.cpp" />
     <ClCompile Include="SKO_Shop.cpp" />

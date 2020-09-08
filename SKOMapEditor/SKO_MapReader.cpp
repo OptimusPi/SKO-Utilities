@@ -55,10 +55,12 @@ SKO_Map::Map * SKO_Map::Reader::loadMap(std::string fileName)
 	loadTargets(map, mapIni); 
 	loadNpcs(map, mapIni);
 
-	// TODO loadNatureEngine();
+	// TODO loadNatureEngine(); // tee hee
 
 	return map;
 }
+
+
 void SKO_Map::Reader::loadBackgroundTiles(SKO_Map::Map * map, INIReader mapIni)
 {
 	// load background tiles
@@ -73,10 +75,14 @@ void SKO_Map::Reader::loadBackgroundTiles(SKO_Map::Map * map, INIReader mapIni)
 
 		int x = mapIni.GetInteger(section.str(), "x", 0);
 		int y = mapIni.GetInteger(section.str(), "y", 0);
-		int id = mapIni.GetInteger(section.str(), "tile_id", 0);
 
+		// TODO gotta Ctrl+H the map files... ugh, but wait I can't because of this: background_tile_id_26 = 5
+		std::string tileset_key = mapIni.Get(section.str(), "tileset_key", "00000000-0000-0000-0000-000000000000");
+		int tileset_row = mapIni.GetInteger(section.str(), "tileset_row", 0);
+		int tileset_column = mapIni.GetInteger(section.str(), "tileset_column", 0);
+		
 		// Add background tile to map collection
-		SKO_Map::Tile *backgroundTile = new SKO_Map::Tile(x, y, id);
+		SKO_Map::Tile *backgroundTile = new SKO_Map::Tile(x, y, tileset_key, tileset_row, tileset_column);
 		map->backgroundTiles.push_back(backgroundTile);
 	}
 }
@@ -103,9 +109,36 @@ void SKO_Map::Reader::loadFringeTiles(SKO_Map::Map * map, INIReader mapIni)
 		int id = mapIni.GetInteger("fringe_tiles", ssid.str(), 0);
 
 		// Add fringe tile to map collection
-		SKO_Map::Tile *fringeTile = new SKO_Map::Tile(x, y, id);
+		SKO_Map::Tile* fringeTile = convertTile(x, y, id);
 		map->fringeTiles.push_back(fringeTile);
 	}
+}
+
+std::string SKO_Map::Reader::convertKey(int id)
+{
+	//TODO make these really work
+	return "8a50c312-a146-460f-8120-fbf352c5a95e";
+}
+
+unsigned int SKO_Map::Reader::convertColumn(int id)
+{
+	//TODO make these really work
+	return 1;
+}
+
+unsigned int SKO_Map::Reader::convertRow(int id)
+{
+	//TODO make these really work
+	return 1;
+}
+
+// TODO - remove this when I'm done with it
+SKO_Map::Tile* SKO_Map::Reader::convertTile(int x, int y, int id)
+{
+	std::string key = convertKey(id);
+	unsigned int row = convertRow(id);
+	unsigned int column = convertColumn(id);
+	return new SKO_Map::Tile(x, y, key, row, column);
 }
 
 void SKO_Map::Reader::loadCollisionRects(SKO_Map::Map * map, INIReader mapIni)

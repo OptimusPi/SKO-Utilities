@@ -47,6 +47,36 @@ SDL_Surface* OPI_Image::copySurface(SDL_Surface *surface)
 	return SDL_CreateRGBSurfaceFrom(surface->pixels, surface->w, surface->h, 32, surface->pitch, rmask, gmask, bmask, amask);
 }
 
+SDL_Surface* OPI_Image::clipSurface(SDL_Surface* surface, unsigned int x, unsigned int y, unsigned int w, unsigned int h)
+{
+	Uint32 rmask, gmask, bmask, amask;
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+	rmask = 0xff000000;
+	gmask = 0x00ff0000;
+	bmask = 0x0000ff00;
+	amask = 0x000000ff;
+#else // little endian, like x86
+	rmask = 0x000000ff;
+	gmask = 0x0000ff00;
+	bmask = 0x00ff0000;
+	amask = 0xff000000;
+#endif
+	SDL_Rect clipArea;
+	clipArea.x = x;
+	clipArea.y = y;
+	clipArea.w = w;
+	clipArea.h = h;
+	
+	// Copy the surface and then set the target clip area.
+	auto copy = OPI_Image::copySurface(surface);
+	SDL_SetClipRect(copy, &clipArea);
+	
+	// Create blank canvas, then blit the clip area onto it.
+	auto canvas = OPI_Image::createBlankSurface(w, h);
+	SDL_BlitSurface(copy, &clipArea, canvas, NULL);
+	return canvas;
+}
+
 SDL_Surface* OPI_Image::tintSurface(SDL_Surface *surface, unsigned int r, unsigned int g, unsigned int b, unsigned int a)
 {
 	auto copy = OPI_Image::copySurface(surface);
@@ -81,20 +111,22 @@ void OPI_Image::setImage(SDL_Surface * surface)
 		printf("ERROR: OPI_Image width not power of two!\n");
 
 	texture = OPI_Image::generateTexture(surface);
+	surface = surface;
 }
 
 void OPI_Image::setImage(std::string path)
 {
 	this->fileLocation = path;
 	SDL_Surface *surface = OPI_Image::getSurface(path);
+	this->surface = surface;
 	setImage(surface);
-	SDL_FreeSurface(surface);
 }
 
 void OPI_Image::setImage(OPI_Image *source)
 {
 	this->fileLocation = source->fileLocation;
 	texture = source->texture;
+	surface = source->surface;
 	width = source->width;
 	height = source->height;
 }

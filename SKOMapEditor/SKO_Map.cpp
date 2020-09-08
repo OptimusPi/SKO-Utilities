@@ -82,7 +82,9 @@ void SKO_Map::Map::saveMap(std::string filePath)
 			MapFile << b1 << b2 << b3 << b4;
 
 			//tile number
-			MapFile << backgroundTiles[i]->tileId;
+			//MapFile << backgroundTiles[i]->tileId;
+			//TODO what?
+			MapFile << 99;
 		}
 
 		//spit out all the tiles
@@ -106,7 +108,9 @@ void SKO_Map::Map::saveMap(std::string filePath)
 			MapFile << b1 << b2 << b3 << b4;
 
 			//fringe number
-			MapFile << fringeTiles[i]->tileId;
+			//MapFile << fringeTiles[i]->tileId;
+			//TODO what?
+			MapFile << 99;
 
 		}
 
@@ -156,181 +160,181 @@ void SKO_Map::Map::saveMap(std::string filePath)
 }
 
 // TODO load from INI
-// DEPRECATED
-void SKO_Map::Map::loadMap(std::string filePath)
-{
-	std::ifstream MapFile(filePath, std::ios::in | std::ios::binary | std::ios::ate);
-	this->filePath = filePath;
-
-	if (MapFile.is_open())
-	{
-		//loading variables
-		std::ifstream::pos_type size;
-		char * memblock;    
-
-		//allocate memory
-		size = MapFile.tellg();
-		memblock = (char *)malloc(size);
-
-		//load the file into memory      
-		MapFile.seekg(0, std::ios::beg); 
-		MapFile.read(memblock, size);    
-		//close file                     
-		MapFile.close();                 
-
-		//hold the result... 
-		unsigned int num;    
-
-		//build an int from 4 bytes
-		((char*)&num)[0] = memblock[0];
-		((char*)&num)[1] = memblock[1];
-		((char*)&num)[2] = memblock[2];
-		((char*)&num)[3] = memblock[3]; 
-
-
-		//store the number into variables
-		int number_of_tiles = num;
-
-		//build an int from 4 bytes
-		((char*)&num)[0] = memblock[4];
-		((char*)&num)[1] = memblock[5];
-		((char*)&num)[2] = memblock[6];
-		((char*)&num)[3] = memblock[7];
-
-		//store the number into variables
-		int number_of_fringe = num;
-
-		//build an int from 4 bytes
-		((char*)&num)[0] = memblock[8];
-		((char*)&num)[1] = memblock[9];
-		((char*)&num)[2] = memblock[10];
-		((char*)&num)[3] = memblock[11];
-
-		//store the number into variables
-		int number_of_rects = num;
-
-
-		//
-		//tiles
-		//
-		int last_i = 11;
-
-		for (int i = 0; i < number_of_tiles; i++)
-		{
-			//9 bytes per tile silly ;)
-
-			//build an int from 4 bytes
-			((char*)&num)[0] = memblock[last_i + 1 + i * 9];
-			((char*)&num)[1] = memblock[last_i + 2 + i * 9];
-			((char*)&num)[2] = memblock[last_i + 3 + i * 9];
-			((char*)&num)[3] = memblock[last_i + 4 + i * 9];
-
-			//store the number into variables
-			int x = num;
-
-			//build an int from 4 bytes
-			((char*)&num)[0] = memblock[last_i + 5 + i * 9];
-			((char*)&num)[1] = memblock[last_i + 6 + i * 9];
-			((char*)&num)[2] = memblock[last_i + 7 + i * 9];
-			((char*)&num)[3] = memblock[last_i + 8 + i * 9];
-
-			//store the number into variables
-			int y = num;
-
-			//store the number into variables
-			int tileId = (unsigned char)memblock[last_i + 9 + i * 9];
-
-			this->backgroundTiles.push_back(new SKO_Map::Tile(x, y, tileId));
-		}
-
-		last_i += number_of_tiles * 9;
-		//
-		//fringe tiles
-		//
-		for (int i = 0; i < number_of_fringe; i++)
-		{
-			//9 bytes per tile silly ;)
-
-			//build an int from 4 bytes
-			((char*)&num)[0] = memblock[last_i + 1 + i * 9];
-			((char*)&num)[1] = memblock[last_i + 2 + i * 9];
-			((char*)&num)[2] = memblock[last_i + 3 + i * 9];
-			((char*)&num)[3] = memblock[last_i + 4 + i * 9];
-
-			//store the number into variables
-			int x = num;
-
-
-			//build an int from 4 bytes
-			((char*)&num)[0] = memblock[last_i + 5 + i * 9];
-			((char*)&num)[1] = memblock[last_i + 6 + i * 9];
-			((char*)&num)[2] = memblock[last_i + 7 + i * 9];
-			((char*)&num)[3] = memblock[last_i + 8 + i * 9];
-
-			//store the number into variables
-			int y = num;
-
-			//store the number into variables
-			int tileId = memblock[last_i + 9 + i * 9];
-
-			this->fringeTiles.push_back(new SKO_Map::Tile(x, y, tileId));
-		}
-		last_i += number_of_fringe * 9;
-		//
-		//rects
-		//
-		for (int i = 0; i < number_of_rects; i++)
-		{
-			//read the map file
-			//build an int from 4 bytes
-			((char*)&num)[0] = memblock[last_i + 1 + i * 16];
-			((char*)&num)[1] = memblock[last_i + 2 + i * 16];
-			((char*)&num)[2] = memblock[last_i + 3 + i * 16];
-			((char*)&num)[3] = memblock[last_i + 4 + i * 16];
-
-			//store the number into variables
-			int x = num;
-
-			//build an int from 4 bytes
-			((char*)&num)[0] = memblock[last_i + 5 + i * 16];
-			((char*)&num)[1] = memblock[last_i + 6 + i * 16];
-			((char*)&num)[2] = memblock[last_i + 7 + i * 16];
-			((char*)&num)[3] = memblock[last_i + 8 + i * 16];
-
-			//store the number into variables
-			int y = num;
-
-			//build an int from 4 bytes
-			((char*)&num)[0] = memblock[last_i + 9  + i * 16];
-			((char*)&num)[1] = memblock[last_i + 10 + i * 16];
-			((char*)&num)[2] = memblock[last_i + 11 + i * 16];
-			((char*)&num)[3] = memblock[last_i + 12 + i * 16];
-
-			//store the number into variables
-			int w = num;
-
-			//build an int from 4 bytes
-			((char*)&num)[0] = memblock[last_i + 13 + i * 16];
-			((char*)&num)[1] = memblock[last_i + 14 + i * 16];
-			((char*)&num)[2] = memblock[last_i + 15 + i * 16];
-			((char*)&num)[3] = memblock[last_i + 16 + i * 16];
-
-
-			//store the number into variables
-			int h = num;
-
-			SDL_Rect newRect;
-			newRect.x = (unsigned short int)x;
-			newRect.y = (unsigned short int)y;
-			newRect.h = (short int)h;
-			newRect.w = (short int)w;
-			this->collisionRects.push_back(newRect);
-		}
-
-		free(memblock);
-	}
-}
-
+//// DEPRECATED
+//void SKO_Map::Map::loadMap(std::string filePath)
+//{
+//	std::ifstream MapFile(filePath, std::ios::in | std::ios::binary | std::ios::ate);
+//	this->filePath = filePath;
+//
+//	if (MapFile.is_open())
+//	{
+//		//loading variables
+//		std::ifstream::pos_type size;
+//		char * memblock;    
+//
+//		//allocate memory
+//		size = MapFile.tellg();
+//		memblock = (char *)malloc(size);
+//
+//		//load the file into memory      
+//		MapFile.seekg(0, std::ios::beg); 
+//		MapFile.read(memblock, size);    
+//		//close file                     
+//		MapFile.close();                 
+//
+//		//hold the result... 
+//		unsigned int num;    
+//
+//		//build an int from 4 bytes
+//		((char*)&num)[0] = memblock[0];
+//		((char*)&num)[1] = memblock[1];
+//		((char*)&num)[2] = memblock[2];
+//		((char*)&num)[3] = memblock[3]; 
+//
+//
+//		//store the number into variables
+//		int number_of_tiles = num;
+//
+//		//build an int from 4 bytes
+//		((char*)&num)[0] = memblock[4];
+//		((char*)&num)[1] = memblock[5];
+//		((char*)&num)[2] = memblock[6];
+//		((char*)&num)[3] = memblock[7];
+//
+//		//store the number into variables
+//		int number_of_fringe = num;
+//
+//		//build an int from 4 bytes
+//		((char*)&num)[0] = memblock[8];
+//		((char*)&num)[1] = memblock[9];
+//		((char*)&num)[2] = memblock[10];
+//		((char*)&num)[3] = memblock[11];
+//
+//		//store the number into variables
+//		int number_of_rects = num;
+//
+//
+//		//
+//		//tiles
+//		//
+//		int last_i = 11;
+//
+//		for (int i = 0; i < number_of_tiles; i++)
+//		{
+//			//9 bytes per tile silly ;)
+//
+//			//build an int from 4 bytes
+//			((char*)&num)[0] = memblock[last_i + 1 + i * 9];
+//			((char*)&num)[1] = memblock[last_i + 2 + i * 9];
+//			((char*)&num)[2] = memblock[last_i + 3 + i * 9];
+//			((char*)&num)[3] = memblock[last_i + 4 + i * 9];
+//
+//			//store the number into variables
+//			int x = num;
+//
+//			//build an int from 4 bytes
+//			((char*)&num)[0] = memblock[last_i + 5 + i * 9];
+//			((char*)&num)[1] = memblock[last_i + 6 + i * 9];
+//			((char*)&num)[2] = memblock[last_i + 7 + i * 9];
+//			((char*)&num)[3] = memblock[last_i + 8 + i * 9];
+//
+//			//store the number into variables
+//			int y = num;
+//
+//			//store the number into variables
+//			int tileId = (unsigned char)memblock[last_i + 9 + i * 9];
+//
+//			this->backgroundTiles.push_back(new SKO_Map::Tile(x, y, tileId));
+//		}
+//
+//		last_i += number_of_tiles * 9;
+//		//
+//		//fringe tiles
+//		//
+//		for (int i = 0; i < number_of_fringe; i++)
+//		{
+//			//9 bytes per tile silly ;)
+//
+//			//build an int from 4 bytes
+//			((char*)&num)[0] = memblock[last_i + 1 + i * 9];
+//			((char*)&num)[1] = memblock[last_i + 2 + i * 9];
+//			((char*)&num)[2] = memblock[last_i + 3 + i * 9];
+//			((char*)&num)[3] = memblock[last_i + 4 + i * 9];
+//
+//			//store the number into variables
+//			int x = num;
+//
+//
+//			//build an int from 4 bytes
+//			((char*)&num)[0] = memblock[last_i + 5 + i * 9];
+//			((char*)&num)[1] = memblock[last_i + 6 + i * 9];
+//			((char*)&num)[2] = memblock[last_i + 7 + i * 9];
+//			((char*)&num)[3] = memblock[last_i + 8 + i * 9];
+//
+//			//store the number into variables
+//			int y = num;
+//
+//			//store the number into variables
+//			int tileId = memblock[last_i + 9 + i * 9];
+//
+//			this->fringeTiles.push_back(new SKO_Map::Tile(x, y, tileId));
+//		}
+//		last_i += number_of_fringe * 9;
+//		//
+//		//rects
+//		//
+//		for (int i = 0; i < number_of_rects; i++)
+//		{
+//			//read the map file
+//			//build an int from 4 bytes
+//			((char*)&num)[0] = memblock[last_i + 1 + i * 16];
+//			((char*)&num)[1] = memblock[last_i + 2 + i * 16];
+//			((char*)&num)[2] = memblock[last_i + 3 + i * 16];
+//			((char*)&num)[3] = memblock[last_i + 4 + i * 16];
+//
+//			//store the number into variables
+//			int x = num;
+//
+//			//build an int from 4 bytes
+//			((char*)&num)[0] = memblock[last_i + 5 + i * 16];
+//			((char*)&num)[1] = memblock[last_i + 6 + i * 16];
+//			((char*)&num)[2] = memblock[last_i + 7 + i * 16];
+//			((char*)&num)[3] = memblock[last_i + 8 + i * 16];
+//
+//			//store the number into variables
+//			int y = num;
+//
+//			//build an int from 4 bytes
+//			((char*)&num)[0] = memblock[last_i + 9  + i * 16];
+//			((char*)&num)[1] = memblock[last_i + 10 + i * 16];
+//			((char*)&num)[2] = memblock[last_i + 11 + i * 16];
+//			((char*)&num)[3] = memblock[last_i + 12 + i * 16];
+//
+//			//store the number into variables
+//			int w = num;
+//
+//			//build an int from 4 bytes
+//			((char*)&num)[0] = memblock[last_i + 13 + i * 16];
+//			((char*)&num)[1] = memblock[last_i + 14 + i * 16];
+//			((char*)&num)[2] = memblock[last_i + 15 + i * 16];
+//			((char*)&num)[3] = memblock[last_i + 16 + i * 16];
+//
+//
+//			//store the number into variables
+//			int h = num;
+//
+//			SDL_Rect newRect;
+//			newRect.x = (unsigned short int)x;
+//			newRect.y = (unsigned short int)y;
+//			newRect.h = (short int)h;
+//			newRect.w = (short int)w;
+//			this->collisionRects.push_back(newRect);
+//		}
+//
+//		free(memblock);
+//	}
+//}
+//
 
 
 void SKO_Map::Map::saveMapINI(std::string filePath)
@@ -359,7 +363,9 @@ void SKO_Map::Map::saveMapINI(std::string filePath)
 	{
 		mapFile << "background_tile_x_" << i << " = " << this->backgroundTiles[i]->x << std::endl;
 		mapFile << "background_tile_y_" << i << " = " << this->backgroundTiles[i]->y << std::endl;
-		mapFile << "background_tile_id_" << i << " = " << (int)this->backgroundTiles[i]->tileId << std::endl;
+		mapFile << "background_tile_tileset_key" << i << " = " << this->backgroundTiles[i]->tileset_key << std::endl;
+		mapFile << "background_tile_tileset_row" << i << " = " << this->backgroundTiles[i]->tileset_row << std::endl;
+		mapFile << "background_tile_tileset_column" << i << " = " << this->backgroundTiles[i]->tileset_column << std::endl;
 		mapFile << std::endl;
 	}
 	mapFile << std::endl;
@@ -370,7 +376,9 @@ void SKO_Map::Map::saveMapINI(std::string filePath)
 	{
 		mapFile << "fringe_tile_x_" << i << " = " << this->fringeTiles[i]->x << std::endl;
 		mapFile << "fringe_tile_y_" << i << " = " << this->fringeTiles[i]->y << std::endl;
-		mapFile << "fringe_tile_id_" << i << " = " << (int)this->fringeTiles[i]->tileId << std::endl;
+		mapFile << "fringe_tile_tileset_key" << i << " = " << this->fringeTiles[i]->tileset_key << std::endl;
+		mapFile << "fringe_tile_tileset_row" << i << " = " << this->fringeTiles[i]->tileset_row << std::endl;
+		mapFile << "fringe_tile_tileset_column" << i << " = " << this->fringeTiles[i]->tileset_column << std::endl;
 		mapFile << std::endl;
 	}
 	mapFile << std::endl;

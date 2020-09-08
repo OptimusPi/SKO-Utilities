@@ -19,6 +19,7 @@ public:
 	void setImage(SDL_Surface *surface);
 	static SDL_Surface* getSurface(std::string filePath);
 	static SDL_Surface* copySurface(SDL_Surface *surface);
+	static SDL_Surface* clipSurface(SDL_Surface* surface, unsigned int x, unsigned int y, unsigned int w, unsigned int h);
 	static SDL_Surface* tintSurface(SDL_Surface *surface, unsigned int r, unsigned int g, unsigned int b, unsigned int a);
 	static GLuint generateTexture(SDL_Surface * surface);
 	static SDL_Surface* createBlankSurface(unsigned short int width, unsigned short int height);
@@ -27,6 +28,7 @@ public:
 	unsigned int width;
 	unsigned int height;
 	std::string fileLocation = "";
+	SDL_Surface* surface;
 };
 
 #endif

@@ -58,10 +58,12 @@ void SKO_Map::Writer::saveBackgroundTiles(SKO_Map::Map * map, std::ofstream * fi
 {
 	for (int i = 0; i < map->backgroundTiles.size(); i++)
 	{
-		*file << "[background_tile" << i << "]" << std::endl; // TODO READER CHANGE
-		*file << "x = " << map->backgroundTiles[i]->x << std::endl;// TODO READER CHANGE
-		*file << "y = " << map->backgroundTiles[i]->y << std::endl;// TODO READER CHANGE
-		*file << "tile_id = " << (int)map->backgroundTiles[i]->tileId << std::endl;// TODO READER CHANGE
+		*file << "[background_tile" << i << "]" << std::endl;
+		*file << "background_tile_x = " << map->backgroundTiles[i]->x << std::endl;
+		*file << "background_tile_y = " << map->backgroundTiles[i]->y << std::endl;
+		*file << "background_tile_tileset_key" << i << " = " << map->backgroundTiles[i]->tileset_key << std::endl;
+		*file << "background_tile_tileset_row" << i << " = " << map->backgroundTiles[i]->tileset_row << std::endl;
+		*file << "background_tile_tileset_column" << i << " = " << map->backgroundTiles[i]->tileset_column << std::endl;
 		*file << std::endl;
 	}
 	*file << std::endl;
@@ -71,10 +73,12 @@ void SKO_Map::Writer::saveFringeTiles(SKO_Map::Map * map, std::ofstream * file)
 {
 	for (int i = 0; i < map->fringeTiles.size(); i++)
 	{
-		*file << "[fringe_tile" << i << "]" << std::endl;// TODO READER CHANGE
-		*file << "x = " << map->fringeTiles[i]->x << std::endl;// TODO READER CHANGE
-		*file << "y = " << map->fringeTiles[i]->y << std::endl;// TODO READER CHANGE
-		*file << "tile_id = " << (int)map->fringeTiles[i]->tileId << std::endl;// TODO READER CHANGE
+		*file << "[fringe_tile" << i << "]" << std::endl;
+		*file << "fringe_tile_x = " << map->fringeTiles[i]->x << std::endl;
+		*file << "fringe_tile_y = " << map->fringeTiles[i]->y << std::endl;
+		*file << "fringe_tile_tileset_key = " << map->fringeTiles[i]->tileset_key << std::endl;
+		*file << "fringe_tile_tileset_row = " << map->fringeTiles[i]->tileset_row << std::endl;
+		*file << "fringe_tile_tileset_column = " << map->fringeTiles[i]->tileset_column << std::endl;
 		*file << std::endl;
 	}
 	*file << std::endl;
@@ -133,7 +137,7 @@ void SKO_Map::Writer::saveSigns(SKO_Map::Map * map, std::ofstream * file)
 void SKO_Map::Writer::saveEnemies(SKO_Map::Map * map, std::ofstream * file)
 {
 	// Save enemy spawn points. 
-	// Actual enemy type definitions are ina  separate file 
+	// Actual enemy type definitions are in a separate file 
 	// TODO What file? right now it's DAT/enemySprites.ini
 	for (int i = 0; i < map->enemies.size(); i++)
 	{

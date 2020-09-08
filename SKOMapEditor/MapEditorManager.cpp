@@ -3,6 +3,7 @@
 #include "Global.h"
 #include <set>
 
+
 SKO_MapEditor::Manager::Manager(OPI_Renderer * renderer, MainMenuGui *mainMenuGui, SKO_Map::Reader *mapReader)
 {
 	this->renderer = renderer;
@@ -24,6 +25,9 @@ void SKO_MapEditor::Manager::loadImages()
 	this->stickman_img.setImage("IMG/stickman.png");
 
 	// load tilesets
+	this->loadTilesets();
+
+	// 
 
 	//// Load tileset
 	//for (int i = 0; i < 256; i++)//check if file exists, etc.
@@ -40,6 +44,52 @@ void SKO_MapEditor::Manager::loadImages()
 	//	else
 	//		break;
 	//}
+}
+
+void SKO_MapEditor::Manager::loadTilesets()
+{
+	std::string filePath = "DAT/tilesets.ini";
+
+	// Open the file to read
+	INIReader tilesetIni(filePath);
+	if (tilesetIni.ParseError() < 0)
+	{
+		std::string error = "SKO_MapEditor::Manager::loadTilesets() Failed to load INI file: " + filePath;
+		throw new std::ios_base::failure(error);
+	}
+
+	// load background tiles
+	int tilesetsCount = tilesetIni.GetInteger("tilesets", "count", 0);
+
+	for (int i = 0; i < tilesetsCount; i++) 
+	{
+		std::stringstream ss;
+		ss << "tileset" << i;
+		std::string name = tilesetIni.Get(ss.str(), "name", "");
+		std::string key = tilesetIni.Get(ss.str(), "key", "00000000-0000-0000-0000-000000000000");
+		std::string filePath = tilesetIni.Get(ss.str(), "filepath", "");
+		unsigned char tile_width = tilesetIni.GetInteger(ss.str(), "tile_width", 32);
+		unsigned char tile_height = tilesetIni.GetInteger(ss.str(), "tile_height", 32);
+		unsigned char rows = tilesetIni.GetInteger(ss.str(), "rows", 32);
+		unsigned char columns = tilesetIni.GetInteger(ss.str(), "columns", 32);
+
+		try
+		{
+			auto image = new OPI_Image(filePath);
+			auto tileset = new SKO_Map::Tileset(image, name, key, tile_width, tile_height, rows, columns);
+			tilesets.insert({ tileset->key, tileset });
+			tilesetKeys.push_back(tileset->key);
+		}
+		catch (...)
+		{
+			continue;
+		}
+	}
+
+	map->filePath = filePath;
+
+	// set current tileset
+	this->current_tileset = 0;
 }
 
 
@@ -80,7 +130,7 @@ void SKO_MapEditor::Manager::removeDuplicateTiles(std::vector<SKO_Map::Tile*> *t
 		{
 			SKO_Map::Tile *tileB = (*tiles)[i2];
 
-			if (tileA->tileId == tileB->tileId && tileA->x == tileB->x && tileA->y == tileB->y)
+			if (SKO_Map::Tile::same(tileA, tileB))// TODO compare function on SKO_Map::Tile::compare
 			{
 				// Remove the first tile, because the last tile wins, since it is on top.
 				duplicateTileIds.push_back(i);
@@ -139,6 +189,16 @@ void SKO_MapEditor::Manager::loadMap(std::string fileName)
 	current_rect = map->collisionRects.size() - 1;
 	current_fringe = map->fringeTiles.size() - 1;
 	current_tile = map->backgroundTiles.size() - 1;
+
+	// load images for each tile
+	for (auto tile : map->fringeTiles)
+	{
+		tile->image = tilesets[tile->tileset_key]->getTileImage(tile->tileset_row, tile->tileset_column);
+	}
+	for (auto tile : map->backgroundTiles)
+	{
+		tile->image = tilesets[tile->tileset_key]->getTileImage(tile->tileset_row, tile->tileset_column);
+	}
 }
 
 void SKO_MapEditor::Manager::DrawGameScene(int camera_x, int camera_y)
@@ -153,7 +213,7 @@ void SKO_MapEditor::Manager::DrawGameScene(int camera_x, int camera_y)
 	for (int i = 0; i < map->backgroundTiles.size(); i++)
 	{
 		SKO_Map::Tile *tile = map->backgroundTiles[i];
-		OPI_Image *tileImg = &tile_img[tile->tileId];
+		OPI_Image *tileImg = tile->image;
 
 		int drawX = tile->x - camera_x;
 		int drawY = tile->y - camera_y;
@@ -176,7 +236,7 @@ void SKO_MapEditor::Manager::DrawGameScene(int camera_x, int camera_y)
 	for (int i = 0; i < map->fringeTiles.size(); i++)
 	{
 		SKO_Map::Tile *tile = map->fringeTiles[i];
-		OPI_Image *tileImg = &tile_img[tile->tileId];
+		OPI_Image* tileImg = tile->image;
 
 
 		int drawX = tile->x - camera_x;
@@ -192,11 +252,16 @@ void SKO_MapEditor::Manager::DrawGameScene(int camera_x, int camera_y)
 		
 	}
 
-	
-
 	//draw current tile
-	if (mode == TILE_DRAW)
-		renderer->drawImage(cursor_x / 32 * 32, cursor_y / 32 * 32, &tile_img[current_tile_img]);
+	if (mode == TILE_DRAW) {
+		auto currentTileImage = tilesets[tilesetKeys[current_tileset]]->getTileImage(current_tileset_row, current_tileset_column);
+		renderer->drawImage(cursor_x / 32 * 32, cursor_y / 32 * 32, currentTileImage);
+		renderer->drawImage(cursor_x + 100, cursor_y + 100, tilesets[tilesetKeys[current_tileset]]->getTileImage(1, 1));
+		renderer->drawImage(cursor_x + 132, cursor_y + 100, tilesets[tilesetKeys[current_tileset]]->getTileImage(2, 2));
+		renderer->drawImage(cursor_x + 164, cursor_y + 100, tilesets[tilesetKeys[current_tileset]]->getTileImage(1, 3));
+		renderer->drawImage(cursor_x + 192, cursor_y + 100, tilesets[tilesetKeys[current_tileset]]->getTileImage(2, 4));
+		renderer->drawImage(cursor_x + 224, cursor_y + 100, tilesets[tilesetKeys[current_tileset]]->getTileImage(1, 5));
+	}
 
 	//draw collision rects, only on screen
 	for (int i = 0; i < map->collisionRects.size(); i++)
@@ -353,15 +418,39 @@ void SKO_MapEditor::Manager::HandleInput()
 				camera_x = 0;
 				camera_y = 0;
 				break;
-			case SDLK_PAGEUP:
-				if (current_tile_img > 0)
-					current_tile_img--;
-				break;
+			case SDLK_PAGEUP: // TODO: next / prev tile function
+			{
+				if (current_tileset_column == 0)
+				{
+					current_tileset_column = tilesets[tilesetKeys[current_tileset]]->columns;
+					current_tileset_row++;
 
-			case SDLK_PAGEDOWN:
-				if (current_tile_img < num_tile_images)
-					current_tile_img++;
-				break;
+					if (current_tileset_row >= tilesets[tilesetKeys[current_tileset]]->rows)
+					{
+						current_tileset_row = 0;
+					}
+				}
+				else
+				{ 
+					current_tileset_column--;
+				}
+
+			}
+			case SDLK_PAGEDOWN: // TODO: next / prev tile function
+			{
+				current_tileset_column++;
+
+				if (current_tileset_column >= tilesets[tilesetKeys[current_tileset]]->rows)
+				{
+					current_tileset_column = 0;
+					current_tileset_row++;
+
+					if (current_tileset_row >= tilesets[tilesetKeys[current_tileset]]->rows)
+					{
+						current_tileset_row = 0;
+					}
+				}
+			}
 
 			case 'w':
 				if (current_tile > 0 && mode == TILE_DRAW && !fringe_mode)
@@ -572,10 +661,10 @@ void SKO_MapEditor::Manager::HandleInput()
 						placing_tile = true;
 					}
 
-					int x = (int)(cursor_x + (int)camera_x) / 32 * 32;
-					int y = (int)(cursor_y + (int)camera_y) / 32 * 32;
+					int x = (int)(cursor_x + (int)camera_x) / tilesets[tilesetKeys[current_tileset]]->tile_width * tilesets[tilesetKeys[current_tileset]]->tile_width;
+					int y = (int)(cursor_y + (int)camera_y) / tilesets[tilesetKeys[current_tileset]]->tile_height * tilesets[tilesetKeys[current_tileset]]->tile_width;
 
-					map->backgroundTiles.push_back(new SKO_Map::Tile(x, y, current_tile_img));
+					map->backgroundTiles.push_back(new SKO_Map::Tile(x, y, tilesets[tilesetKeys[current_tileset]], current_tileset_row, current_tileset_column));
 				}
 				else
 				{
@@ -588,7 +677,7 @@ void SKO_MapEditor::Manager::HandleInput()
 
 					int x = (int)(cursor_x + (int)camera_x) / 32 * 32;
 					int y = (int)(cursor_y + (int)camera_y) / 32 * 32;
-					map->fringeTiles.push_back(new SKO_Map::Tile(x, y, current_tile_img));
+					map->fringeTiles.push_back(new SKO_Map::Tile(x, y, tilesets[tilesetKeys[current_tileset]]->key, current_tileset_row, current_tileset_column));
 				}
 				break;
 
@@ -603,8 +692,8 @@ void SKO_MapEditor::Manager::HandleInput()
 					int at = -1;
 					for (i = 0; i <= current_tile; i++)
 					{
-						if (x > map->backgroundTiles[i]->x&& x < map->backgroundTiles[i]->x + tile_img[map->backgroundTiles[i]->tileId].width &&
-							y > map->backgroundTiles[i]->y&& y < map->backgroundTiles[i]->y + tile_img[map->backgroundTiles[i]->tileId].height)
+						if (x > map->backgroundTiles[i]->x&& x < map->backgroundTiles[i]->x + map->backgroundTiles[i]->image->width &&
+							y > map->backgroundTiles[i]->y&& y < map->backgroundTiles[i]->y + map->backgroundTiles[i]->image->height)
 						{
 							at = i;
 							break;
@@ -622,8 +711,8 @@ void SKO_MapEditor::Manager::HandleInput()
 					int at = -1;
 					for (i = 0; i <= current_fringe; i++)
 					{
-						if (x > map->fringeTiles[i]->x&& x < map->fringeTiles[i]->x + tile_img[map->fringeTiles[i]->tileId].width &&
-							y > map->fringeTiles[i]->y&& y < map->fringeTiles[i]->y + tile_img[map->fringeTiles[i]->tileId].height)
+						if (x > map->fringeTiles[i]->x&& x < map->fringeTiles[i]->x + map->fringeTiles[i]->image->width &&
+							y > map->fringeTiles[i]->y&& y < map->fringeTiles[i]->y + map->fringeTiles[i]->image->height)
 						{
 							at = i;
 							break;

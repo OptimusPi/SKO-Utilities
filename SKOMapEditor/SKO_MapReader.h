@@ -21,6 +21,10 @@ namespace SKO_Map
 		void loadBackgroundTiles(SKO_Map::Map * map, INIReader mapIni);
 		void loadFringeTiles(SKO_Map::Map * map, INIReader mapIni);
 		void loadCollisionRects(SKO_Map::Map * map, INIReader mapIni);
+		SKO_Map::Tile* convertTile(int x, int y, int id);
+		std::string convertKey(int id);
+		unsigned int convertRow(int id);
+		unsigned int convertColumn(int id);
 
 		// Load game objects
 		void loadPortals(SKO_Map::Map * map, INIReader mapIni);

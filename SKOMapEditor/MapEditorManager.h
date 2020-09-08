@@ -11,7 +11,7 @@
 #include "OPI_Clock.h"
 #include "MainMenuGui.h"
 #include "SKO_MapReader.h"
-
+#include "SKO_MapTileset.h"
 
 namespace SKO_MapEditor
 {
@@ -58,15 +58,19 @@ namespace SKO_MapEditor
 		int current_tile = -1;
 		int current_rect = -1;
 		int current_fringe = -1;
-		int current_tile_img = 0;
+		int current_tileset = 0;
+		std::map<std::string, SKO_Map::Tileset*> tilesets;
+		std::vector<std::string> tilesetKeys;
+		unsigned int current_tileset_row = 1;
+		unsigned int current_tileset_column = 1;
+
 		int num_tile_images = 0;
 		int collision_ox = 0;
 		int collision_oy = 0;
 
 		//images
-		OPI_Image tile_img[256];
-		OPI_Image background;
-		OPI_Image stickman_img;
+		OPI_Image background; //meh
+		OPI_Image stickman_img; //meh
 		OPI_Gui::GuiManager *gui;
 
 		//mouse buttons
