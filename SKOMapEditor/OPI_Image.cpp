@@ -102,8 +102,8 @@ void OPI_Image::setImage(SDL_Surface * surface)
 		glDeleteTextures(1, &texture);
 	}
 
-	width = surface->w;
-	height = surface->h;
+	this->width = surface->w;
+	this->height = surface->h;
 
 	if (!pot(width))
 		printf("ERROR: OPI_Image width not power of two!\n");
@@ -111,7 +111,7 @@ void OPI_Image::setImage(SDL_Surface * surface)
 		printf("ERROR: OPI_Image width not power of two!\n");
 
 	texture = OPI_Image::generateTexture(surface);
-	surface = surface;
+	this->surface = surface;
 }
 
 void OPI_Image::setImage(std::string path)
