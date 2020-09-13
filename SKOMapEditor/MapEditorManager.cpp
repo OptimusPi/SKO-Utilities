@@ -232,7 +232,7 @@ void SKO_MapEditor::Manager::DrawGameScene(int camera_x, int camera_y)
 		renderer->drawImage(stickman.x - 25 - camera_x, stickman.y - camera_y, &stickman_img);
 
 
-	//draw finge tiles, only on screen
+	//draw fringe tiles, only on screen
 	for (int i = 0; i < map->fringeTiles.size(); i++)
 	{
 		SKO_Map::Tile *tile = map->fringeTiles[i];
@@ -256,11 +256,6 @@ void SKO_MapEditor::Manager::DrawGameScene(int camera_x, int camera_y)
 	if (mode == TILE_DRAW) {
 		auto currentTileImage = tilesets[tilesetKeys[current_tileset]]->getTileImage(current_tileset_row, current_tileset_column);
 		renderer->drawImage(cursor_x / 32 * 32, cursor_y / 32 * 32, currentTileImage);
-		renderer->drawImage(cursor_x + 100, cursor_y + 100, tilesets[tilesetKeys[current_tileset]]->getTileImage(1, 1));
-		renderer->drawImage(cursor_x + 132, cursor_y + 100, tilesets[tilesetKeys[current_tileset]]->getTileImage(2, 2));
-		renderer->drawImage(cursor_x + 164, cursor_y + 100, tilesets[tilesetKeys[current_tileset]]->getTileImage(1, 3));
-		renderer->drawImage(cursor_x + 192, cursor_y + 100, tilesets[tilesetKeys[current_tileset]]->getTileImage(2, 4));
-		renderer->drawImage(cursor_x + 224, cursor_y + 100, tilesets[tilesetKeys[current_tileset]]->getTileImage(1, 5));
 	}
 
 	//draw collision rects, only on screen

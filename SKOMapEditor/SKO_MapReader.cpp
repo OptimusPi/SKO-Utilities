@@ -36,7 +36,7 @@ SKO_Map::Map * SKO_Map::Reader::loadMap(std::string fileName)
 	// Open the file to read
 	INIReader mapIni(filePath);
 	if (mapIni.ParseError() < 0)
-	{ 
+	{
 		std::string error = "Failed to load INI file: " + filePath;
 		throw new std::ios_base::failure(error);
 	}
@@ -69,23 +69,57 @@ void SKO_Map::Reader::loadBackgroundTiles(SKO_Map::Map * map, INIReader mapIni)
 
 	for (int i = 0; i < num_background_tiles; i++)
 	{
-		std::stringstream section;
-		section << "background_tile" << i;
+		std::stringstream sspawn_x;
+		sspawn_x << "background_tile_x_" << i;
 
+		std::stringstream sspawn_y;
+		sspawn_y << "background_tile_y_" << i;
 
-		int x = mapIni.GetInteger(section.str(), "x", 0);
-		int y = mapIni.GetInteger(section.str(), "y", 0);
+		std::stringstream ssid;
+		ssid << "background_tile_id_" << i;
 
-		// TODO gotta Ctrl+H the map files... ugh, but wait I can't because of this: background_tile_id_26 = 5
-		std::string tileset_key = mapIni.Get(section.str(), "tileset_key", "00000000-0000-0000-0000-000000000000");
-		int tileset_row = mapIni.GetInteger(section.str(), "tileset_row", 0);
-		int tileset_column = mapIni.GetInteger(section.str(), "tileset_column", 0);
-		
+		int x = mapIni.GetInteger("background_tiles", sspawn_x.str(), 0);
+		int y = mapIni.GetInteger("background_tiles", sspawn_y.str(), 0);
+		int id = mapIni.GetInteger("background_tiles", ssid.str(), 0);
+
 		// Add background tile to map collection
-		SKO_Map::Tile *backgroundTile = new SKO_Map::Tile(x, y, tileset_key, tileset_row, tileset_column);
+		SKO_Map::Tile* backgroundTile = convertTile(x, y, id);
 		map->backgroundTiles.push_back(backgroundTile);
 	}
 }
+
+//void SKO_Map::Reader::loadBackgroundTiles(SKO_Map::Map * map, INIReader mapIni)
+//{
+//	// load background tiles
+//	int num_background_tiles = mapIni.GetInteger("count", "background_tiles", 0);
+//	printf("num_background_tiles is %i", num_background_tiles);
+//
+//	for (int i = 0; i < num_background_tiles; i++)
+//	{
+//		std::stringstream section;
+//		section << "background_tile" << i;
+//
+//
+//		int x = mapIni.GetInteger(section.str(), "x", 0);
+//		int y = mapIni.GetInteger(section.str(), "y", 0);
+//
+//		// TODO gotta Ctrl+H the map files... ugh, but wait I can't because of this: background_tile_id_26 = 5
+//		//std::string tileset_key = mapIni.Get(section.str(), "tileset_key", "00000000-0000-0000-0000-000000000000");
+//		//int tileset_row = mapIni.GetInteger(section.str(), "tileset_row", 0);
+//		//int tileset_column = mapIni.GetInteger(section.str(), "tileset_column", 0);
+//		
+//
+//		int id = mapIni.GetInteger(section.str(), ssid.str(), 0);
+//
+//		// Add fringe tile to map collection
+//		SKO_Map::Tile* fringeTile = convertTile(x, y, id);
+//		map->fringeTiles.push_back(fringeTile);
+//
+//		// Add background tile to map collection
+//		SKO_Map::Tile *backgroundTile = new SKO_Map::Tile(x, y, tileset_key, tileset_row, tileset_column);
+//		map->backgroundTiles.push_back(backgroundTile);
+//	}
+//}
 
 void SKO_Map::Reader::loadFringeTiles(SKO_Map::Map * map, INIReader mapIni)
 {
@@ -96,13 +130,13 @@ void SKO_Map::Reader::loadFringeTiles(SKO_Map::Map * map, INIReader mapIni)
 	for (int i = 0; i < num_fringe_tiles; i++)
 	{
 		std::stringstream sspawn_x;
-		sspawn_x << "x" << i;
+		sspawn_x << "fringe_tile_x_" << i;
 
 		std::stringstream sspawn_y;
-		sspawn_y << "y" << i;
+		sspawn_y << "fringe_tile_x_" << i;
 
 		std::stringstream ssid;
-		ssid << "tile_id" << i;
+		ssid << "fringe_tile_id_" << i;
 
 		int x = mapIni.GetInteger("fringe_tiles", sspawn_x.str(),  0);
 		int y = mapIni.GetInteger("fringe_tiles", sspawn_y.str(),  0);
