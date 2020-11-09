@@ -166,7 +166,7 @@ std::string SKO_Map::Reader::convertKey(int id)
 	case 43:
 	case 44:
 	case 45:
-		"d9afe501-8273-49f8-ab3e-fb2198bf6826"; // grassland flora
+		return "d9afe501-8273-49f8-ab3e-fb2198bf6826"; // grassland flora
 
 	default:
 		return "8a50c312-a146-460f-8120-fbf352c5a95e"; // grassland tiles
