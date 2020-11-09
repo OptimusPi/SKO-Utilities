@@ -61,7 +61,7 @@ void SKO_MapEditor::Manager::loadTilesets()
 	// load background tiles
 	int tilesetsCount = tilesetIni.GetInteger("tilesets", "count", 0);
 
-	for (int i = 0; i < tilesetsCount; i++) 
+	for (int i = 0; i < tilesetsCount; i++)
 	{
 		std::stringstream ss;
 		ss << "tileset" << i;

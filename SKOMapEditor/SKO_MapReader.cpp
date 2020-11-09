@@ -151,19 +151,231 @@ void SKO_Map::Reader::loadFringeTiles(SKO_Map::Map * map, INIReader mapIni)
 std::string SKO_Map::Reader::convertKey(int id)
 {
 	//TODO make these really work
-	return "8a50c312-a146-460f-8120-fbf352c5a95e";
+	switch (id)
+	{
+	case 33:
+	case 34:
+	case 35:
+	case 36:
+	case 37:
+	case 38:
+	case 39:
+	case 40:
+	case 41:
+	case 42:
+	case 43:
+	case 44:
+	case 45:
+		"d9afe501-8273-49f8-ab3e-fb2198bf6826"; // grassland flora
+
+	default:
+		return "8a50c312-a146-460f-8120-fbf352c5a95e"; // grassland tiles
+	}
 }
 
 unsigned int SKO_Map::Reader::convertColumn(int id)
 {
 	//TODO make these really work
-	return 1;
+	switch (id)
+	{
+	case 0:
+		return 0;
+	case 1:
+		return 2;
+	case 2:
+		return 1;
+	case 3:
+		return 2;
+	case 4:
+		return 0;
+	case 5:
+		return 1;
+	case 6:
+		return 0;
+	case 7:
+		return 2;
+	case 8:
+		return 1;
+	case 9:
+		return 3;
+	case 10:
+		return 4;
+	case 11:
+		return 4;
+	case 12:
+		return 3;
+	case 13:
+		return 4;
+	case 14:
+		return 3;
+	case 15:
+		return 0;
+	case 16:
+		return 2;
+	case 17:
+		return 1;
+	case 18:
+		return 2;
+	case 19:
+		return 0;
+	case 20:
+		return 1;
+	case 21:
+		return 0;
+	case 22:
+		return 2;
+	case 23:
+		return 1;
+	case 24:
+		return 3;
+	case 25:
+		return 4;
+	case 26:
+		return 4;
+	case 27:
+		return 3;
+	case 28:
+		return 4;
+	case 29:
+		return 3;
+	case 30:
+		return 1;
+	case 31:
+		return 0;
+	case 32:
+		return 2;
+	case 33:
+		return 0;
+	case 34:
+		return 1;
+	case 35:
+		return 2;
+	case 36:
+		return 3;
+	case 37:
+		return 0;
+	case 38:
+		return 1;
+	case 39:
+		return 2;
+	case 40:
+		return 3;
+	case 41:
+		return 4;
+	case 42:
+		return 5;
+	case 43:
+		return 5;
+	case 44:
+		return 5;
+	case 45:
+		return 5;
+	default:
+		return 0; //break;//throw id;
+	}
 }
 
 unsigned int SKO_Map::Reader::convertRow(int id)
 {
 	//TODO make these really work
-	return 1;
+	switch (id)
+	{
+	case 0:
+		return 0;
+	case 1:
+		return 0;
+	case 2:
+		return 0;
+	case 3:
+		return 1;
+	case 4:
+		return 1;
+	case 5:
+		return 1;
+	case 6:
+		return 2;
+	case 7:
+		return 2;
+	case 8:
+		return 2;
+	case 9:
+		return 0;
+	case 10:
+		return 0;
+	case 11:
+		return 1;
+	case 12:
+		return 1;
+	case 13:
+		return 2;
+	case 14:
+		return 2;
+	case 15:
+		return 3;
+	case 16:
+		return 3;
+	case 17:
+		return 3;
+	case 18:
+		return 4;
+	case 19:
+		return 4;
+	case 20:
+		return 4;
+	case 21:
+		return 5;
+	case 22:
+		return 5;
+	case 23:
+		return 5;
+	case 24:
+		return 3;
+	case 25:
+		return 3;
+	case 26:
+		return 4;
+	case 27:
+		return 4;
+	case 28:
+		return 4;
+	case 29:
+		return 5;
+	case 30:
+		return 6;
+	case 31:
+		return 6;
+	case 32:
+		return 6;
+
+	case 33:
+		return 0;
+	case 34:
+		return 0;
+	case 35:
+		return 0;
+	case 36:
+		return 0;
+	case 37:
+		return 1;
+	case 38:
+		return 1;
+	case 39:
+		return 1;
+	case 40:
+		return 1;
+	case 41:
+		return 0;
+	case 42:
+		return 0;
+	case 43:
+		return 0;
+	case 44:
+		return 0;
+	case 45:
+		return 0;
+	default:
+		return 0;//break;//throw id;
+	}
 }
 
 // TODO - remove this when I'm done with it
