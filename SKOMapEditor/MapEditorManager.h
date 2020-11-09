@@ -61,8 +61,8 @@ namespace SKO_MapEditor
 		int current_tileset = 0;
 		std::map<std::string, SKO_Map::Tileset*> tilesets;
 		std::vector<std::string> tilesetKeys;
-		unsigned int current_tileset_row = 1;
-		unsigned int current_tileset_column = 1;
+		unsigned int current_tileset_row = 0;
+		unsigned int current_tileset_column = 0;
 
 		int num_tile_images = 0;
 		int collision_ox = 0;

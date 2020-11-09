@@ -197,6 +197,10 @@ void SKO_MapEditor::Manager::loadMap(std::string fileName)
 	}
 	for (auto tile : map->backgroundTiles)
 	{
+		if (tile->tileset_key == "d9afe501-8273-49f8-ab3e-fb2198bf6826")
+		{
+			tile->image = tilesets[tile->tileset_key]->getTileImage(tile->tileset_row, tile->tileset_column);
+		}
 		tile->image = tilesets[tile->tileset_key]->getTileImage(tile->tileset_row, tile->tileset_column);
 	}
 }

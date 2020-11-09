@@ -1,7 +1,7 @@
 #include "SKO_MapTileset.h"
 #include <sstream>
 
-SKO_Map::Tileset::Tileset(OPI_Image* image, std::string name, std::string key, unsigned char tile_width, unsigned char tile_height, unsigned char rows, unsigned char columns)
+SKO_Map::Tileset::Tileset(OPI_Image* image, std::string name, std::string key, unsigned short tile_width, unsigned short tile_height, unsigned char rows, unsigned char columns)
 {
 	this->key = key;
 	this->image = image;

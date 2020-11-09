@@ -161,12 +161,16 @@ std::string SKO_Map::Reader::convertKey(int id)
 	case 38:
 	case 39:
 	case 40:
-	case 41:
 	case 42:
 	case 43:
 	case 44:
 	case 45:
+	case 60:
 		return "d9afe501-8273-49f8-ab3e-fb2198bf6826"; // grassland flora
+
+	case 41:
+	case 61:
+		return "74069b57-5008-40a7-98f1-3364d4d9a425"; // grassland trees
 
 	default:
 		return "8a50c312-a146-460f-8120-fbf352c5a95e"; // grassland tiles
@@ -261,7 +265,7 @@ unsigned int SKO_Map::Reader::convertColumn(int id)
 	case 40:
 		return 3;
 	case 41:
-		return 4;
+		return 0;
 	case 42:
 		return 5;
 	case 43:
@@ -270,6 +274,10 @@ unsigned int SKO_Map::Reader::convertColumn(int id)
 		return 5;
 	case 45:
 		return 5;
+	case 60:
+		return 5;
+	case 61:
+		return 1;
 	default:
 		return 0; //break;//throw id;
 	}
@@ -373,6 +381,8 @@ unsigned int SKO_Map::Reader::convertRow(int id)
 		return 0;
 	case 45:
 		return 0;
+	case 61:
+		return 0;
 	default:
 		return 0;//break;//throw id;
 	}
@@ -381,9 +391,16 @@ unsigned int SKO_Map::Reader::convertRow(int id)
 // TODO - remove this when I'm done with it
 SKO_Map::Tile* SKO_Map::Reader::convertTile(int x, int y, int id)
 {
+
 	std::string key = convertKey(id);
 	unsigned int row = convertRow(id);
 	unsigned int column = convertColumn(id);
+
+	if (id == 41 || id == 61)
+	{
+		std::string test = "123";
+	}
+
 	return new SKO_Map::Tile(x, y, key, row, column);
 }
 
