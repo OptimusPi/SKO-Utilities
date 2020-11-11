@@ -133,7 +133,7 @@ void SKO_Map::Reader::loadFringeTiles(SKO_Map::Map * map, INIReader mapIni)
 		sspawn_x << "fringe_tile_x_" << i;
 
 		std::stringstream sspawn_y;
-		sspawn_y << "fringe_tile_x_" << i;
+		sspawn_y << "fringe_tile_y_" << i;
 
 		std::stringstream ssid;
 		ssid << "fringe_tile_id_" << i;
@@ -161,12 +161,30 @@ std::string SKO_Map::Reader::convertKey(int id)
 	case 38:
 	case 39:
 	case 40:
+	case 60:
+		return "d9afe501-8273-49f8-ab3e-fb2198bf6826"; // grassland flora
+
+	case 46:
+	case 47:
+	case 48:
+	case 49:
+	case 50:
+	case 51:
+		return "696148d6-4e80-483c-ac9b-291e5a7bd31b"; // bricks
+
 	case 42:
 	case 43:
 	case 44:
 	case 45:
-	case 60:
-		return "d9afe501-8273-49f8-ab3e-fb2198bf6826"; // grassland flora
+	case 52:
+	case 53:
+	case 54:
+	case 55:
+	case 56:
+	case 57:
+	case 58:
+	case 59:
+		return "f4218b24-1b4f-4728-83a4-c39da61bb728"; // Structures (pipes, stores, sign)
 
 	case 41:
 	case 61:
@@ -267,13 +285,27 @@ unsigned int SKO_Map::Reader::convertColumn(int id)
 	case 41:
 		return 0;
 	case 42:
-		return 5;
+		return 0;
 	case 43:
-		return 5;
+		return 0;
 	case 44:
-		return 5;
+		return 0;
 	case 45:
-		return 5;
+		return 0;
+
+	case 46:
+		return 0;
+	case 47:
+		return 0;
+	case 48:
+		return 0;
+	case 49:
+		return 1;
+	case 50:
+		return 0;
+	case 51:
+		return 1;
+
 	case 60:
 		return 5;
 	case 61:
@@ -380,7 +412,21 @@ unsigned int SKO_Map::Reader::convertRow(int id)
 	case 44:
 		return 0;
 	case 45:
+		return 3;
+
+	case 46:
 		return 0;
+	case 47:
+		return 3;
+	case 48:
+		return 1;
+	case 49:
+		return 0;
+	case 50:
+		return 2;
+	case 51:
+		return 1;
+
 	case 61:
 		return 0;
 	default:
@@ -391,15 +437,9 @@ unsigned int SKO_Map::Reader::convertRow(int id)
 // TODO - remove this when I'm done with it
 SKO_Map::Tile* SKO_Map::Reader::convertTile(int x, int y, int id)
 {
-
 	std::string key = convertKey(id);
 	unsigned int row = convertRow(id);
 	unsigned int column = convertColumn(id);
-
-	if (id == 41 || id == 61)
-	{
-		std::string test = "123";
-	}
 
 	return new SKO_Map::Tile(x, y, key, row, column);
 }

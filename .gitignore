@@ -26,10 +26,6 @@ docs/
 *.log
 
 # Game Content files
-IMG/
-DAT/
-SND/
-MAP/
 help.txt
 library.txt
 readme.txt
