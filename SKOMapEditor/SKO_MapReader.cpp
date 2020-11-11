@@ -84,6 +84,23 @@ void SKO_Map::Reader::loadBackgroundTiles(SKO_Map::Map * map, INIReader mapIni)
 
 		// Add background tile to map collection
 		SKO_Map::Tile* backgroundTile = convertTile(x, y, id);
+
+		if (id == 9 || id == 10)
+		{
+			// life hack put a dirt tile under it quick - 
+			//TODO remove, it's just because the corner tile was made more modular with invisible background
+			SKO_Map::Tile* dirtTile = convertTile(x, y, 5);
+			map->backgroundTiles.push_back(dirtTile);
+		}
+
+		if (id == 24 || id == 25)
+		{
+			// life hack put a dirt tile under it quick - 
+			//TODO remove, it's just because the corner tile was made more modular with invisible background
+			SKO_Map::Tile* dirtTile = convertTile(x, y, 20);
+			map->backgroundTiles.push_back(dirtTile);
+		}
+
 		map->backgroundTiles.push_back(backgroundTile);
 	}
 }
@@ -306,6 +323,23 @@ unsigned int SKO_Map::Reader::convertColumn(int id)
 	case 51:
 		return 1;
 
+	case 52:
+		return 2;
+	case 53:
+		return 0;
+	case 54:
+		return 0;
+	case 55:
+		return 2;
+	case 56:
+		return 0;
+	case 57:
+		return 1;
+	case 58:
+		return 2;
+	case 59:
+		return 1;
+
 	case 60:
 		return 5;
 	case 61:
@@ -426,6 +460,23 @@ unsigned int SKO_Map::Reader::convertRow(int id)
 		return 2;
 	case 51:
 		return 1;
+
+	case 52:
+		return 4;
+	case 53:
+		return 4;
+	case 54:
+		return 6;
+	case 55:
+		return 6;
+	case 56:
+		return 5;
+	case 57:
+		return 4;
+	case 58:
+		return 5;
+	case 59:
+		return 6;
 
 	case 61:
 		return 0;
