@@ -48,7 +48,7 @@ SKO_Map::Map * SKO_Map::Reader::loadMap(std::string fileName)
 	loadCollisionRects(map, mapIni); // TODO fix with new format, it doesnt match other objects
 
 	loadPortals(map, mapIni);
-	loadSigns(map, mapIni);
+	loadSigns(map, mapIni);   
 	loadEnemies(map, mapIni); // TODO fix with new format, it doesnt match other objects
 	loadStalls(map, mapIni);  
 	loadShops(map, mapIni);   
@@ -56,7 +56,7 @@ SKO_Map::Map * SKO_Map::Reader::loadMap(std::string fileName)
 	loadNpcs(map, mapIni);
 
 	// TODO loadNatureEngine(); // tee hee
-
+	
 	return map;
 }
 

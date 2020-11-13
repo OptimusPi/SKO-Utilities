@@ -197,10 +197,6 @@ void SKO_MapEditor::Manager::loadMap(std::string fileName)
 	}
 	for (auto tile : map->backgroundTiles)
 	{
-		if (tile->tileset_key == "d9afe501-8273-49f8-ab3e-fb2198bf6826")
-		{
-			tile->image = tilesets[tile->tileset_key]->getTileImage(tile->tileset_row, tile->tileset_column);
-		}
 		tile->image = tilesets[tile->tileset_key]->getTileImage(tile->tileset_row, tile->tileset_column);
 	}
 }
@@ -421,25 +417,29 @@ void SKO_MapEditor::Manager::HandleInput()
 			{
 				if (current_tileset_column == 0)
 				{
-					current_tileset_column = tilesets[tilesetKeys[current_tileset]]->columns;
-					current_tileset_row++;
-
-					if (current_tileset_row >= tilesets[tilesetKeys[current_tileset]]->rows)
+					current_tileset_column = tilesets[tilesetKeys[current_tileset]]->columns - 1;
+					
+					if (current_tileset_row == 0)
 					{
-						current_tileset_row = 0;
+						current_tileset_row = tilesets[tilesetKeys[current_tileset]]->rows - 1;
+					}
+					else 
+					{
+						current_tileset_row--;
 					}
 				}
 				else
-				{ 
+				{
 					current_tileset_column--;
 				}
 
-			}
+			}break;
+
 			case SDLK_PAGEDOWN: // TODO: next / prev tile function
 			{
 				current_tileset_column++;
 
-				if (current_tileset_column >= tilesets[tilesetKeys[current_tileset]]->rows)
+				if (current_tileset_column >= tilesets[tilesetKeys[current_tileset]]->columns)
 				{
 					current_tileset_column = 0;
 					current_tileset_row++;
@@ -449,13 +449,13 @@ void SKO_MapEditor::Manager::HandleInput()
 						current_tileset_row = 0;
 					}
 				}
-			}
+			}break;
 
 			case 'w':
 				if (current_tile > 0 && mode == TILE_DRAW && !fringe_mode)
-					map->backgroundTiles[current_tile]->x--;
+					map->backgroundTiles[current_tile]->y--;
 				if (current_fringe > 0 && mode == TILE_DRAW && fringe_mode)
-					map->fringeTiles[current_fringe]->x--;
+					map->fringeTiles[current_fringe]->y--;
 
 				if (mode == TOGGLE_TEST)
 					y_speed = -6;
@@ -674,9 +674,10 @@ void SKO_MapEditor::Manager::HandleInput()
 						placing_fringe = true;
 					}
 
-					int x = (int)(cursor_x + (int)camera_x) / 32 * 32;
-					int y = (int)(cursor_y + (int)camera_y) / 32 * 32;
-					map->fringeTiles.push_back(new SKO_Map::Tile(x, y, tilesets[tilesetKeys[current_tileset]]->key, current_tileset_row, current_tileset_column));
+					int x = (int)(cursor_x + (int)camera_x) / tilesets[tilesetKeys[current_tileset]]->tile_width * tilesets[tilesetKeys[current_tileset]]->tile_width;
+					int y = (int)(cursor_y + (int)camera_y) / tilesets[tilesetKeys[current_tileset]]->tile_height * tilesets[tilesetKeys[current_tileset]]->tile_width;
+
+					map->fringeTiles.push_back(new SKO_Map::Tile(x, y, tilesets[tilesetKeys[current_tileset]], current_tileset_row, current_tileset_column));
 				}
 				break;
 
