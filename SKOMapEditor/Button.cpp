@@ -28,8 +28,8 @@ OPI_Gui::Button::Button(std::string theme, int x, int y, OPI_Text::TextComponent
 	this->text = text;
 	this->texture = nullptr;
 	auto buttonText = text;
-	int buttonTextX = (this->theme->getMinimumWidth() - buttonText->contentRender.width) / 2;
-	int buttonTextY = (this->theme->getMinimumHeight() - buttonText->contentRender.height) / 2;
+	int buttonTextX = (this->theme->getMinimumWidth() - buttonText->contentRender->width) / 2;
+	int buttonTextY = (this->theme->getMinimumHeight() - buttonText->contentRender->height) / 2;
 	auto textLabel = new OPI_Gui::TextLabel(buttonTextX, buttonTextY, buttonText);
 	this->addElement(textLabel);
 }

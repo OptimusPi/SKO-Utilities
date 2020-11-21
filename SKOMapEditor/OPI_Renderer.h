@@ -14,7 +14,8 @@ public:
 	
 	// Drawing functions
 	void drawImage(int x, int y, const OPI_Image *img);
-	void drawImage(int x, int y, const OPI_Image *img, float blendTolerance);
+	void drawImage(int x, int y, const OPI_Image* img, SDL_Rect selection);
+	void drawImage(int x, int y, const OPI_Image *img, SDL_Rect selection, float blendTolerance);
 	void drawText(OPI_Text::TextComponent *text);
 	void drawRect(SDL_Rect rect, unsigned char r, unsigned char g, unsigned char b);
 

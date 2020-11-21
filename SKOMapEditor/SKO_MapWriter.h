@@ -12,14 +12,14 @@ namespace SKO_Map
 	{
 	public:
 		// Pass a SKO_Map and it will save to its file location
-		static void saveMap(SKO_Map::Map *map);
+		static void saveMap(SKO_Map::Map *map, std::map<std::string, SKO_Map::Tileset*> tilesets);
 
 		// Save map header and count
 		static void saveMetaData(SKO_Map::Map * map, std::ofstream *file);
 
 		// Save dimensions and graphics
-		static void saveBackgroundTiles(SKO_Map::Map * map, std::ofstream *file);
-		static void saveFringeTiles(SKO_Map::Map * map, std::ofstream *file);
+		static void saveBackgroundTiles(SKO_Map::Map * map, std::map<std::string, SKO_Map::Tileset*> tilesets, std::ofstream *file);
+		static void saveFringeTiles(SKO_Map::Map * map, std::map<std::string, SKO_Map::Tileset*> tilesets, std::ofstream *file);
 		static void saveCollisionRects(SKO_Map::Map * map, std::ofstream *file);
 
 		// Save game objects

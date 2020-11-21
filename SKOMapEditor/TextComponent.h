@@ -32,7 +32,7 @@ namespace OPI_Text
 
 		unsigned short int width, height;
 		bool visible;
-		OPI_Image contentRender;
+		OPI_Image *contentRender;
 		std::string content;
 
 	private:

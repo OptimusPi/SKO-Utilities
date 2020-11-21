@@ -26,7 +26,7 @@ namespace SKO_MapEditor
 		void loadMap(std::string filename);
 		// Clean up useless rectangles (<4x4 pixels) to a SKO_Map in-place.
 		void cleanupInvisibleRects(SKO_Map::Map *map);
-
+		
 		//Clean up accidentally duplicated tiles
 		void removeDuplicateTiles(std::vector<SKO_Map::Tile*> *tiles);
 		void removeDuplicateTiles(SKO_Map::Map *map);
@@ -55,12 +55,13 @@ namespace SKO_MapEditor
 		SKO_Map::Reader * mapReader;
 		float camera_x = 0, camera_y = 0;
 		int cursor_x = 0, cursor_y = 0;
-		int current_tile = -1;
+		SKO_Map::Tile *current_tile = nullptr;
 		int current_rect = -1;
-		int current_fringe = -1;
-		int current_tileset = 0;
+		
 		std::map<std::string, SKO_Map::Tileset*> tilesets;
 		std::vector<std::string> tilesetKeys;
+
+		SKO_Map::Tileset* current_tileset = nullptr;
 		unsigned int current_tileset_row = 0;
 		unsigned int current_tileset_column = 0;
 

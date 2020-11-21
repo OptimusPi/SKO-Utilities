@@ -40,17 +40,41 @@ void OPI_Renderer::sizeScreen()
 
 }
 
+
+void OPI_Renderer::drawImage(int x, int y, const OPI_Image* img, const SDL_Rect selection)
+{
+	if (x >= (int)(0 - selection.w) &&
+		x < this->originalWindowWidth &&
+		y < this->originalWindowHeight &&
+		y >= (int)(0 - selection.h))
+	{
+		drawImage(x, y, img, selection, this->defaultBlendTolerance);
+	}
+}
+
 void OPI_Renderer::drawImage(int x, int y, const OPI_Image *img)
 {
-	drawImage(x, y, img, this->defaultBlendTolerance);
+	if (x >= (int)(0 - img->width) &&
+		x < this->originalWindowWidth &&
+		y < this->originalWindowHeight &&
+		y >= (int)(0 - img->height))
+	{
+		SDL_Rect selection;
+		selection.x = 0;
+		selection.y = 0;
+		selection.w = img->width;
+		selection.h = img->height;
+		drawImage(x, y, img, selection, this->defaultBlendTolerance);
+	}
 }
 
 
-void OPI_Renderer::drawImage(int x, int y, const OPI_Image *img, float blendTolerance)
+void OPI_Renderer::drawImage(int x, int y, const OPI_Image *img, const SDL_Rect selection, float blendTolerance)
 {
 	// Do not attempt to render null images, just continue.
 	if (img == nullptr)
 		return;
+
 	glEnable(GL_TEXTURE_2D);
 	glMatrixMode(GL_TEXTURE);
 	glLoadIdentity();
@@ -66,23 +90,33 @@ void OPI_Renderer::drawImage(int x, int y, const OPI_Image *img, float blendTole
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+	float
+		offset_x = selection.x,
+		offset_y = selection.y,
+		end_x = x + selection.w,
+		end_y = y + selection.h;
+
+	float right = (offset_x + selection.w) / (float)img->width;
+	float bottom = (offset_y + selection.h) / (float)img->height;
+	float left = (offset_x) / (float)img->width;
+	float top = (offset_y) / (float)img->height;
 
 	glBegin(GL_QUADS);
 	//Top-left vertex (corner)
-	glTexCoord2i(0, 0);
-	glVertex3i(x, y, 0);
+	glTexCoord2f(left, top);
+	glVertex2f(x, y);
 
 	//Bottom-left vertex (corner)
-	glTexCoord2i(0, 1);
-	glVertex3i(x, y + img->height, 0);
+	glTexCoord2f(left, bottom);
+	glVertex2f(x, y);
 
 	//Bottom-right vertex (corner)
-	glTexCoord2i(1, 1);
-	glVertex3i(x + img->width, y + img->height, 0);
+	glTexCoord2f(right, bottom);
+	glVertex2f(end_x, end_y);
 
 	//Top-right vertex (corner)
-	glTexCoord2i(1, 0);
-	glVertex3i(x + img->width, y, 0);
+	glTexCoord2f(right, top);
+	glVertex2f(end_x, y);
 	glEnd();
 }
 
@@ -91,9 +125,15 @@ void OPI_Renderer::drawText(OPI_Text::TextComponent *text)
 	//tint
 	glColor3f(text->R, text->G, text->B);
 
-	float screen_x = text->x;
-	float screen_y = text->y;
-	drawImage(10, 10, &text->contentRender, 0.01);
+	float x = text->x;
+	float y = text->y;
+	SDL_Rect selection;
+	selection.w = text->contentRender->width;
+	selection.h = text->contentRender->height;
+	selection.x = 0;
+	selection.y = 0;
+
+	drawImage(x, y, text->contentRender, selection, 0.01);
 
 	//reset tint
 	glColor3f(1.0f, 1.0f, 1.0f);

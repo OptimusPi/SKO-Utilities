@@ -37,7 +37,7 @@ void OPI_Text::TextComponent::renderImage(std::string content, OPI_Text::Font* f
 
 	// TODO - implement text wrap
 	SDL_Surface *surface = TTF_RenderUTF8_Blended(font->size(this->fontPoint), content.c_str(), this->color);
-	this->contentRender.setImage(surface);
+	this->contentRender->setImage(surface);
 	SDL_FreeSurface(surface);
 }
 

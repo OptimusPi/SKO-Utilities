@@ -150,8 +150,19 @@ void SKO_MapEditor::Manager::removeDuplicateTiles(std::vector<SKO_Map::Tile*> *t
 
 void SKO_MapEditor::Manager::removeDuplicateTiles(SKO_Map::Map *map)
 {
-	removeDuplicateTiles(&map->backgroundTiles);
-	removeDuplicateTiles(&map->fringeTiles);
+	for (auto it = map->backgroundTiles.begin(); it != map->backgroundTiles.end(); it++)
+	{
+		auto tilesetKey = it->first;
+		auto tiles = it->second;
+		removeDuplicateTiles(&tiles);
+	}
+
+	for (auto it = map->fringeTiles.begin(); it != map->fringeTiles.end(); it++)
+	{
+		auto tilesetKey = it->first;
+		auto tiles = it->second;
+		removeDuplicateTiles(&tiles);
+	}
 }
 
  
@@ -161,7 +172,7 @@ void SKO_MapEditor::Manager::saveMap(std::string fileLocation)
 	this->cleanupInvisibleRects(this->map);
 
 	// Save the map at the given file location
-	this->map->saveMap(fileLocation);
+	this->map->saveMap(fileLocation, tilesets);
 }
 
 void SKO_MapEditor::Manager::saveMap()
@@ -169,8 +180,11 @@ void SKO_MapEditor::Manager::saveMap()
 	// Cleanup small rects you can't see
 	this->cleanupInvisibleRects(this->map);
 
+	// Remove duplicate tiles that are exactly the same
+	this->removeDuplicateTiles(this->map);
+
 	// Save the map to its previous file location
-	this->map->saveMap();
+	this->map->saveMap(this->tilesets);
 }
 
 
@@ -185,20 +199,30 @@ void SKO_MapEditor::Manager::loadMap(std::string fileName)
 	// Remove tiles that are the same tileID and same X and same Y values
 	//removeDuplicateTiles(map);
 
-	// Set map current rect
-	current_rect = map->collisionRects.size() - 1;
-	current_fringe = map->fringeTiles.size() - 1;
-	current_tile = map->backgroundTiles.size() - 1;
-
 	// load images for each tile
-	for (auto tile : map->fringeTiles)
+	for (auto it = map->backgroundTiles.begin(); it != map->backgroundTiles.end(); it++)
 	{
-		tile->image = tilesets[tile->tileset_key]->getTileImage(tile->tileset_row, tile->tileset_column);
+		auto tilesetKey = it->first;
+		auto tiles = it->second;
+
+		for (auto tile : tiles)
+		{
+			// TODO don't need to store the tile image in each tile - use sprite batching
+			tile->image = tilesets[tilesetKey]->getTileImage(tile->tileset_row, tile->tileset_column);
+		}
 	}
-	for (auto tile : map->backgroundTiles)
+
+	for (auto it = map->fringeTiles.begin(); it != map->fringeTiles.end(); it++)
 	{
-		tile->image = tilesets[tile->tileset_key]->getTileImage(tile->tileset_row, tile->tileset_column);
+		auto tilesetKey = it->first;
+		auto tiles = it->second;
+
+		for (auto tile : tiles)
+		{
+			tile->image = tilesets[tilesetKey]->getTileImage(tile->tileset_row, tile->tileset_column);
+		}
 	}
+	
 }
 
 void SKO_MapEditor::Manager::DrawGameScene(int camera_x, int camera_y)
@@ -209,21 +233,35 @@ void SKO_MapEditor::Manager::DrawGameScene(int camera_x, int camera_y)
 	renderer->drawImage(0, 1024, &background);
 	renderer->drawImage(1024, 1024, &background);
 
+	// TODO use sprite batching
 	//draw background tiles, only on screen
-	for (int i = 0; i < map->backgroundTiles.size(); i++)
+	//
+	//{
+	//	auto tilesetKey = it->first;
+	//	auto tiles = it->second;
+
+	//	for (auto tile : tiles)
+	//	{
+	//		tile->image = tilesets[tilesetKey]->getTileImage(tile->tileset_row, tile->tileset_column);
+	//	}
+	//}
+
+	for (auto it = map->backgroundTiles.begin(); it != map->backgroundTiles.end(); it++)
 	{
-		SKO_Map::Tile *tile = map->backgroundTiles[i];
-		OPI_Image *tileImg = tile->image;
+		auto tilesetKey = it->first;
+		auto tiles = it->second;
 
-		int drawX = tile->x - camera_x;
-		int drawY = tile->y - camera_y;
-
-		if (drawX >= (int)(0 - tileImg->width) &&
-			drawX < renderer->originalWindowWidth &&
-			drawY < renderer->originalWindowHeight &&
-			drawY >= (int)(0 - tileImg->height))
+		for (auto tile : tiles)
 		{
+			OPI_Image* tileImg = tile->image;
+
+			int drawX = tile->x - camera_x;
+			int drawY = tile->y - camera_y;
+
+			
+			
 			renderer->drawImage(drawX, drawY, tileImg);
+			
 		}
 	}
 
@@ -233,28 +271,25 @@ void SKO_MapEditor::Manager::DrawGameScene(int camera_x, int camera_y)
 
 
 	//draw fringe tiles, only on screen
-	for (int i = 0; i < map->fringeTiles.size(); i++)
+	for (auto it = map->fringeTiles.begin(); it != map->fringeTiles.end(); it++)
 	{
-		SKO_Map::Tile *tile = map->fringeTiles[i];
-		OPI_Image* tileImg = tile->image;
+		auto tilesetKey = it->first;
+		auto tiles = it->second;
 
-
-		int drawX = tile->x - camera_x;
-		int drawY = tile->y - camera_y;
-
-		if (drawX >= (int)(0 - tileImg->width) &&
-			drawX < renderer->originalWindowWidth &&
-			drawY < renderer->originalWindowHeight &&
-			drawY >= (int)(0 - tileImg->height))
+		for (auto tile : tiles)
 		{
+			OPI_Image* tileImg = tile->image;
+
+			int drawX = tile->x - camera_x;
+			int drawY = tile->y - camera_y;
+
 			renderer->drawImage(drawX, drawY, tileImg);
 		}
-		
 	}
 
 	//draw current tile
 	if (mode == TILE_DRAW) {
-		auto currentTileImage = tilesets[tilesetKeys[current_tileset]]->getTileImage(current_tileset_row, current_tileset_column);
+		auto currentTileImage = current_tileset->getTileImage(current_tileset_row, current_tileset_column);
 		renderer->drawImage(cursor_x / 32 * 32, cursor_y / 32 * 32, currentTileImage);
 	}
 
@@ -417,11 +452,11 @@ void SKO_MapEditor::Manager::HandleInput()
 			{
 				if (current_tileset_column == 0)
 				{
-					current_tileset_column = tilesets[tilesetKeys[current_tileset]]->columns - 1;
+					current_tileset_column = current_tileset->columns - 1;
 					
 					if (current_tileset_row == 0)
 					{
-						current_tileset_row = tilesets[tilesetKeys[current_tileset]]->rows - 1;
+						current_tileset_row = current_tileset->rows - 1;
 					}
 					else 
 					{
@@ -439,12 +474,12 @@ void SKO_MapEditor::Manager::HandleInput()
 			{
 				current_tileset_column++;
 
-				if (current_tileset_column >= tilesets[tilesetKeys[current_tileset]]->columns)
+				if (current_tileset_column >= current_tileset->columns)
 				{
 					current_tileset_column = 0;
 					current_tileset_row++;
 
-					if (current_tileset_row >= tilesets[tilesetKeys[current_tileset]]->rows)
+					if (current_tileset_row >= current_tileset->rows)
 					{
 						current_tileset_row = 0;
 					}
@@ -452,13 +487,12 @@ void SKO_MapEditor::Manager::HandleInput()
 			}break;
 
 			case 'w':
-				if (current_tile > 0 && mode == TILE_DRAW && !fringe_mode)
-					map->backgroundTiles[current_tile]->y--;
-				if (current_fringe > 0 && mode == TILE_DRAW && fringe_mode)
-					map->fringeTiles[current_fringe]->y--;
+				if (current_tile != nullptr && mode == TILE_DRAW)
+					current_tile->y--;
 
 				if (mode == TOGGLE_TEST)
 					y_speed = -6;
+
 				if (mode == COLLISION_DRAW && current_rect >= 0)
 				{
 					if (map->collisionRects[current_rect].y > 0)
@@ -472,11 +506,7 @@ void SKO_MapEditor::Manager::HandleInput()
 
 				if (current_tile > 0 && mode == TILE_DRAW && !fringe_mode)
 				{
-					map->backgroundTiles[current_tile]->x--;
-				}
-				if (current_fringe > 0 && mode == TILE_DRAW && fringe_mode)
-				{
-					map->fringeTiles[current_fringe]->x--;
+					current_tile->x--;
 				}
 
 				LEFT = true;
@@ -491,11 +521,9 @@ void SKO_MapEditor::Manager::HandleInput()
 				}
 				break;
 			case 's':
-				if (current_tile > 0 && mode == TILE_DRAW && !fringe_mode)
-					map->backgroundTiles[current_tile]->y++;
-				if (current_fringe > 0 && mode == TILE_DRAW && fringe_mode)
-					map->fringeTiles[current_fringe]->y++;
-
+				if (current_tile != nullptr && mode == TILE_DRAW)
+					current_tile->y++;
+				
 				if (mode == COLLISION_DRAW && current_rect >= 0)
 				{
 					map->collisionRects[current_rect].y++;
@@ -505,10 +533,8 @@ void SKO_MapEditor::Manager::HandleInput()
 				break;
 			case 'd':
 
-				if (current_tile > 0 && mode == TILE_DRAW && !fringe_mode)
-					map->backgroundTiles[current_tile]->x++;
-				if (current_fringe > 0 && mode == TILE_DRAW && fringe_mode)
-					map->fringeTiles[current_fringe]->x++;
+				if (current_tile != nullptr && mode == TILE_DRAW)
+					current_tile->x++;
 
 				RIGHT = true;
 
@@ -620,17 +646,8 @@ void SKO_MapEditor::Manager::HandleInput()
 			}
 			if (mode == TILE_DRAW && LCLICK)
 			{
-				if (!fringe_mode && current_tile >= 0)
-				{
-					map->backgroundTiles[current_tile]->x = (int)(cursor_x + camera_x) / 32 * 32;
-					map->backgroundTiles[current_tile]->y = (int)(cursor_y + camera_y) / 32 * 32;
-
-				}
-				else if (current_fringe && current_fringe >= 0)
-				{
-					map->fringeTiles[current_fringe]->x = (int)(cursor_x + camera_x) / 32 * 32;
-					map->fringeTiles[current_fringe]->y = (int)(cursor_y + camera_y) / 32 * 32;
-				}
+				current_tile->x = (int)(cursor_x + camera_x) / 32 * 32;
+				current_tile->y = (int)(cursor_y + camera_y) / 32 * 32;
 			}
 			if (mode == TOGGLE_TEST && LCLICK)
 			{
@@ -650,84 +667,61 @@ void SKO_MapEditor::Manager::HandleInput()
 			switch (mode)
 			{
 
-			case TILE_DRAW:
-				if (!fringe_mode)
+			case TILE_DRAW: {
+				if (!placing_tile)
 				{
-					current_tile++;
+					placing_tile = true;
+				}
 
-					if (!placing_tile)
-					{
-						placing_tile = true;
-					}
-
-					int x = (int)(cursor_x + (int)camera_x) / tilesets[tilesetKeys[current_tileset]]->tile_width * tilesets[tilesetKeys[current_tileset]]->tile_width;
-					int y = (int)(cursor_y + (int)camera_y) / tilesets[tilesetKeys[current_tileset]]->tile_height * tilesets[tilesetKeys[current_tileset]]->tile_width;
-
-					map->backgroundTiles.push_back(new SKO_Map::Tile(x, y, tilesets[tilesetKeys[current_tileset]], current_tileset_row, current_tileset_column));
+				auto x = (int)(cursor_x + camera_x) / 32 * 32;
+				auto y = (int)(cursor_y + camera_y) / 32 * 32;
+				auto tile = new SKO_Map::Tile(x, y, current_tileset, current_tileset_row, current_tileset_column);
+				if (fringe_mode)
+				{
+					map->fringeTiles[current_tileset->key].push_back(tile);
 				}
 				else
 				{
-					current_fringe++;
-
-					if (!placing_fringe)
-					{
-						placing_fringe = true;
-					}
-
-					int x = (int)(cursor_x + (int)camera_x) / tilesets[tilesetKeys[current_tileset]]->tile_width * tilesets[tilesetKeys[current_tileset]]->tile_width;
-					int y = (int)(cursor_y + (int)camera_y) / tilesets[tilesetKeys[current_tileset]]->tile_height * tilesets[tilesetKeys[current_tileset]]->tile_width;
-
-					map->fringeTiles.push_back(new SKO_Map::Tile(x, y, tilesets[tilesetKeys[current_tileset]], current_tileset_row, current_tileset_column));
-				}
-				break;
-
-			case TILE_DELETE: {
-				//find a tile to delete
-				int i;
-				int x = cursor_x + camera_x;
-				int y = cursor_y + camera_y;
-
-				if (!fringe_mode)
-				{
-					int at = -1;
-					for (i = 0; i <= current_tile; i++)
-					{
-						if (x > map->backgroundTiles[i]->x&& x < map->backgroundTiles[i]->x + map->backgroundTiles[i]->image->width &&
-							y > map->backgroundTiles[i]->y&& y < map->backgroundTiles[i]->y + map->backgroundTiles[i]->image->height)
-						{
-							at = i;
-							break;
-						}
-					}
-
-					if (at >= 0)
-					{
-						map->backgroundTiles.erase(map->backgroundTiles.begin() + at);
-						current_tile--;
-					}
-				}
-				else
-				{
-					int at = -1;
-					for (i = 0; i <= current_fringe; i++)
-					{
-						if (x > map->fringeTiles[i]->x&& x < map->fringeTiles[i]->x + map->fringeTiles[i]->image->width &&
-							y > map->fringeTiles[i]->y&& y < map->fringeTiles[i]->y + map->fringeTiles[i]->image->height)
-						{
-							at = i;
-							break;
-						}
-					}
-
-					if (at >= 0)
-					{
-						map->fringeTiles.erase(map->fringeTiles.begin() + at);
-						current_fringe--;
-					}
+					map->backgroundTiles[current_tileset->key].push_back(tile);
 				}
 			}
 			break;
 
+			case TILE_DELETE: {
+				//find a tile to delete
+				int x = cursor_x + camera_x;
+				int y = cursor_y + camera_y;
+				int width = current_tileset->tile_width;
+				int height = current_tileset->tile_height;
+				std::vector<SKO_Map::Tile*> tiles; 
+
+				if (fringe_mode)
+				{
+					tiles = map->fringeTiles[current_tileset->key];
+				}
+				else
+				{
+					tiles = map->backgroundTiles[current_tileset->key];
+				}
+
+				int at = -1;
+				for (int i = 0; i < tiles.size(); i++)
+				{
+					auto tile = tiles[i];
+					if (x > tile->x&& x < tile->x + width &&
+						y > tile->y&& y < tile->y + height)
+					{
+						at = i;
+						break;
+					}
+				}
+					
+				if (at >= 0)
+				{
+					tiles.erase(tiles.begin() + at);
+				}
+			}
+			break;
 
 			// TODO separate all these giant switch statements please
 			case COLLISION_DRAW: {

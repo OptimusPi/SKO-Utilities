@@ -90,7 +90,7 @@ void SKO_Map::Reader::loadBackgroundTiles(SKO_Map::Map * map, INIReader mapIni)
 			// life hack put a dirt tile under it quick - 
 			//TODO remove, it's just because the corner tile was made more modular with invisible background
 			SKO_Map::Tile* dirtTile = convertTile(x, y, 5);
-			map->backgroundTiles.push_back(dirtTile);
+			map->backgroundTiles[dirtTile->tileset_key].push_back(dirtTile);
 		}
 
 		if (id == 24 || id == 25)
@@ -98,10 +98,10 @@ void SKO_Map::Reader::loadBackgroundTiles(SKO_Map::Map * map, INIReader mapIni)
 			// life hack put a dirt tile under it quick - 
 			//TODO remove, it's just because the corner tile was made more modular with invisible background
 			SKO_Map::Tile* dirtTile = convertTile(x, y, 20);
-			map->backgroundTiles.push_back(dirtTile);
+			map->backgroundTiles[dirtTile->tileset_key].push_back(dirtTile);
 		}
 
-		map->backgroundTiles.push_back(backgroundTile);
+		map->backgroundTiles[backgroundTile->tileset_key].push_back(backgroundTile);
 	}
 }
 
@@ -161,7 +161,7 @@ void SKO_Map::Reader::loadFringeTiles(SKO_Map::Map * map, INIReader mapIni)
 
 		// Add fringe tile to map collection
 		SKO_Map::Tile* fringeTile = convertTile(x, y, id);
-		map->fringeTiles.push_back(fringeTile);
+		map->fringeTiles[fringeTile->tileset_key].push_back(fringeTile);
 	}
 }
 

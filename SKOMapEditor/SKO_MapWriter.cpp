@@ -1,6 +1,6 @@
 #include "SKO_MapWriter.h"
 
-void SKO_Map::Writer::saveMap(SKO_Map::Map * map)
+void SKO_Map::Writer::saveMap(SKO_Map::Map * map, std::map<std::string, SKO_Map::Tileset*> tilesets)
 {
 	// Open the output, overwriting the entire file.
 	std::ofstream* file = new std::ofstream(map->filePath); // TODO - remove this, tempoorarily being used to convert old maps to new format... +".2.ini");
@@ -12,8 +12,8 @@ void SKO_Map::Writer::saveMap(SKO_Map::Map * map)
 	*file << std::endl;
 	*file << "# Map Dimensions: Background Tiles, Fringe Tiles, and Collision Rectangles" << std::endl;
 	*file << std::endl;
-	saveBackgroundTiles(map, file);
-	saveFringeTiles(map, file);
+	saveBackgroundTiles(map, tilesets, file);
+	saveFringeTiles(map, tilesets, file);
 	saveCollisionRects(map, file);
 
 	// Save game objects
@@ -42,6 +42,7 @@ void SKO_Map::Writer::saveMetaData(SKO_Map::Map * map, std::ofstream * file)
 
 	// Count of all the types
 	*file << "[count]" << std::endl;
+	*file << "tiles = " << map->backgroundTiles.size() << std::endl;
 	*file << "background_tiles = " << map->backgroundTiles.size() << std::endl;
 	*file << "fringe_tiles = " << map->fringeTiles.size() << std::endl;
 	*file << "collision_rects = " << map->collisionRects.size() << std::endl;
@@ -54,31 +55,53 @@ void SKO_Map::Writer::saveMetaData(SKO_Map::Map * map, std::ofstream * file)
 	*file << "npcs = " << map->npcs.size() << std::endl;
 }
 
-void SKO_Map::Writer::saveBackgroundTiles(SKO_Map::Map * map, std::ofstream * file)
+void SKO_Map::Writer::saveBackgroundTiles(SKO_Map::Map * map, std::map<std::string, SKO_Map::Tileset*> tilesets, std::ofstream * file)
 {
-	for (int i = 0; i < map->backgroundTiles.size(); i++)
+	for (auto it = map->backgroundTiles.begin(); it != map->backgroundTiles.end(); it++)
 	{
-		*file << "[background_tile" << i << "]" << std::endl;
-		*file << "background_tile_x = " << map->backgroundTiles[i]->x << std::endl;
-		*file << "background_tile_y = " << map->backgroundTiles[i]->y << std::endl;
-		*file << "background_tile_tileset_key" << i << " = " << map->backgroundTiles[i]->tileset_key << std::endl;
-		*file << "background_tile_tileset_row" << i << " = " << map->backgroundTiles[i]->tileset_row << std::endl;
-		*file << "background_tile_tileset_column" << i << " = " << map->backgroundTiles[i]->tileset_column << std::endl;
+		auto tilesetKey = it->first;
+		auto tiles = it->second;
+
+		if (tiles.size() > 0)
+		{
+			*file << "; " << tilesets[tilesetKey]->name;
+			*file << "[background_tiles_" << tilesetKey << "]" << std::endl;
+		}
+
+		for (int i = 0; i < tiles.size(); i++)
+		{
+			*file << "x" << i << " = " << tiles[i]->x << std::endl;
+			*file << "y" << i << " = " << tiles[i]->y << std::endl;
+			*file << "row" << i << " = " << tiles[i]->tileset_row << std::endl;
+			*file << "col" << i << " = " << tiles[i]->tileset_column << std::endl;
+		}
+		
 		*file << std::endl;
 	}
 	*file << std::endl;
 }
 
-void SKO_Map::Writer::saveFringeTiles(SKO_Map::Map * map, std::ofstream * file)
+void SKO_Map::Writer::saveFringeTiles(SKO_Map::Map * map, std::map<std::string, SKO_Map::Tileset*> tilesets, std::ofstream * file)
 {
-	for (int i = 0; i < map->fringeTiles.size(); i++)
+	for (auto it = map->fringeTiles.begin(); it != map->fringeTiles.end(); it++)
 	{
-		*file << "[fringe_tile" << i << "]" << std::endl;
-		*file << "fringe_tile_x = " << map->fringeTiles[i]->x << std::endl;
-		*file << "fringe_tile_y = " << map->fringeTiles[i]->y << std::endl;
-		*file << "fringe_tile_tileset_key = " << map->fringeTiles[i]->tileset_key << std::endl;
-		*file << "fringe_tile_tileset_row = " << map->fringeTiles[i]->tileset_row << std::endl;
-		*file << "fringe_tile_tileset_column = " << map->fringeTiles[i]->tileset_column << std::endl;
+		auto tilesetKey = it->first;
+		auto tiles = it->second;
+
+		if (tiles.size() > 0)
+		{
+			*file << "; " << tilesets[tilesetKey]->name;
+			*file << "[fringe_tiles_" << tilesetKey << "]" << std::endl;
+		}
+
+		for (int i = 0; i < tiles.size(); i++)
+		{
+			*file << "x" << i << " = " << tiles[i]->x << std::endl;
+			*file << "y" << i << " = " << tiles[i]->y << std::endl;
+			*file << "row" << i << " = " << tiles[i]->tileset_row << std::endl;
+			*file << "col" << i << " = " << tiles[i]->tileset_column << std::endl;
+		}
+
 		*file << std::endl;
 	}
 	*file << std::endl;
@@ -89,10 +112,10 @@ void SKO_Map::Writer::saveCollisionRects(SKO_Map::Map * map, std::ofstream * fil
 	for (int i = 0; i < map->collisionRects.size(); i++) 
 	{
 		*file << "[collision_rect" << i << "]" << std::endl; // TODO READER CHANGE
-		*file << "x = " << map->collisionRects[i].x << std::endl;// TODO READER CHANGE
-		*file << "y = " << map->collisionRects[i].y << std::endl;// TODO READER CHANGE
-		*file << "w = " << map->collisionRects[i].w << std::endl;// TODO READER CHANGE
-		*file << "h = " << map->collisionRects[i].h << std::endl;// TODO READER CHANGE
+		*file << "x = " << map->collisionRects[i].x << std::endl; // TODO READER CHANGE
+		*file << "y = " << map->collisionRects[i].y << std::endl; // TODO READER CHANGE
+		*file << "w = " << map->collisionRects[i].w << std::endl; // TODO READER CHANGE
+		*file << "h = " << map->collisionRects[i].h << std::endl; // TODO READER CHANGE
 		*file << std::endl;
 	}
 	*file << std::endl;
@@ -107,7 +130,7 @@ void SKO_Map::Writer::savePortals(SKO_Map::Map * map, std::ofstream * file)
 		*file << "y = " << map->portals[i]->y << std::endl;
 		*file << "w = " << map->portals[i]->w << std::endl;
 		*file << "h = " << map->portals[i]->h << std::endl;
-		*file << "map_id = " << (int)map->portals[i]->mapId << std::endl; // TODO READER CHANGE
+		*file << "map_id = " << (int)map->portals[i]->mapId << std::endl; // TODO READER CHANGE - need to use map guid
 		*file << "spawn_x = " << map->portals[i]->spawn_x << std::endl;
 		*file << "spawn_y = " << map->portals[i]->spawn_y << std::endl; 
 		*file << "level_required = " << map->portals[i]->level_required << std::endl;

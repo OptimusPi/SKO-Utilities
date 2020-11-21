@@ -163,10 +163,19 @@ int OPI_Gui::GuiManager::getScreenHeight()
 
 void OPI_Gui::GuiManager::drawElement(int x, int y, OPI_Gui::Element * element)
 {
-	renderer->drawImage(x + element->x, y + element->y, element->getTexture(), 0.f);
-	for (OPI_Gui::Element* child : element->children) {
+	SDL_Rect selection;
+	selection.x = 0;
+	selection.y = 0;
+	selection.w = element->getTexture()->width;
+	selection.h = element->getTexture()->height;
+
+	renderer->drawImage(x + element->x, y + element->y, element->getTexture(), selection, 0.f);
+	for (OPI_Gui::Element* child : element->children) 
+	{
 		if (child->isVisible)
+		{
 			drawElement(x + element->x, y + element->y, child);
+		}
 	}
 }
 

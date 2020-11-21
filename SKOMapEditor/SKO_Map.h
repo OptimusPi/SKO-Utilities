@@ -29,8 +29,8 @@ namespace SKO_Map
 		virtual ~Map(); 
 
 		// Static map objects
-		std::vector<Tile*> backgroundTiles;   
-		std::vector<Tile*> fringeTiles;       
+		std::map<std::string, std::vector<Tile*>> backgroundTiles;
+		std::map<std::string, std::vector<Tile*>> fringeTiles;
 		std::vector<SDL_Rect> collisionRects; 
 
 		// Living game objects inside this map
@@ -43,13 +43,13 @@ namespace SKO_Map
 		std::vector<SKO_Npc*>npcs;
 
 		// TODO - Move to Reader/Writer classes
-		void saveMap(); 
-		void saveMap(std::string filePath); 
+		void saveMap(std::map<std::string, SKO_Map::Tileset*> tilesets);
+		void saveMap(std::string filePath, std::map<std::string, SKO_Map::Tileset*> tilesets);
 		void loadMap(std::string filePath); 
 		
 		// New version to save as INI and read INI
-		void saveMapINI(std::string filePath); 
-		void loadMapINI(std::string filePath); 
+		void saveMapINI(std::string filePath, std::map<std::string, SKO_Map::Tileset*> tilesets); 
+		void loadMapINI(std::string filePath);
 		std::string filePath;
 	private:
 		

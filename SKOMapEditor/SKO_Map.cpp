@@ -14,149 +14,150 @@ SKO_Map::Map::~Map()
 
 }
 
-void SKO_Map::Map::saveMap()
+void SKO_Map::Map::saveMap(std::map<std::string, SKO_Map::Tileset*> tilesets)
 {
-	this->saveMap(this->filePath);
+	this->saveMap(this->filePath, tilesets);
 }
 
-void SKO_Map::Map::saveMap(std::string filePath)
+void SKO_Map::Map::saveMap(std::string filePath, std::map<std::string, SKO_Map::Tileset*> tilesets)
 {
 	// TODO use SKO_Map::MapWriter
 
-	SKO_Map::Writer::saveMap(this);
+	SKO_Map::Writer::saveMap(this, tilesets);
 
 	return;
-	// LEGACY Crap
-	//dump all the memory into a file
-	std::ofstream MapFile(filePath, std::ios::out | std::ios::binary);
-	int number_of_tiles = this->backgroundTiles.size();
-	int number_of_fringe = this->fringeTiles.size();
-	int number_of_rects = this->collisionRects.size();
 
-	if (MapFile.is_open())
- 	{ 
-		//first say how many tiles
-		//break up the int as 4 bytes 
-		unsigned char *p;
-		p = (unsigned char*)&number_of_tiles;
-		unsigned char b1 = p[0];
-		unsigned char b2 = p[1];
-		unsigned char b3 = p[2];
-		unsigned char b4 = p[3];
+	//// LEGACY Crap
+	////dump all the memory into a file
+	//std::ofstream MapFile(filePath, std::ios::out | std::ios::binary);
+	//int number_of_tiles = this->backgroundTiles.size();
+	//int number_of_fringe = this->fringeTiles.size();
+	//int number_of_rects = this->collisionRects.size();
 
-		//spit out each of the bytes
-		MapFile << b1 << b2 << b3 << b4;
+	//if (MapFile.is_open())
+ //	{ 
+	//	//first say how many tiles
+	//	//break up the int as 4 bytes 
+	//	unsigned char *p;
+	//	p = (unsigned char*)&number_of_tiles;
+	//	unsigned char b1 = p[0];
+	//	unsigned char b2 = p[1];
+	//	unsigned char b3 = p[2];
+	//	unsigned char b4 = p[3];
 
-		//put how many fringe
-		p = (unsigned char*)&number_of_fringe;
-		b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+	//	//spit out each of the bytes
+	//	MapFile << b1 << b2 << b3 << b4;
 
-		//spit out each of the bytes
-		MapFile << b1 << b2 << b3 << b4;
+	//	//put how many fringe
+	//	p = (unsigned char*)&number_of_fringe;
+	//	b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
 
-		//put how many rects
-		p = (unsigned char*)&number_of_rects;
-		b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+	//	//spit out each of the bytes
+	//	MapFile << b1 << b2 << b3 << b4;
 
-		//spit out each of the bytes
-		MapFile << b1 << b2 << b3 << b4;
+	//	//put how many rects
+	//	p = (unsigned char*)&number_of_rects;
+	//	b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
 
-		//spit out all the tiles
-		for (int i = 0; i < number_of_tiles; i++)
-		{
-			//x coords
-			unsigned char *p = (unsigned char*)(&backgroundTiles[i]->x);
-			unsigned char b1 = p[0]; 
-			unsigned char b2 = p[1]; 
-			unsigned char b3 = p[2]; 
-			unsigned char b4 = p[3];
+	//	//spit out each of the bytes
+	//	MapFile << b1 << b2 << b3 << b4;
 
-			//spit out each of the bytes
-			MapFile << b1 << b2 << b3 << b4;
+	//	//spit out all the tiles
+	//	for (int i = 0; i < number_of_tiles; i++)
+	//	{
+	//		//x coords
+	//		unsigned char *p = (unsigned char*)(&backgroundTiles[i]->x);
+	//		unsigned char b1 = p[0]; 
+	//		unsigned char b2 = p[1]; 
+	//		unsigned char b3 = p[2]; 
+	//		unsigned char b4 = p[3];
 
-			//y coords
-			p = (unsigned char*)(&backgroundTiles[i]->y);
-			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+	//		//spit out each of the bytes
+	//		MapFile << b1 << b2 << b3 << b4;
 
-			//spit out each of the bytes
-			MapFile << b1 << b2 << b3 << b4;
+	//		//y coords
+	//		p = (unsigned char*)(&backgroundTiles[i]->y);
+	//		b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
 
-			//tile number
-			//MapFile << backgroundTiles[i]->tileId;
-			//TODO what?
-			MapFile << 99;
-		}
+	//		//spit out each of the bytes
+	//		MapFile << b1 << b2 << b3 << b4;
 
-		//spit out all the tiles
-		for (int i = 0; i < number_of_fringe; i++)
-		{
-			//x coords
-			unsigned char *p = (unsigned char*)&fringeTiles[i]->x;
-			unsigned char b1 = p[0]; 
-			unsigned char b2 = p[1]; 
-			unsigned char b3 = p[2]; 
-			unsigned char b4 = p[3];
+	//		//tile number
+	//		//MapFile << backgroundTiles[i]->tileId;
+	//		//TODO what?
+	//		MapFile << 99;
+	//	}
 
-			//spit out each of the bytes
-			MapFile << b1 << b2 << b3 << b4;
+	//	//spit out all the tiles
+	//	for (int i = 0; i < number_of_fringe; i++)
+	//	{
+	//		//x coords
+	//		unsigned char *p = (unsigned char*)&fringeTiles[i]->x;
+	//		unsigned char b1 = p[0]; 
+	//		unsigned char b2 = p[1]; 
+	//		unsigned char b3 = p[2]; 
+	//		unsigned char b4 = p[3];
 
-			//y coords
-			p = (unsigned char*)&fringeTiles[i]->y;
-			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+	//		//spit out each of the bytes
+	//		MapFile << b1 << b2 << b3 << b4;
 
-			//spit out each of the bytes
-			MapFile << b1 << b2 << b3 << b4;
+	//		//y coords
+	//		p = (unsigned char*)&fringeTiles[i]->y;
+	//		b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
 
-			//fringe number
-			//MapFile << fringeTiles[i]->tileId;
-			//TODO what?
-			MapFile << 99;
+	//		//spit out each of the bytes
+	//		MapFile << b1 << b2 << b3 << b4;
 
-		}
+	//		//fringe number
+	//		//MapFile << fringeTiles[i]->tileId;
+	//		//TODO what?
+	//		MapFile << 99;
 
-		//spit out all the rects
-		for (int i = 0; i < number_of_rects; i++)
-		{
-			//x coords
-			int x = collisionRects[i].x;
-			unsigned char *p = (unsigned char*)&x;
-			unsigned char b1 = p[0];
-			unsigned char b2 = p[1];
-			unsigned char b3 = p[2];
-			unsigned char b4 = p[3];
+	//	}
 
-			//spit out each of the bytes
-			MapFile << b1 << b2 << b3 << b4;
+	//	//spit out all the rects
+	//	for (int i = 0; i < number_of_rects; i++)
+	//	{
+	//		//x coords
+	//		int x = collisionRects[i].x;
+	//		unsigned char *p = (unsigned char*)&x;
+	//		unsigned char b1 = p[0];
+	//		unsigned char b2 = p[1];
+	//		unsigned char b3 = p[2];
+	//		unsigned char b4 = p[3];
 
-			//y coords
-			int y = collisionRects[i].y;
-			p = (unsigned char*)&y;
-			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+	//		//spit out each of the bytes
+	//		MapFile << b1 << b2 << b3 << b4;
 
-			//spit out each of the bytes
-			MapFile << b1 << b2 << b3 << b4;
+	//		//y coords
+	//		int y = collisionRects[i].y;
+	//		p = (unsigned char*)&y;
+	//		b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
 
-			//width
-			int w = collisionRects[i].w;
-			p = (unsigned char*)&w;
-			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+	//		//spit out each of the bytes
+	//		MapFile << b1 << b2 << b3 << b4;
 
-			//spit out each of the bytes
-			MapFile << b1 << b2 << b3 << b4;
+	//		//width
+	//		int w = collisionRects[i].w;
+	//		p = (unsigned char*)&w;
+	//		b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
 
-			//height
-			int h = collisionRects[i].h;
-			p = (unsigned char*)&h;
-			b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
+	//		//spit out each of the bytes
+	//		MapFile << b1 << b2 << b3 << b4;
 
-			//spit out each of the bytes
-			MapFile << b1 << b2 << b3 << b4;
-		}
+	//		//height
+	//		int h = collisionRects[i].h;
+	//		p = (unsigned char*)&h;
+	//		b1 = p[0]; b2 = p[1]; b3 = p[2]; b4 = p[3];
 
-		MapFile.close();
-	}
+	//		//spit out each of the bytes
+	//		MapFile << b1 << b2 << b3 << b4;
+	//	}
 
-	saveMapINI(filePath + ".ini");
+	//	MapFile.close();
+	//}
+
+	//saveMapINI(filePath + ".ini", tilesets);
 }
 
 // TODO load from INI
@@ -336,75 +337,3 @@ void SKO_Map::Map::saveMap(std::string filePath)
 //}
 //
 
-
-void SKO_Map::Map::saveMapINI(std::string filePath)
-{
-
-	//open the file 
-	std::ofstream mapFile(filePath);
-
-	// Title and version
-	mapFile << "# Stick Knights Online Map File" << std::endl;
-	mapFile << std::endl;
-	mapFile << "[version]" <<std::endl;
-	mapFile << "version = " << VERSION_MAJOR << "." << VERSION_MINOR << std::endl;
-	mapFile << std::endl;
-
-	//output the counts of everything: tiles & collisions
-	mapFile << "[count]" << std::endl;
-	mapFile << "background_tiles = " << this->backgroundTiles.size() << std::endl;
-	mapFile << "fringe_tiles = " << this->fringeTiles.size() << std::endl;
-	mapFile << "collision_rects = " << this->collisionRects.size() << std::endl;
-	mapFile << std::endl;
-
-	//output the background tiles
-	mapFile << "[background_tiles]" << std::endl;
-	for (int i = 0; i < this->backgroundTiles.size(); i++)
-	{
-		mapFile << "background_tile_x_" << i << " = " << this->backgroundTiles[i]->x << std::endl;
-		mapFile << "background_tile_y_" << i << " = " << this->backgroundTiles[i]->y << std::endl;
-		mapFile << "background_tile_tileset_key" << i << " = " << this->backgroundTiles[i]->tileset_key << std::endl;
-		mapFile << "background_tile_tileset_row" << i << " = " << this->backgroundTiles[i]->tileset_row << std::endl;
-		mapFile << "background_tile_tileset_column" << i << " = " << this->backgroundTiles[i]->tileset_column << std::endl;
-		mapFile << std::endl;
-	}
-	mapFile << std::endl;
-
-	//output the fringe tiles
-	mapFile << "[fringe_tiles]" << std::endl;
-	for (int i = 0; i < this->fringeTiles.size(); i++)
-	{
-		mapFile << "fringe_tile_x_" << i << " = " << this->fringeTiles[i]->x << std::endl;
-		mapFile << "fringe_tile_y_" << i << " = " << this->fringeTiles[i]->y << std::endl;
-		mapFile << "fringe_tile_tileset_key" << i << " = " << this->fringeTiles[i]->tileset_key << std::endl;
-		mapFile << "fringe_tile_tileset_row" << i << " = " << this->fringeTiles[i]->tileset_row << std::endl;
-		mapFile << "fringe_tile_tileset_column" << i << " = " << this->fringeTiles[i]->tileset_column << std::endl;
-		mapFile << std::endl;
-	}
-	mapFile << std::endl;
-
-	//output the collision rectangles
-	mapFile << "[collision_rects]" << std::endl;
-	for (int i = 0; i < this->collisionRects.size(); i++)
-	{
-		mapFile << "collision_tile_x_" << i << " = " << this->collisionRects[i].x << std::endl;
-		mapFile << "collision_tile_y_" << i << " = " << this->collisionRects[i].y << std::endl;
-		mapFile << "collision_tile_w_" << i << " = " << this->collisionRects[i].w << std::endl;
-		mapFile << "collision_tile_h_" << i << " = " << this->collisionRects[i].h << std::endl;
-
-		mapFile << std::endl;
-	}
-	mapFile << std::endl;
-
-
-
-
-}
-
-void SKO_Map::Map::loadMapINI(std::string filePath)
-{
-	
-
-	
-
-}
