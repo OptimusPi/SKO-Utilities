@@ -108,7 +108,7 @@ void OPI_Renderer::drawImage(int x, int y, const OPI_Image *img, const SDL_Rect 
 
 	//Bottom-left vertex (corner)
 	glTexCoord2f(left, bottom);
-	glVertex2f(x, y);
+	glVertex2f(x, end_y);
 
 	//Bottom-right vertex (corner)
 	glTexCoord2f(right, bottom);
