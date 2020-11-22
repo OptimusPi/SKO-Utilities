@@ -22,7 +22,6 @@ SKO_Map::Tile::Tile(int x, int y, SKO_Map::Tileset *tileset, unsigned int tilese
 	this->tileset_key = tileset->key;
 	this->tileset_row = tileset_row;
 	this->tileset_column = tileset_column;
-	this->image = tileset->getTileImage(tileset_row, tileset_column);
 }
 
 SKO_Map::Tile::~Tile()

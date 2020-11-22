@@ -16,7 +16,6 @@ namespace SKO_Map
 		virtual ~Tile();
 		int x = 0;
 		int y = 0;
-		OPI_Image* image;
 		std::string tileset_key;
 		unsigned int tileset_row;
 		unsigned int tileset_column;

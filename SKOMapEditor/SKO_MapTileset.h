@@ -12,11 +12,8 @@ namespace SKO_Map
 	public:
 		Tileset(OPI_Image *image, std::string name, std::string key, unsigned short tile_width, unsigned short tile_height, unsigned char rows, unsigned char columns);
 		virtual ~Tileset();
-		OPI_Image* getTileImage(unsigned int row, unsigned int column);
-		std::string getTileKey(unsigned int row, unsigned int column);
 
 		OPI_Image* image = nullptr;
-		std::map<std::string, OPI_Image*> tileImages;
 		std::string name = "";
 		std::string key = "00000000-0000-0000-0000-000000000000";
 		unsigned short tile_width = 0;

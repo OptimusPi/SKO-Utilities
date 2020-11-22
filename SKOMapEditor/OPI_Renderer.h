@@ -45,6 +45,8 @@ public:
 	// OpenGL Context
 	SDL_GLContext glContext = nullptr;
 
+	GLuint bound = 0; 
+
 private:
 	float defaultBlendTolerance = 0.75f;
 

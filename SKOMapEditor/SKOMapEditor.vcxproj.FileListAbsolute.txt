@@ -1,0 +1,2 @@
+C:\Github\SKO-Utilities\SKOMapEditor\SKOMapEditor.exe
+C:\Github\SKO-Utilities\SKOMapEditor\SKOMapEditor.pdb

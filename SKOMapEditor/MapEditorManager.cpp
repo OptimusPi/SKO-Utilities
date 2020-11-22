@@ -196,31 +196,6 @@ void SKO_MapEditor::Manager::loadMap(std::string fileName)
 	//SKO_MapEditor::Manager::cleanupInvisibleRects(this->map);
 	// Remove tiles that are the same tileID and same X and same Y values
 	//removeDuplicateTiles(map);
-
-	// load images for each tile
-	for (auto it = map->backgroundTiles.begin(); it != map->backgroundTiles.end(); it++)
-	{
-		auto tilesetKey = it->first;
-		auto tiles = it->second;
-
-		for (auto tile : tiles)
-		{
-			// TODO don't need to store the tile image in each tile - use sprite batching
-			tile->image = tilesets[tilesetKey]->getTileImage(tile->tileset_row, tile->tileset_column);
-		}
-	}
-
-	for (auto it = map->fringeTiles.begin(); it != map->fringeTiles.end(); it++)
-	{
-		auto tilesetKey = it->first;
-		auto tiles = it->second;
-
-		for (auto tile : tiles)
-		{
-			tile->image = tilesets[tilesetKey]->getTileImage(tile->tileset_row, tile->tileset_column);
-		}
-	}
-	
 }
 
 void SKO_MapEditor::Manager::DrawGameScene(int camera_x, int camera_y)
@@ -247,19 +222,22 @@ void SKO_MapEditor::Manager::DrawGameScene(int camera_x, int camera_y)
 	for (auto it = map->backgroundTiles.begin(); it != map->backgroundTiles.end(); it++)
 	{
 		auto tilesetKey = it->first;
+		auto tileset = tilesets[tilesetKey];
 		auto tiles = it->second;
 
 		for (auto tile : tiles)
 		{
-			OPI_Image* tileImg = tile->image;
-
 			int drawX = tile->x - camera_x;
 			int drawY = tile->y - camera_y;
 
-			
-			
-			renderer->drawImage(drawX, drawY, tileImg);
-			
+			SDL_Rect selection;
+			selection.x = tile->tileset_column * tileset->tile_width;
+			selection.y = tile->tileset_row * tileset->tile_height;
+			selection.w = tileset->tile_width;
+			selection.h = tileset->tile_height;
+
+			//TODO only bind image once 
+			renderer->drawImage(drawX, drawY, tileset->image, selection);
 		}
 	}
 
@@ -272,23 +250,39 @@ void SKO_MapEditor::Manager::DrawGameScene(int camera_x, int camera_y)
 	for (auto it = map->fringeTiles.begin(); it != map->fringeTiles.end(); it++)
 	{
 		auto tilesetKey = it->first;
+		auto tileset = tilesets[tilesetKey];
 		auto tiles = it->second;
 
 		for (auto tile : tiles)
 		{
-			OPI_Image* tileImg = tile->image;
-
 			int drawX = tile->x - camera_x;
 			int drawY = tile->y - camera_y;
 
-			renderer->drawImage(drawX, drawY, tileImg);
+			SDL_Rect selection;
+			selection.x = tile->tileset_column * tileset->tile_width;
+			selection.y = tile->tileset_row * tileset->tile_height;
+			selection.w = tileset->tile_width;
+			selection.h = tileset->tile_height;
+
+			//TODO only bind image once 
+			renderer->drawImage(drawX, drawY, tileset->image, selection);
 		}
 	}
 
 	//draw current tile
 	if (mode == TILE_DRAW) {
-		auto currentTileImage = current_tileset->getTileImage(current_tileset_row, current_tileset_column);
-		renderer->drawImage(cursor_x / 32 * 32, cursor_y / 32 * 32, currentTileImage);
+
+
+		int drawX = cursor_x / 32 * 32;
+		int drawY = cursor_y / 32 * 32;
+
+		SDL_Rect selection;
+		selection.x = current_tileset_column * current_tileset->tile_width;
+		selection.y = current_tileset_row * current_tileset->tile_height;
+		selection.w = current_tileset->tile_width;
+		selection.h = current_tileset->tile_height;
+
+		renderer->drawImage(drawX, drawY, current_tileset->image, selection);
 	}
 
 	//draw collision rects, only on screen
@@ -496,7 +490,7 @@ void SKO_MapEditor::Manager::HandleInput()
 					if (map->collisionRects[current_rect].y > 0)
 					{
 						map->collisionRects[current_rect].y--;
-						map->collisionRects[current_rect].w++;
+						map->collisionRects[current_rect].h++;
 					}
 				}
 				break;
@@ -682,6 +676,7 @@ void SKO_MapEditor::Manager::HandleInput()
 				{
 					map->backgroundTiles[current_tileset->key].push_back(tile);
 				}
+				current_tile = tile;
 			}
 			break;
 
@@ -740,8 +735,7 @@ void SKO_MapEditor::Manager::HandleInput()
 				newRect.w = 0;
 				newRect.h = 0;
 				map->collisionRects.push_back(newRect);
-				break;
-			}
+			}break;
 			case COLLISION_DELETE: {
 				//find a collision to delete
 				int i;
