@@ -12,6 +12,7 @@ SKO_MapEditor::Manager::Manager(OPI_Renderer * renderer, MainMenuGui *mainMenuGu
 	this->map = new SKO_Map::Map();
 	this->mapReader = mapReader;
 	this->loadImages();
+	this->current_tileset = tilesets[tilesetKeys[0]];
 }
 
 SKO_MapEditor::Manager::~Manager()
@@ -87,9 +88,6 @@ void SKO_MapEditor::Manager::loadTilesets()
 	}
 
 	map->filePath = filePath;
-
-	// set current tileset
-	this->current_tileset = 0;
 }
 
 
