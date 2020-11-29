@@ -16,6 +16,7 @@ namespace SKO_Map
 
 		// Save map header and count
 		static void saveMetaData(SKO_Map::Map * map, std::ofstream *file);
+		static int countTiles(std::map<std::string, std::vector<SKO_Map::Tile*>> tiles);
 
 		// Save dimensions and graphics
 		static void saveBackgroundTiles(SKO_Map::Map * map, std::map<std::string, SKO_Map::Tileset*> tilesets, std::ofstream *file);

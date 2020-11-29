@@ -87,7 +87,7 @@ void SKO_MapEditor::Manager::loadTilesets()
 		}
 	}
 
-	map->filePath = filePath;
+	map->filePath = "MAP/default.map.ini";
 }
 
 
@@ -686,23 +686,23 @@ void SKO_MapEditor::Manager::HandleInput()
 				int y = cursor_y + camera_y;
 				int width = current_tileset->tile_width;
 				int height = current_tileset->tile_height;
-				std::vector<SKO_Map::Tile*> tiles; 
+				std::vector<SKO_Map::Tile*> *tiles; 
 
 				if (fringe_mode)
 				{
-					tiles = map->fringeTiles[current_tileset->key];
+					tiles = &map->fringeTiles[current_tileset->key];
 				}
 				else
 				{
-					tiles = map->backgroundTiles[current_tileset->key];
+					tiles = &map->backgroundTiles[current_tileset->key];
 				}
 
 				int at = -1;
-				for (int i = 0; i < tiles.size(); i++)
+				for (int i = 0; i < tiles->size(); i++)
 				{
-					auto tile = tiles[i];
-					if (x > tile->x&& x < tile->x + width &&
-						y > tile->y&& y < tile->y + height)
+					auto tile = (*tiles)[i];
+					if (x > tile->x && x < tile->x + width &&
+						y > tile->y && y < tile->y + height)
 					{
 						at = i;
 						break;
@@ -711,7 +711,7 @@ void SKO_MapEditor::Manager::HandleInput()
 					
 				if (at >= 0)
 				{
-					tiles.erase(tiles.begin() + at);
+					tiles->erase(tiles->begin() + at);
 				}
 			}
 			break;

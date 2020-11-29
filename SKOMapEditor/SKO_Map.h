@@ -51,6 +51,7 @@ namespace SKO_Map
 		void saveMapINI(std::string filePath, std::map<std::string, SKO_Map::Tileset*> tilesets); 
 		void loadMapINI(std::string filePath);
 		std::string filePath;
+		std::string name = "Untitled map";
 	private:
 		
 	};
