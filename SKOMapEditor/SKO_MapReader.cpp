@@ -411,7 +411,7 @@ unsigned int SKO_Map::Reader::convertRow(int id)
 	case 27:
 		return 4;
 	case 28:
-		return 4;
+		return 5;
 	case 29:
 		return 5;
 	case 30:
