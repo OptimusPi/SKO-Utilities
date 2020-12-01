@@ -60,13 +60,22 @@ SKO_Map::Map * SKO_Map::Reader::loadMap(std::string fileName)
 	return map;
 }
 
-
 void SKO_Map::Reader::loadBackgroundTiles(SKO_Map::Map * map, INIReader mapIni)
 {
 	// load background tiles
-	int num_background_tiles = mapIni.GetInteger("count", "background_tiles", 0);
-	printf("num_background_tiles is %i", num_background_tiles);
 
+	// loop through every tileset layer of background tiles, 
+	// output each collection as it's own section
+	for (auto it = map->backgroundTiles.begin(); it != map->backgroundTiles.end(); it++)
+	{
+		auto tilesetKey = it->first;
+		auto tiles = it->second;
+		std::string section = "background_tiles_" + tilesetKey;
+
+		
+
+	}
+	auto num_background_tiles = 1;
 	for (int i = 0; i < num_background_tiles; i++)
 	{
 		std::stringstream sspawn_x;

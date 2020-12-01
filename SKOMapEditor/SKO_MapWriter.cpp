@@ -13,7 +13,9 @@ void SKO_Map::Writer::saveMap(SKO_Map::Map * map, std::map<std::string, SKO_Map:
 	*file << "# Map Dimensions: Background Tiles, Fringe Tiles, and Collision Rectangles" << std::endl;
 	*file << std::endl;
 	saveBackgroundTiles(map, tilesets, file);
+	saveBackgroundMaskTiles(map, tilesets, file);
 	saveFringeTiles(map, tilesets, file);
+	saveFringeMaskTiles(map, tilesets, file);
 	saveCollisionRects(map, file);
 
 	// Save game objects
@@ -71,38 +73,9 @@ int SKO_Map::Writer::countTiles(std::map<std::string, std::vector<SKO_Map::Tile*
 }
 
 
-void SKO_Map::Writer::saveBackgroundTiles(SKO_Map::Map * map, std::map<std::string, SKO_Map::Tileset*> tilesets, std::ofstream * file)
+void SKO_Map::Writer::saveTileLayer(std::string name, std::map<std::string, std::vector<Tile*>> tileLayer, std::map<std::string, SKO_Map::Tileset*> tilesets, std::ofstream* file)
 {
-	for (auto it = map->backgroundTiles.begin(); it != map->backgroundTiles.end(); it++)
-	{
-		auto tilesetKey = it->first;
-		auto tiles = it->second;
-
-		if (tiles.size() < 1)
-		{
-			break;
-		}
-
-		*file << "; " << tilesets[tilesetKey]->name << std::endl;
-		*file << "[background_tiles_" << tilesetKey << "]" << std::endl;
-		
-		for (int i = 0; i < tiles.size(); i++)
-		{
-			*file << "tile" << i << " = "
-				<< tiles[i]->x << ","
-				<< tiles[i]->y << ","
-				<< tiles[i]->tileset_row << ","
-				<< tiles[i]->tileset_column << std::endl;
-		}
-		
-		*file << std::endl;
-	}
-	*file << std::endl;
-}
-
-void SKO_Map::Writer::saveFringeTiles(SKO_Map::Map * map, std::map<std::string, SKO_Map::Tileset*> tilesets, std::ofstream * file)
-{
-	for (auto it = map->fringeTiles.begin(); it != map->fringeTiles.end(); it++)
+	for (auto it = tileLayer.begin(); it != tileLayer.end(); it++)
 	{
 		auto tilesetKey = it->first;
 		auto tiles = it->second;
@@ -110,7 +83,7 @@ void SKO_Map::Writer::saveFringeTiles(SKO_Map::Map * map, std::map<std::string, 
 		if (tiles.size() > 0)
 		{
 			*file << "; " << tilesets[tilesetKey]->name << std::endl;
-			*file << "[fringe_tiles_" << tilesetKey << "]" << std::endl;
+			*file << "[" << name << "_" << tilesetKey << "]" << std::endl;
 		}
 
 		for (int i = 0; i < tiles.size(); i++)
@@ -127,23 +100,49 @@ void SKO_Map::Writer::saveFringeTiles(SKO_Map::Map * map, std::map<std::string, 
 	*file << std::endl;
 }
 
-void SKO_Map::Writer::saveCollisionRects(SKO_Map::Map * map, std::ofstream * file)
+void SKO_Map::Writer::saveBackgroundTiles(SKO_Map::Map * map, std::map<std::string, SKO_Map::Tileset*> tilesets, std::ofstream * file)
 {
-	if (map->collisionRects.size() < 1)
+	saveTileLayer("background_tiles", map->backgroundTiles, tilesets, file);
+}
+
+void SKO_Map::Writer::saveBackgroundMaskTiles(SKO_Map::Map* map, std::map<std::string, SKO_Map::Tileset*> tilesets, std::ofstream* file)
+{
+	saveTileLayer("background_mask_tiles", map->backgroundTiles, tilesets, file);
+}
+
+void SKO_Map::Writer::saveFringeTiles(SKO_Map::Map * map, std::map<std::string, SKO_Map::Tileset*> tilesets, std::ofstream * file)
+{
+	saveTileLayer("fringe_tiles", map->fringeTiles, tilesets, file);
+}
+
+void SKO_Map::Writer::saveFringeMaskTiles(SKO_Map::Map* map, std::map<std::string, SKO_Map::Tileset*> tilesets, std::ofstream* file)
+{
+	saveTileLayer("fringe_mask_tiles", map->fringeTiles, tilesets, file);
+}
+
+void SKO_Map::Writer::saveRects(std::string name, std::vector<SDL_Rect> rects, std::ofstream* file)
+{
+	if (rects.size() < 1)
 	{
 		return;
 	}
 
-	*file << "[collision_rects]" << std::endl;
-	for (int i = 0; i < map->collisionRects.size(); i++) 
+	*file << "[" << name << "]" << std::endl;
+
+	for (int i = 0; i < rects.size(); i++)
 	{
-		*file << "rect" << i << " = " 
-			<< map->collisionRects[i].x << ","
-			<< map->collisionRects[i].y << ","
-			<< map->collisionRects[i].w << ","
-			<< map->collisionRects[i].h << std::endl;
+		*file << "rect" << i << " = "
+			<< rects[i].x << ","
+			<< rects[i].y << ","
+			<< rects[i].w << ","
+			<< rects[i].h << std::endl;
 	}
 	*file << std::endl;
+}
+
+void SKO_Map::Writer::saveCollisionRects(SKO_Map::Map * map, std::ofstream * file)
+{
+	saveRects("collision_rects", map->collisionRects, file);
 }
 
 void SKO_Map::Writer::savePortals(SKO_Map::Map * map, std::ofstream * file)

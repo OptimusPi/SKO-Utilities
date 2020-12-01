@@ -20,8 +20,13 @@ namespace SKO_Map
 
 		// Save dimensions and graphics
 		static void saveBackgroundTiles(SKO_Map::Map * map, std::map<std::string, SKO_Map::Tileset*> tilesets, std::ofstream *file);
-		static void saveFringeTiles(SKO_Map::Map * map, std::map<std::string, SKO_Map::Tileset*> tilesets, std::ofstream *file);
-		static void saveCollisionRects(SKO_Map::Map * map, std::ofstream *file);
+		static void saveBackgroundMaskTiles(SKO_Map::Map * map, std::map<std::string, SKO_Map::Tileset*> tilesets, std::ofstream *file);
+		static void saveFringeTiles(SKO_Map::Map* map, std::map<std::string, SKO_Map::Tileset*> tilesets, std::ofstream* file);
+		static void saveFringeMaskTiles(SKO_Map::Map* map, std::map<std::string, SKO_Map::Tileset*> tilesets, std::ofstream* file);
+		static void saveTileLayer(std::string name, std::map<std::string, std::vector<Tile*>> tileLayer, std::map<std::string, SKO_Map::Tileset*> tilesets, std::ofstream* file);
+		static void saveCollisionRects(SKO_Map::Map* map, std::ofstream* file);
+		static void saveRects(std::string section, std::vector<SDL_Rect> rects, std::ofstream* file);
+
 
 		// Save game objects
 		static void savePortals(SKO_Map::Map * map, std::ofstream *file);

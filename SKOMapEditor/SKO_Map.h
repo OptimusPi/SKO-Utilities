@@ -30,7 +30,9 @@ namespace SKO_Map
 
 		// Static map objects
 		std::map<std::string, std::vector<Tile*>> backgroundTiles;
+		std::map<std::string, std::vector<Tile*>> backgroundMaskTiles;
 		std::map<std::string, std::vector<Tile*>> fringeTiles;
+		std::map<std::string, std::vector<Tile*>> fringeMaskTiles;
 		std::vector<SDL_Rect> collisionRects; 
 
 		// Living game objects inside this map
