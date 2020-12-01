@@ -75,7 +75,7 @@ void OPI_Gui::GuiManager::setCursor(OPI_Gui::CursorType selectedCursor)
 
 bool OPI_Gui::GuiManager::handleMouseMove_InteractingElements(int mouseX, int mouseY)
 {
-	for (auto i = instance->children.rbegin(); i != instance->children.rend(); i++)
+	for (auto i = instance->children.rbegin(); i != instance->children.rend(); ++i)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->isInteracting() && element->handleMouseMove(mouseX, mouseY))
@@ -92,7 +92,7 @@ bool OPI_Gui::GuiManager::handleMouseMove(int mouseX, int mouseY)
 	if (instance->handleMouseMove_InteractingElements(mouseX, mouseY))
 		return true;
 
-	for (auto i = instance->children.rbegin(); i != instance->children.rend(); i++)
+	for (auto i = instance->children.rbegin(); i != instance->children.rend(); ++i)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->handleMouseMove(mouseX, mouseY))
@@ -105,7 +105,7 @@ bool OPI_Gui::GuiManager::handleMouseMove(int mouseX, int mouseY)
 bool OPI_Gui::GuiManager::handleMousePressLeft(int mouseX, int mouseY)
 {
 	bool eventHandled = false;
-	for (auto i = instance->children.rbegin(); i != instance->children.rend(); i++)
+	for (auto i = instance->children.rbegin(); i != instance->children.rend(); ++i)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->handleMousePressLeft(mouseX, mouseY))
@@ -117,7 +117,7 @@ bool OPI_Gui::GuiManager::handleMousePressLeft(int mouseX, int mouseY)
 bool OPI_Gui::GuiManager::handleMousePressRight(int mouseX, int mouseY)
 {
 	bool eventHandled = false;
-	for (auto i = instance->children.rbegin(); i != instance->children.rend(); i++)
+	for (auto i = instance->children.rbegin(); i != instance->children.rend(); ++i)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->handleMousePressRight(mouseX, mouseY))
@@ -129,7 +129,7 @@ bool OPI_Gui::GuiManager::handleMousePressRight(int mouseX, int mouseY)
 bool OPI_Gui::GuiManager::handleMouseReleaseLeft(int mouseX, int mouseY)
 {
 	bool eventHandled = false;
-	for (auto i = instance->children.rbegin(); i != instance->children.rend(); i++)
+	for (auto i = instance->children.rbegin(); i != instance->children.rend(); ++i)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->handleMouseReleaseLeft(mouseX, mouseY))
@@ -142,7 +142,7 @@ bool OPI_Gui::GuiManager::handleMouseReleaseLeft(int mouseX, int mouseY)
 bool OPI_Gui::GuiManager::handleMouseReleaseRight(int mouseX, int mouseY)
 {
 	bool eventHandled = false;
-	for (auto i = instance->children.rbegin(); i != instance->children.rend(); i++)
+	for (auto i = instance->children.rbegin(); i != instance->children.rend(); ++i)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->handleMouseReleaseRight(mouseX, mouseY))

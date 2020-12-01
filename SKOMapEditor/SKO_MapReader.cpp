@@ -6,7 +6,7 @@
 #include "FontManager.h"
 
 
-SKO_Map::Reader::Reader(std::string fileLocation)
+SKO_Map::Reader::Reader(std::string fileLocation, std::map<std::string, SKO_Map::Tileset*> tilesets)
 {
 	if (fileLocation.find_last_of("/") == fileLocation.length() - 1)
 	{
@@ -18,6 +18,7 @@ SKO_Map::Reader::Reader(std::string fileLocation)
 		// Else add slash to end of file location
 		this->fileLocation = fileLocation + "/";
 	}
+	this->tilesets = tilesets;
 }
 SKO_Map::Reader::~Reader()
 {
@@ -43,13 +44,13 @@ SKO_Map::Map * SKO_Map::Reader::loadMap(std::string fileName)
 
 	map->filePath = filePath;
 
-	loadBackgroundTiles(map, mapIni); // TODO fix with new format, it doesnt match other objects
-	loadFringeTiles(map, mapIni); // TODO fix with new format, it doesnt match other objects
-	loadCollisionRects(map, mapIni); // TODO fix with new format, it doesnt match other objects
+	loadBackgroundTiles(map, mapIni);
+	loadFringeTiles(map, mapIni); 
+	loadCollisionRects(map, mapIni); 
 
 	loadPortals(map, mapIni);
 	loadSigns(map, mapIni);   
-	loadEnemies(map, mapIni); // TODO fix with new format, it doesnt match other objects
+	loadEnemies(map, mapIni);
 	loadStalls(map, mapIni);  
 	loadShops(map, mapIni);   
 	loadTargets(map, mapIni); 
@@ -60,13 +61,22 @@ SKO_Map::Map * SKO_Map::Reader::loadMap(std::string fileName)
 	return map;
 }
 
+void SKO_Map::Reader::loadTileLayer(std::string name, std::map<std::string, std::vector<Tile*>> &tileLayer, INIReader mapIni)
+{
+	for (auto it = tilesets.begin(); it != tilesets.end(); ++it)
+	{
+
+	}
+}
+
 void SKO_Map::Reader::loadBackgroundTiles(SKO_Map::Map * map, INIReader mapIni)
 {
 	// load background tiles
+	loadTileLayer("background_tiles", map->backgroundTiles, mapIni);
 
 	// loop through every tileset layer of background tiles, 
 	// output each collection as it's own section
-	for (auto it = map->backgroundTiles.begin(); it != map->backgroundTiles.end(); it++)
+	for (auto it = map->backgroundTiles.begin(); it != map->backgroundTiles.end(); ++it)
 	{
 		auto tilesetKey = it->first;
 		auto tiles = it->second;
@@ -75,8 +85,9 @@ void SKO_Map::Reader::loadBackgroundTiles(SKO_Map::Map * map, INIReader mapIni)
 		
 
 	}
+
 	auto num_background_tiles = 1;
-	for (int i = 0; i < num_background_tiles; i++)
+	for (int i = 0; i < num_background_tiles; ++i)
 	{
 		std::stringstream sspawn_x;
 		sspawn_x << "background_tile_x_" << i;
@@ -120,7 +131,7 @@ void SKO_Map::Reader::loadBackgroundTiles(SKO_Map::Map * map, INIReader mapIni)
 //	int num_background_tiles = mapIni.GetInteger("count", "background_tiles", 0);
 //	printf("num_background_tiles is %i", num_background_tiles);
 //
-//	for (int i = 0; i < num_background_tiles; i++)
+//	for (int i = 0; i < num_background_tiles; ++i)
 //	{
 //		std::stringstream section;
 //		section << "background_tile" << i;
@@ -153,7 +164,7 @@ void SKO_Map::Reader::loadFringeTiles(SKO_Map::Map * map, INIReader mapIni)
 	int num_fringe_tiles = mapIni.GetInteger("count", "fringe_tiles", 0);
 	printf("num_fringe_tiles is %i", num_fringe_tiles);
 
-	for (int i = 0; i < num_fringe_tiles; i++)
+	for (int i = 0; i < num_fringe_tiles; ++i)
 	{
 		std::stringstream sspawn_x;
 		sspawn_x << "fringe_tile_x_" << i;
@@ -510,7 +521,7 @@ void SKO_Map::Reader::loadCollisionRects(SKO_Map::Map * map, INIReader mapIni)
 	int num_collision_rects = mapIni.GetInteger("count", "collision_rects", 0);
 	printf("num_collision_rects is %i", num_collision_rects);
 
-	for (int i = 0; i < num_collision_rects; i++)
+	for (int i = 0; i < num_collision_rects; ++i)
 	{
 		std::stringstream sspawn_x;
 		sspawn_x << "collision_tile_x_" << i;
@@ -546,7 +557,7 @@ void SKO_Map::Reader::loadPortals(SKO_Map::Map * map, INIReader mapIni)
 	int num_portals = mapIni.GetInteger("count", "portals", 0);
 	printf("num_portals is %i", num_portals);
 
-	for (int i = 0; i < num_portals; i++)
+	for (int i = 0; i < num_portals; ++i)
 	{
 		std::stringstream ss;
 		ss << "portal" << i;
@@ -573,7 +584,7 @@ void SKO_Map::Reader::loadSigns(SKO_Map::Map * map, INIReader mapIni)
 	int num_signs = mapIni.GetInteger("count", "signs", 0);
 	printf("num_signs is %i\n", num_signs);
 
-	for (int i = 0; i < num_signs; i++) 
+	for (int i = 0; i < num_signs; ++i) 
 	{
 		std::stringstream ss; 
 		ss << "sign" << i;    
@@ -614,7 +625,7 @@ void SKO_Map::Reader::loadEnemies(SKO_Map::Map * map, INIReader mapIni)
 	int num_enemies = mapIni.GetInteger("count", "enemies", 0);
 	printf("num_enemies is %i", num_enemies);
 
-	for (int i = 0; i < num_enemies; i++)
+	for (int i = 0; i < num_enemies; ++i)
 	{
 		std::stringstream ss;
 		ss << "enemy" << i;
@@ -672,7 +683,7 @@ void SKO_Map::Reader::loadStalls(SKO_Map::Map * map, INIReader mapIni)
 	int num_stalls = mapIni.GetInteger("count", "stalls", 0);
 	printf("num_stalls is %i\n", num_stalls);
 
-	for (int i = 0; i < num_stalls; i++) 
+	for (int i = 0; i < num_stalls; ++i) 
 	{
 		std::stringstream ss1;
 		ss1 << "stall" << i;
@@ -696,7 +707,7 @@ void SKO_Map::Reader::loadShops(SKO_Map::Map * map, INIReader mapIni)
 	printf("num_shops is %i\n", num_shops);
 
 	// Why does this for loop use <= num_shops? Because shop0 doesn't ever exist; it refers to the bank.
-	for (int i = 0; i < num_shops; i++)
+	for (int i = 0; i < num_shops; ++i)
 	{
 		SKO_Shop *shop = new SKO_Shop();
 		std::stringstream ss1;
@@ -735,7 +746,7 @@ void SKO_Map::Reader::loadTargets(SKO_Map::Map * map, INIReader mapIni)
 	int num_targets = mapIni.GetInteger("count", "targets", 0);
 	printf("num_targets is %i\n", num_targets);
 
-	for (int i = 0; i < num_targets; i++) {
+	for (int i = 0; i < num_targets; ++i) {
 		std::stringstream ss1;
 		ss1 << "target" << i;
 		std::string targetStr = ss1.str();
@@ -756,7 +767,7 @@ void SKO_Map::Reader::loadNpcs(SKO_Map::Map * map, INIReader mapIni)
 	int num_npcs = mapIni.GetInteger("count", "npcs", 0);
 	printf("num_npcs is %i\n", num_npcs);
 
-	for (int i = 0; i < num_npcs; i++) 
+	for (int i = 0; i < num_npcs; ++i) 
 	{
 		std::stringstream ss1;
 		ss1 << "npc" << i;

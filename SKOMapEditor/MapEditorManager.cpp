@@ -1,18 +1,22 @@
 #include "MapEditorManager.h"
+#include "SKO_MapWriter.h"
 
 #include "Global.h"
 #include <set>
 
 
-SKO_MapEditor::Manager::Manager(OPI_Renderer * renderer, MainMenuGui *mainMenuGui, SKO_Map::Reader *mapReader)
+SKO_MapEditor::Manager::Manager(OPI_Renderer * renderer, MainMenuGui *mainMenuGui)
 {
+	// Initialize map loader
+	this->map = new SKO_Map::Map();
 	this->renderer = renderer;
 	this->mainMenuGui = mainMenuGui;
 	this->gui = OPI_Gui::GuiManager::getInstance();
-	this->map = new SKO_Map::Map();
-	this->mapReader = mapReader;
+	
 	this->loadImages();
-	this->current_tileset = tilesets[tilesetKeys[0]];
+	this->loadTilesets();
+	
+	this->mapReader = new SKO_Map::Reader("MAP/", tilesets);
 }
 
 SKO_MapEditor::Manager::~Manager()
@@ -24,27 +28,7 @@ void SKO_MapEditor::Manager::loadImages()
 {
 	this->background.setImage("IMG/back.png");
 	this->stickman_img.setImage("IMG/stickman.png");
-
-	// load tilesets
-	this->loadTilesets();
-
-	// 
-
-	//// Load tileset
-	//for (int i = 0; i < 256; i++)//check if file exists, etc.
-	//{
-	//	std::stringstream ss;
-	//	ss << "IMG/TILE/tile" << i << ".png";
-	//	std::ifstream checker(ss.str());
-	//	if (checker.is_open())
-	//	{
-	//		checker.close();
-	//		tile_img[i].setImage(ss.str());
-	//		num_tile_images = i;
-	//	}
-	//	else
-	//		break;
-	//}
+	
 }
 
 void SKO_MapEditor::Manager::loadTilesets()
@@ -62,7 +46,7 @@ void SKO_MapEditor::Manager::loadTilesets()
 	// load background tiles
 	int tilesetsCount = tilesetIni.GetInteger("tilesets", "count", 0);
 
-	for (int i = 0; i < tilesetsCount; i++)
+	for (int i = 0; i < tilesetsCount; ++i)
 	{
 		std::stringstream ss;
 		ss << "tileset" << i;
@@ -87,7 +71,7 @@ void SKO_MapEditor::Manager::loadTilesets()
 		}
 	}
 
-	map->filePath = "MAP/default.map.ini";
+	this->current_tileset = tilesets[tilesetKeys[0]];
 }
 
 
@@ -97,7 +81,7 @@ void SKO_MapEditor::Manager::cleanupInvisibleRects(SKO_Map::Map *map)
 	std::vector<int> invisibleRectIds;
 
 	//Delete any collision rectangles that are too small.
-	for (int i = 0; i < map->collisionRects.size(); i++)
+	for (int i = 0; i < map->collisionRects.size(); ++i)
 	{
 		// If rect is nearly invisible, remove it
 		if (map->collisionRects[i].h < 3 && map->collisionRects[i].w < 3)
@@ -121,7 +105,7 @@ void SKO_MapEditor::Manager::removeDuplicateTiles(std::vector<SKO_Map::Tile*> *t
 	std::vector<int> duplicateTileIds = std::vector<int>();
 
 	// Find duplicate tiles
-	for (int i = 0; i < tiles->size(); i++)
+	for (int i = 0; i < tiles->size(); ++i)
 	{
 		SKO_Map::Tile *tileA = (*tiles)[i];
 		for (int i2 = i + 1; i2 < tiles->size(); i2++)
@@ -148,14 +132,14 @@ void SKO_MapEditor::Manager::removeDuplicateTiles(std::vector<SKO_Map::Tile*> *t
 
 void SKO_MapEditor::Manager::removeDuplicateTiles(SKO_Map::Map *map)
 {
-	for (auto it = map->backgroundTiles.begin(); it != map->backgroundTiles.end(); it++)
+	for (auto it = map->backgroundTiles.begin(); it != map->backgroundTiles.end(); ++it)
 	{
 		auto tilesetKey = it->first;
 		auto tiles = it->second;
 		removeDuplicateTiles(&tiles);
 	}
 
-	for (auto it = map->fringeTiles.begin(); it != map->fringeTiles.end(); it++)
+	for (auto it = map->fringeTiles.begin(); it != map->fringeTiles.end(); ++it)
 	{
 		auto tilesetKey = it->first;
 		auto tiles = it->second;
@@ -163,14 +147,17 @@ void SKO_MapEditor::Manager::removeDuplicateTiles(SKO_Map::Map *map)
 	}
 }
 
- 
-void SKO_MapEditor::Manager::saveMap(std::string fileLocation)
+void SKO_MapEditor::Manager::saveMap(std::string filePath)
 {
 	// Cleanup small rects you can't see
 	this->cleanupInvisibleRects(this->map);
 
+	// Remove duplicate tiles that are exactly the same
+	this->removeDuplicateTiles(this->map);
+
 	// Save the map at the given file location
-	this->map->saveMap(fileLocation, tilesets);
+	this->map->filePath = filePath;
+	SKO_Map::Writer::saveMap(this->map, tilesets);
 }
 
 void SKO_MapEditor::Manager::saveMap()
@@ -182,7 +169,7 @@ void SKO_MapEditor::Manager::saveMap()
 	this->removeDuplicateTiles(this->map);
 
 	// Save the map to its previous file location
-	this->map->saveMap(this->tilesets);
+	SKO_Map::Writer::saveMap(this->map, tilesets);
 }
 
 
@@ -190,12 +177,30 @@ void SKO_MapEditor::Manager::loadMap(std::string fileName)
 {
 	// Load map
 	this->map = this->mapReader->loadMap(fileName);
+}
 
-	// TODO enable this if needed
-	// Edge case where accidental small rectangles are leftover, clean these up
-	//SKO_MapEditor::Manager::cleanupInvisibleRects(this->map);
-	// Remove tiles that are the same tileID and same X and same Y values
-	//removeDuplicateTiles(map);
+void SKO_MapEditor::Manager::drawTileLayer(int camera_x, int camera_y, std::map<std::string, std::vector<SKO_Map::Tile*>> tileLayer)
+{
+	for (auto it = tileLayer.begin(); it != tileLayer.end(); ++it)
+	{
+		auto tilesetKey = it->first;
+		auto tileset = tilesets[tilesetKey];
+		auto tiles = it->second;
+
+		for (auto tile : tiles)
+		{
+			int drawX = tile->x - camera_x;
+			int drawY = tile->y - camera_y;
+
+			SDL_Rect selection;
+			selection.x = tile->tileset_column * tileset->tile_width;
+			selection.y = tile->tileset_row * tileset->tile_height;
+			selection.w = tileset->tile_width;
+			selection.h = tileset->tile_height;
+
+			renderer->drawImage(drawX, drawY, tileset->image, selection);
+		}
+	}
 }
 
 void SKO_MapEditor::Manager::DrawGameScene(int camera_x, int camera_y)
@@ -206,68 +211,17 @@ void SKO_MapEditor::Manager::DrawGameScene(int camera_x, int camera_y)
 	renderer->drawImage(0, 1024, &background);
 	renderer->drawImage(1024, 1024, &background);
 
-	// TODO use sprite batching
-	//draw background tiles, only on screen
-	//
-	//{
-	//	auto tilesetKey = it->first;
-	//	auto tiles = it->second;
-
-	//	for (auto tile : tiles)
-	//	{
-	//		tile->image = tilesets[tilesetKey]->getTileImage(tile->tileset_row, tile->tileset_column);
-	//	}
-	//}
-
-	for (auto it = map->backgroundTiles.begin(); it != map->backgroundTiles.end(); it++)
-	{
-		auto tilesetKey = it->first;
-		auto tileset = tilesets[tilesetKey];
-		auto tiles = it->second;
-
-		for (auto tile : tiles)
-		{
-			int drawX = tile->x - camera_x;
-			int drawY = tile->y - camera_y;
-
-			SDL_Rect selection;
-			selection.x = tile->tileset_column * tileset->tile_width;
-			selection.y = tile->tileset_row * tileset->tile_height;
-			selection.w = tileset->tile_width;
-			selection.h = tileset->tile_height;
-
-			//TODO only bind image once 
-			renderer->drawImage(drawX, drawY, tileset->image, selection);
-		}
-	}
+	drawTileLayer(camera_x, camera_y, map->backgroundTiles);
+	drawTileLayer(camera_x, camera_y, map->backgroundMaskTiles);
 
 	//stickman!
 	if (stickman_toggle) //TODO - mapEditorState.stickmanVisible
 		renderer->drawImage(stickman.x - 25 - camera_x, stickman.y - camera_y, &stickman_img);
 
 
-	//draw fringe tiles, only on screen
-	for (auto it = map->fringeTiles.begin(); it != map->fringeTiles.end(); it++)
-	{
-		auto tilesetKey = it->first;
-		auto tileset = tilesets[tilesetKey];
-		auto tiles = it->second;
+	drawTileLayer(camera_x, camera_y, map->fringeTiles);
+	drawTileLayer(camera_x, camera_y, map->fringeMaskTiles);
 
-		for (auto tile : tiles)
-		{
-			int drawX = tile->x - camera_x;
-			int drawY = tile->y - camera_y;
-
-			SDL_Rect selection;
-			selection.x = tile->tileset_column * tileset->tile_width;
-			selection.y = tile->tileset_row * tileset->tile_height;
-			selection.w = tileset->tile_width;
-			selection.h = tileset->tile_height;
-
-			//TODO only bind image once 
-			renderer->drawImage(drawX, drawY, tileset->image, selection);
-		}
-	}
 
 	//draw current tile
 	if (mode == TILE_DRAW) {
@@ -286,7 +240,7 @@ void SKO_MapEditor::Manager::DrawGameScene(int camera_x, int camera_y)
 	}
 
 	//draw collision rects, only on screen
-	for (int i = 0; i < map->collisionRects.size(); i++)
+	for (int i = 0; i < map->collisionRects.size(); ++i)
 	{
 		SDL_Rect newRect;
 
@@ -698,7 +652,7 @@ void SKO_MapEditor::Manager::HandleInput()
 				}
 
 				int at = -1;
-				for (int i = 0; i < tiles->size(); i++)
+				for (int i = 0; i < tiles->size(); ++i)
 				{
 					auto tile = (*tiles)[i];
 					if (x > tile->x && x < tile->x + width &&
@@ -742,7 +696,7 @@ void SKO_MapEditor::Manager::HandleInput()
 				int x = cursor_x + camera_x;
 				int y = cursor_y + camera_y;
 				int at = -1;
-				for (i = 0; i <= current_rect; i++)
+				for (i = 0; i <= current_rect; ++i)
 				{
 					if (x > map->collisionRects[i].x && x < map->collisionRects[i].x + map->collisionRects[i].w &&
 						y > map->collisionRects[i].y && y < map->collisionRects[i].y + map->collisionRects[i].h)
@@ -862,7 +816,7 @@ void SKO_MapEditor::Manager::processLoop()
 
 bool SKO_MapEditor::Manager::isBlocked(SDL_Rect rect)
 {
-	for (int i = 0; i < this->map->collisionRects.size(); i++)
+	for (int i = 0; i < this->map->collisionRects.size(); ++i)
 	{
 		if (SDL_HasIntersection(&rect, &this->map->collisionRects[i]))
 			return true;

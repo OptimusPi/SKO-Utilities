@@ -19,11 +19,11 @@ namespace SKO_MapEditor
 	class Manager
 	{
 	public:
-		Manager(OPI_Renderer * renderer, MainMenuGui *mainMenuGui, SKO_Map::Reader *mapReader);
+		Manager(OPI_Renderer * renderer, MainMenuGui *mainMenuGui);
 		virtual ~Manager();
 		void saveMap();
-		void saveMap(std::string filename);
-		void loadMap(std::string filename);
+		void saveMap(std::string filePath);
+		void loadMap(std::string filePath);
 		// Clean up useless rectangles (<4x4 pixels) to a SKO_Map in-place.
 		void cleanupInvisibleRects(SKO_Map::Map *map);
 		
@@ -32,6 +32,7 @@ namespace SKO_MapEditor
 		void removeDuplicateTiles(SKO_Map::Map *map);
 
 		// Draw: sky, map layers, and player test object
+		void drawTileLayer(int camera_x, int camera_y, std::map<std::string, std::vector<SKO_Map::Tile*>> tileLayer);
 		void DrawGameScene(int camera_x, int camera_y);
 
 		// Draw all map editor gui
@@ -48,11 +49,11 @@ namespace SKO_MapEditor
 		void loadTilesets();
 
 	private:
+		SKO_Map::Reader *mapReader = nullptr;
 		SDL_Event event;
-		MainMenuGui *mainMenuGui;
-		OPI_Renderer * renderer;
-		SKO_Map::Map * map;
-		SKO_Map::Reader * mapReader;
+		MainMenuGui *mainMenuGui = nullptr;
+		OPI_Renderer * renderer = nullptr;
+		SKO_Map::Map * map = nullptr;
 		float camera_x = 0, camera_y = 0;
 		int cursor_x = 0, cursor_y = 0;
 		SKO_Map::Tile *current_tile = nullptr;

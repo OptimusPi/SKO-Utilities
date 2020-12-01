@@ -61,7 +61,7 @@ int SKO_Map::Writer::countTiles(std::map<std::string, std::vector<SKO_Map::Tile*
 {
 	int tileCount = 0;
 
-	for (auto it = tiles.begin(); it != tiles.end(); it++)
+	for (auto it = tiles.begin(); it != tiles.end(); ++it)
 	{
 		auto tileset = it->first;
 		auto tiles = it->second;
@@ -75,7 +75,7 @@ int SKO_Map::Writer::countTiles(std::map<std::string, std::vector<SKO_Map::Tile*
 
 void SKO_Map::Writer::saveTileLayer(std::string name, std::map<std::string, std::vector<Tile*>> tileLayer, std::map<std::string, SKO_Map::Tileset*> tilesets, std::ofstream* file)
 {
-	for (auto it = tileLayer.begin(); it != tileLayer.end(); it++)
+	for (auto it = tileLayer.begin(); it != tileLayer.end(); ++it)
 	{
 		auto tilesetKey = it->first;
 		auto tiles = it->second;
@@ -86,7 +86,7 @@ void SKO_Map::Writer::saveTileLayer(std::string name, std::map<std::string, std:
 			*file << "[" << name << "_" << tilesetKey << "]" << std::endl;
 		}
 
-		for (int i = 0; i < tiles.size(); i++)
+		for (int i = 0; i < tiles.size(); ++i)
 		{
 			*file << "tile" << i << " = "
 				<< tiles[i]->x << ","
@@ -129,7 +129,7 @@ void SKO_Map::Writer::saveRects(std::string name, std::vector<SDL_Rect> rects, s
 
 	*file << "[" << name << "]" << std::endl;
 
-	for (int i = 0; i < rects.size(); i++)
+	for (int i = 0; i < rects.size(); ++i)
 	{
 		*file << "rect" << i << " = "
 			<< rects[i].x << ","
@@ -147,7 +147,7 @@ void SKO_Map::Writer::saveCollisionRects(SKO_Map::Map * map, std::ofstream * fil
 
 void SKO_Map::Writer::savePortals(SKO_Map::Map * map, std::ofstream * file)
 {
-	for (int i = 0; i < map->portals.size(); i++)
+	for (int i = 0; i < map->portals.size(); ++i)
 	{
 		*file << "[portal" << i << "]" << std::endl;
 		*file << "coords = " 
@@ -166,7 +166,7 @@ void SKO_Map::Writer::savePortals(SKO_Map::Map * map, std::ofstream * file)
 
 void SKO_Map::Writer::saveSigns(SKO_Map::Map * map, std::ofstream * file)
 {
-	for (int i = 0; i < map->signs.size(); i++)
+	for (int i = 0; i < map->signs.size(); ++i)
 	{
 		*file << "[sign" << i << "]" << std::endl;
 		*file << "coords = "
@@ -189,7 +189,7 @@ void SKO_Map::Writer::saveEnemies(SKO_Map::Map * map, std::ofstream * file)
 	// Save enemy spawn points. 
 	// Actual enemy type definitions are in a separate file 
 	// TODO What file? right now it's DAT/enemySprites.ini
-	for (int i = 0; i < map->enemies.size(); i++)
+	for (int i = 0; i < map->enemies.size(); ++i)
 	{
 		*file << "[enemy" << i << "]" << std::endl;
 		*file << "type = " << map->enemies[i]->type << std::endl;
@@ -202,7 +202,7 @@ void SKO_Map::Writer::saveEnemies(SKO_Map::Map * map, std::ofstream * file)
 
 void SKO_Map::Writer::saveStalls(SKO_Map::Map * map, std::ofstream * file)
 {
-	for (int i = 0; i < map->stalls.size(); i++)
+	for (int i = 0; i < map->stalls.size(); ++i)
 	{
 		*file << "[stall" << i << "]" << std::endl;
 		*file << "type = " << map->stalls[i]->type << std::endl;
@@ -218,7 +218,7 @@ void SKO_Map::Writer::saveStalls(SKO_Map::Map * map, std::ofstream * file)
 
 void SKO_Map::Writer::saveShops(SKO_Map::Map * map, std::ofstream * file)
 {
-	for (int i = 0; i < map->shops.size(); i++) 
+	for (int i = 0; i < map->shops.size(); ++i) 
 	{
 		*file << "[shop" << i << "]" << std::endl; // TODO READER CHANGE from 1 to 0
 
@@ -252,7 +252,7 @@ void SKO_Map::Writer::saveShops(SKO_Map::Map * map, std::ofstream * file)
 
 void SKO_Map::Writer::saveTargets(SKO_Map::Map * map, std::ofstream * file)
 {
-	for (int i = 0; i < map->targets.size(); i++)
+	for (int i = 0; i < map->targets.size(); ++i)
 	{
 		*file << "[target" << i << "]" << std::endl;
 		*file << "coords = "
@@ -268,7 +268,7 @@ void SKO_Map::Writer::saveTargets(SKO_Map::Map * map, std::ofstream * file)
 
 void SKO_Map::Writer::saveNpcs(SKO_Map::Map * map, std::ofstream * file)
 {
-	for (int i = 0; i < map->npcs.size(); i++) 
+	for (int i = 0; i < map->npcs.size(); ++i) 
 	{
 		*file << "[npc" << i << "]" << std::endl;
 

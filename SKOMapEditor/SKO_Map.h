@@ -45,13 +45,9 @@ namespace SKO_Map
 		std::vector<SKO_Npc*>npcs;
 
 		// TODO - Move to Reader/Writer classes
-		void saveMap(std::map<std::string, SKO_Map::Tileset*> tilesets);
-		void saveMap(std::string filePath, std::map<std::string, SKO_Map::Tileset*> tilesets);
-		void loadMap(std::string filePath); 
 		
 		// New version to save as INI and read INI
-		void saveMapINI(std::string filePath, std::map<std::string, SKO_Map::Tileset*> tilesets); 
-		void loadMapINI(std::string filePath);
+
 		std::string filePath;
 		std::string name = "Untitled map";
 	private:

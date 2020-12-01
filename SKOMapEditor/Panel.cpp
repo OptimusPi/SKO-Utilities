@@ -165,7 +165,7 @@ bool OPI_Gui::Panel::handleMouseMove(int mouseX, int mouseY)
 
 
 	//handle child mouse presses first
-	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
+	for (auto i = this->children.rbegin(); i != this->children.rend(); ++i)
 	{
 		OPI_Gui::Element *element = *i;
 		element->handleMouseMove(mouseX - this->x, mouseY - this->y);
@@ -195,7 +195,7 @@ bool OPI_Gui::Panel::handleMousePressLeft(int mouseX, int mouseY)
 	bool panelContainsMouse = containsMouse(mouseX, mouseY, this->x, this->y, this->width, this->height);
 
 	//handle child mouse presses first
-	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
+	for (auto i = this->children.rbegin(); i != this->children.rend(); ++i)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->handleMousePressLeft(mouseX - this->x, mouseY - this->y))
@@ -234,7 +234,7 @@ bool OPI_Gui::Panel::handleMouseReleaseLeft(int mouseX, int mouseY)
 	bool panelContainsMouse = containsMouse(mouseX, mouseY, this->x, this->y, this->width, this->height);
 
 	//handle child mouse presses first
-	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
+	for (auto i = this->children.rbegin(); i != this->children.rend(); ++i)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->handleMouseReleaseLeft(mouseX - this->x, mouseY - this->y))
@@ -264,7 +264,7 @@ bool OPI_Gui::Panel::handleMousePressRight(int mouseX, int mouseY)
 
 
 	//handle child mouse presses first
-	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
+	for (auto i = this->children.rbegin(); i != this->children.rend(); ++i)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->handleMousePressRight(mouseX - this->x, mouseY - this->y))
@@ -280,7 +280,7 @@ bool OPI_Gui::Panel::handleMouseReleaseRight(int mouseX, int mouseY)
 	bool panelContainsMouse = containsMouse(mouseX, mouseY, this->x, this->y, this->width, this->height);
 
 	//handle child mouse presses first
-	for (auto i = this->children.rbegin(); i != this->children.rend(); i++)
+	for (auto i = this->children.rbegin(); i != this->children.rend(); ++i)
 	{
 		OPI_Gui::Element *element = *i;
 		if (element->handleMouseReleaseRight(mouseX - this->x, mouseY - this->y))

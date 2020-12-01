@@ -11,13 +11,15 @@ namespace SKO_Map
 	class Reader
 	{
 	public:
-		Reader(std::string directoryLocation);
+		Reader(std::string directoryLocation, std::map<std::string, SKO_Map::Tileset*> tilesets);
 		virtual ~Reader();
 		
 		SKO_Map::Map *loadMap(std::string mapFile);
 		std::string fileLocation;
+		std::map<std::string, SKO_Map::Tileset*> tilesets;
 	private:
 		// Load dimensions and graphics
+		void loadTileLayer(std::string name, std::map<std::string, std::vector<Tile*>> &tileLayer, INIReader mapIni);
 		void loadBackgroundTiles(SKO_Map::Map * map, INIReader mapIni);
 		void loadFringeTiles(SKO_Map::Map * map, INIReader mapIni);
 		void loadCollisionRects(SKO_Map::Map * map, INIReader mapIni);

@@ -34,10 +34,7 @@ void OPI_Renderer::sizeScreen()
 	glViewport(0, 0, windowWidth, windowHeight);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-
-
 	glOrtho(0.0f, originalWindowWidth, originalWindowHeight, 0.0f, -1.0f, 1.0f);
-
 }
 
 

@@ -16,7 +16,7 @@ SKO_Enemy::SKO_Enemy()
 	  xp = 5;
 	  
 	  //damage done by each player
-	  for (int i = 0; i < MAX_CLIENTS; i++)
+	  for (int i = 0; i < MAX_CLIENTS; ++i)
 		dibsDamage[i] = 0;
 	AI_ticker = 0;
 	AI_period = 0;
@@ -72,7 +72,7 @@ SKO_Enemy();
 	 xp = 5;
 	 
 	 //damage done by each player
-	  for (int i = 0; i < MAX_CLIENTS; i++)
+	  for (int i = 0; i < MAX_CLIENTS; ++i)
 		dibsDamage[i] = 0;
 
 }
@@ -91,7 +91,7 @@ void SKO_Enemy::Respawn()
      dibsTicker = 0;	 
 	 
 	 //damage done by each player
-	  for (int i = 0; i < MAX_CLIENTS; i++)
+	  for (int i = 0; i < MAX_CLIENTS; ++i)
 		dibsDamage[i] = 0;
 
      dead = false;
@@ -122,7 +122,7 @@ SKO_ItemObject SKO_Enemy::getLootItem()
 	for (int dontInf = 0; dontInf < 1000 && !itemGiven; dontInf++)
 	{
 		//loop through all my loot items!
-		for (unsigned int i = startRollAt; i < lootItem.size(); i++)
+		for (unsigned int i = startRollAt; i < lootItem.size(); ++i)
 		{
 			//roll for this item!
 			if (Roll(lootItem[i].chance))
