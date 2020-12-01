@@ -21,12 +21,10 @@ namespace SKO_Map
 		// Load dimensions and graphics
 		void loadTileLayer(std::string name, std::map<std::string, std::vector<Tile*>> &tileLayer, INIReader mapIni);
 		void loadBackgroundTiles(SKO_Map::Map * map, INIReader mapIni);
+		void loadBackgroundMaskTiles(SKO_Map::Map* map, INIReader mapIni);
 		void loadFringeTiles(SKO_Map::Map * map, INIReader mapIni);
+		void loadFringeMaskTiles(SKO_Map::Map* map, INIReader mapIni);
 		void loadCollisionRects(SKO_Map::Map * map, INIReader mapIni);
-		SKO_Map::Tile* convertTile(int x, int y, int id);
-		std::string convertKey(int id);
-		unsigned int convertRow(int id);
-		unsigned int convertColumn(int id);
 
 		// Load game objects
 		void loadPortals(SKO_Map::Map * map, INIReader mapIni);
@@ -36,6 +34,10 @@ namespace SKO_Map
 		void loadShops(SKO_Map::Map * map, INIReader mapIni);
 		void loadTargets(SKO_Map::Map * map, INIReader mapIni);
 		void loadNpcs(SKO_Map::Map * map, INIReader mapIni);
+
+		// Parsing helper
+		std::vector<std::string> parseCsv(std::string values);
+		std::vector<int> parseCsvInt(std::string values);
 	};
 }
 

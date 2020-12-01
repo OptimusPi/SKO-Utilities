@@ -107,7 +107,7 @@ void SKO_Map::Writer::saveBackgroundTiles(SKO_Map::Map * map, std::map<std::stri
 
 void SKO_Map::Writer::saveBackgroundMaskTiles(SKO_Map::Map* map, std::map<std::string, SKO_Map::Tileset*> tilesets, std::ofstream* file)
 {
-	saveTileLayer("background_mask_tiles", map->backgroundTiles, tilesets, file);
+	saveTileLayer("background_mask_tiles", map->backgroundMaskTiles, tilesets, file);
 }
 
 void SKO_Map::Writer::saveFringeTiles(SKO_Map::Map * map, std::map<std::string, SKO_Map::Tileset*> tilesets, std::ofstream * file)
@@ -117,7 +117,7 @@ void SKO_Map::Writer::saveFringeTiles(SKO_Map::Map * map, std::map<std::string, 
 
 void SKO_Map::Writer::saveFringeMaskTiles(SKO_Map::Map* map, std::map<std::string, SKO_Map::Tileset*> tilesets, std::ofstream* file)
 {
-	saveTileLayer("fringe_mask_tiles", map->fringeTiles, tilesets, file);
+	saveTileLayer("fringe_mask_tiles", map->fringeMaskTiles, tilesets, file);
 }
 
 void SKO_Map::Writer::saveRects(std::string name, std::vector<SDL_Rect> rects, std::ofstream* file)

@@ -621,7 +621,7 @@ void SKO_MapEditor::Manager::HandleInput()
 
 				auto x = (int)(cursor_x + camera_x) / 32 * 32;
 				auto y = (int)(cursor_y + camera_y) / 32 * 32;
-				auto tile = new SKO_Map::Tile(x, y, current_tileset, current_tileset_row, current_tileset_column);
+				auto tile = new SKO_Map::Tile(x, y, current_tileset->key, current_tileset_row, current_tileset_column);
 				if (fringe_mode)
 				{
 					map->fringeTiles[current_tileset->key].push_back(tile);

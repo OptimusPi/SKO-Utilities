@@ -15,15 +15,6 @@ SKO_Map::Tile::Tile(int x, int y, std::string tileset_key, unsigned int tileset_
 }
 
 
-SKO_Map::Tile::Tile(int x, int y, SKO_Map::Tileset *tileset, unsigned int tileset_row, unsigned int tileset_column)
-{
-	this->x = x;
-	this->y = y;
-	this->tileset_key = tileset->key;
-	this->tileset_row = tileset_row;
-	this->tileset_column = tileset_column;
-}
-
 SKO_Map::Tile::~Tile()
 {
 

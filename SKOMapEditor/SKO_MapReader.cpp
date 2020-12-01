@@ -61,10 +61,72 @@ SKO_Map::Map * SKO_Map::Reader::loadMap(std::string fileName)
 	return map;
 }
 
+
+std::vector<std::string> SKO_Map::Reader::parseCsv(std::string valuesCsv)
+{
+	std::stringstream sstream(valuesCsv);
+	std::string tmp;
+	std::vector<std::string> values;
+	char delimiter = ',';
+
+	while (std::getline(sstream, tmp, delimiter)) 
+	{
+		values.push_back(tmp);
+	}
+
+	return values;
+}
+
+std::vector<int> SKO_Map::Reader::parseCsvInt(std::string valuesCsv)
+{
+	std::stringstream sstream(valuesCsv);
+	std::string tmp;
+	std::vector<int> values;
+	char delimiter = ',';
+
+	while (std::getline(sstream, tmp, delimiter))
+	{
+		std::stringstream str(tmp);
+		int number;
+		if (!(str >> number).fail())
+		{
+			values.push_back(number);
+		}
+	}
+
+	return values;
+}
+
 void SKO_Map::Reader::loadTileLayer(std::string name, std::map<std::string, std::vector<Tile*>> &tileLayer, INIReader mapIni)
 {
 	for (auto it = tilesets.begin(); it != tilesets.end(); ++it)
 	{
+		std::string tilesetKey = it->first;
+		
+		// Load tiles from this config section, if it exists
+		std::string section = name + "_" + tilesetKey;
+
+		for (int i = 0; ; ++i)
+		{
+			std::stringstream tileTag;
+			tileTag << "tile" << i;
+			std::string values = mapIni.Get(section, tileTag.str(), "null");
+
+			if (values == "null")
+			{
+				break;
+			}
+
+			auto parsedValues = parseCsvInt(values);
+
+			int x = parsedValues[0];
+			int y = parsedValues[1];
+			int tileset_row = parsedValues[2];
+			int tileset_column = parsedValues[3];
+
+			auto* tile = new SKO_Map::Tile(x, y, tilesetKey, tileset_row, tileset_column);
+			tileLayer[tilesetKey].push_back(tile);
+		}
 
 	}
 }
@@ -73,472 +135,45 @@ void SKO_Map::Reader::loadBackgroundTiles(SKO_Map::Map * map, INIReader mapIni)
 {
 	// load background tiles
 	loadTileLayer("background_tiles", map->backgroundTiles, mapIni);
-
-	// loop through every tileset layer of background tiles, 
-	// output each collection as it's own section
-	for (auto it = map->backgroundTiles.begin(); it != map->backgroundTiles.end(); ++it)
-	{
-		auto tilesetKey = it->first;
-		auto tiles = it->second;
-		std::string section = "background_tiles_" + tilesetKey;
-
-		
-
-	}
-
-	auto num_background_tiles = 1;
-	for (int i = 0; i < num_background_tiles; ++i)
-	{
-		std::stringstream sspawn_x;
-		sspawn_x << "background_tile_x_" << i;
-
-		std::stringstream sspawn_y;
-		sspawn_y << "background_tile_y_" << i;
-
-		std::stringstream ssid;
-		ssid << "background_tile_id_" << i;
-
-		int x = mapIni.GetInteger("background_tiles", sspawn_x.str(), 0);
-		int y = mapIni.GetInteger("background_tiles", sspawn_y.str(), 0);
-		int id = mapIni.GetInteger("background_tiles", ssid.str(), 0);
-
-		// Add background tile to map collection
-		SKO_Map::Tile* backgroundTile = convertTile(x, y, id);
-
-		if (id == 9 || id == 10)
-		{
-			// life hack put a dirt tile under it quick - 
-			//TODO remove, it's just because the corner tile was made more modular with invisible background
-			SKO_Map::Tile* dirtTile = convertTile(x, y, 5);
-			map->backgroundTiles[dirtTile->tileset_key].push_back(dirtTile);
-		}
-
-		if (id == 24 || id == 25)
-		{
-			// life hack put a dirt tile under it quick - 
-			//TODO remove, it's just because the corner tile was made more modular with invisible background
-			SKO_Map::Tile* dirtTile = convertTile(x, y, 20);
-			map->backgroundTiles[dirtTile->tileset_key].push_back(dirtTile);
-		}
-
-		map->backgroundTiles[backgroundTile->tileset_key].push_back(backgroundTile);
-	}
 }
 
-//void SKO_Map::Reader::loadBackgroundTiles(SKO_Map::Map * map, INIReader mapIni)
-//{
-//	// load background tiles
-//	int num_background_tiles = mapIni.GetInteger("count", "background_tiles", 0);
-//	printf("num_background_tiles is %i", num_background_tiles);
-//
-//	for (int i = 0; i < num_background_tiles; ++i)
-//	{
-//		std::stringstream section;
-//		section << "background_tile" << i;
-//
-//
-//		int x = mapIni.GetInteger(section.str(), "x", 0);
-//		int y = mapIni.GetInteger(section.str(), "y", 0);
-//
-//		// TODO gotta Ctrl+H the map files... ugh, but wait I can't because of this: background_tile_id_26 = 5
-//		//std::string tileset_key = mapIni.Get(section.str(), "tileset_key", "00000000-0000-0000-0000-000000000000");
-//		//int tileset_row = mapIni.GetInteger(section.str(), "tileset_row", 0);
-//		//int tileset_column = mapIni.GetInteger(section.str(), "tileset_column", 0);
-//		
-//
-//		int id = mapIni.GetInteger(section.str(), ssid.str(), 0);
-//
-//		// Add fringe tile to map collection
-//		SKO_Map::Tile* fringeTile = convertTile(x, y, id);
-//		map->fringeTiles.push_back(fringeTile);
-//
-//		// Add background tile to map collection
-//		SKO_Map::Tile *backgroundTile = new SKO_Map::Tile(x, y, tileset_key, tileset_row, tileset_column);
-//		map->backgroundTiles.push_back(backgroundTile);
-//	}
-//}
+void SKO_Map::Reader::loadBackgroundMaskTiles(SKO_Map::Map* map, INIReader mapIni)
+{
+	// load background tiles
+	loadTileLayer("background_mask_tiles", map->backgroundMaskTiles, mapIni);
+}
 
 void SKO_Map::Reader::loadFringeTiles(SKO_Map::Map * map, INIReader mapIni)
 {
-	// load fringe tiles
-	int num_fringe_tiles = mapIni.GetInteger("count", "fringe_tiles", 0);
-	printf("num_fringe_tiles is %i", num_fringe_tiles);
-
-	for (int i = 0; i < num_fringe_tiles; ++i)
-	{
-		std::stringstream sspawn_x;
-		sspawn_x << "fringe_tile_x_" << i;
-
-		std::stringstream sspawn_y;
-		sspawn_y << "fringe_tile_y_" << i;
-
-		std::stringstream ssid;
-		ssid << "fringe_tile_id_" << i;
-
-		int x = mapIni.GetInteger("fringe_tiles", sspawn_x.str(),  0);
-		int y = mapIni.GetInteger("fringe_tiles", sspawn_y.str(),  0);
-		int id = mapIni.GetInteger("fringe_tiles", ssid.str(), 0);
-
-		// Add fringe tile to map collection
-		SKO_Map::Tile* fringeTile = convertTile(x, y, id);
-		map->fringeTiles[fringeTile->tileset_key].push_back(fringeTile);
-	}
+	// load background tiles
+	loadTileLayer("fringe_tiles", map->fringeTiles, mapIni);
 }
 
-std::string SKO_Map::Reader::convertKey(int id)
+void SKO_Map::Reader::loadFringeMaskTiles(SKO_Map::Map* map, INIReader mapIni)
 {
-	//TODO make these really work
-	switch (id)
-	{
-	case 33:
-	case 34:
-	case 35:
-	case 36:
-	case 37:
-	case 38:
-	case 39:
-	case 40:
-	case 60:
-		return "d9afe501-8273-49f8-ab3e-fb2198bf6826"; // grassland flora
-
-	case 46:
-	case 47:
-	case 48:
-	case 49:
-	case 50:
-	case 51:
-		return "696148d6-4e80-483c-ac9b-291e5a7bd31b"; // bricks
-
-	case 42:
-	case 43:
-	case 44:
-	case 45:
-	case 52:
-	case 53:
-	case 54:
-	case 55:
-	case 56:
-	case 57:
-	case 58:
-	case 59:
-		return "f4218b24-1b4f-4728-83a4-c39da61bb728"; // Structures (pipes, stores, sign)
-
-	case 41:
-	case 61:
-		return "74069b57-5008-40a7-98f1-3364d4d9a425"; // grassland trees
-
-	default:
-		return "8a50c312-a146-460f-8120-fbf352c5a95e"; // grassland tiles
-	}
-}
-
-unsigned int SKO_Map::Reader::convertColumn(int id)
-{
-	//TODO make these really work
-	switch (id)
-	{
-	case 0:
-		return 0;
-	case 1:
-		return 2;
-	case 2:
-		return 1;
-	case 3:
-		return 2;
-	case 4:
-		return 0;
-	case 5:
-		return 1;
-	case 6:
-		return 0;
-	case 7:
-		return 2;
-	case 8:
-		return 1;
-	case 9:
-		return 3;
-	case 10:
-		return 4;
-	case 11:
-		return 4;
-	case 12:
-		return 3;
-	case 13:
-		return 4;
-	case 14:
-		return 3;
-	case 15:
-		return 0;
-	case 16:
-		return 2;
-	case 17:
-		return 1;
-	case 18:
-		return 2;
-	case 19:
-		return 0;
-	case 20:
-		return 1;
-	case 21:
-		return 0;
-	case 22:
-		return 2;
-	case 23:
-		return 1;
-	case 24:
-		return 3;
-	case 25:
-		return 4;
-	case 26:
-		return 4;
-	case 27:
-		return 3;
-	case 28:
-		return 4;
-	case 29:
-		return 3;
-	case 30:
-		return 1;
-	case 31:
-		return 0;
-	case 32:
-		return 2;
-	case 33:
-		return 0;
-	case 34:
-		return 1;
-	case 35:
-		return 2;
-	case 36:
-		return 3;
-	case 37:
-		return 0;
-	case 38:
-		return 1;
-	case 39:
-		return 2;
-	case 40:
-		return 3;
-	case 41:
-		return 0;
-	case 42:
-		return 0;
-	case 43:
-		return 0;
-	case 44:
-		return 0;
-	case 45:
-		return 0;
-
-	case 46:
-		return 0;
-	case 47:
-		return 0;
-	case 48:
-		return 0;
-	case 49:
-		return 1;
-	case 50:
-		return 0;
-	case 51:
-		return 1;
-
-	case 52:
-		return 2;
-	case 53:
-		return 0;
-	case 54:
-		return 0;
-	case 55:
-		return 2;
-	case 56:
-		return 0;
-	case 57:
-		return 1;
-	case 58:
-		return 2;
-	case 59:
-		return 1;
-
-	case 60:
-		return 5;
-	case 61:
-		return 1;
-	default:
-		return 0; //break;//throw id;
-	}
-}
-
-unsigned int SKO_Map::Reader::convertRow(int id)
-{
-	//TODO make these really work
-	switch (id)
-	{
-	case 0:
-		return 0;
-	case 1:
-		return 0;
-	case 2:
-		return 0;
-	case 3:
-		return 1;
-	case 4:
-		return 1;
-	case 5:
-		return 1;
-	case 6:
-		return 2;
-	case 7:
-		return 2;
-	case 8:
-		return 2;
-	case 9:
-		return 0;
-	case 10:
-		return 0;
-	case 11:
-		return 1;
-	case 12:
-		return 1;
-	case 13:
-		return 2;
-	case 14:
-		return 2;
-	case 15:
-		return 3;
-	case 16:
-		return 3;
-	case 17:
-		return 3;
-	case 18:
-		return 4;
-	case 19:
-		return 4;
-	case 20:
-		return 4;
-	case 21:
-		return 5;
-	case 22:
-		return 5;
-	case 23:
-		return 5;
-	case 24:
-		return 3;
-	case 25:
-		return 3;
-	case 26:
-		return 4;
-	case 27:
-		return 4;
-	case 28:
-		return 5;
-	case 29:
-		return 5;
-	case 30:
-		return 6;
-	case 31:
-		return 6;
-	case 32:
-		return 6;
-
-	case 33:
-		return 0;
-	case 34:
-		return 0;
-	case 35:
-		return 0;
-	case 36:
-		return 0;
-	case 37:
-		return 1;
-	case 38:
-		return 1;
-	case 39:
-		return 1;
-	case 40:
-		return 1;
-	case 41:
-		return 0;
-	case 42:
-		return 0;
-	case 43:
-		return 0;
-	case 44:
-		return 0;
-	case 45:
-		return 3;
-
-	case 46:
-		return 0;
-	case 47:
-		return 3;
-	case 48:
-		return 1;
-	case 49:
-		return 0;
-	case 50:
-		return 2;
-	case 51:
-		return 1;
-
-	case 52:
-		return 4;
-	case 53:
-		return 4;
-	case 54:
-		return 6;
-	case 55:
-		return 6;
-	case 56:
-		return 5;
-	case 57:
-		return 4;
-	case 58:
-		return 5;
-	case 59:
-		return 6;
-
-	case 61:
-		return 0;
-	default:
-		return 0;//break;//throw id;
-	}
-}
-
-// TODO - remove this when I'm done with it
-SKO_Map::Tile* SKO_Map::Reader::convertTile(int x, int y, int id)
-{
-	std::string key = convertKey(id);
-	unsigned int row = convertRow(id);
-	unsigned int column = convertColumn(id);
-
-	return new SKO_Map::Tile(x, y, key, row, column);
+	// load background tiles
+	loadTileLayer("fringe_mask_tiles", map->fringeMaskTiles, mapIni);
 }
 
 void SKO_Map::Reader::loadCollisionRects(SKO_Map::Map * map, INIReader mapIni)
 {
-	// load background tiles
-	int num_collision_rects = mapIni.GetInteger("count", "collision_rects", 0);
-	printf("num_collision_rects is %i", num_collision_rects);
-
-	for (int i = 0; i < num_collision_rects; ++i)
+	for (int i = 0; ; ++i)
 	{
-		std::stringstream sspawn_x;
-		sspawn_x << "collision_tile_x_" << i;
+		std::stringstream rectTag;
+		rectTag << "rect" << i;
+		std::string values = mapIni.Get("collision_rects", rectTag.str(), "null");
 
-		std::stringstream sspawn_y;
-		sspawn_y << "collision_tile_y_" << i;
+		if (values == "null")
+		{
+			break;
+		}
 
-		std::stringstream ssw;
-		ssw << "collision_tile_w_" << i;
+		auto parsedValues = parseCsvInt(values);
 
-		std::stringstream ssh;
-		ssh << "collision_tile_h_" << i;
-
-		int x = mapIni.GetInteger("collision_rects", sspawn_x.str(), 0);
-		int y = mapIni.GetInteger("collision_rects", sspawn_y.str(), 0);
-		int w = mapIni.GetInteger("collision_rects", ssw.str(), 0);
-		int h = mapIni.GetInteger("collision_rects", ssh.str(), 0);
+		int x = parsedValues[0];
+		int y = parsedValues[1];
+		int w = parsedValues[2];
+		int h = parsedValues[3];
 
 		// Add background tile to map collection
 		SDL_Rect collisionRect;
@@ -549,6 +184,9 @@ void SKO_Map::Reader::loadCollisionRects(SKO_Map::Map * map, INIReader mapIni)
 
 		map->collisionRects.push_back(collisionRect);
 	}
+
+		
+	
 }
 
 void SKO_Map::Reader::loadPortals(SKO_Map::Map * map, INIReader mapIni)
