@@ -56,6 +56,7 @@ SDL_Cursor *pointer;
 
 std::string save = "";
 
+// TODO global
 char mode = 0;
 bool fringe_mode = false;
 
@@ -117,7 +118,7 @@ int main(int argc, char *argv[])
 
 	// TODO auto detect screen size, make smaller if less than 1080p to render.
 	//renderer = new OPI_Renderer("SKO Map Editor v 0.9.0", 1280, 720);
-	renderer = new OPI_Renderer("SKO Map Editor v 0.9.0", 1920, 1080);
+	renderer = new OPI_Renderer("SKO Map Editor v 0.9.1", 1920, 1080);
 	renderer->initScreen();
 	OPI_Gui::GuiManager::create(renderer);
 	OPI_Gui::GuiManager::initCursors("IMG/GUI/cursors/normal.png", "IMG/GUI/cursors/move.png", "IMG/GUI/cursors/resize.png", "IMG/GUI/cursors/hourglass.png", "IMG/GUI/cursors/hand.png");

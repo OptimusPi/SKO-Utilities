@@ -25,12 +25,16 @@ private:
 
 	// Create Gui Elements
 	void setupHotBar();
+	void setupLayersHotbar();
 	void setupCoordinates();
 	void drawGui();
 
 	// Helper callback functions
 	void setEditorMode(char setting);
 	void toggleEditorFringe();
+	void toggleEditorFringeMask();
+	void toggleEditorBackground();
+	void toggleEditorBackgroundMask();
 };
 
 #endif

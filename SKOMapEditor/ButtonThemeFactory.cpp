@@ -88,6 +88,7 @@ void OPI_Gui::ButtonThemeFactory::loadTheme_ButtonIcon(std::string themeImage)
 	SDL_Surface *pressedSurface = OPI_Image::tintSurface(surface, 150, 150, 255, 200);
 	elementThemeButtonIcon->texturePressed = new OPI_Image(pressedSurface);
 
+	//TODO load from cache
 	//insert into cache
 	std::string key = generateKey(OPI_Gui::ElementThemeType::ButtonIcon, themeImage);
 	this->themes.insert({ {key, elementThemeButtonIcon} });
